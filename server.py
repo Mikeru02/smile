@@ -41,6 +41,7 @@ def revoke_client(ip):
     subprocess.run(["iptables", "-D", "FORWARD", "-s", ip, "-j", "ACCEPT"])
     subprocess.run(["iptables", "-D", "FORWARD", "-d", ip, "-j", "ACCEPT"])
     subprocess.run(["iptables", "-t", "nat", "-D", "POSTROUTING", "-s", ip, "-j", "MASQUERADE"])
+    subprocess.run(["conntrack", "-D", "-s", ip])
     active_clients.pop(ip, None)
 
 
