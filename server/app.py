@@ -4,6 +4,7 @@
 from flask import Flask, redirect as flask_redirect
 from config.config import config as global_config
 from utils.modules.file_handler import Open_File
+from utils.modules.path_handler import Path_Handler
 from utils.modules.cleaner import Session_Cleaner
 from utils.modules.clients import Clients
 from routes.v1.index import v1
@@ -24,7 +25,7 @@ v1.active_clients = active_clients
 v1.pending_clients = pending_clients
 
 # Loading of the configuration file
-config_file = Open_File("smile.conf")
+config_file = Open_File(Path_Handler.get("smile.conf"))
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
