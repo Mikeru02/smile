@@ -1,27 +1,24 @@
 from flask import Blueprint, request, current_app
 from utils.modules.client_management import Client_Management
+from utils.modules.clients import Clients
 import time
+
+active_clients = Clients.active_clients
+pending_clients = Clients.pending_clients
+active_droppers = Clients.active_droppers
 
 splash_router = Blueprint("splash_router", __name__)
 
 @splash_router.route("/earned")
 def earned():
-    v1_blueprint = current_app.blueprints['v1']
-    pending_users = v1_blueprint.pending_clients
-
     ip = request.remote_addr
-    seconds = pending_users.get(ip, 0)
+    seconds = pending_clients.get(ip, 0)
     return {"seconds": seconds, "minutes": seconds // 60}
 
 @splash_router.route("/authenticate")
 def authenticate():
-    v1_blueprint = current_app.blueprints['v1']
-    active_clients = v1_blueprint.active_clients
-    pending_users = v1_blueprint.pending_clients
-    active_droppers = v1_blueprint.active_droppers
-
     ip = request.remote_addr
-    earned_time = pending_users.get(ip, 0)
+    earned_time = pending_clients.get(ip, 0)
 
     if earned_time == 0:
         return "<p>You must drop a bottle or plastic waste to gain access.</p>"
@@ -32,7 +29,7 @@ def authenticate():
         "total_time": earned_time
     }
 
-    pending_users.pop(ip, None)
+    pending_clients.pop(ip, None)
     active_droppers.discard(ip)  # Stop adding more time after authentication
 
     return '''
@@ -49,9 +46,6 @@ def authenticate():
 
 @splash_router.route("/start_drop", methods=["POST"])
 def start_drop():
-    v1_blueprint = current_app.blueprints['v1']
-    active_droppers = v1_blueprint.active_droppers
-    
     ip = request.remote_addr
     active_droppers.add(ip)
     print(f"[Drop] {ip} is ready to drop.")
