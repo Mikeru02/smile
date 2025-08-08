@@ -53,7 +53,7 @@ def redirect(path):
         let startedDrop = false;
 
         async function checkTime() {
-            const res = await fetch('v1/splash/earned');
+            const res = await fetch('/v1/splash/earned');
             const data = await res.json();
 
             if (data.minutes > 0) {
@@ -95,5 +95,5 @@ if __name__ == '__main__':
     global_config = config_file
 
     threading.Thread(target=Session_Cleaner.clean, args=(active_clients,), daemon=True).start()
-    threading.Thread(target=Arduino_Lister.listen, args=(arduino, DROP_CREDITS, active_droppers, pending_clients))
+    threading.Thread(target=Arduino_Lister.listen, args=(arduino, DROP_CREDITS, Clients.active_droppers, Clients.pending_clients)).start()
     app.run(host=global_config["HOST"], port=global_config["PORT"])
