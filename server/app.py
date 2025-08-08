@@ -12,11 +12,6 @@ from routes.v1.index import v1
 import threading
 import serial
 
-# Storage for clients
-active_clients = Clients.active_clients
-pending_clients = Clients.pending_clients
-active_droppers = Clients.active_droppers
-
 # Instance of the flask application
 app = Flask(__name__)
 
@@ -37,8 +32,11 @@ DROP_CREDITS = {
 @app.route("/<path:path>")
 def redirect(path):
     ip = request.remote_addr
-    if ip not in pending_clients:
-        pending_clients[ip] = 0  # Start with 0 earned time
+    if path.startswith("/v1/admin"):
+        return flask_redirect("/v1/admin")
+
+    if ip not in Clients.pending_clients:
+        Clients.pending_clients[ip] = 0  # Start with 0 earned time
 
     return '''
     <html>
@@ -89,9 +87,6 @@ if __name__ == '__main__':
     # Global Configuration Application
     global_config = config_file
 
-    threading.Thread(target=Session_Cleaner.clean, args=(active_clients,), daemon=True).start()
+    threading.Thread(target=Session_Cleaner.clean, args=(Clients.active_clients,), daemon=True).start()
     threading.Thread(target=Arduino_Lister.listen, args=(arduino, DROP_CREDITS, Clients.active_droppers, Clients.pending_clients)).start()
     app.run(host=global_config["HOST"], port=global_config["PORT"])
-    print(active_clients)
-    print(pending_clients)
-    print(active_droppers)
