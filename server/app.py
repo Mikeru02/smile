@@ -5,7 +5,8 @@ from flask import Flask, redirect as flask_redirect
 from config.config import config as global_config
 from utils.modules.file_handler import Open_File
 from utils.modules.path_handler import Path_Handler
-from server.utils.modules.background_process.session_cleaner import Session_Cleaner
+from utils.modules.background_process.session_cleaner import Session_Cleaner
+from utils.modules.background_process.arduino_listener import Arduino_Lister
 from utils.modules.clients import Clients
 from routes.v1.index import v1
 import threading
@@ -32,6 +33,10 @@ config_file = Open_File(Path_Handler.get("smile.conf")).execute()
 
 # Instance the arduino
 arduino = serial.Serial(config_file["SERIAL_PORT"], config_file["SERIAL_SPEED"], timeout=1)
+DROP_CREDITS = {
+    "PLASTIC_BOTTLE": 5 * 60,
+    "PLASTIC_WASTE": 3 * 60
+}
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
@@ -43,4 +48,5 @@ if __name__ == '__main__':
     global_config = config_file
 
     threading.Thread(target=Session_Cleaner.clean, args=(active_clients,), daemon=True).start()
+    threading.Thread(target=Arduino_Lister.listen, args=(arduino, DROP_CREDITS, active_droppers, pending_clients))
     app.run(host=global_config["HOST"], port=global_config["PORT"])
