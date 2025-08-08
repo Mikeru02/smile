@@ -1,4 +1,4 @@
-from .client_management import Client_Management
+from ..client_management import Client_Management
 import time
 
 class Session_Cleaner:
