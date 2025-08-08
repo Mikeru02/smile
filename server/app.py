@@ -23,11 +23,6 @@ app = Flask(__name__)
 # Registers the route of /v1
 app.register_blueprint(v1, url_prefix='/v1')
 
-# Inject clients data
-v1.active_clients = active_clients
-v1.pending_clients = pending_clients
-v1.active_droppers = active_droppers
-
 # Loading of the configuration file
 config_file = Open_File(Path_Handler.get("smile.conf")).execute()
 
