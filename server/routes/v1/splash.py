@@ -47,6 +47,9 @@ def authenticate():
 @splash_router.route("/start_drop", methods=["POST"])
 def start_drop():
     ip = request.remote_addr
+    if Clients.active_droppers and ip not in Clients.active_droppers:
+        return "Another user is currently in use. Please wait!", 403
+
     Clients.active_droppers.add(ip)
     print(f"[Drop] {ip} is ready to drop.")
     return '', 204
