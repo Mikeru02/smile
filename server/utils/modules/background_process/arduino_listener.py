@@ -1,6 +1,6 @@
 class Arduino_Lister:
     @staticmethod
-    def arduino_listener(arduino, DROP_CREDITS, active_droppers, pending_users):
+    def listen(arduino, DROP_CREDITS, active_droppers, pending_users):
         while True:
             if arduino.in_waiting:
                 line = arduino.readline().decode().strip()
