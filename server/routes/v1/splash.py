@@ -46,3 +46,13 @@ def authenticate():
     </body>
     </html>
     '''
+
+@splash_router.route("/start_drop", methods=["POST"])
+def start_drop():
+    v1_blueprint = current_app.blueprints['v1']
+    active_droppers = v1_blueprint.active_droppers
+    
+    ip = request.remote_addr
+    active_droppers.add(ip)
+    print(f"[Drop] {ip} is ready to drop.")
+    return '', 204
