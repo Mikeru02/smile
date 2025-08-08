@@ -1,7 +1,7 @@
 # Main Script Application for S.M.I.L.E.
 
 # Libraries and modules used
-from flask import Flask, redirect
+from flask import Flask, redirect as flask_redirect
 from config.config import config as global_config
 from utils.modules.file_handler import Open_File
 from utils.modules.cleaner import Session_Cleaner
@@ -24,12 +24,12 @@ v1.active_clients = active_clients
 v1.pending_clients = pending_clients
 
 # Loading of the configuration file
-config_file = Open_File("server/smile.conf")
+config_file = Open_File("smile.conf")
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def redirect(path):
-    return redirect("/v1/splash/")
+    return flask_redirect("http://192.168.10.1/v1/splash/")
 
 if __name__ == '__main__':
     # Global Configuration Application
