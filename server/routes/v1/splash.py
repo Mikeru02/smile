@@ -4,13 +4,11 @@ import time
 
 splash_router = Blueprint("splash_router", __name__)
 
-v1_blueprint = current_app.blueprints['v1']
-active_clients = v1_blueprint.active_clients
-pending_users = v1_blueprint.pending_clients
-active_droppers = v1_blueprint.active_droppers
-
 @splash_router.route("/")
 def splash_page():
+    v1_blueprint = current_app.blueprints['v1']
+    pending_users = v1_blueprint.pending_clients
+
     ip = request.remote_addr
     if ip not in pending_users:
         pending_users[ip] = 0  # Start with 0 earned time
@@ -62,12 +60,20 @@ def splash_page():
 
 @splash_router.route("/earned")
 def earned():
+    v1_blueprint = current_app.blueprints['v1']
+    pending_users = v1_blueprint.pending_clients
+
     ip = request.remote_addr
     seconds = pending_users.get(ip, 0)
     return {"seconds": seconds, "minutes": seconds // 60}
 
 @splash_router.route("/authenticate")
 def authenticate():
+    v1_blueprint = current_app.blueprints['v1']
+    active_clients = v1_blueprint.active_clients
+    pending_users = v1_blueprint.pending_clients
+    active_droppers = v1_blueprint.active_droppers
+    
     ip = request.remote_addr
     earned_time = pending_users.get(ip, 0)
 
