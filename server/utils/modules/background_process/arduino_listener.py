@@ -5,6 +5,7 @@ class Arduino_Lister:
             if arduino.in_waiting:
                 line = arduino.readline().decode().strip()
                 print(f"[Arduino] {line}")
+                print(f"Active droppers: {active_droppers}")
                 if line in DROP_CREDITS and active_droppers:
                     added = DROP_CREDITS[line]
                     for ip in list(active_droppers):
