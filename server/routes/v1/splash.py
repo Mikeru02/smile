@@ -15,7 +15,7 @@ def earned():
     seconds = pending_clients.get(ip, 0)
     return {"seconds": seconds, "minutes": seconds // 60}
 
-@splash_router.route("/authenticate")
+@splash_router.route("/authenticate", methods=["POST"])
 def authenticate():
     ip = request.remote_addr
     earned_time = pending_clients.get(ip, 0)
@@ -47,6 +47,6 @@ def authenticate():
 @splash_router.route("/start_drop", methods=["POST"])
 def start_drop():
     ip = request.remote_addr
-    active_droppers.add(ip)
+    Clients.active_droppers.add(ip)
     print(f"[Drop] {ip} is ready to drop.")
     return '', 204

@@ -66,7 +66,7 @@ def redirect(path):
 
         async function startDrop() {
             startedDrop = true;
-            await fetch('/start_drop', { method: 'POST' });
+            await fetch('/v1/splash/start_drop', { method: 'POST' });
             document.getElementById("earned").innerText = "🕒 Waiting for drop input from Arduino...";
         }
 
@@ -78,7 +78,7 @@ def redirect(path):
         <h1>Welcome to Smile WiFi!</h1>
         <button onclick="startDrop()">🚮 Press Me to Start Drop</button>
         <p id="earned">🕒 Waiting...</p>
-        <form action="/authenticate" method="post">
+        <form action="/v1/splash/authenticate" method="post">
             <button id="authBtn" type="submit" disabled>Click to Get Internet</button>
         </form>
     </body>
@@ -92,3 +92,6 @@ if __name__ == '__main__':
     threading.Thread(target=Session_Cleaner.clean, args=(active_clients,), daemon=True).start()
     threading.Thread(target=Arduino_Lister.listen, args=(arduino, DROP_CREDITS, Clients.active_droppers, Clients.pending_clients)).start()
     app.run(host=global_config["HOST"], port=global_config["PORT"])
+    print(active_clients)
+    print(pending_clients)
+    print(active_droppers)
