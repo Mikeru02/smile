@@ -13,7 +13,7 @@ import threading
 import serial
 
 # Instance of the flask application
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../public")
 
 # Registers the route of /v1
 app.register_blueprint(v1, url_prefix='/v1')
@@ -88,5 +88,5 @@ if __name__ == '__main__':
     global_config = config_file
 
     threading.Thread(target=Session_Cleaner.clean, args=(Clients.active_clients,), daemon=True).start()
-    threading.Thread(target=Arduino_Lister.listen, args=(arduino, DROP_CREDITS, Clients.active_droppers, Clients.pending_clients)).start()
+    threading.Thread(target=Arduino_Lister.listen, args=(arduino, DROP_CREDITS, Clients.active_droppers, Clients.pending_clients), daemon=True).start()
     app.run(host=global_config["HOST"], port=global_config["PORT"])
