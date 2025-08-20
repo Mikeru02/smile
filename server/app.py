@@ -2,14 +2,10 @@
 
 # Libraries and modules used
 from flask import Flask, request, redirect as flask_redirect
-from config.config import config as global_config
-from utils.modules.file_handler import Open_File
-from utils.modules.path_handler import Path_Handler
-from utils.modules.background_process.session_cleaner import Session_Cleaner
-from utils.modules.background_process.arduino_listener import Arduino_Lister
-from utils.modules.clients import Clients
+from modules.utils.file_handler import Open_File
+from modules.utils.path_handler import Path_Handler
+from modules.utils.clients import Clients
 from routes.v1.index import v1
-import threading
 import serial
 
 # Instance of the flask application
@@ -82,11 +78,3 @@ def redirect(path):
     </body>
     </html>
     '''
-
-if __name__ == '__main__':
-    # Global Configuration Application
-    global_config = config_file
-
-    threading.Thread(target=Session_Cleaner.clean, args=(Clients.active_clients,), daemon=True).start()
-    threading.Thread(target=Arduino_Lister.listen, args=(arduino, DROP_CREDITS, Clients.active_droppers, Clients.pending_clients), daemon=True).start()
-    app.run(host=global_config["HOST"], port=global_config["PORT"])
