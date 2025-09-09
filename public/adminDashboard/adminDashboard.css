@@ -1,0 +1,98 @@
+#ADbg {
+    min-height: 120vh;
+    width: 100vw;
+
+    background-color: #0C393C;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#ADmainCont {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    /* margin-top: 50px; */
+
+    height: 100vh;
+    width: 100vw;
+    max-width: 320px;
+
+    /* background-color: pink; */
+
+    position: relative;
+}
+
+#ADlogoCont {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* justify-content: flex-start; */
+
+    margin: 10px;
+}
+
+#ADlogoSVG {
+    height: 50px;
+    width: 50px;
+    /* display: none; */
+}
+
+#ADsmileTXT {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    
+    margin-left: 10px;
+    /* display: none; */
+}
+
+#ADnavCont {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    /* display: none; */
+}
+
+#ADnavIconHome, #ADnavIconAnalytics,
+#ADnavIconSettings, #ADnavIconLogout {
+    height: 40px;
+    /* display: none; */
+}
+
+#ADdashboardCont {
+    /* width: 100vw; */
+    width: 320px;
+    min-height: 100vh;
+    margin-top: 20px;
+
+    background-color: #ECF1F0;
+    border-radius: 20px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* display: none; */
+}
+
+#AddashboardTXT {
+    color: #0C393C;
+    font-size: 18px;
+    font-weight: bolder;
+
+    margin-top: 20px;
+    /* display: none; */
+    
+}
+
+#ADcont1Cont {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+
+    margin-top: 20px;
+
+    width: 260px;
+    height: 240px;
+}
