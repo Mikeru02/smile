@@ -1,0 +1,150 @@
+/* logs.css */
+
+#ADbg {
+    min-height: 120vh;
+    width: 100vw;
+    background-color: #0C393C;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#ADmainCont {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    max-width: 320px;
+    position: relative;
+}
+
+#ADlogoCont {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 10px;
+}
+
+#ADlogoSVG {
+    height: 50px;
+    width: 50px;
+}
+
+#ADsmileTXT {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+#ADnavCont {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#ADnavIconHome, #ADnavIconAnalytics,
+#ADnavIconSettings, #ADnavIconLogout {
+    height: 40px;
+}
+
+#ADdashboardCont {
+    width: 320px;
+    min-height: 100vh;
+    margin-top: 20px;
+    background-color: #ECF1F0;
+    border-radius: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+#ADdashboardTXT {
+    color: #0C393C;
+    font-size: 18px;
+    font-weight: bolder;
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.table-container {
+    width: 90%;
+    margin: 20px 0;
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.account-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.account-table th {
+    background-color: #13585C;
+    color: white;
+    padding: 12px 8px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.account-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.account-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.account-table tr:hover {
+    background-color: #e9f5f5;
+}
+
+/* Action buttons styling */
+.edit-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.zzz-icon {
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.edit-btn:hover {
+    background-color: #218838;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
