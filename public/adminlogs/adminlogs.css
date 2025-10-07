@@ -1,0 +1,125 @@
+/* logs.css */
+
+#ADbg {
+    min-height: 120vh;
+    width: 100vw;
+    background-color: #0C393C;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#ADmainCont {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    max-width: 320px;
+    position: relative;
+}
+
+#ADlogoCont {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 10px;
+}
+
+#ADlogoSVG {
+    height: 50px;
+    width: 50px;
+}
+
+#ADsmileTXT {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+#ADnavCont {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#ADnavIconHome, #ADnavIconAnalytics,
+#ADnavIconSettings, #ADnavIconLogout {
+    height: 40px;
+}
+
+#ADdashboardCont {
+    width: 320px;
+    min-height: 100vh;
+    margin-top: 20px;
+    background-color: #ECF1F0;
+    border-radius: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#AddashboardTXT {
+    color: #0C393C;
+    font-size: 18px;
+    font-weight: bolder;
+    margin-top: 20px;
+}
+
+.logs-header {
+    display: flex;
+    width: 90%;
+    background-color: #13585C;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.header-date {
+    width: 35%;
+}
+
+.header-event {
+    width: 30%;
+}
+
+.header-description {
+    width: 35%;
+}
+
+.logs-container {
+    width: 90%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.log-entry {
+    display: flex;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+}
+
+.log-date-time {
+    width: 35%;
+    color: #0C393C;
+    font-weight: bold;
+}
+
+.log-event-type {
+    width: 30%;
+    color: #13585C;
+    font-weight: bold;
+}
+
+.log-description {
+    width: 35%;
+    color: #333333;
+}
