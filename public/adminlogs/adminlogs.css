@@ -1,6 +1,4 @@
-/* logs.css */
-
-#ADbg {
+#ALbg {
     min-height: 120vh;
     width: 100vw;
     background-color: #0C393C;
@@ -9,7 +7,7 @@
     left: 0;
 }
 
-#ADmainCont {
+#ALmainCont {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -19,55 +17,57 @@
     position: relative;
 }
 
-#ADlogoCont {
+#ALlogoCont {
     display: flex;
     align-items: center;
     width: 100%;
     margin: 10px;
 }
 
-#ADlogoSVG {
+#ALlogoSVG {
     height: 50px;
     width: 50px;
 }
 
-#ADsmileTXT {
+#ALsmileTXT {
     color: #FFFFFF;
     font-size: 16px;
     font-weight: bold;
     margin-left: 10px;
 }
 
-#ADnavCont {
+#ALnavCont {
     display: flex;
     justify-content: space-around;
     width: 100%;
 }
 
-#ADnavIconHome, #ADnavIconAnalytics,
-#ADnavIconSettings, #ADnavIconLogout {
+#ALnavIconHome,
+#ALnavIconAnalytics,
+#ALnavIconSettings,
+#ALnavIconLogout {
     height: 40px;
 }
 
-#ADdashboardCont {
+#ALdashboardCont {
     width: 320px;
     min-height: 100vh;
     margin-top: 20px;
     background-color: #ECF1F0;
-    border-radius: 20px 20px;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#AddashboardTXT {
+#ALdashboardTXT {
     color: #0C393C;
     font-size: 18px;
     font-weight: bolder;
     margin-top: 20px;
 }
 
-.logs-header {
+#ALlogsHeader {
     display: flex;
     width: 90%;
     background-color: #13585C;
@@ -79,25 +79,18 @@
     font-size: 14px;
 }
 
-.header-date {
-    width: 35%;
+.ALheaderCell {
+    flex: 1;
+    text-align: center;
 }
 
-.header-event {
-    width: 30%;
-}
-
-.header-description {
-    width: 35%;
-}
-
-.logs-container {
+#ALlogsContainer {
     width: 90%;
     margin-top: 10px;
     margin-bottom: 20px;
 }
 
-.log-entry {
+.ALlogEntry {
     display: flex;
     background-color: #FFFFFF;
     border-radius: 8px;
@@ -107,19 +100,22 @@
     font-size: 14px;
 }
 
-.log-date-time {
-    width: 35%;
+.ALlogDateTime {
+    flex: 1;
     color: #0C393C;
     font-weight: bold;
+    text-align: center;
 }
 
-.log-event-type {
-    width: 30%;
+.ALlogEventType {
+    flex: 1;
     color: #13585C;
     font-weight: bold;
+    text-align: center;
 }
 
-.log-description {
-    width: 35%;
+.ALlogDescription {
+    flex: 1;
     color: #333333;
+    text-align: center;
 }
