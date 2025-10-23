@@ -1,6 +1,19 @@
 from pathlib import Path
 from flask import Flask, send_from_directory
 from routes.v1.index import v1
+from dotenv import load_dotenv
+import os
+import serial
+
+load_dotenv()
+
+port = os.getenv("PORT", 80)
+host = os.getenv("HOST", "0.0.0.0")
+serial_port = os.getenv("SERIAL_PORT", "/dev/ttyACM0")
+serial_speed = os.getenv("SERIAL_SPEED", 9600)
+serial_timeout = os.getenv("SERIAL_TIMEOUT", 1)
+
+arduino = serial.Serial(serial_port, serial_speed, timeout=serial_timeout)
 
 directory = Path(__file__).resolve().parent.parent / "dist"
 
