@@ -1,11 +1,10 @@
-import Layout from "../layouts/default";
-import Header from "../components/captivePortal/header";
+import MainOnlyLayout from "../layouts/mainOnly";
 import Main from "../components/captivePortal/main";
 import Events from "../components/captivePortal/events";
 
 export default function CaptivePortal() {
-  const { header, main, footer } = Layout(this.root);
-  Header(header);
+  const { main } = MainOnlyLayout(this.root);
+
   Main(main);
   Events();
 }
