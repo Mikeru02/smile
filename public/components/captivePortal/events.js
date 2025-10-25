@@ -1,6 +1,8 @@
 // All events in the captive portal will be handled here.
+import Logo from "/icons/bgimg.svg";
 
-export default async function Events(){
+export default async function Events() {
+    document.body.style.backgroundImage = `url('${Logo}')`
     const dropBTN = document.getElementById("start-drop");
 
     let startedDrop = false;

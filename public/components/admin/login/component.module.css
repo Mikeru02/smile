@@ -1,0 +1,32 @@
+.main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    width: 10rem;
+    height: 10rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    height: 57rem;
+    width: 35rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: rgba(64, 82, 86, 0.5);
+    font-family: "Inter";
+    color: white;
+}
+
+.input-fields {
+    display: flex;
+    flex-direction: column;
+}
