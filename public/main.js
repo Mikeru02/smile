@@ -2,7 +2,7 @@ import SPA from './core/spa';
 // TODO: Import the pages here
 import PageNotFound from './pages/pageNotFound';
 import CaptivePortal from './pages/captivePortal';
-import Admin from './pages/admin';
+import Admin from './pages/admin/login';
 
 import './styles/styles.css';
 
