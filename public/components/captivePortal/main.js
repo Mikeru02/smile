@@ -15,7 +15,7 @@ export default function Main(root){
                 <label for="yearlvl">Year Level</label>
                 <input type="text" name="yearlvl" id="yearlvl" placeholder="Year Level">
             </div>
-            <button id="submit-credentital" class="${styles["button-submit-cred"]}">SUBMIT</button>
+            <button id="submit-credential" class="${styles["button-submit-cred"]}">SUBMIT</button>
         </div>
     `;
 
