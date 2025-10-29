@@ -2,3 +2,6 @@ __pycache__
 node_modules
 dist
 .env
+runs
+*.pt
+yolo_smile*
