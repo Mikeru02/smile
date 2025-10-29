@@ -40,16 +40,16 @@ This tool will be used to annotate images for A.I. model training.
     ![alt text](pictures/image-8.png)
 4. Click the classe based on the images.
     ![alt text](pictures/image-9.png)
-    ![alt text](ipictures/image-10.png)
-    ![alt text](ipictures/image-11.png)
+    ![alt text](pictures/image-10.png)
+    ![alt text](pictures/image-11.png)
 5. Left click and drag to the image and then left click again.
-    ![alt text](ipictures/image-12.png)
+    ![alt text](pictures/image-12.png)
 6. After labeling click submit.
 
 ### `Notes`: 
 * To undo labels `Ctrl + Z`.
 * To reset / clear the labels, click the `x` button.
-    ![alt text](ipictures/image-13.png)
+    ![alt text](pictures/image-13.png)
 
 
 # :pencil: Optional
