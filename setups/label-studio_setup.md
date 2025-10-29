@@ -13,7 +13,7 @@ This tool will be used to annotate images for A.I. model training.
 3. Open label-studio at `http://localhost:8080`.
 4. Sign up with an email address and password that you create.
 5. Click Create to create a project.
-    ![alt textpictures/](image.png)
+    ![alt textpictures/](pictures/image.png)
 6. Add project name and labeling setup.
     ![alt text](pictures/image-1.png)
     For labeling setup select the `custom template`.
