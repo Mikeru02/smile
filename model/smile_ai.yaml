@@ -4,5 +4,5 @@ val: datasets/images/val
 nc: 3
 names:
   - General Waste
-  - Papers
-  - Plastic Bottles
+  - Paper
+  - Plastic Bottle
