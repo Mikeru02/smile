@@ -5,3 +5,5 @@ dist
 runs
 *.pt
 yolo_smile*
+venv
+to_process
