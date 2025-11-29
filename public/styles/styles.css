@@ -9,4 +9,9 @@
 
 html {
     font-size: 10px;
+    font-family: "Inter";
+}
+
+table {
+    border-collapse: collapse;
 }

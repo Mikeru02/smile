@@ -2,10 +2,24 @@ import MainOnlyLayout from "../../layouts/mainOnly";
 import Main from "../../components/admin/login/main";
 import Events from "../../components/admin/login/events";
 
-export default function Admin() {
-  const { main } = MainOnlyLayout(this.root);
+// export default function AdminLogin() {
+//   const { main } = MainOnlyLayout(this.root);
 
-  Main(main);
+//   Main(main);
 
-  Events();
+//   Events();
+// }
+
+export default class AdminLogin {
+  constructor(root) {
+    this.root = root;
+  }
+
+  render() {
+    const { main } = MainOnlyLayout(this.root);
+
+    Main(main);
+
+    Events();
+  }
 }
