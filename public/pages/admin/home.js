@@ -1,4 +1,4 @@
-import Layout from "../../layouts/default";
+import HeaderMainOnly from "../../layouts/default";
 import Header from "../../components/admin/header";
 import MainCard from "../../components/admin/main";
 import MainContent from "../../components/admin/home/main";
@@ -10,7 +10,7 @@ export default class AdminHome {
     }
 
     render() {
-        const { header, main, footer } = Layout(this.root);
+        const { header, main } = HeaderMainOnly(this.root);
 
         Header(header);
         const card = MainCard(main, "Dashboard");

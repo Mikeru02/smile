@@ -1,6 +1,6 @@
-import MainOnlyLayout from "../layouts/mainOnly";
-import Main from "../components/captivePortal/main";
-import Events from "../components/captivePortal/events";
+import MainOnlyLayout from "../../layouts/mainOnly";
+import Main from "../../components/user/captivePortal/main";
+import Events from "../../components/user/captivePortal/events";
 
 // export default function CaptivePortal() {
 //   const { main } = MainOnlyLayout(this.root);
