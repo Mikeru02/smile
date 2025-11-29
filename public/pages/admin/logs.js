@@ -2,6 +2,7 @@ import Layout from "../../layouts/default";
 import Header from "../../components/admin/header";
 import MainCard from "../../components/admin/main";
 import AdminEvents from "../../components/admin/events";
+import MainContent from "../../components/admin/logs/main";
 
 export default class AdminLogs {
     constructor(root) {
@@ -13,6 +14,7 @@ export default class AdminLogs {
 
         Header(header);
         const card = MainCard(main, "Logs");
+        MainContent(card)
 
         AdminEvents();
     }

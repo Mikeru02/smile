@@ -7,7 +7,7 @@ export default function MainContent(root) {
             <option value="bin-count">Full Bin Count</option>
         </select>
 
-        <table id="analytics-table" class="${styles["analytics-table"]}">
+        <table id="analytics-table" class="analytics-table">
             <thead></thead>
             <tbody></tbody>
         </table>
