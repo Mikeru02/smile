@@ -1,4 +1,4 @@
-import Layout from "../../layouts/default";
+import HeaderMainOnly from "../../layouts/headerMain";
 import AdminEvents from "../../components/admin/events";
 import PageEvents from "../../components/admin/analytics/events";
 import Header from "../../components/admin/header";
@@ -20,7 +20,7 @@ export default class AdminAnalytics {
     }
 
     render() {
-        const { header, main, footer } = Layout(this.root);
+        const { header, main } = HeaderMainOnly(this.root);
 
         Header(header);
         const card = MainCard(main, "Analytics");
