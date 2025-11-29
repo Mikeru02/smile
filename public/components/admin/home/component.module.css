@@ -1,0 +1,28 @@
+.card {
+    width: 32rem;
+    background-color: #FFFFFF;
+    min-height: 15rem;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 3rem;
+}
+
+.card p {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.stats {
+    color: #666666;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.stats span {
+    font-size: 5rem;
+    color: #0C393C;
+    font-weight: bold;
+}

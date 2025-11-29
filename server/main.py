@@ -1,12 +1,30 @@
-from app import app, config_file, arduino, DROP_CREDITS
-from .modules.utils.clients import Clients
-from .modules.utils.background_process.session_cleaner import Session_Cleaner
-from .modules.utils.background_process.arduino_listener import Arduino_Lister
-import threading
+from modules.helpers.service_checker import Service
+from modules.helpers.setup_config import SETUP
+from modules.helpers.git_checker import GIT
 
-if __name__ == '__main__':
-    global_config = config_file
+if __name__ == "__main__":
+    # Check and restart the services needed
+    services = ["dnsmasq", "NetworkManager"]
+    for service in services:
+        print(f"Checking service [{service}]")
+        check = Service.check(service)
+        if check == False:
+            print(f"Service [{service}] is down. Restarting...")
+            restart = Service.restart(service)
+            print(f"Service [{service}] is {restart}")
+    
+    # Setup the configuation of iptables and conntrack
+    print("Setting up iptables configuration...")
+    SETUP.flush()
+    SETUP.set()
 
-    threading.Thread(target=Session_Cleaner.clean, args=(Clients.active_clients,), daemon=True).start()
-    threading.Thread(target=Arduino_Lister.listen, args=(arduino, DROP_CREDITS, Clients.active_droppers, Clients.pending_clients), daemon=True).start()
-    app.run(host=global_config["HOST"], port=global_config["PORT"])
+    # Check fo updates in the repository
+    print("Fetching current updates...")
+    git_result = GIT.fetch()
+    if git_result:
+        GIT.pull()
+
+    # Import updated app here
+    from app import app
+
+    app.run(debug=True)

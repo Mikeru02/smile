@@ -1,0 +1,75 @@
+.main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    width: 10rem;
+    height: 10rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    height: 57rem;
+    width: 35rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: #0C393C;
+    font-family: "Inter";
+    color: white;
+}
+
+.input-fields {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 2.4rem;
+}
+
+.desc {
+    font-size: 2rem;
+    margin-top: 2rem;
+}
+
+.input-fields input{
+    width: 26rem;
+    height: 4rem;
+    background-color: transparent;
+    border: solid 3px white;
+    border-radius: .5rem;
+    margin-bottom: 1.5rem;
+    color: white;
+    /* font-weight: bold; */
+    padding-left: 1rem;
+}
+
+.input-fields input::placeholder{
+    color: rgba(255,255,255,0.6);
+}
+
+.input-fields input:focus {
+    outline: none;
+}
+
+.input-fields label {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    margin-bottom: .1rem;
+}
+
+.button-submit-cred {
+    width: 21rem;
+    height: 4rem;
+    border-radius: 3.4rem;
+    margin-top: 2rem;
+    font-size: 1.6rem;
+}

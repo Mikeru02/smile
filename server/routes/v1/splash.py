@@ -1,6 +1,6 @@
-from flask import Blueprint, request, current_app
-from utils.modules.client_management import Client_Management
-from utils.modules.clients import Clients
+from flask import Blueprint, request
+from data.clients import Clients
+from modules.utils.client_management import Client_Management
 import time
 
 active_clients = Clients.active_clients
