@@ -22,7 +22,12 @@ class SPA {
             this.pushRoute('/')
             return;
         }
-        cb.call(this.context, params);
+
+        const page = new cb(this.context.root);
+        if (typeof page.render === "function") {
+          page.render(params)
+        }
+        //cb.call(this.context, params);
     };
       this.routes.push({
         key: path,
