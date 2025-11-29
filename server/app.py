@@ -1,80 +1,32 @@
-# Main Script Application for S.M.I.L.E.
-
-# Libraries and modules used
-from flask import Flask, request, redirect as flask_redirect
-from modules.utils.file_handler import Open_File
-from modules.utils.path_handler import Path_Handler
-from modules.utils.clients import Clients
+from pathlib import Path
+from flask import Flask, send_from_directory
 from routes.v1.index import v1
+from dotenv import load_dotenv
+import os
 import serial
 
-# Instance of the flask application
-app = Flask(__name__, template_folder="../public")
+load_dotenv()
 
-# Registers the route of /v1
-app.register_blueprint(v1, url_prefix='/v1')
+port = os.getenv("PORT", 80)
+host = os.getenv("HOST", "0.0.0.0")
+serial_port = os.getenv("SERIAL_PORT", "/dev/ttyACM0")
+serial_speed = os.getenv("SERIAL_SPEED", 9600)
+serial_timeout = os.getenv("SERIAL_TIMEOUT", 1)
 
-# Loading of the configuration file
-config_file = Open_File(Path_Handler.get("smile.conf")).execute()
+arduino = serial.Serial(serial_port, serial_speed, timeout=serial_timeout)
 
-# Instance the arduino
-arduino = serial.Serial(config_file["SERIAL_PORT"], config_file["SERIAL_SPEED"], timeout=1)
-DROP_CREDITS = {
-    "PLASTIC_BOTTLE": 5 * 60,
-    "PLASTIC_WASTE": 3 * 60
-}
+directory = Path(__file__).resolve().parent.parent / "dist"
 
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def redirect(path):
-    ip = request.remote_addr
-    if path.startswith("/v1/admin"):
-        return flask_redirect("/v1/admin")
+app = Flask(__name__, static_folder=None)
 
-    if ip not in Clients.pending_clients:
-        Clients.pending_clients[ip] = 0  # Start with 0 earned time
+app.register_blueprint(v1, url_prefix="/v1")
 
-    return '''
-    <html>
-    <head>
-        <title>Smile WiFi</title>
-        <script>
-        let startedDrop = false;
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    file_path = directory / path
 
-        async function checkTime() {
-            const res = await fetch('/v1/splash/earned');
-            const data = await res.json();
+    if file_path.exists() and file_path.is_file():
+        return send_from_directory(directory, path)
 
-            if (data.minutes > 0) {
-                document.getElementById("earned").innerText = `✅ You've earned ${data.minutes} minutes.`;
-                document.getElementById("authBtn").disabled = false;
-            } else {
-                if (!startedDrop) {
-                    document.getElementById("earned").innerText = "🕒 Press the button below and drop a bottle/plastic.";
-                } else {
-                    document.getElementById("earned").innerText = "🕒 Waiting for drop input from Arduino...";
-                }
-                document.getElementById("authBtn").disabled = true;
-            }
-        }
-
-        async function startDrop() {
-            startedDrop = true;
-            await fetch('/v1/splash/start_drop', { method: 'POST' });
-            document.getElementById("earned").innerText = "🕒 Waiting for drop input from Arduino...";
-        }
-
-        setInterval(checkTime, 2000);
-        window.onload = checkTime;
-        </script>
-    </head>
-    <body>
-        <h1>Welcome to Smile WiFi!</h1>
-        <button onclick="startDrop()">🚮 Press Me to Start Drop</button>
-        <p id="earned">🕒 Waiting...</p>
-        <form action="/v1/splash/authenticate" method="post">
-            <button id="authBtn" type="submit" disabled>Click to Get Internet</button>
-        </form>
-    </body>
-    </html>
-    '''
+    return send_from_directory(directory, 'index.html')

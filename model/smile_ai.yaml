@@ -1,0 +1,8 @@
+train: datasets/images/train
+val: datasets/images/val
+
+nc: 3
+names:
+  - General Waste
+  - Paper
+  - Plastic Bottle
