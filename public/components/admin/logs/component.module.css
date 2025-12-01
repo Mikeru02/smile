@@ -1,0 +1,75 @@
+.logs-container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.logs-table-container {
+    width: 100%;
+    padding: 0;
+    overflow-x: auto;
+}
+
+.logs-table {
+    width: 100%;
+    min-width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.logs-table thead {
+    background-color: #145054;
+    height: 4rem;
+    text-align: left;
+    color: #FFFFFF;
+    border-bottom: solid .5rem #ECF1F0;
+}
+
+.logs-table thead tr th,
+.logs-table tbody tr td {
+    padding: 0 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.logs-table tbody {
+    background-color: #FFFFFF;
+}
+
+.logs-table tbody tr {
+    border-bottom: solid .5rem #ECF1F0;
+    height: 4rem;
+}
+
+/* Column widths */
+.logs-table thead tr th:first-child,
+.logs-table tbody tr td:first-child {
+    width: 30%;
+}
+
+.logs-table thead tr th:not(:first-child),
+.logs-table tbody tr td:not(:first-child) {
+    width: 35%;
+}
+
+/* Responsiveness */
+@media (max-width: 425px) {
+    .logs-table {
+        font-size: 0.8rem;
+    }
+    
+    .logs-table thead {
+        height: 3rem;
+    }
+    
+    .logs-table thead tr th,
+    .logs-table tbody tr td {
+        padding: 0 0.5rem;
+    }
+    
+    .logs-table tbody tr {
+        height: 3rem;
+    }
+}
