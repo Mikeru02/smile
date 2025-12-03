@@ -6,8 +6,12 @@ import os
 
 load_dotenv()
 
+port=80
+host="192.168.10.1"
+
 if __name__ == "__main__":
-    if os.getenv("RUN_MAIN") != "true":
+    """
+    if os.getenv("RUN_MAIN") == "true":
         # Check and restart the services needed
         services = ["dnsmasq", "NetworkManager"]
         for service in services:
@@ -28,8 +32,8 @@ if __name__ == "__main__":
         git_result = GIT.fetch()
         if git_result:
             GIT.pull()
-
+    """
     # Import updated app here
     from app import app
 
-    app.run(debug=True)
+    app.run(host=host, port=port, debug=True)
