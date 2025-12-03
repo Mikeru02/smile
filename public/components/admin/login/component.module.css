@@ -1,4 +1,3 @@
-/* Base styles */
 .main {
     width: 100vw;
     min-height: 100vh;
@@ -159,14 +158,12 @@
     }
 }
 
-/* Small tablet adjustments */
 @media (min-width: 600px) and (max-width: 768px) {
     .card {
         max-width: 90%;
     }
 }
 
-/* Landscape mode for tablets */
 @media (max-height: 768px) and (orientation: landscape) {
     .card {
         min-height: auto;
