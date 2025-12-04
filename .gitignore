@@ -9,3 +9,4 @@ venv
 to_process
 *.jpg
 *.csv
+datasets
