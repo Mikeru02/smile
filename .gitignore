@@ -7,3 +7,5 @@ runs
 yolo_smile*
 venv
 to_process
+*.jpg
+*.csv
