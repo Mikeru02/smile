@@ -2,18 +2,6 @@ from pathlib import Path
 from flask import Flask, send_from_directory, redirect
 from routes.v1.index import v1
 from dotenv import load_dotenv
-from modules.arduino.arduino import Arduino
-import os
-
-load_dotenv()
-
-port = os.getenv("PORT", 80)
-host = os.getenv("HOST", "0.0.0.0")
-serial_port = os.getenv("SERIAL_PORT", "/dev/ttyACM0")
-serial_speed = os.getenv("SERIAL_SPEED", 9600)
-serial_timeout = os.getenv("SERIAL_TIMEOUT", 1)
-
-arduino = Arduino(serial_port, serial_speed, serial_timeout)
 
 directory = Path(__file__).resolve().parent.parent / "dist"
 
