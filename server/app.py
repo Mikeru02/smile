@@ -2,8 +2,8 @@ from pathlib import Path
 from flask import Flask, send_from_directory, redirect
 from routes.v1.index import v1
 from dotenv import load_dotenv
+from modules.arduino.arduino import Arduino
 import os
-import serial
 
 load_dotenv()
 
@@ -13,7 +13,7 @@ serial_port = os.getenv("SERIAL_PORT", "/dev/ttyACM0")
 serial_speed = os.getenv("SERIAL_SPEED", 9600)
 serial_timeout = os.getenv("SERIAL_TIMEOUT", 1)
 
-arduino = serial.Serial(serial_port, serial_speed, timeout=serial_timeout)
+arduino = Arduino(serial_port, serial_speed, serial_timeout)
 
 directory = Path(__file__).resolve().parent.parent / "dist"
 
@@ -21,7 +21,7 @@ app = Flask(__name__, static_folder=None)
 
 app.register_blueprint(v1, url_prefix="/v1")
 
-@app.route('/', defaults={'path': ''}, methods=["GET","POST"])
+@app.route('/', defaults={'path': ''})
 @app.route('/<path:path>', methods=["GET","POST"])
 def serve(path):
     file_path = directory / path

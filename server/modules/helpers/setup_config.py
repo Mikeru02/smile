@@ -4,12 +4,12 @@ import os
 
 load_dotenv()
 
-router_connection_name = os.getenv("ROUTER_CONNECTION_NAME")
-router_connection = os.getenv("ROUTER_CONNECTION")
-router_address = os.getenv("ROUTER_ADDRESS")
-port = os.getenv("PORT")
-tcp_port = os.getenv("TCP_PORT")
-udp_port = os.getenv("UDP_PORT")
+router_main_interface = os.getenv("ROUTER_MAIN_INTERFACE", "eth0")
+router_secondary_interface = os.getenv("ROUTER_SECONDARY_INTERFACE", "enxec9a0c1bee94")
+router_address = os.getenv("ROUTER_ADDRESS", "192.168.10.1")
+port = os.getenv("PORT", 80)
+tcp_port = os.getenv("TCP_PORT", 80)
+udp_port = os.getenv("UDP_PORT", 53)
 
 class SETUP:
     @staticmethod
@@ -40,9 +40,13 @@ class SETUP:
     @staticmethod
     def set():
         commands = [
-            ["iptables", "-t", "nat", "-A", "PREROUTING", "-i", router_connection, "-p", "tcp", "--dport", tcp_port, "-j", "DNAT", "--to-destination", f"{router_address}:{port}"],
-            ["iptables", "-t", "nat", "-A", "PREROUTING", "-i", router_connection, "-p", "udp", "--dport", udp_port, "-j", "DNAT", "--to-destination", router_address],
-            ["iptables", "-t", "nat", "-A", "POSTROUTING", "-o", "eth0", "-j", "MASQUERADE"]
+            ["sudo", "iptables", "-t", "nat", "-A", "PREROUTING", "-i", router_secondary_interface, "-p", "tcp", "-dport", tcp_port, "-j", "DNAT", "--to-destination", f"{router_address}:{port}"],
+            ["sudo", "iptables", "-t", "nat", "-A", "PREROUTING", "-i", router_secondary_interface, "-p", "udp", "-dport", udp_port, "-j", "DNAT", "--to-destination", f"{router_address}"],
+            ["sudo", "iptables", "-t", "nat", "-A", "POSTROUTING", "-o", router_main_interface, "-j", "MASQUERADE"],
+            ["sudo", "iptables", "-A", "FORWARD", "-i", router_secondary_interface, "-j", "DROP"],
+            ["sudo", "iptables", "-A", "FORWARD", "-i", router_secondary_interface, "-d", router_address, "-j", "ACCEPT"],
+            ["sudo", "iptables", "-A", "FORWARD", "-i", router_secondary_interface, "-p", "udp", "--dport", udp_port, "-d", router_address, "-j", "ACCEPT"]
+
         ]
 
         is_success = True
