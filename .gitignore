@@ -8,5 +8,7 @@ yolo_smile*
 venv
 to_process
 *.jpg
+*.jpeg
 *.csv
-datasets
+*.txt
+.zip
