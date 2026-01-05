@@ -67,8 +67,8 @@ if __name__ == "__main__":
 
         if arduino_ready:
             ips = get_all_ip()
-            for ip in ips:
-                arduino.send_message(f"INFO | IP | {ip}\n")
+            all_ips = " , ".join(ips)
+            arduino.send_message(f"INFO | IP | {all_ips}\n")
             print("IP is displayed on lcd for debugging")
 
         app.config["arduino"] = arduino
@@ -77,8 +77,8 @@ if __name__ == "__main__":
         print("Failed to start app!")
         if arduino_ready:
             ips = get_all_ip()
-            for ip in ips:
-                arduino.send_message(f"INFO | IP | {ip}\n")
+            all_ips = " , ".join(ips)
+            arduino.send_message(f"INFO | IP | {all_ips}\n")
             print("IP is displayed on lcd for debugging")
                 
         print("The following checks failed...")
