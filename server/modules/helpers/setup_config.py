@@ -15,10 +15,10 @@ class SETUP:
     @staticmethod
     def flush():
         commands = [
-            ["iptables", "-F"],
-            ["iptables", "-t", "nat", "-F"],
-            ["iptables", "-X"],
-            ["conntrack", "-F"]
+            ["sudo", "iptables", "-F"],
+            ["sudo", "iptables", "-t", "nat", "-F"],
+            ["sudo", "iptables", "-X"],
+            ["sudo", "conntrack", "-F"]
         ]
 
         is_success = True
@@ -40,8 +40,8 @@ class SETUP:
     @staticmethod
     def set():
         commands = [
-            ["sudo", "iptables", "-t", "nat", "-A", "PREROUTING", "-i", router_secondary_interface, "-p", "tcp", "-dport", tcp_port, "-j", "DNAT", "--to-destination", f"{router_address}:{port}"],
-            ["sudo", "iptables", "-t", "nat", "-A", "PREROUTING", "-i", router_secondary_interface, "-p", "udp", "-dport", udp_port, "-j", "DNAT", "--to-destination", f"{router_address}"],
+            ["sudo", "iptables", "-t", "nat", "-A", "PREROUTING", "-i", router_secondary_interface, "-p", "tcp", "--dport", tcp_port, "-j", "DNAT", "--to-destination", f"{router_address}:{port}"],
+            ["sudo", "iptables", "-t", "nat", "-A", "PREROUTING", "-i", router_secondary_interface, "-p", "udp", "--dport", udp_port, "-j", "DNAT", "--to-destination", f"{router_address}"],
             ["sudo", "iptables", "-t", "nat", "-A", "POSTROUTING", "-o", router_main_interface, "-j", "MASQUERADE"],
             ["sudo", "iptables", "-A", "FORWARD", "-i", router_secondary_interface, "-j", "DROP"],
             ["sudo", "iptables", "-A", "FORWARD", "-i", router_secondary_interface, "-d", router_address, "-j", "ACCEPT"],
