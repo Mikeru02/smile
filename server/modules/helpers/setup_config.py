@@ -7,9 +7,9 @@ load_dotenv()
 router_main_interface = os.getenv("ROUTER_MAIN_INTERFACE", "eth0")
 router_secondary_interface = os.getenv("ROUTER_SECONDARY_INTERFACE", "enxec9a0c1bee94")
 router_address = os.getenv("ROUTER_ADDRESS", "192.168.10.1")
-port = os.getenv("PORT", 80)
-tcp_port = os.getenv("TCP_PORT", 80)
-udp_port = os.getenv("UDP_PORT", 53)
+port = os.getenv("PORT", "80")
+tcp_port = os.getenv("TCP_PORT", "80")
+udp_port = os.getenv("UDP_PORT", "53")
 
 class SETUP:
     @staticmethod

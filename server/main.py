@@ -2,6 +2,7 @@ from modules.helpers.service_checker import Service
 from modules.helpers.setup_config import SETUP
 from modules.helpers.git_checker import GIT
 from modules.arduino.arduino_module import Arduino
+from modules.utils.get_all_ip import get_all_ip
 from dotenv import load_dotenv
 import os
 
@@ -65,6 +66,13 @@ if __name__ == "__main__":
         app.config["arduino"] = arduino
         app.run(host=host, port=port, debug=True)
     else:
+        print("Failed to start app!")
+        if arduino_ready:
+            ips = get_all_ip()
+            for ip in ips:
+                arduino.send_message(f"[IP] [{ip}]\n")
+            print("IP is displayed on lcd for debugging")
+            
         print("The following checks failed...")
         for failure in failed_checks:
             print("\t", failure)
