@@ -16,6 +16,8 @@ class Arduino:
         time.sleep(3)
 
     def send_message(self, message):
+        if isinstance(message, str):
+            message = message.encode('utf-8')
         self.serial_connection.write(message)
 
     def read_message(self):
