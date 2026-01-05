@@ -1,5 +1,5 @@
 from pathlib import Path
-from flask import Flask, send_from_directory, redirect
+from flask import Flask, send_from_directory, redirect, make_response
 from routes.v1.index import v1
 from dotenv import load_dotenv
 
@@ -15,7 +15,9 @@ def serve(path):
     file_path = directory / path
 
     if file_path.exists() and file_path.is_file():
-        return send_from_directory(directory, path)
+        response = make_response(send_from_directory(directory, path))
+        response.status_code = 302
+        return response
 
     return send_from_directory(directory, 'index.html')
 
