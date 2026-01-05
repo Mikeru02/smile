@@ -15,9 +15,7 @@ def serve(path):
     file_path = directory / path
 
     if file_path.exists() and file_path.is_file():
-        response = make_response(send_from_directory(directory, path))
-        response.status_code = 302
-        return response
+        return send_from_directory(directory, path)
 
     return send_from_directory(directory, 'index.html')
 
