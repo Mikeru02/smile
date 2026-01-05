@@ -72,7 +72,7 @@ if __name__ == "__main__":
             print("IP is displayed on lcd for debugging")
 
         app.config["arduino"] = arduino
-        app.run(host=host, port=port, debug=True)
+        app.run(host=host, port=port)
     else:
         print("Failed to start app!")
         if arduino_ready:
