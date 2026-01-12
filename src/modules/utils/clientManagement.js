@@ -7,7 +7,7 @@ export default class ClientManagement {
     
     static allowClient(ip) {
         if (!this.isValidIP(ip)) {
-            throw new Error(`[ERROR] Invalid IP address: ${ip}`);
+            throw new Error(`[ERROR] <ClientManagement.allowClient> Invalid IP address: ${ip}`);
         }
 
         runSpawnSync('iptables', ['-t', 'nat', '-I', 'PREROUTING', '-s', ip, '-p', 'tcp', '--dport', '80', '-j', 'RETURN']);
@@ -21,7 +21,7 @@ export default class ClientManagement {
 
     static revokeClient(ip) {
         if (!this.isValidIP(ip)) {
-            throw new Error(`[ERROR] Invalid IP address: ${ip}`);
+            throw new Error(`[ERROR] <ClientManagement.revokeClient> Invalid IP address: ${ip}`);
         }
 
         runSpawnSync('iptables', ['-t', 'nat', '-D', 'PREROUTING', '-s', ip, '-p', 'tcp', '--dport', '80', '-j', 'RETURN']);

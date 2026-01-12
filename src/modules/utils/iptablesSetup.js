@@ -1,11 +1,11 @@
-import runSpawnSync from './runSpawnSync';
+import runSpawnSync from './runSpawnSync.js';
 
-routerAddress = process.env.ROUTER_ADDRESS;
-routerPrimaryInterface = process.env.PRIMARY_INTERFACE;
-routerSecondaryInterface = process.env.SECONDARY_INTERFACE;
-tcpPort = Number(process.env.TCP_PORT);
-udpPort = Number(process.env.UDP_PORT);
-srcPort = Number(process.env.SRC_PORT);
+const routerAddress = process.env.ROUTER_ADDRESS;
+const routerPrimaryInterface = process.env.PRIMARY_INTERFACE;
+const routerSecondaryInterface = process.env.SECONDARY_INTERFACE;
+const tcpPort = Number(process.env.TCP_PORT);
+const udpPort = Number(process.env.UDP_PORT);
+const srcPort = Number(process.env.SRC_PORT);
 
 export default class IPTSetup {
     static flush() {
@@ -20,7 +20,7 @@ export default class IPTSetup {
             try {
                 runSpawnSync(cmd, args);
             } catch(err) {
-                console.error(`[ERROR] ${cmd} ${args.join(' ')} failed: `, err.message);
+                console.error(`[ERROR] <IPTSetup.flush> ${cmd} ${args.join(' ')} failed: `, err.message);
             }
         }
 
@@ -41,7 +41,7 @@ export default class IPTSetup {
             try {
                 runSpawnSync(cmd, args);
             } catch(err) {
-                console.error(`[ERROR] ${cmd} ${args.join(' ')} failed: `, err.message);
+                console.error(`[ERROR] <IPTSetup.set> ${cmd} ${args.join(' ')} failed: `, err.message);
             }
         }
     }
