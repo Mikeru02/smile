@@ -1,0 +1,28 @@
+services:
+  mongo:
+    image: mongo:latest
+    container: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: tamsadmin
+      MONGO_INITDB_ROOT_PASSWORD: admintams
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+  
+  mongo-express:
+    image: mongo-express:latest
+    container: mongo-express
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: tamsadmin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admintams
+      ME_CONFIG_MONGODB_SERVER: mongo
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data
