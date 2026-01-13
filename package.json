@@ -6,6 +6,7 @@
   "scripts": {
     "dev_frontend": "vite",
     "dev_backend": "python3 server/main.py",
+    "dev_api": "nodemon api/index.js",
     "build_frontend": "vite build --emptyOutDir",
     "prod": "python3 server/main.py",
     "js": "nodemon src/index.js",
