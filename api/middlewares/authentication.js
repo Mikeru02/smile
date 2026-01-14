@@ -20,7 +20,7 @@ export default function authentication(req, res, next) {
         return;
         }
 
-        res.locals.username = decoded?.username;
+        res.locals.ip = decoded?.ip;
         res.locals.authenticated = true;
         next();
     });
