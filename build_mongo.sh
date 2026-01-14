@@ -32,7 +32,16 @@ if ! docker ps -a | grep -q $MONGO_CONTAINER; then
         -p 27017:27017 \
         mongo
 else
-    echo "MongoDB container already exists."
+    echo "MongoDB container already exists. Recreating to ensure port mapping..."
+    docker stop $MONGO_CONTAINER
+    docker rm $MONGO_CONTAINER
+    docker run -d \
+        --name $MONGO_CONTAINER \
+        --network $NETWORK_NAME \
+        -e MONGO_INITDB_ROOT_USERNAME=$MONGO_ROOT_USER \
+        -e MONGO_INITDB_ROOT_PASSWORD=$MONGO_ROOT_PASS \
+        -p 27017:27017 \
+        mongo
 fi
 
 # ===== RUN MONGO EXPRESS =====
@@ -50,7 +59,8 @@ if ! docker ps -a | grep -q $MONGO_EXPRESS_CONTAINER; then
         -p 8081:8081 \
         mongo-express
 else
-    echo "Mongo Express container already exists."
+    echo "Mongo Express container already exists. Restarting..."
+    docker restart $MONGO_EXPRESS_CONTAINER
 fi
 
 
