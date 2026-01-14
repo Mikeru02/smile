@@ -2,12 +2,12 @@ import SPA from './core/spa';
 // TODO: Import the pages here
 import PageNotFound from './pages/pageNotFound';
 import CaptivePortal from './pages/user/captivePortal';
+import TimePortal from './pages/user/timePortal';
 import AdminLogin from './pages/admin/login';
 import AdminHome from './pages/admin/home';
 import AdminAnalytics from './pages/admin/analytics';
 import AdminLogs from './pages/admin/logs';
 import AdminAccountManagement from './pages/admin/accountManagement';
-import Portal from './pages/receive';
 
 import './styles/styles.css';
 
@@ -20,6 +20,7 @@ window.app = app;
 
 // TODO: Add the routes here
 app.add("/", CaptivePortal);
+app.add("/portal", TimePortal);
 app.add("/admin/login", AdminLogin);
 app.add("/admin/dashboard", AdminHome);
 app.add("/admin/analytics", AdminAnalytics);
