@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import 'dotenv/config.js';
 import Service from './modules/utils/serviceChecker.js';
 import IPTSetup from './modules/utils/iptablesSetup.js';
+import StaticIP from './modules/utils/setStaticIP.js';
 
 // Block for checking the services needed
 console.log('Checking services...');
@@ -27,6 +28,10 @@ if (serviceFailure.length > 0) {
 } else {
     console.log('[OK] All services are running');
 }
+
+// Block for setting up static ip
+console.log('Setting up Static Ip...');
+StaticIP.set();
 
 // Block for setup of iptables
 console.log('Setting up iptables...');
