@@ -29,8 +29,6 @@ export default class ClientController {
                 "time_remaining": 0,
                 "time_earned": 0,
                 "connection_start_at": null,
-                "created_at": new Date(),
-                "updated_at": new Date()
             }
 
             const response = await this.clientModel.create(clientData);
