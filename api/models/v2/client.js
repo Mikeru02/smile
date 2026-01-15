@@ -14,18 +14,54 @@ class Client {
             );
             return result;
         } catch (err) {
-            console.error("[ERROR] account.create", err);
+            console.error("[ERROR] client.create", err);
+            throw err;
+        }
+    }
+
+    async authenticate(ip) {
+        try {
+            const clientData = await this.getClientByIP(ip);
+            const timeRemaining = clientData.time_remaining + clientData.time_earned;
+            const [result, ] = await this.db.execute(
+                'UPDATE clients SET time_remaining=?, time_earned=?, status=?, connection_start_at=NOW(), updated_at=NOW() WHERE ip=?',
+                [timeRemaining, 0, 'active', ip]
+            );
+            return result;
+        } catch (err) {
+            console.error("[ERROR] client.authenticate", err);
+            throw err;
+        }
+    }
+
+    async getClientTime(ip, type) {
+        try {
+            if (type === 'time_earned') {
+                const [result, ] = await this.db.execute(
+                    'SELECT time_earned FROM clients WHERE ip=?',
+                    [ip]
+                );
+                return result?.[0];
+            } else if (type === 'time_remaining') {
+                const [result, ] = await this.db.execute(
+                    'SELECT time_remaining FROM clients WHERE ip=?',
+                    [ip]
+                );
+                return result?.[0];
+            }
+        } catch (err) {
+            console.error("[ERROR] client.getClientEarnedTime", err);
             throw err;
         }
     }
 
     async getClientByIP(ip) {
         try {
-            const [result, ] = this.db.execute(
+            const [result, ] = await this.db.execute(
                 'SELECT * FROM clients WHERE ip=?',
                 [ip]
             );
-            return result;
+            return result?.[0];
         } catch (err) {
             console.error("[ERROR] client.getClientByIP", err);
             throw err;
@@ -49,7 +85,7 @@ class Client {
     async updateClientStatus(ip, status) {
         try {
             const [result, ] = await this.db.execute(
-                'UPDATE clients SET status=? WHERE ip=?',
+                'UPDATE clients SET status=?, updated_at=NOW() WHERE ip=?',
                 [status, ip]
             )
             return result;
@@ -59,9 +95,15 @@ class Client {
         }
     }
 
-    async earned(req, res) {
+    async earned(ip, timeEarned) {
         try {
-
+            const clientData = await this.getClientByIP(ip);
+            const totalTime = clientData.time_earned + timeEarned;
+            const [result, ] = await this.db.execute(
+                'UPDATE clients SET time_earned=?, updated_at=NOW() WHERE ip=?',
+                [totalTime, ip]
+            );
+            return result;
         } catch (err) {
             console.error("[ERROR] client.earned", err);
             throw err;

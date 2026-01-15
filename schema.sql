@@ -1,4 +1,4 @@
-DROP DATABASE smile;
+DROP DATABASE IF EXISTS smile;
 
 CREATE DATABASE IF NOT EXISTS smile
     CHARACTER SET utf8mb4
@@ -12,8 +12,8 @@ CREATE TABLE `accounts`(
     `name` VARCHAR(100) NOT NULL,
     `role` ENUM('staff', 'admin') NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `clients`(
@@ -23,7 +23,9 @@ CREATE TABLE `clients`(
     `course` VARCHAR(10) NOT NULL,
     `yearlevel` INT NOT NULL,
     `status` ENUM('pending', 'active', 'dropping', 'paused'),
-    `connection_start_at` TIMESTAMP DEFAULT NULL,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    `time_remaining` BIGINT DEFAULT 0,
+    `time_earned` BIGINT DEFAULT 0,
+    `connection_start_at` DATETIME DEFAULT NULL,
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

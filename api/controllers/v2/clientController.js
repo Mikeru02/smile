@@ -36,7 +36,19 @@ class ClientController {
     async authenticate(req, res) {
         try {
             const clientData = await this.client.getClientByIP(res.locals.ip);
-            console.log(clientData);
+            const earnedTime = clientData.time_earned;
+            if (earnedTime === 0 || clientData.status != 'dropping') {
+                return res.status(400).json({
+                    success: false,
+                    messgae: "You must drop a trash to earn time!"
+                });
+            }
+            await this.client.authenticate(res.locals.ip);
+            return res.status(200).json({
+                success: true,
+                message: 'Client Authenticated!'
+            })
+
         } catch (err) {
             return res.status(500).json({
                 success: false,
@@ -67,32 +79,83 @@ class ClientController {
         }
     }
 
-    async update(req, res) {
-        try{ 
-            const { name, role, password} = req.body || {};
-            if (!username || !name || !role || !password) {
+    async earned(req, res) {
+        try {
+            const { earned_time } = req.body || {};
+            if (!earned_time) {
                 return res.status(400).json({
                     success: false,
-                    message: 'All fields are required'
-                }) 
+                    message: 'No time earned'
+                })
             }
-            const currentData = await this.account.get(res.locals.username);
-            const upName = name ?? currentData.name;
-            const upRole = role ?? currentData.role;
-            const upPass = password ?? currentData.password;
+            const convertedTime = Number(earned_time);
+            if (isNaN(convertedTime) || convertedTime <= 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid time value"
+                })
+            }
 
-            const response = await this.account.update(res.locals.username, upName, upRole, upPass);
-            if (response?.affectedRows > 0) {
-                return res.status(200).json({
-                    success: true,
-                    message: 'Account details are updated'
-                })
-            } else {
+            await this.client.earned(res.locals.ip, convertedTime);
+            return res.status(200).json({
+                success: true,
+                message: "Time earned is added"
+            })
+            
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async getClientByIP(req, res) {
+        try {
+            const response = await this.client.getClientByIP(res.locals.ip);
+            return res.status(200).json({
+                success: true,
+                data: response
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async getClientTime(req, res) {
+        try {
+            const response = await this.client.getClientTime(res.locals.ip, req.params.type);
+            return res.status(200).json({
+                success: true,
+                data: response
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async updateClientStatus(req, res) {
+        try {
+            const { status } = req.body || {};
+            if (!status) {
                 return res.status(400).json({
                     success: false,
-                    message: 'Account details are not updated'
-                })
+                    message: 'Field is required'
+                });
             }
+
+            await this.client.updateClientStatus(res.locals.ip, status);
+            return res.status(200).json({
+                success: true,
+                message: 'Updated successfully'
+            });
+
         } catch (err) {
             return res.status(500).json({
                 success: false,

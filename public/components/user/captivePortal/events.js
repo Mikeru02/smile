@@ -22,7 +22,7 @@ export default async function Events() {
         localStorage.setItem('token', response.data.data.token);
 
         // TODO: Redirect the user to the page of receiving time/rewards
-        window.app.pushRoute("/received");
+        window.app.pushRoute("/portal");
     })
 }
 

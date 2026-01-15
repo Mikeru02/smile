@@ -17,7 +17,7 @@ export default function Modal() {
                 </div>
                 <div class="${styles['button-container']}">
                     <button id="exit" class="${styles["action-button"]}">Exit</button>
-                    <button id="Proceed" class="${styles["action-button"]}">Proceed</button>
+                    <button id="proceed" class="${styles["action-button"]}">Proceed</button>
                 </div>
             </div>
         </div>

@@ -21,6 +21,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.use('/v1', cors(), v1);
 app.use('/v2', cors(), v2);
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`[RUNNING] API is up and running at port ${port}...`);
 })
