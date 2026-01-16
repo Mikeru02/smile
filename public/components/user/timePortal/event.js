@@ -95,7 +95,7 @@ export default async function Events() {
     proceed.addEventListener('click', async function() {
         modal.style.display = 'none';
         clearInterval(earnInterval);
-        const response = await axios.post(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/authenticate`, {}, {
+        const response = await axios.post(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/firstAuth`, {}, {
             headers: {
                 'Content-Type': 'application/json',
                 'apikey': import.meta.env.VITE_API_KEY,
