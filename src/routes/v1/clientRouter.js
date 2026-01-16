@@ -36,6 +36,8 @@ clientRouter.post('/disconnect', async (req, res) => {
         }
     );
 
+    await axios
+
     ClientManagement.revokeClient(req.ip);
     return res.status(200).json({
         success: true,

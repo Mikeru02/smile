@@ -11,6 +11,7 @@ import Service from './utils/serviceChecker.js';
 import IPTSetup from './utils/iptablesSetup.js';
 import StaticIP from './utils/setStaticIP.js';
 import v1 from './routes/v1/index.js';
+import startTimeDeductor from './workers/timeDeductor.js';
 
 // Block for checking the services needed
 console.log('Checking services...');
@@ -79,3 +80,6 @@ app.get('*', (req, res) => {
 app.listen(port, host, () => {
     console.log(`Server is running at http://${host}:${port}`);
 });
+
+// Intialize workers
+startTimeDeductor();

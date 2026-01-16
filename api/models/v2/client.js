@@ -49,9 +49,29 @@ class Client {
 
     async deauthenticate(ip) {
         try {
+            const [row] = await this.db.execute(
+                'SELECT time_remaining, connection_start_at FROM clients WHERE ip=?',
+                [ip]
+            );
+
+            if (!row.length) {
+                throw new Error('Client not found');
+            }
+
+            const client = row[0];
+            let newTimeRemaining = client.time_remaining;
+
+            if (client.connection_start_at) {
+                const now = new Date();
+                const connectionStart = new Date(client.connection_start_at);
+
+                const consumedSeconds = Math.floor((now - connectionStart) / 1000);
+
+                newTimeRemaining = Math.max(client.time_remaining - consumedSeconds, 0);
+            }
             const [result, ] = await this.db.execute(
-                'UPDATE clients SET status=?, connection_start_at=?,  updated_at=NOW() WHERE ip=?',
-                ['paused', null, ip]
+                'UPDATE clients SET status=?, connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=?',
+                ['paused', null, newTimeRemaining, ip]
             );
             return result;
         } catch (err) {
