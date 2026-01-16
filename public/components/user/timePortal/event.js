@@ -69,6 +69,17 @@ export default async function Events() {
                     }
                 }
             );
+            const debug = await axios.post(
+                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/disconnect`,
+                {},
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            console.log(debug);
         }
     });
 

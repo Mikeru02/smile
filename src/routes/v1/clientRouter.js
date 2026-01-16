@@ -8,6 +8,13 @@ clientRouter.post('/connect', async (req, res) => {
     return res.status(200).json({
         success: true,
     })
+});
+
+clientRouter.post('/disconnect', async (req, res) => {
+    ClientManagement.revokeClient(req.ip);
+    return res.status(200).json({
+        success: true,
+    })
 })
 
 export default clientRouter;
