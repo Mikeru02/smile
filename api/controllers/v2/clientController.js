@@ -62,13 +62,18 @@ class ClientController {
             const clientData = await this.client.getClientByIP(res.locals.ip);
             const timeRemaining = clientData.time_remaining;
 
-            if (timeRemaining <= 0 && clientData.status === 'paused') {
-                await this.client.authenticate(res.locals.ip);
-                return res.status(200).json({
-                    sucess: true,
-                    message: 'Client authenticated'
-                });
+            if (timeRemaining <= 0 && clientData.status != 'paused') {
+                return res.status(400).json({
+                sucess: true,
+                message: 'No time or status is incorrect'
+            });
             }
+
+            await this.client.authenticate(res.locals.ip);
+            return res.status(200).json({
+                sucess: true,
+                message: 'Client authenticated'
+            });
         } catch (err) {
             return res.status(500).json({
                 success: false,
