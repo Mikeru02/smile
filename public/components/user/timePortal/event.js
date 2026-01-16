@@ -35,7 +35,7 @@ export default async function Events() {
             startTime();
             await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/connect`,
-                {},
+                { token: localStorage.getItem('token') },
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ export default async function Events() {
             // Call disconnect function from main server
             await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/disconnect`,
-                {},
+                { token: localStorage.getItem('token') },
                 {
                     headers: {
                         'Content-Type': 'application/json'

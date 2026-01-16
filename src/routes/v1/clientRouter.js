@@ -12,7 +12,7 @@ clientRouter.post('/connect', async (req, res) => {
             headers: {
                 'Content-Type': 'application/json',
                 'apikey': process.env.API_KEY,
-                'token': localStorage.getItem('token')
+                'token': req.body.token
             }
         }
     );
@@ -31,7 +31,7 @@ clientRouter.post('/disconnect', async (req, res) => {
             headers: {
                 'Content-Type': 'application/json',
                 'apikey': process.env.API_KEY,
-                'token': localStorage.getItem('token')
+                'token': req.body.token
             }
         }
     );
