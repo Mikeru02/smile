@@ -39,6 +39,17 @@ export default async function Events() {
                 }
             });
             startTime();
+            const debug = await axios.post(
+                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/connect`,
+                {},
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+
+            );
+            console.log("DEBUG", debug)
         } else {
             connect.textContent = 'Connect';
             clearInterval(timeRemainingInterval);

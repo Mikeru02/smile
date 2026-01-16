@@ -1,4 +1,4 @@
-import runSpawnSync from './runSpawnSync';
+import runSpawnSync from './runSpawnSync.js';
 
 export default class ClientManagement {
     static isValidIP(ip) {

@@ -1,11 +1,16 @@
 import express from 'express';
 import path from 'path';
-import Arduino from './utils/arduino.js';
 import { fileURLToPath } from 'url';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
 import 'dotenv/config.js';
+import Arduino from './utils/arduino.js';
 import Service from './utils/serviceChecker.js';
 import IPTSetup from './utils/iptablesSetup.js';
 import StaticIP from './utils/setStaticIP.js';
+import v1 from './routes/v1/index.js';
 
 // Block for checking the services needed
 console.log('Checking services...');
@@ -55,13 +60,12 @@ const host = process.env.SRC_HOST || '0.0.0.0';
 const distDirectory = path.join(directory, "../dist");
 
 app.use(express.static(distDirectory));
+app.use(morgan('combined'));
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// Log every client connecting
-app.use((req, res, next) => {
-    const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    console.log(`[CLIENT] ${clientIp} requested ${req.originalUrl}`);
-    next();
-});
+app.use('/v1', cors(), v1);
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect(302, '/');
