@@ -37,7 +37,7 @@ class ClientController {
         try {
             const clientData = await this.client.getClientByIP(res.locals.ip);
             const earnedTime = clientData.time_earned;
-            if (earnedTime === 0 || clientData.status != 'dropping') {
+            if (earnedTime === 0 || (clientData.status != 'dropping' || clientData.status === 'pending')) {
                 return res.status(400).json({
                     success: false,
                     messgae: "You must drop a trash to earn time!"
