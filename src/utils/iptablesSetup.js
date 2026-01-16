@@ -32,9 +32,6 @@ export default class IPTSetup {
             ['iptables', ['-t', 'nat', '-A', 'PREROUTING', '-i', routerSecondaryInterface, '-p', 'tcp', '--dport', tcpPort, '-j', 'DNAT', '--to-destination', `${routerAddress}:${srcPort}`]],
             ['iptables', ['-t', 'nat', '-A', 'PREROUTING', '-i', routerSecondaryInterface, '-p', 'udp', '--dport', udpPort, '-j', 'DNAT', '--to-destination', routerAddress]],
             ['iptables', ['-t', 'nat', '-A', 'POSTROUTING', '-o', routerPrimaryInterface, '-j', 'MASQUERADE']],
-            ['iptables', ['-A', 'FORWARD', '-i', routerSecondaryInterface, '-j', 'DROP']],
-            ['iptables', ['-A', 'FORWARD', '-i', routerSecondaryInterface, '-d', routerAddress, '-j', 'ACCEPT']],
-            ['iptables', ['-A', 'FORWARD', '-i', routerSecondaryInterface, '-p', 'udp', '--dport', udpPort, '-d', routerAddress, '-j', 'ACCEPT']]
         ];
 
         for (const [cmd, args] of commands) {
