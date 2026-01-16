@@ -1,9 +1,13 @@
 // All events in the captive portal will be handled here.
 import axios from "axios";
+import checkToken from "../../../utils/checkToken.js";
 import BGIMG from "/icons/bgimg.svg";
 
 export default async function Events() {
-    document.body.style.backgroundImage = `url('${BGIMG}')`
+    document.body.style.backgroundImage = `url('${BGIMG}')`;
+    
+    checkToken(localStorage.getItem('token'));
+
     const submitBtn = document.getElementById("submit-credential");
     submitBtn.addEventListener("click", async function(){
         // TODO: Add the user to the drop clients to avoid duplication
