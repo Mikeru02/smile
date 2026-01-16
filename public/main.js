@@ -20,12 +20,11 @@ window.app = app;
 
 // TODO: Add the routes here
 app.add("/", CaptivePortal);
-app.add("/portal", TimePortal);
+app.add("/portal", TimePortal, true);
 app.add("/admin/login", AdminLogin);
 app.add("/admin/dashboard", AdminHome);
 app.add("/admin/analytics", AdminAnalytics);
 app.add("/admin/logs", AdminLogs);
 app.add("/admin/account-management", AdminAccountManagement);
-//app.add("/received", Portal);
 
 app.handleRouteChanges();
