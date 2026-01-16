@@ -13,12 +13,11 @@ export default class ClientManagement {
         const secIface = process.env.SECONDARY_INTERFACE;  // Where clients connect
         const priIface = process.env.PRIMARY_INTERFACE;    // Internet interface
 
-        // Allow forwarding to/from client
-        runSpawnSync('iptables', ['-I', 'FORWARD', '-i', secIface, '-s', ip, '-j', 'ACCEPT']);
-        runSpawnSync('iptables', ['-I', 'FORWARD', '-o', secIface, '-d', ip, '-j', 'ACCEPT']);
-
-        // Masquerade outgoing traffic to internet
-        runSpawnSync('iptables', ['-t', 'nat', '-I', 'POSTROUTING', '-s', ip, '-o', priIface, '-j', 'MASQUERADE']);
+        runSpawnSync('iptables', ['-t', 'nat', '-I', 'PREROUTING', '-s', ip, '-p', 'tcp', '--dport', '80', '-j', 'RETURN']);
+        runSpawnSync('iptables', ['-t', 'nat', '-I', 'PREROUTING', '-s', ip, '-p', 'udp', '--dport', '53', '-j', 'RETURN']);
+        runSpawnSync('iptables', ['-I', 'FORWARD', '-s', ip, '-j', 'ACCEPT']);
+        runSpawnSync('iptables', ['-I', 'FORWARD', '-d', ip, '-j', 'ACCEPT']);
+        runSpawnSync('iptables', ['-t', 'nat', '-I', 'POSTROUTING', '-s', ip, '-j', 'MASQUERADE']);
 
         console.log(`[ALLOW] Client ${ip} can now access the internet`);
     }
@@ -28,15 +27,13 @@ export default class ClientManagement {
         const secIface = process.env.SECONDARY_INTERFACE;
         const priIface = process.env.PRIMARY_INTERFACE;
 
-        // Remove FORWARD rules
-        runSpawnSync('iptables', ['-D', 'FORWARD', '-i', secIface, '-s', ip, '-j', 'ACCEPT']);
-        runSpawnSync('iptables', ['-D', 'FORWARD', '-o', secIface, '-d', ip, '-j', 'ACCEPT']);
-
-        // Remove NAT
-        runSpawnSync('iptables', ['-t', 'nat', '-D', 'POSTROUTING', '-s', ip, '-o', priIface, '-j', 'MASQUERADE']);
-
-        // Clear conntrack
+        runSpawnSync('iptables', ['-t', 'nat', '-D', 'PREROUTING', '-s', ip, '-p', 'tcp', '--dport', '80', '-j', 'RETURN']);
+        runSpawnSync('iptables', ['-t', 'nat', '-D', 'PREROUTING', '-s', ip, '-p', 'udp', '--dport', '53', '-j', 'RETURN']);
+        runSpawnSync('iptables', ['-D', 'FORWARD', '-s', ip, '-j', 'ACCEPT']);
+        runSpawnSync('iptables', ['-D', 'FORWARD', '-d', ip, '-j', 'ACCEPT']);
+        runSpawnSync('iptables', ['-t', 'nat', '-D', 'POSTROUTING', '-s', ip, '-j', 'MASQUERADE']);
         runSpawnSync('conntrack', ['-D', '-s', ip]);
+        runSpawnSync('conntrack', ['-D', '-d', ip]);
         runSpawnSync('conntrack', ['-D', '-d', ip]);
 
         console.log(`[REVOKE] Client ${ip} has been disconnected`);
