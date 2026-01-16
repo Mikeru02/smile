@@ -9,6 +9,21 @@ class ClientController {
     async create(req, res) {
         try {
             const ip = req.ip || req.socket.remoteAddress;
+
+            // Check client if it is existing in db
+            const existingClientData = this.getClientByIP(ip);
+
+            if (existingClientData) {
+                return res.status(200).json({
+                    success: true,
+                    data: {
+                        token: jwt.sign({ 'ip': ip }, process.env.API_SECRET_KEY, {
+                            expiresIn: '1d'
+                        })
+                    }
+                });
+            }
+            
             const { name, course, yearlevel } = req.body || {};
             if (!name || !course || !yearlevel) {
                 return res.status(400).json({

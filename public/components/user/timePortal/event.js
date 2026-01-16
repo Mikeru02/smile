@@ -31,19 +31,9 @@ export default async function Events() {
         if (!isConnected) {
             connect.textContent = 'Pause';
             isConnected = true;
-            const response = await axios.post(
-                `http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/auth`, 
-                {}, 
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_API_KEY,
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
+
             startTime();
-            const debug = await axios.post(
+            await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/connect`,
                 {},
                 {
@@ -53,23 +43,13 @@ export default async function Events() {
                 }
 
             );
-            console.log("DEBUG", debug)
         } else {
             connect.textContent = 'Connect';
             clearInterval(timeRemainingInterval);
             isConnected = false;
-            const response = await axios.post(
-                `http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/deauth`, 
-                {}, 
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_API_KEY,
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
-            const debug = await axios.post(
+
+            // Call disconnect function from main server
+            await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/disconnect`,
                 {},
                 {
@@ -78,8 +58,6 @@ export default async function Events() {
                     }
                 }
             );
-
-            console.log(debug);
         }
     });
 
