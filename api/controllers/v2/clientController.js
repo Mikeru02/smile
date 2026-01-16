@@ -11,7 +11,7 @@ class ClientController {
             const ip = req.ip || req.socket.remoteAddress;
 
             // Check client if it is existing in db
-            const existingClientData = this.getClientByIP(ip);
+            const existingClientData = await this.getClientByIP(ip);
 
             if (existingClientData) {
                 return res.status(200).json({
