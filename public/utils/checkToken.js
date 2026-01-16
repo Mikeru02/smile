@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export default function checkToken(token) {
     if (!token) {
-        return '/';
+        return false;
     } else {
         try {
             const decoded = jwtDecode(token);
@@ -10,13 +10,13 @@ export default function checkToken(token) {
 
             if (decoded.exp < currentTime) {
                 localStorage.removeItem('token');
-                return '/';
+                return false;
             } else {
-                return '/portal';
+                return true;
             }
         } catch (error) {
             localStorage.removeItem('token');
-            return '/';
+            return false;
         }
     }
 }

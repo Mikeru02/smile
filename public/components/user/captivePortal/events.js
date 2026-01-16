@@ -6,7 +6,14 @@ import BGIMG from "/icons/bgimg.svg";
 export default async function Events() {
     document.body.style.backgroundImage = `url('${BGIMG}')`;
     
-    window.app.pushRoute(checkToken(localStorage.getItem('token')));
+    const token = localStorage.getItem('token');
+    const isValid = await checkToken(token);
+
+    if (isValid) {
+        window.app.pushRoute("/portal");
+        return;
+    }
+
 
     const submitBtn = document.getElementById("submit-credential");
     submitBtn.addEventListener("click", async function(){
