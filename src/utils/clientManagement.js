@@ -24,16 +24,16 @@ export default class ClientManagement {
 
 
     static revokeClient(ip) {
-        const secIface = process.env.SECONDARY_INTERFACE;
-        const priIface = process.env.PRIMARY_INTERFACE;
-
+        if (!this.isValidIP(ip)) {
+            throw new Error(`[ERROR] <ClientManagement.allowClient> Invalid IP address: ${ip}`);
+        }
+        
         runSpawnSync('iptables', ['-t', 'nat', '-D', 'PREROUTING', '-s', ip, '-p', 'tcp', '--dport', '80', '-j', 'RETURN']);
         runSpawnSync('iptables', ['-t', 'nat', '-D', 'PREROUTING', '-s', ip, '-p', 'udp', '--dport', '53', '-j', 'RETURN']);
         runSpawnSync('iptables', ['-D', 'FORWARD', '-s', ip, '-j', 'ACCEPT']);
         runSpawnSync('iptables', ['-D', 'FORWARD', '-d', ip, '-j', 'ACCEPT']);
         runSpawnSync('iptables', ['-t', 'nat', '-D', 'POSTROUTING', '-s', ip, '-j', 'MASQUERADE']);
         runSpawnSync('conntrack', ['-D', '-s', ip]);
-        runSpawnSync('conntrack', ['-D', '-d', ip]);
         runSpawnSync('conntrack', ['-D', '-d', ip]);
 
         console.log(`[REVOKE] Client ${ip} has been disconnected`);

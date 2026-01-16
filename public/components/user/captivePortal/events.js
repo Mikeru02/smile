@@ -6,7 +6,7 @@ import BGIMG from "/icons/bgimg.svg";
 export default async function Events() {
     document.body.style.backgroundImage = `url('${BGIMG}')`;
     
-    window.app.pushRoute = checkToken(localStorage.getItem('token'));
+    window.app.pushRoute(checkToken(localStorage.getItem('token')));
 
     const submitBtn = document.getElementById("submit-credential");
     submitBtn.addEventListener("click", async function(){
