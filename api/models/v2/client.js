@@ -49,7 +49,7 @@ class Client {
 
     async deauthenticate(ip) {
         try {
-            const newTimeRemaining = await this.updateClientTime();
+            const newTimeRemaining = await this.updateClientTime(ip);
             const [result, ] = await this.db.execute(
                 'UPDATE clients SET status=?, connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=?',
                 ['paused', null, newTimeRemaining, ip]
@@ -139,20 +139,28 @@ class Client {
 
     async updateAllClientsTime() {
         try {
-            const newTimeRemaining = await this.updateClientTime();
-            const [result, ] = await this.db.execute(
-                'UPDATE clients SET connection_start_at=NOW(), time_remaining=?, updated_at=NOW() WHERE ip=?',
-                [newTimeRemaining, ip]
-            );
             
-            return result;
+            const [clients] = await this.db.execute(
+                "SELECT ip, time_remaining, connection_start_at FROM clients WHERE status='active' AND time_remaining > 0",
+                []
+            );
+
+            for (const client of clients) {
+                const newTimeRemaining = await this.updateClientTime(client.ip);
+                const [result, ] = await this.db.execute(
+                    'UPDATE clients SET connection_start_at=NOW(), time_remaining=?, updated_at=NOW() WHERE ip=?',
+                    [newTimeRemaining, ip]
+                );
+            }
+            
+            // return result;
         } catch(err) {
             console.error("[ERROR] client.updateAllClients", err);
             throw err;
         }
     }
 
-    async getTimeRemainingAndConnectionStart() {
+    async getTimeRemainingAndConnectionStart(ip) {
         try {
             const [row] = await this.db.execute(
                 'SELECT time_remaining, connection_start_at FROM clients WHERE ip=?',
@@ -168,9 +176,9 @@ class Client {
         }
     }
 
-    async updateClientTime() {
+    async updateClientTime(ip) {
         try {
-            const client = await this.getTimeRemainingAndConnectionStart();
+            const client = await this.getTimeRemainingAndConnectionStart(ip);
             let newTimeRemaining = client.time_remaining;
 
             if (client.connection_start_at) {
