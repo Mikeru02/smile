@@ -163,6 +163,21 @@ class ClientController {
             });
         }
     }
+
+    async updateAllClientsTime(req, res) {
+        try {
+            const response = await this.client.updateAllClientsTime();
+            return res.status(200).json({
+                success: true,
+                response: response
+            })
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
 }
 
 export default ClientController;

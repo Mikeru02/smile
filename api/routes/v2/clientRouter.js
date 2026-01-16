@@ -20,7 +20,7 @@ clientRouter.post('/authenticate', authentication, client.authenticate.bind(clie
 
 // Patch Methods
 clientRouter.patch('/', authentication, client.updateClientStatus.bind(client));
-
+clientRouter.patch('/all', client.updateAllClientsTime.bind(client));
 // Delete Methods
 
 export default clientRouter;

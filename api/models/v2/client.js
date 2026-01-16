@@ -110,30 +110,15 @@ class Client {
         }
     }
 
-    // Get Account
-    async get(username) {
+    async updateAllClientsTime() {
         try {
             const [result, ] = await this.db.execute(
-                'SELECT * FROM accounts WHERE username=?',
-                [username]
+                "UPDATE clients SET time_remaining = GREATEST(time_remaining - TIMESTAMPDFF(SECOND, connection_start_at, NOW()), 0), connection_start_at=NOW(), updated_at=NOW() WHERE status='active' AND time_remaining > 0",
+                []
             );
             return result;
         } catch(err) {
-            console.error("[ERROR] account.get", err);
-            throw err;
-        }
-    }
-
-    // Update Account
-    async update(username, name, role, password) {
-        try {
-            const [result, ] = await this.db.execute(
-                'UPDATE accounts SET name=?, role=?, password=? WHERE username=?',
-                [name, role, encryptPassword(password), username]
-            );
-            return result;
-        } catch(err) {
-            console.error("[ERROR] account.update", err);
+            console.error("[ERROR] client.updateAllClients", err);
             throw err;
         }
     }

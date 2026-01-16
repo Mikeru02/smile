@@ -1,22 +1,51 @@
 import axios from 'axios';
+import { renderEarnTime, renderTimeRemaining } from '../../../utils/render.js';
 import  BGIMG from '/icons/bgimg.svg';
 
 export default async function Events() {
     document.body.style.backgroundImage = `url('${BGIMG}')`;
 
+    const modal = document.getElementById('modal');
+
+    // Time Containers
     const hoursSpan = document.getElementById('earn-hours-span');
     const minSpan = document.getElementById('earn-min-span');
     const secSpan = document.getElementById('earn-sec-span');
-
     const TRhoursSpan = document.getElementById('hours-span');
     const TRminSpan = document.getElementById('min-span');
     const TRsecSpan = document.getElementById('sec-span');
 
+    // Earn Intervals
     let earnInterval = null;
     let isRunning = false;
     const timeEarned = 10;
 
-    const modal = document.getElementById('modal');
+    // Time Remaining Intervals
+    let timeRemainingSeconds = 0;
+    let timeRemainingInterval = null;
+
+    
+    const connect = document.getElementById('connect');
+    let isConnected = false;
+    connect.addEventListener('click', async function() {
+        if (!isConnected) {
+            connect.textContent = 'Pause';
+            isConnected = true;
+            const response = await axios.post(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/authenticate`, {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_API_KEY,
+                    'token': localStorage.getItem('token')
+                }
+            });
+            startTime();
+        } else {
+            connect.textContent = 'Connect';
+            clearInterval(timeRemainingInterval);
+            isConnected = false;
+        }
+    });
+
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         modal.style.display = 'block';
@@ -44,7 +73,7 @@ export default async function Events() {
                 'token': localStorage.getItem('token')
             }
         });
-        console.log("DEBUG: ", response.data)
+        updateTimeRemaining();
     });
 
     const proceed = document.getElementById('proceed');
@@ -58,21 +87,11 @@ export default async function Events() {
                 'token': localStorage.getItem('token')
             }
         });
-        console.log("DEBUG: ", response.data)
-        updateTimeRemaining()
-    })
-
-    const connect = document.getElementById('connect');
-    let isConnected = false;
-    connect.addEventListener('click', async function() {
-        if (!isConnected) {
-            connect.textContent = 'Pause';
-            isConnected = true;
-        } else {
-            connect.textContent = 'Connect';
-            isConnected = false;
-        }
-    })
+        updateTimeRemaining();
+        connect.textContent = 'Pause';
+        isConnected = true;
+        startTime();
+    });
 
     const updateTimeRemaining = async () => {
         const response = await axios.get(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/time_remaining`, {
@@ -82,12 +101,9 @@ export default async function Events() {
                 'token': localStorage.getItem('token')
             }
         });
-
-        const earnedSeconds = response.data.data.time_remaining;
-        const { hrs, mins, secs} = secondsToTime(earnedSeconds);
-        TRhoursSpan.textContent = String(hrs).padStart(2, '0');
-        TRminSpan.textContent = String(mins).padStart(2, '0');
-        TRsecSpan.textContent = String(secs).padStart(2, '0');
+        timeRemainingSeconds = response.data.data.time_remaining;
+        const timeRemaining = response.data.data.time_remaining;
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemaining)
     }
 
     const updateEarnedTimeDisplay = async () => {
@@ -102,11 +118,7 @@ export default async function Events() {
         if (!response.data.success) return;
 
         const earnedSeconds = response.data.data.time_earned;
-        const { hrs, mins, secs} = secondsToTime(earnedSeconds);
-
-        hoursSpan.textContent = String(hrs).padStart(2, '0');
-        minSpan.textContent = String(mins).padStart(2, '0');
-        secSpan.textContent = String(secs).padStart(2, '0');
+        renderEarnTime({ hoursSpan, minSpan, secSpan }, earnedSeconds);
     }
 
     const earn = async () => {
@@ -128,17 +140,24 @@ export default async function Events() {
         isRunning = false;
     }
 
-    const secondsToTime = (totalSeconds) => {
-        const hrs = Math.floor(totalSeconds / 3600);
-        const mins = Math.floor((totalSeconds % 3600) / 60);
-        const secs = totalSeconds % 60;
+    const startTime = () => {
+        if (timeRemainingInterval) return;
+        timeRemainingInterval = setInterval(() => {
+            if (!isConnected) return;
 
-        return {
-            hrs,
-            mins,
-            secs
-        };
-    };
+            if (timeRemainingSeconds <= 0) {
+                clearInterval(timeRemainingInterval);
+                timeRemainingInterval = null;
+
+                connect.textContent = 'Connect';
+                isConnected = false;
+                return;
+            }
+
+            timeRemainingSeconds -= 1;
+            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+        }, 1000);
+    }
 
     updateTimeRemaining()
 
