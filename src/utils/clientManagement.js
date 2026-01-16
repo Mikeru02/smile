@@ -10,41 +10,32 @@ export default class ClientManagement {
             throw new Error(`[ERROR] <ClientManagement.allowClient> Invalid IP address: ${ip}`);
         }
 
-        runSpawnSync('iptables', ['-t', 'nat', '-I', 'PREROUTING', '-s', ip, '-p', 'tcp', '--dport', '80', '-j', 'RETURN']);
-        runSpawnSync('iptables', ['-t', 'nat', '-I', 'PREROUTING', '-s', ip, '-p', 'udp', '--dport', '53', '-j', 'RETURN']);
-        runSpawnSync('iptables', ['-I', 'FORWARD', '-s', ip, '-j', 'ACCEPT']);
-        runSpawnSync('iptables', ['-I', 'FORWARD', '-d', ip, '-j', 'ACCEPT']);
-        runSpawnSync('iptables', ['-t', 'nat', '-I', 'POSTROUTING', '-s', ip, '-j', 'MASQUERADE']);
+        const secIface = process.env.SECONDARY_INTERFACE;  // Where clients connect
+        const priIface = process.env.PRIMARY_INTERFACE;    // Internet interface
 
-        // Allow all traffic to/from client
-        runSpawnSync('iptables', ['-I', 'FORWARD', '-s', ip, '-j', 'ACCEPT']);
-        runSpawnSync('iptables', ['-I', 'FORWARD', '-d', ip, '-j', 'ACCEPT']);
+        // Allow forwarding to/from client
+        runSpawnSync('iptables', ['-I', 'FORWARD', '-i', secIface, '-s', ip, '-j', 'ACCEPT']);
+        runSpawnSync('iptables', ['-I', 'FORWARD', '-o', secIface, '-d', ip, '-j', 'ACCEPT']);
 
-        // NAT outgoing traffic
-        runSpawnSync('iptables', ['-t', 'nat', '-I', 'POSTROUTING', '-s', ip, '-j', 'MASQUERADE']);
-        
-        console.log(`[ALLOW] Client ${ip} is now online`);
+        // Masquerade outgoing traffic to internet
+        runSpawnSync('iptables', ['-t', 'nat', '-I', 'POSTROUTING', '-s', ip, '-o', priIface, '-j', 'MASQUERADE']);
+
+        console.log(`[ALLOW] Client ${ip} can now access the internet`);
     }
 
-    static revokeClient(ip) {
-        if (!this.isValidIP(ip)) {
-            throw new Error(`[ERROR] <ClientManagement.revokeClient> Invalid IP address: ${ip}`);
-        }
 
-        // Remove PREROUTING bypass rules
-        runSpawnSync('iptables', ['-t', 'nat', '-D', 'PREROUTING', '-s', ip, '-p', 'tcp', '--dport', '80', '-j', 'RETURN']);
-        runSpawnSync('iptables', ['-t', 'nat', '-D', 'PREROUTING', '-s', ip, '-p', 'tcp', '--dport', '443', '-j', 'RETURN']);
-        runSpawnSync('iptables', ['-t', 'nat', '-D', 'PREROUTING', '-s', ip, '-p', 'udp', '--dport', '53', '-j', 'RETURN']);
-        runSpawnSync('iptables', ['-t', 'nat', '-D', 'PREROUTING', '-s', ip, '-p', 'tcp', '--dport', '53', '-j', 'RETURN']);
+    static revokeClient(ip) {
+        const secIface = process.env.SECONDARY_INTERFACE;
+        const priIface = process.env.PRIMARY_INTERFACE;
 
         // Remove FORWARD rules
-        runSpawnSync('iptables', ['-D', 'FORWARD', '-s', ip, '-j', 'ACCEPT']);
-        runSpawnSync('iptables', ['-D', 'FORWARD', '-d', ip, '-j', 'ACCEPT']);
+        runSpawnSync('iptables', ['-D', 'FORWARD', '-i', secIface, '-s', ip, '-j', 'ACCEPT']);
+        runSpawnSync('iptables', ['-D', 'FORWARD', '-o', secIface, '-d', ip, '-j', 'ACCEPT']);
 
-        // Remove POSTROUTING NAT
-        runSpawnSync('iptables', ['-t', 'nat', '-D', 'POSTROUTING', '-s', ip, '-j', 'MASQUERADE']);
+        // Remove NAT
+        runSpawnSync('iptables', ['-t', 'nat', '-D', 'POSTROUTING', '-s', ip, '-o', priIface, '-j', 'MASQUERADE']);
 
-        // Clear any existing connections for this IP
+        // Clear conntrack
         runSpawnSync('conntrack', ['-D', '-s', ip]);
         runSpawnSync('conntrack', ['-D', '-d', ip]);
 
