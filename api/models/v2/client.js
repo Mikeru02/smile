@@ -113,7 +113,7 @@ class Client {
                 'SELECT * FROM clients WHERE status=?',
                 [status]
             );
-            console.log(result)
+            console.log(result);
             return result;
         } catch (err) {
             console.error("[ERROR] client.getClientByStatus", err);

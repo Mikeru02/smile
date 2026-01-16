@@ -25,7 +25,7 @@ export default function startTimeDeductor() {
             }
         )
 
-        console.log(response.data.data);
+        console.log(response);
 
 
     }, 5000);
