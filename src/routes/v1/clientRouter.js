@@ -36,7 +36,24 @@ clientRouter.post('/disconnect', async (req, res) => {
         }
     );
 
-    await axios
+    ClientManagement.revokeClient(req.ip);
+    return res.status(200).json({
+        success: true,
+    });
+});
+
+clientRouter.post('/revoke', async (req, res) => {
+    await axios.patch(
+        `http://${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_ROUTE_VERSION}/client/deauth`, 
+        {}, 
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': process.env.API_KEY,
+                'token': req.body.token
+            }
+        }
+    );
 
     ClientManagement.revokeClient(req.ip);
     return res.status(200).json({

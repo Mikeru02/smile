@@ -23,6 +23,8 @@ clientRouter.post('/deauth', authentication, client.deauthenticate.bind(client))
 // Patch Methods
 clientRouter.patch('/', authentication, client.updateClientStatus.bind(client));
 clientRouter.patch('/all', client.updateAllClientsTime.bind(client));
+clientRouter.patch('/revoke', authentication, client.revoke.bind(client));
+
 // Delete Methods
 
 export default clientRouter;

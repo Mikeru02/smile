@@ -157,13 +157,22 @@ export default async function Events() {
 
     const startTime = () => {
         if (timeRemainingInterval) return;
-        timeRemainingInterval = setInterval(() => {
+        timeRemainingInterval = setInterval(async () => {
             if (!isConnected) return;
 
             if (timeRemainingSeconds <= 0) {
                 clearInterval(timeRemainingInterval);
                 timeRemainingInterval = null;
+                await axios.patch(
+                    `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/revoke`,
+                    { token: localStorage.getItem('token') },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
 
+                );
                 connect.textContent = 'Connect';
                 isConnected = false;
                 return;

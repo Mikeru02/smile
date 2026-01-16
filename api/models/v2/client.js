@@ -61,6 +61,18 @@ class Client {
         }
     }
 
+    async revoke(ip) {
+        try {
+            const [result, ] = await this.db.execute(
+                'UPDATE clients SET status=?, time_remaining=?, connection_start_at=?, updated_at=NOW() WHERE ip=?',
+                ["pending", 0, null, ip]
+            )
+        } catch (err) {
+            console.error("[ERROR] client.revoke", err);
+            throw err;
+        }
+    }
+
     async getClientTime(ip, type) {
         try {
             if (type === 'time_earned') {
@@ -140,17 +152,18 @@ class Client {
     async updateAllClientsTime() {
         try {
             
-            const [rows] = await this.db.execute(
+            const [clients] = await this.db.execute(
                 "SELECT ip, time_remaining, connection_start_at FROM clients WHERE status='active' AND time_remaining > 0",
                 []
             );
-            const clients = rows?.[0]
+
+            console.log("DEBUG: ", clients);
 
             for (const client of clients) {
                 const newTimeRemaining = await this.updateClientTime(client.ip);
                 const [result, ] = await this.db.execute(
                     'UPDATE clients SET connection_start_at=NOW(), time_remaining=?, updated_at=NOW() WHERE ip=?',
-                    [newTimeRemaining, ip]
+                    [newTimeRemaining, client.ip]
                 );
             }
             

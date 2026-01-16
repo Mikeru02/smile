@@ -112,6 +112,21 @@ class ClientController {
         }
     }
 
+    async revoke(req, res) {
+        try {
+            await this.client.revoke(res.locals.ip);
+            return res.status(200).json({
+                sucess: true,
+                message: 'Client revoke access to internet'
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     async startDrop(req, res) {
         try {
             const existingDropper = await this.client.getClientByStatus('dropping');
