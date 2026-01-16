@@ -1,11 +1,11 @@
 import express from 'express';
 import path from 'path';
-import Arduino from './modules/utils/arduino.js';
+import Arduino from './utils/arduino.js';
 import { fileURLToPath } from 'url';
 import 'dotenv/config.js';
-import Service from './modules/utils/serviceChecker.js';
-import IPTSetup from './modules/utils/iptablesSetup.js';
-import StaticIP from './modules/utils/setStaticIP.js';
+import Service from './utils/serviceChecker.js';
+import IPTSetup from './utils/iptablesSetup.js';
+import StaticIP from './utils/setStaticIP.js';
 
 // Block for checking the services needed
 console.log('Checking services...');
