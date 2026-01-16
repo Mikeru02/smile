@@ -8,6 +8,10 @@ export default function runSpawnSync(cmd, args) {
     }
 
     if (result.status !== 0) {
+        if (cmd === 'conntrack') {
+            return result;
+        }
+
         throw new Error(`[ERROR] ${cmd} failed: ${args.join(' ')}`);
     }
 
