@@ -10,7 +10,7 @@ export default function startTimeDeductor() {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': process.env.API_KEY``
+                    'apikey': process.env.API_KEY
                 }
             }
         )

@@ -49,26 +49,7 @@ class Client {
 
     async deauthenticate(ip) {
         try {
-            const [row] = await this.db.execute(
-                'SELECT time_remaining, connection_start_at FROM clients WHERE ip=?',
-                [ip]
-            );
-
-            if (!row.length) {
-                throw new Error('Client not found');
-            }
-
-            const client = row[0];
-            let newTimeRemaining = client.time_remaining;
-
-            if (client.connection_start_at) {
-                const now = new Date();
-                const connectionStart = new Date(client.connection_start_at);
-
-                const consumedSeconds = Math.floor((now - connectionStart) / 1000);
-
-                newTimeRemaining = Math.max(client.time_remaining - consumedSeconds, 0);
-            }
+            const newTimeRemaining = await this.updateClientTime();
             const [result, ] = await this.db.execute(
                 'UPDATE clients SET status=?, connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=?',
                 ['paused', null, newTimeRemaining, ip]
@@ -158,10 +139,12 @@ class Client {
 
     async updateAllClientsTime() {
         try {
+            const newTimeRemaining = await this.updateClientTime();
             const [result, ] = await this.db.execute(
-                "UPDATE clients SET time_remaining = GREATEST(time_remaining - TIMESTAMPDFF(SECOND, connection_start_at, NOW()), 0), connection_start_at=NOW(), updated_at=NOW() WHERE status='active' AND time_remaining > 0",
-                []
+                'UPDATE clients SET connection_start_at=NOW(), time_remaining=?, updated_at=NOW() WHERE ip=?',
+                [newTimeRemaining, ip]
             );
+            
             return result;
         } catch(err) {
             console.error("[ERROR] client.updateAllClients", err);
@@ -169,16 +152,38 @@ class Client {
         }
     }
 
-    // Delete Account
-    async delete(username) {
+    async getTimeRemainingAndConnectionStart() {
         try {
-            const [result, ]= await this.db.execute(
-                'DELETE FROM accounts WHERE username=?',
-                [username]
+            const [row] = await this.db.execute(
+                'SELECT time_remaining, connection_start_at FROM clients WHERE ip=?',
+                [ip]
             );
-            return result;
+            if (!row.length) {
+                return null;
+            }
+            return row?.[0];
         } catch(err) {
-            console.error("[ERROR] account.delete", err);
+            console.error("[ERROR] client.getTimeRemainingAndConnectionStart", err);
+            throw err;
+        }
+    }
+
+    async updateClientTime() {
+        try {
+            const client = await this.getTimeRemainingAndConnectionStart();
+            let newTimeRemaining = client.time_remaining;
+
+            if (client.connection_start_at) {
+                const now = new Date();
+                const connectionStart = new Date(client.connection_start_at);
+
+                const consumedSeconds = Math.floor((now - connectionStart) / 1000);
+
+                newTimeRemaining = Math.max(client.time_remaining - consumedSeconds, 0);
+            }
+            return newTimeRemaining;
+        } catch(err) {
+            console.error("[ERROR] client.updateClientTime", err);
             throw err;
         }
     }
