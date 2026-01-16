@@ -8,7 +8,7 @@
     "dev_backend": "python3 server/main.py",
     "dev_api": "nodemon api/index.js",
     "build_frontend": "vite build --emptyOutDir",
-    "prod": "python3 server/main.py",
+    "prod": "node api/index.js & node src/index.js",
     "js": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
