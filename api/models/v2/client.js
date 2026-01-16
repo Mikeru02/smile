@@ -19,7 +19,7 @@ class Client {
         }
     }
 
-    async authenticate(ip) {
+    async firstAuthenticate(ip) {
         try {
             const clientData = await this.getClientByIP(ip);
             const timeRemaining = clientData.time_remaining + clientData.time_earned;
@@ -30,6 +30,32 @@ class Client {
             return result;
         } catch (err) {
             console.error("[ERROR] client.authenticate", err);
+            throw err;
+        }
+    }
+
+    async authenticate(ip) {
+        try {
+            const [result, ] = await this.db.execute(
+                'UPDATE clients SET status=?, connection_start_at=NOW(), updated_at=NOW() WHERE ip=?',
+                ['active', ip]
+            );
+            return result;
+        } catch (err) {
+            console.error("[ERROR] client.authenticate", err);
+            throw err;
+        }
+    }
+
+    async deauthenticate(ip) {
+        try {
+            const [result, ] = await this.db.execute(
+                'UPDATE clients SET status=?, connection_start_at=?,  updated_at=NOW() WHERE ip=?',
+                ['paused', null, ip]
+            );
+            return result;
+        } catch (err) {
+            console.error("[ERROR] client.deauthenticate", err);
             throw err;
         }
     }

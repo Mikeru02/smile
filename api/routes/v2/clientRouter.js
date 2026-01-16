@@ -16,7 +16,9 @@ clientRouter.get('/', authentication, client.getClientByIP.bind(client));
 clientRouter.post('/', client.create.bind(client));
 clientRouter.post('/start', authentication, client.startDrop.bind(client));
 clientRouter.post('/earn', authentication, client.earned.bind(client));
-clientRouter.post('/authenticate', authentication, client.authenticate.bind(client));
+clientRouter.post('/firstAuth', authentication, client.firstAuthenticate.bind(client));
+clientRouter.post('/auth', authentication, client.authenticate.bind(client));
+clientRouter.post('/deauth', authentication, client.deauthenticate.bind(client));
 
 // Patch Methods
 clientRouter.patch('/', authentication, client.updateClientStatus.bind(client));

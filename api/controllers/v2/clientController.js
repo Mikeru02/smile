@@ -33,22 +33,57 @@ class ClientController {
         }
     }
 
-    async authenticate(req, res) {
+    async firstAuthenticate(req, res) {
         try {
             const clientData = await this.client.getClientByIP(res.locals.ip);
             const earnedTime = clientData.time_earned;
-            if (earnedTime === 0 || (clientData.status != 'dropping' || clientData.status === 'pending')) {
+            if (earnedTime === 0 || clientData.status != 'dropping') {
                 return res.status(400).json({
                     success: false,
                     messgae: "You must drop a trash to earn time!"
                 });
             }
-            await this.client.authenticate(res.locals.ip);
+            await this.client.firstAuthenticate(res.locals.ip);
             return res.status(200).json({
                 success: true,
                 message: 'Client Authenticated!'
             })
 
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async authenticate(req, res) {
+        try {
+            const clientData = await this.client.getClientByIP(res.locals.ip);
+            const timeRemaining = clientData.time_remaining;
+
+            if (timeRemaining <= 0 && clientData.status === 'paused') {
+                await this.client.authenticate(res.locals.ip);
+                return res.status(200).json({
+                    sucess: true,
+                    message: 'Client authenticated'
+                });
+            }
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async deauthenticate(req, res) {
+        try {
+            await this.client.deauthenticate(res.locals.ip);
+            return res.status(200).json({
+                sucess: true,
+                message: 'Client deauthenticated'
+            });
         } catch (err) {
             return res.status(500).json({
                 success: false,

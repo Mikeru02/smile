@@ -31,13 +31,17 @@ export default async function Events() {
         if (!isConnected) {
             connect.textContent = 'Pause';
             isConnected = true;
-            const response = await axios.post(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/authenticate`, {}, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_API_KEY,
-                    'token': localStorage.getItem('token')
+            const response = await axios.post(
+                `http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/auth`, 
+                {}, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': import.meta.env.VITE_API_KEY,
+                        'token': localStorage.getItem('token')
+                    }
                 }
-            });
+            );
             startTime();
             const debug = await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/connect`,
@@ -54,6 +58,17 @@ export default async function Events() {
             connect.textContent = 'Connect';
             clearInterval(timeRemainingInterval);
             isConnected = false;
+            const response = await axios.post(
+                `http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/deauth`, 
+                {}, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': import.meta.env.VITE_API_KEY,
+                        'token': localStorage.getItem('token')
+                    }
+                }
+            );
         }
     });
 
