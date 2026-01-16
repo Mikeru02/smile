@@ -31,7 +31,7 @@ if (serviceFailure.length > 0) {
 
 // Block for setting up static ip
 console.log('Setting up Static Ip...');
-StaticIP.set();
+//StaticIP.set();
 
 // Block for setup of iptables
 console.log('Setting up iptables...');
