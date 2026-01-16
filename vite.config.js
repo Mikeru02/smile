@@ -1,7 +1,7 @@
 export default {
-  root: "./public",
+  root: "public",
   build: {
     outDir: "../dist",
   },
-  publicDir: "./public"
+  publicDir: "fonts"
 }
