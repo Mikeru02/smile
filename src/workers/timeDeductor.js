@@ -4,7 +4,7 @@ export default function startTimeDeductor() {
     console.log(`[RUNNING] Time deductor started (30s Interval)`);
 
     setInterval(async () => {
-        const response = await axios.patch(
+        await axios.patch(
             `http://${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_ROUTE_VERSION}/client/all`, 
             {},
             {
@@ -14,5 +14,19 @@ export default function startTimeDeductor() {
                 }
             }
         )
-    }, 30000);
+
+        const response = await axios.get(
+            `http://${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_ROUTE_VERSION}/client/outOfTime`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': process.env.API_KEY
+                }
+            }
+        )
+
+        console.log(response.data.data);
+
+
+    }, 5000);
 }

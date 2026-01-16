@@ -121,6 +121,19 @@ class Client {
         }
     }
 
+    async getAllOutofTimeClients() {
+        try {
+            const [result,] = await this.db.execute(
+                "SELECT ip FROM clients WHERE status='outOfTime'",
+                []
+            );
+            return result;
+        } catch (err) {
+            console.error("[ERROR] client.getClientByStatus", err);
+            throw err;
+        }
+    }
+
     async updateClientStatus(ip, status) {
         try {
             const [result, ] = await this.db.execute(
@@ -157,10 +170,15 @@ class Client {
                 []
             );
 
-            console.log("DEBUG: ", clients);
-
             for (const client of clients) {
                 const newTimeRemaining = await this.updateClientTime(client.ip);
+                if (newTimeRemaining <= 0) {
+                    await this.updateClientStatus(client.ip, 'outOfTime');
+                    await this.db.execute(
+                        "UPDATE clients SET connection_start_at=?, time_remaining=?, update_at=NOW() WHERE ip=?",
+                        [null, 0, client.ip]
+                    )
+                }
                 const [result, ] = await this.db.execute(
                     'UPDATE clients SET connection_start_at=NOW(), time_remaining=?, updated_at=NOW() WHERE ip=?',
                     [newTimeRemaining, client.ip]

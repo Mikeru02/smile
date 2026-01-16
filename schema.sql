@@ -22,7 +22,7 @@ CREATE TABLE `clients`(
     `name` VARCHAR(100) NOT NULL,
     `course` VARCHAR(10) NOT NULL,
     `yearlevel` INT NOT NULL,
-    `status` ENUM('pending', 'active', 'dropping', 'paused'),
+    `status` ENUM('pending', 'active', 'dropping', 'paused', 'outOfTime'),
     `time_remaining` BIGINT DEFAULT 0,
     `time_earned` BIGINT DEFAULT 0,
     `connection_start_at` DATETIME DEFAULT NULL,
