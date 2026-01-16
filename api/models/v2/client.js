@@ -140,10 +140,11 @@ class Client {
     async updateAllClientsTime() {
         try {
             
-            const [clients] = await this.db.execute(
+            const [rows] = await this.db.execute(
                 "SELECT ip, time_remaining, connection_start_at FROM clients WHERE status='active' AND time_remaining > 0",
                 []
             );
+            const clients = rows?.[0]
 
             for (const client of clients) {
                 const newTimeRemaining = await this.updateClientTime(client.ip);
