@@ -56,6 +56,13 @@ const distDirectory = path.join(directory, "../dist");
 
 app.use(express.static(distDirectory));
 
+// Log every client connecting
+app.use((req, res, next) => {
+    const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    console.log(`[CLIENT] ${clientIp} requested ${req.originalUrl}`);
+    next();
+});
+
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect(302, '/');
 });
