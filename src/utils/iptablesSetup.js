@@ -29,6 +29,7 @@ export default class IPTSetup {
 
     static set() {
         const commands = [
+            ["sysctl", ["-w", "net.ipv4.ip_forward=1"]],
             ["iptables", ["-t", "nat", "-A", "PREROUTING", "-i", routerSecondaryInterface, "-p", "tcp", "--dport", tcpPort, "-j", "DNAT", "--to-destination", `${routerAddress}:${srcPort}`]],
             ["iptables", ["-t", "nat", "-A", "PREROUTING", "-i", routerSecondaryInterface, "-p", "udp", "--dport", udpPort, "-j", "DNAT", "--to-destination", routerAddress]],
             ["iptables", ["-A", "FORWARD", "-i", routerSecondaryInterface, "-o", routerPrimaryInterface, "-j", "ACCEPT"]],

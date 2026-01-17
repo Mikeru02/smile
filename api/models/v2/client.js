@@ -175,7 +175,7 @@ class Client {
                 if (newTimeRemaining <= 0) {
                     await this.updateClientStatus(client.ip, 'outOfTime');
                     await this.db.execute(
-                        "UPDATE clients SET connection_start_at=?, time_remaining=?, update_at=NOW() WHERE ip=?",
+                        "UPDATE clients SET connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=?",
                         [null, 0, client.ip]
                     )
                 }
