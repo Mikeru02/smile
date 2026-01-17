@@ -47,6 +47,7 @@ export default async function Events() {
             connect.textContent = 'Connect';
             clearInterval(timeRemainingInterval);
             isConnected = false;
+            timeRemainingInterval = null;
 
             // Call disconnect function from main server
             await axios.post(

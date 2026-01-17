@@ -42,7 +42,7 @@ clientRouter.post('/disconnect', async (req, res) => {
     });
 });
 
-clientRouter.post('/revoke', async (req, res) => {
+clientRouter.patch('/revoke', async (req, res) => {
     await axios.patch(
         `http://${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_ROUTE_VERSION}/client/revoke`, 
         {}, 
