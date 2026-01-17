@@ -109,6 +109,16 @@ export default async function Events() {
         connect.textContent = 'Pause';
         isConnected = true;
         startTime();
+        await axios.post(
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/connect`,
+            { token: localStorage.getItem('token') },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+        );
     });
 
     const updateTimeRemaining = async () => {
