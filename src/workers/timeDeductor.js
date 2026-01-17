@@ -25,7 +25,20 @@ export default function startTimeDeductor() {
             }
         )
 
-        console.log(response);
+        const clients = response.data.data;
+
+        for (const client of clients) {
+            await axios.patch(
+                `http://${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_ROUTE_VERSION}/client/revoke`,
+                {},
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': process.env.API_KEY
+                    }
+                }
+            )
+        }
 
 
     }, 30000);
