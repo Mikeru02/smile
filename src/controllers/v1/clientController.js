@@ -81,13 +81,21 @@ class ClientController {
 
             if (timeRemaining <= 0 && clientData.status != 'paused') {
                 return res.status(400).json({
-                sucess: true,
+                success: true,
                 message: 'No time or status is incorrect'
             });
             }
 
             await this.client.authenticate(res.locals.ip);
-            ClientManagement.allowClient(res.locals.ip);
+            try {
+                ClientManagement.allowClient(res.locals.ip);
+            } catch (err) {
+                console.error("Failed to allow client:", err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Failed to allow client: " + err.message
+                });
+            }
             return res.status(200).json({
                 sucess: true,
                 message: 'Client authenticated'
