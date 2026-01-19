@@ -18,7 +18,7 @@ export default async function Events() {
     const submitBtn = document.getElementById("submit-credential");
     submitBtn.addEventListener("click", async function(){
         // TODO: Add the user to the drop clients to avoid duplication
-        const response = await axios.post(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/`, {
+        const response = await axios.post(`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`, {
             name: document.getElementById('name').value,
             course: document.getElementById('course').value,
             yearlevel: document.getElementById('yearlvl').value
