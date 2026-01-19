@@ -2,27 +2,22 @@ import runSpawnSync from './runSpawnSync.js';
 
 export default class ClientManagement {
     static allowClient(ip) {
-        // Flush old connections
-        runSpawnSync('conntrack', ['-D', '-s', ip]);
-        runSpawnSync('conntrack', ['-D', '-d', ip]);
-
-        // Add the client to the CLIENTS_AUTH chain
-        runSpawnSync('iptables', [
-            '-t', 'nat', '-I', 'CLIENTS_AUTH', '-s', ip, '-j', 'RETURN'
-        ]);
-
+        runSpawnSync(["iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", 80, "-j", "RETURN"]]),
+        runSpawnSync(["iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "udp", "--dport", 53, "-j", "RETURN"]]),
+        runSpawnSync(["iptables", ["-I", "FORWARD", "-s", ip, "-j", "ACCEPT"]]),
+        runSpawnSync(["iptables", ["-I", "FORWARD", "-d", ip, "-j", "ACCEPT"]]),
+        runSpawnSync(["iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-j", "MASQUERADE"]])
         console.log(`[ALLOW] ${ip} internet enabled`);
     }
 
     static revokeClient(ip) {
-        // Remove the client from CLIENTS_AUTH
-        runSpawnSync('iptables', [
-            '-t', 'nat', '-D', 'CLIENTS_AUTH', '-s', ip, '-j', 'RETURN'
-        ]);
-
-        // Flush connections
-        runSpawnSync('conntrack', ['-D', '-s', ip]);
-        runSpawnSync('conntrack', ['-D', '-d', ip]);
+        runSpawnSync(["iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", 80, "-j", "RETURN"]]),
+        runSpawnSync(["iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "udp", "--dport", 53, "-j", "RETURN"]]),
+        runSpawnSync(["iptables", ["-D", "FORWARD", "-s", ip, "-j", "ACCEPT"]]),
+        runSpawnSync(["iptables", ["-D", "FORWARD", "-d", ip, "-j", "ACCEPT"]]),
+        runSpawnSync(["iptables", ["-t", "nat", "-D", "POSTROUTING", "-s", ip, "-j", "MASQUERADE"]]),
+        runSpawnSync(["conntrack", ["-D", "-s", ip]]),
+        runSpawnSync(["conntrack", ["-D", "-d", ip]])
 
         console.log(`[REVOKE] ${ip} internet revoked`);
     }
