@@ -72,8 +72,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/v1', cors(), v1);
 app.use('/api', cors(), apiRouter);
 
-app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
-    res.redirect(302, '/');
+app.get(['/generate_204', '/hotspot-detect.html'], (req, res, next) => {
+    res.sendFile(path.join(distDirectory, 'index.html'));
 });
 
 app.get('*', (req, res) => {
