@@ -5,23 +5,23 @@ const primaryInterface = process.env.PRIMARY_INTERFACE; // your internet-facing 
 
 export default class ClientManagement {
     static allowClient(ip) {
-        // Allow HTTP/DNS to bypass DNAT (so portal works)
+        const uplinkInterface = "enxec9a0c164fda";
+
+        // Bypass portal for HTTP/DNS for this client
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
+        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "tcp", "--dport", "53", "-j", "RETURN"]);
 
-        // Allow forwarding to internet
-        runSpawnSync("iptables", ["-I", "FORWARD", "-i", secondaryInterface, "-o", primaryInterface, "-s", ip, "-j", "ACCEPT"]);
-        runSpawnSync("iptables", ["-I", "FORWARD", "-i", primaryInterface, "-o", secondaryInterface, "-d", ip, "-m", "state", "--state", "ESTABLISHED,RELATED", "-j", "ACCEPT"]);
+        // Allow forwarding
+        runSpawnSync("iptables", ["-I", "FORWARD", "-i", secondaryInterface, "-o", uplinkInterface, "-s", ip, "-j", "ACCEPT"]);
+        runSpawnSync("iptables", ["-I", "FORWARD", "-i", uplinkInterface, "-o", secondaryInterface, "-d", ip, "-m", "state", "--state", "ESTABLISHED,RELATED", "-j", "ACCEPT"]);
 
-        // MASQUERADE for internet NAT (only on uplink interface)
-        runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-o", primaryInterface, "-j", "MASQUERADE"]);
-
-        // Remove any previous DROP rules (if client was revoked before)
-        try { runSpawnSync("iptables", ["-D", "FORWARD", "-s", ip, "-j", "DROP"]); } catch {}
-        try { runSpawnSync("iptables", ["-D", "FORWARD", "-d", ip, "-j", "DROP"]); } catch {}
+        // NAT
+        runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-o", uplinkInterface, "-j", "MASQUERADE"]);
 
         console.log(`[ALLOW] ${ip} internet enabled`);
-    }
+}
+
 
     static revokeClient(ip) {
         // Remove bypass for DNAT (portal)
