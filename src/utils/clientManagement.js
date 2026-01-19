@@ -7,8 +7,9 @@ export default class ClientManagement {
     static allowClient(ip) {
         const uplinkInterface = "enxec9a0c164fda";
 
-        // Bypass portal for HTTP/DNS for this client
+        // Bypass portal for HTTP/HTTPS/DNS
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
+        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "tcp", "--dport", "443", "-j", "RETURN"]);
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "tcp", "--dport", "53", "-j", "RETURN"]);
 
@@ -20,7 +21,8 @@ export default class ClientManagement {
         runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-o", uplinkInterface, "-j", "MASQUERADE"]);
 
         console.log(`[ALLOW] ${ip} internet enabled`);
-}
+    }
+
 
 
     static revokeClient(ip) {
