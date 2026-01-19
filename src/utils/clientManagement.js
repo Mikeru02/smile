@@ -16,8 +16,8 @@ export default class ClientManagement {
         runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-j", "MASQUERADE"]);
 
         // Remove any previous drop rules (in case client was revoked before)
-        runSpawnSync("iptables", ["-D", "FORWARD", "-s", ip, "-j", "DROP"]);
-        runSpawnSync("iptables", ["-D", "FORWARD", "-d", ip, "-j", "DROP"]);
+        try { runSpawnSync("iptables", ["-D", "FORWARD", "-s", ip, "-j", "DROP"]); } catch {}
+        try { runSpawnSync("iptables", ["-D", "FORWARD", "-d", ip, "-j", "DROP"]); } catch {}
 
         console.log(`[ALLOW] ${ip} internet enabled`);
     }
