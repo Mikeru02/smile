@@ -62,6 +62,7 @@ const host = process.env.SRC_HOST || '0.0.0.0';
 const distDirectory = path.join(directory, "../dist");
 
 app.use('/fonts', express.static('public/fonts'));
+app.use('/assets', express.static(path.join(distDirectory, 'assets')))
 app.use(express.static(distDirectory));
 app.use(morgan('combined'));
 app.use(cookieParser());
