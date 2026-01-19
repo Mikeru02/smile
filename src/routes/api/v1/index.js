@@ -1,5 +1,8 @@
 import { Router } from 'express';
+import clientRouter from './clientRouter';
 
-const apiV1 = new Router();
+const v1 = new Router();
 
-export default apiV1;
+v1.use('/client', clientRouter);
+
+export default v1;
