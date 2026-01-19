@@ -20,6 +20,7 @@ window.app = app;
 
 // TODO: Add the routes here
 app.add("/", CaptivePortal);
+app.add("/generate_204", CaptivePortal);
 app.add("/portal", TimePortal, true);
 app.add("/admin/login", AdminLogin);
 app.add("/admin/dashboard", AdminHome);

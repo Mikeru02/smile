@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import compression from 'compression';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -41,9 +42,9 @@ console.log('Setting up Static Ip...');
 //StaticIP.set();
 
 // Block for setup of iptables
-console.log('Setting up iptables...');
-IPTSetup.flush();
-IPTSetup.set();
+//console.log('Setting up iptables...');
+//IPTSetup.flush();
+//IPTSetup.set();
 
 // Block for checking arduino
 const arduino = new Arduino(
@@ -52,31 +53,39 @@ const arduino = new Arduino(
     Number(process.env.SERIAL_TIMEOUT) || 1000
 );
 
-const file = fileURLToPath(import.meta.url);
-const directory = path.dirname(file);
+const __file = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__file);
 
 const app = express();
 const port = Number(process.env.SRC_PORT) || 80;
 const host = process.env.SRC_HOST || '0.0.0.0';
 
-const distDirectory = path.join(directory, "../dist");
+//const distDirectory = path.join(directory, "../dist");
 
+//console.log("DIST DIRECTORY: ", distDirectory);
+app.use(compression());
 app.use('/fonts', express.static('public/fonts'));
-app.use(express.static(distDirectory));
+//app.use('/assets', express.static(path.join(distDirectory, 'assets')));
+app.use(express.static(path.join(__dirname, '../dist')));
 app.use(morgan('combined'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/v1', cors(), v1);
-app.use('/api', cors(), apiRouter);
+//app.use('/api', cors(), apiRouter);
+
+app.use((req, res, next) => {
+  console.log(req.method, req.url, req.ip);
+  next();
+});
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
-    res.redirect(302, '/');
+    res.redirect('/');
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(distDirectory, 'index.html'))
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 });
 
 app.listen(port, host, () => {
