@@ -11,7 +11,8 @@ export default async function Events() {
 
     if (isValid) {
         window.app.pushRoute("/portal");
-        return;
+    } else {
+        window.app.pushRoute("/");
     }
 
 
@@ -25,13 +26,13 @@ export default async function Events() {
         }, {
             headers: {
                 "Content-Type": "application/json",
-                "apikey": import.meta.env.VITE_API_KEY
+                "apikey": import.meta.env.VITE_SRC_KEY
             }
         });
     
         // Set Token to the local storage
         localStorage.setItem('token', response.data.data.token);
-
+        window.alert("Token: ", response.data.data.token);
         // TODO: Redirect the user to the page of receiving time/rewards
         window.app.pushRoute("/portal");
     })

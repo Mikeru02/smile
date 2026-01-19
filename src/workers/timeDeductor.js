@@ -5,7 +5,7 @@ export default function startTimeDeductor() {
 
     setInterval(async () => {
         await axios.patch(
-            `http://${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_ROUTE_VERSION}/client/all`, 
+            `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/${process.env.SRC_ROUTE_VERSION}/client/all`, 
             {},
             {
                 headers: {
@@ -16,7 +16,7 @@ export default function startTimeDeductor() {
         )
 
         const response = await axios.get(
-            `http://${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_ROUTE_VERSION}/client/outOfTime`,
+            `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/${process.env.SRC_ROUTE_VERSION}/client/outOfTime`,
             {
                 headers: {
                     'Content-Type': 'application/json',
