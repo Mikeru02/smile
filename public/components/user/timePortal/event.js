@@ -75,7 +75,7 @@ export default async function Events() {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_API_KEY,
+                    'apikey': import.meta.env.VITE_SRC_KEY,
                     'token': localStorage.getItem('token')
             }
             }
@@ -94,7 +94,7 @@ export default async function Events() {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_API_KEY,
+                    'apikey': import.meta.env.VITE_SRC_KEY,
                     'token': localStorage.getItem('token')
                 }
             }
@@ -112,7 +112,7 @@ export default async function Events() {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_API_KEY,
+                    'apikey': import.meta.env.VITE_SRC_KEY,
                     'token': localStorage.getItem('token')
                 }
             }
@@ -129,7 +129,7 @@ export default async function Events() {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_API_KEY,
+                    'apikey': import.meta.env.VITE_SRC_KEY,
                     'token': localStorage.getItem('token')
                 }
             }
@@ -145,7 +145,7 @@ export default async function Events() {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_API_KEY,
+                    'apikey': import.meta.env.VITE_SRC_KEY,
                     'token': localStorage.getItem('token')
                 }
             }
@@ -167,7 +167,7 @@ export default async function Events() {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_API_KEY,
+                    'apikey': import.meta.env.VITE_SRC_KEY,
                     'token': localStorage.getItem('token')
                 }
             }
