@@ -1,7 +1,7 @@
 import styles from './component.module.css';
-import Modal from './modal';
-import Logo from '/icons/logo.svg';
-import ILLUSTRATION1 from '/icons/time.svg';
+import Modal from './modal.js';
+import Logo from '/icons/logo.png';
+import ILLUSTRATION1 from '/icons/time.png';
 
 export default function Main(root) {
     root.innerHTML = `
