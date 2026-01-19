@@ -34,11 +34,13 @@ export default async function Events() {
 
             startTime();
             await axios.post(
-                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/connect`,
-                { token: localStorage.getItem('token') },
+                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
+                {},
                 {
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'apikey': import.meta.env.VITE_SRC_KEY,
+                        'token': localStorage.getItem('token')
                     }
                 }
 
@@ -51,7 +53,7 @@ export default async function Events() {
 
             // Call disconnect function from main server
             await axios.post(
-                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/disconnect`,
+                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
                 { token: localStorage.getItem('token') },
                 {
                     headers: {
@@ -67,13 +69,17 @@ export default async function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         modal.style.display = 'block';
-        await axios.post(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/start`, {}, {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_API_KEY,
-                'token': localStorage.getItem('token')
+        await axios.post(
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/start`, 
+            {}, 
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_API_KEY,
+                    'token': localStorage.getItem('token')
             }
-        })
+            }
+        );
         earn();
         earnInterval = setInterval(earn, 1000);
     });
@@ -82,15 +88,17 @@ export default async function Events() {
     exit.addEventListener('click', async function() {
         modal.style.display = 'none';
         clearInterval(earnInterval);
-        const response = await axios.patch(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/`, {
-            status: 'pending'
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_API_KEY,
-                'token': localStorage.getItem('token')
+        const response = await axios.patch(
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
+            { status: 'pending' }, 
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_API_KEY,
+                    'token': localStorage.getItem('token')
+                }
             }
-        });
+        );
         updateTimeRemaining();
     });
 
@@ -98,50 +106,50 @@ export default async function Events() {
     proceed.addEventListener('click', async function() {
         modal.style.display = 'none';
         clearInterval(earnInterval);
-        const response = await axios.post(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/firstAuth`, {}, {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_API_KEY,
-                'token': localStorage.getItem('token')
+        await axios.post(
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/firstAuth`,
+            {}, 
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_API_KEY,
+                    'token': localStorage.getItem('token')
+                }
             }
-        });
+        );
         updateTimeRemaining();
         connect.textContent = 'Pause';
         isConnected = true;
         startTime();
-        await axios.post(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/connect`,
-            { token: localStorage.getItem('token') },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-
-        );
     });
 
     const updateTimeRemaining = async () => {
-        const response = await axios.get(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/time_remaining`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_API_KEY,
-                'token': localStorage.getItem('token')
+        const response = await axios.get(
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time_remaining`, 
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_API_KEY,
+                    'token': localStorage.getItem('token')
+                }
             }
-        });
+        );
         timeRemainingSeconds = response.data.data.time_remaining;
         const timeRemaining = response.data.data.time_remaining;
         renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemaining)
     }
 
     const updateEarnedTimeDisplay = async () => {
-        const response = await axios.get(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/time_earned`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_API_KEY,
-                'token': localStorage.getItem('token')
+        const response = await axios.get(
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time_earned`, 
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_API_KEY,
+                    'token': localStorage.getItem('token')
+                }
             }
-        });
+        );
 
         if (!response.data.success) return;
 
@@ -154,15 +162,16 @@ export default async function Events() {
 
         isRunning = true;
 
-        const response = await axios.post(`http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}/${import.meta.env.VITE_API_ROUTE_VERSION}/client/earn`, {
-            earned_time: timeEarned
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_API_KEY,
-                'token': localStorage.getItem('token')
+        await axios.post(`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`, 
+            { earned_time: timeEarned },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_API_KEY,
+                    'token': localStorage.getItem('token')
+                }
             }
-        });
+        );
 
         updateEarnedTimeDisplay();
         isRunning = false;
@@ -177,11 +186,13 @@ export default async function Events() {
                 clearInterval(timeRemainingInterval);
                 timeRemainingInterval = null;
                 await axios.patch(
-                    `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/v1/client/revoke`,
-                    { token: localStorage.getItem('token') },
+                    `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
+                    {},
                     {
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'apikey': import.meta.env.VITE_SRC_KEY,
+                            'token': localStorage.getItem('token')
                         }
                     }
 
