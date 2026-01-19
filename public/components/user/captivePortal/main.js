@@ -1,4 +1,4 @@
-import Logo from '/icons/logo.png';
+import Logo from '/icons/logo.svg';
 import styles from './component.module.css';
 
 export default function Main(root){

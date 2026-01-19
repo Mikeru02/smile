@@ -29,7 +29,7 @@ export default async function Events() {
                 "apikey": import.meta.env.VITE_SRC_KEY
             }
         });
-    
+        
         // Set Token to the local storage
         localStorage.setItem('token', response.data.data.token);
         window.alert("Token: ", response.data.data.token);
