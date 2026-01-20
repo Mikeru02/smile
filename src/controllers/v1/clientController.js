@@ -74,6 +74,29 @@ class ClientController {
         }
     }
 
+    async addTime(req, res) {
+        try {
+            const clientData = await this.client.getClientByIP(res.locals.ip);
+            const earnedTime = clientData.time_earned;
+            if (earnedTime === 0 || clientData.status != 'dropping') {
+                return res.status(400).json({
+                    success: false,
+                    messgae: "You must drop a trash to earn time!"
+                });
+            }
+            await this.client.addTime(res.locals.ip);
+            return res.status(200).json({
+                success: true,
+                message: 'Add time success!'
+            })
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     async authenticate(req, res) {
         try {
             const clientData = await this.client.getClientByIP(res.locals.ip);

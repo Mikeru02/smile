@@ -47,11 +47,11 @@ console.log('Setting up Static Ip...');
 //IPTSetup.set();
 
 // Block for checking arduino
-const arduino = new Arduino(
-    process.env.SERIAL_PORT,
-    Number(process.env.SERIAL_SPEED) || 9600,
-    Number(process.env.SERIAL_TIMEOUT) || 1000
-);
+// const arduino = new Arduino(
+//     process.env.SERIAL_PORT,
+//     Number(process.env.SERIAL_SPEED) || 9600,
+//     Number(process.env.SERIAL_TIMEOUT) || 1000
+// );
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);

@@ -109,7 +109,7 @@ export default async function Events() {
         modal.style.display = 'none';
         clearInterval(earnInterval);
         await axios.post(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/firstAuth`,
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/add-time`,
             {}, 
             {
                 headers: {
@@ -120,9 +120,6 @@ export default async function Events() {
             }
         );
         updateTimeRemaining();
-        connect.textContent = 'Pause';
-        isConnected = true;
-        startTime();
     });
 
     const updateTimeRemaining = async () => {

@@ -21,6 +21,7 @@ clientRouter.post('/earn', authentication, client.earned.bind(client));
 clientRouter.post('/firstAuth', authentication, client.firstAuthenticate.bind(client));
 clientRouter.post('/auth', authentication, client.authenticate.bind(client));
 clientRouter.post('/deauth', authentication, client.deauthenticate.bind(client));
+clientRouter.post('/add-time', authentication, client.addTime.bind(client));
 
 // Patch Methods
 clientRouter.patch('/', authentication, client.updateClientStatus.bind(client));

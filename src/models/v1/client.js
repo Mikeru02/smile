@@ -34,6 +34,21 @@ class Client {
         }
     }
 
+    async addTime(ip) {
+        try {
+            const clientData = await this.getClientByIP(ip);
+            const timeRemaining = clientData.time_remaining + clientData.time_earned;
+            const [result, ]= await this.db.execute(
+                'UPDATE clients SET time_remaining=?, time_earned=?, status=?, updated_at=NOW() WHERE ip=?',
+                [timeRemaining, 0, 'pending', ip]
+            );
+            return result;
+        } catch (err) {
+            console.error("[ERROR] client.addTime", err);
+            throw err;
+        }
+    }
+
     async authenticate(ip) {
         try {
             const [result, ] = await this.db.execute(
