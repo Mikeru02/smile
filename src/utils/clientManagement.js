@@ -4,18 +4,20 @@ export default class ClientManagement {
     static allowClient(ip) {
         // Stop portal redirect for this client
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
+        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "443", "-j", "RETURN"]);
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
 
-        // Forward only this client's traffic
+        // Forward traffic
         runSpawnSync("iptables", ["-I", "FORWARD", "-s", ip, "-o", "enxec9a0c164fda", "-j", "ACCEPT"]);
         runSpawnSync("iptables", ["-I", "FORWARD", "-d", ip, "-i", "enxec9a0c164fda", "-m", "state", "--state", "ESTABLISHED,RELATED", "-j", "ACCEPT"]);
 
-        // NAT only for this client
+        // NAT outgoing for client
         runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-o", "enxec9a0c164fda", "-j", "MASQUERADE"]);
 
         // Flush old connections
         runSpawnSync("conntrack", ["-D", "-s", ip]);
         runSpawnSync("conntrack", ["-D", "-d", ip]);
+
 
         console.log(`[ALLOW] ${ip} internet allowed`);
     }
