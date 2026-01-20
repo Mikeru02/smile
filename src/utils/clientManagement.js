@@ -2,10 +2,8 @@ import runSpawnSync from './runSpawnSync.js';
 
 export default class ClientManagement {
     static allowClient(ip) {
-        // Stop portal redirect for this client (HTTP + DNS)
+        // Stop portal redirect for HTTP only (port 80)
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "53", "-j", "RETURN"]); // TCP DNS
 
         // Forward all traffic from this client
         runSpawnSync("iptables", ["-I", "FORWARD", "-s", ip, "-o", "enxec9a0c164fda", "-j", "ACCEPT"]);
@@ -18,10 +16,8 @@ export default class ClientManagement {
     }
 
     static revokeClient(ip) {
-        // Restore portal redirect (HTTP + DNS)
+        // Restore portal redirect for HTTP
         runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "53", "-j", "RETURN"]); // TCP DNS
 
         // Remove forwarding
         runSpawnSync("iptables", ["-D", "FORWARD", "-s", ip, "-o", "enxec9a0c164fda", "-j", "ACCEPT"]);
