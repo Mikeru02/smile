@@ -2,28 +2,22 @@ import runSpawnSync from './runSpawnSync.js';
 
 export default class ClientManagement {
     static allowClient(ip) {
-        // Bypass portal
-        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
+        // Stop portal redirect
+        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-j", "RETURN"]);
 
-        // Forwarding: HTTP/HTTPS/other
+        // Forward all traffic from this client
         runSpawnSync("iptables", ["-I", "FORWARD", "-s", ip, "-o", "enxec9a0c164fda", "-j", "ACCEPT"]);
         runSpawnSync("iptables", ["-I", "FORWARD", "-d", ip, "-i", "enxec9a0c164fda", "-m", "state", "--state", "ESTABLISHED,RELATED", "-j", "ACCEPT"]);
 
-        // Forwarding: DNS
-        runSpawnSync("iptables", ["-I", "FORWARD", "-s", ip, "-p", "udp", "--dport", "53", "-o", "enxec9a0c164fda", "-j", "ACCEPT"]);
-        runSpawnSync("iptables", ["-I", "FORWARD", "-d", ip, "-p", "udp", "--sport", "53", "-i", "enxec9a0c164fda", "-m", "state", "--state", "ESTABLISHED,RELATED", "-j", "ACCEPT"]);
-
-        // NAT masquerade
+        // NAT for client
         runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-o", "enxec9a0c164fda", "-j", "MASQUERADE"]);
 
         console.log(`[ALLOW] ${ip} internet allowed`);
     }
 
     static revokeClient(ip) {
-        // Remove portal bypass
-        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
+        // Restore portal redirect
+        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-j", "RETURN"]);
 
         // Remove forwarding
         runSpawnSync("iptables", ["-D", "FORWARD", "-s", ip, "-o", "enxec9a0c164fda", "-j", "ACCEPT"]);
