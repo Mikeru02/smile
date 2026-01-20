@@ -5,46 +5,40 @@ const primaryInterface = process.env.PRIMARY_INTERFACE; // your internet-facing 
 
 export default class ClientManagement {
     static allowClient(ip) {
-        const uplinkInterface = "enxec9a0c164fda";
+        // Bypass DNS hijack
+        runSpawnSync("iptables", [
+            "-t", "nat", "-I", "PREROUTING", "1",
+            "-i", "enxec9a0c1bee94",
+            "-s", ip,
+            "-p", "udp", "--dport", "53",
+            "-j", "RETURN"
+        ]);
 
-        // Bypass portal for HTTP/HTTPS/DNS
-        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "tcp", "--dport", "443", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "tcp", "--dport", "53", "-j", "RETURN"]);
+        // Bypass HTTP hijack
+        runSpawnSync("iptables", [
+            "-t", "nat", "-I", "PREROUTING", "1",
+            "-i", "enxec9a0c1bee94",
+            "-s", ip,
+            "-p", "tcp", "--dport", "80",
+            "-j", "RETURN"
+        ]);
 
-        // Allow forwarding
-        runSpawnSync("iptables", ["-I", "FORWARD", "-i", secondaryInterface, "-o", uplinkInterface, "-s", ip, "-j", "ACCEPT"]);
-        runSpawnSync("iptables", ["-I", "FORWARD", "-i", uplinkInterface, "-o", secondaryInterface, "-d", ip, "-m", "state", "--state", "ESTABLISHED,RELATED", "-j", "ACCEPT"]);
-
-        // NAT
-        runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-o", uplinkInterface, "-j", "MASQUERADE"]);
-
-        console.log(`[ALLOW] ${ip} internet enabled`);
+        // Allow internet forwarding
+        runSpawnSync("iptables", [
+            "-I", "ALLOWED_CLIENT", "1",
+            "-s", ip,
+            "-o", "enxec9a0c164fda",
+            "-m", "state",
+            "--state", "NEW,ESTABLISHED,RELATED",
+            "-j", "ACCEPT"
+        ]);
     }
 
 
 
+
     static revokeClient(ip) {
-        // Remove bypass for DNAT (portal)
-        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-i", secondaryInterface, "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
-
-        // Remove per-client FORWARD rules
-        runSpawnSync("iptables", ["-D", "FORWARD", "-i", secondaryInterface, "-o", primaryInterface, "-s", ip, "-j", "ACCEPT"]);
-        runSpawnSync("iptables", ["-D", "FORWARD", "-i", primaryInterface, "-o", secondaryInterface, "-d", ip, "-m", "state", "--state", "ESTABLISHED,RELATED", "-j", "ACCEPT"]);
-
-        // Remove MASQUERADE for this client
-        runSpawnSync("iptables", ["-t", "nat", "-D", "POSTROUTING", "-s", ip, "-o", primaryInterface, "-j", "MASQUERADE"]);
-
-        // Terminate any existing connections
-        runSpawnSync("conntrack", ["-D", "-s", ip]);
-        runSpawnSync("conntrack", ["-D", "-d", ip]);
-
-        // Drop all other traffic to prevent internet access
-        runSpawnSync("iptables", ["-I", "FORWARD", "-s", ip, "-j", "DROP"]);
-        runSpawnSync("iptables", ["-I", "FORWARD", "-d", ip, "-j", "DROP"]);
-
+        
         console.log(`[REVOKE] ${ip} internet revoked`);
     }
 }
