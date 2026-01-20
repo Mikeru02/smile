@@ -5,13 +5,13 @@ const primaryInterface = process.env.PRIMARY_INTERFACE; // your internet-facing 
 
 export default class ClientManagement {
     static allowClient(ip) {
-       runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
-       runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
-       runSpawnSync("iptables", ["-I", "FORWARD", "-s", ip, "-j", "ACCEPT"]);
-       runSpawnSync("iptables", ["-I", "FORWARD", "-d", ip, "-j", "ACCEPT"]);
-       runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-j", "MASQUERADE"])
-
-        console.log(`[ALLOW] ${ip} internet allowed`);
+        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
+        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
+        runSpawnSync("iptables", ["-I", "FORWARD", "-s", ip, "-o", "enxec9a0c164fda", "-j", "ACCEPT"]);
+        runSpawnSync("iptables", ["-I", "FORWARD", "-d", ip, "-i", "enxec9a0c164fda", "-j", "ACCEPT"]);
+        runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-o", "enxec9a0c164fda", "-j", "MASQUERADE"]);
+        
+            console.log(`[ALLOW] ${ip} internet allowed`);
     }
 
 
@@ -25,7 +25,7 @@ export default class ClientManagement {
         runSpawnSync("iptables", ["-t", "nat", "-D", "POSTROUTING", "-s", ip, "-j", "MASQUERADE"]);
         runSpawnSync("conntrack", ["-D", "-s", ip]);
         runSpawnSync("conntrack", ["-D", "-d", ip]);
-        
+
         console.log(`[REVOKE] ${ip} internet revoked`);
     }
 }
