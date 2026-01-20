@@ -5,39 +5,26 @@ const primaryInterface = process.env.PRIMARY_INTERFACE; // your internet-facing 
 
 export default class ClientManagement {
     static allowClient(ip) {
-        // Bypass DNS hijack
-        runSpawnSync("iptables", [
-            "-t", "nat", "-I", "PREROUTING", "1",
-            "-i", "enxec9a0c1bee94",
-            "-s", ip,
-            "-p", "udp", "--dport", "53",
-            "-j", "RETURN"
-        ]);
+       runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
+       runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
+       runSpawnSync("iptables", ["-I", "FORWARD", "-s", ip, "-j", "ACCEPT"]);
+       runSpawnSync("iptables", ["-I", "FORWARD", "-d", ip, "-j", "ACCEPT"]);
+       runSpawnSync("iptables", ["-t", "nat", "-I", "POSTROUTING", "-s", ip, "-j", "MASQUERADE"])
 
-        // Bypass HTTP hijack
-        runSpawnSync("iptables", [
-            "-t", "nat", "-I", "PREROUTING", "1",
-            "-i", "enxec9a0c1bee94",
-            "-s", ip,
-            "-p", "tcp", "--dport", "80",
-            "-j", "RETURN"
-        ]);
-
-        // Allow internet forwarding
-        runSpawnSync("iptables", [
-            "-I", "ALLOWED_CLIENT", "1",
-            "-s", ip,
-            "-o", "enxec9a0c164fda",
-            "-m", "state",
-            "--state", "NEW,ESTABLISHED,RELATED",
-            "-j", "ACCEPT"
-        ]);
+        console.log(`[ALLOW] ${ip} internet allowed`);
     }
 
 
 
 
     static revokeClient(ip) {
+        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
+        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
+        runSpawnSync("iptables", ["-D", "FORWARD", "-s", ip, "-j", "ACCEPT"]);
+        runSpawnSync("iptables", ["-D", "FORWARD", "-d", ip, "-j", "ACCEPT"]);
+        runSpawnSync("iptables", ["-t", "nat", "-D", "POSTROUTING", "-s", ip, "-j", "MASQUERADE"]);
+        runSpawnSync("conntrack", ["-D", "-s", ip]);
+        runSpawnSync("conntrack", ["-D", "-d", ip]);
         
         console.log(`[REVOKE] ${ip} internet revoked`);
     }
