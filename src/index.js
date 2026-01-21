@@ -36,9 +36,9 @@ if (serviceFailure.length > 0) {
 }
 
 // Block for setup of iptables
-console.log('Setting up iptables...');
-IPTSetup.flush();
-IPTSetup.set();
+// console.log('Setting up iptables...');
+// IPTSetup.flush();
+// IPTSetup.set();
 
 // Block for checking arduino
 // const arduino = new Arduino(
