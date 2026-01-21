@@ -242,6 +242,19 @@ class Client {
             throw err;
         }
     }
+
+    async getAllClients(n = 10) {
+        try {
+            const [rows ] = this.db.execute(
+                'SELECT * FROM clients ORDER BY created_at DESC LIMIT ?',
+                [n]
+            );
+            return rows;
+        } catch(err) {
+            console.error("[ERROR] client.getAllClients", err);
+            throw err;
+        }
+    }
 }
 
 export default Client;

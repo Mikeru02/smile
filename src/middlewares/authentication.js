@@ -20,6 +20,8 @@ export default function authentication(req, res, next) {
         return;
         }
 
+        res.locals.username = decoded?.username;
+        res.locals.role = decoded?.role;
         res.locals.ip = decoded?.ip;
         res.locals.authenticated = true;
         next();

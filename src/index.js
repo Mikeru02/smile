@@ -35,11 +35,6 @@ if (serviceFailure.length > 0) {
     console.log('[OK] All services are running');
 }
 
-// Block for setup of iptables
-// console.log('Setting up iptables...');
-// IPTSetup.flush();
-// IPTSetup.set();
-
 // Block for checking arduino
 // const arduino = new Arduino(
 //     process.env.SERIAL_PORT,
