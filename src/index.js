@@ -10,8 +10,6 @@ import 'dotenv/config.js';
 import Arduino from './utils/arduino.js';
 import Service from './utils/serviceChecker.js';
 import IPTSetup from './utils/iptablesSetup.js';
-// import StaticIP from './utils/setStaticIP.js';
-import v1 from './routes/v1/index.js';
 import apiRouter from './routes/api/index.js';
 import startTimeDeductor from './workers/timeDeductor.js';
 
@@ -37,14 +35,10 @@ if (serviceFailure.length > 0) {
     console.log('[OK] All services are running');
 }
 
-// Block for setting up static ip
-console.log('Setting up Static Ip...');
-//StaticIP.set();
-
 // Block for setup of iptables
-//console.log('Setting up iptables...');
-//IPTSetup.flush();
-//IPTSetup.set();
+console.log('Setting up iptables...');
+IPTSetup.flush();
+IPTSetup.set();
 
 // Block for checking arduino
 // const arduino = new Arduino(
@@ -65,20 +59,13 @@ const distDirectory = path.join(directory, "../dist");
 console.log("DIST DIRECTORY: ", distDirectory);
 app.use(compression());
 app.use('/fonts', express.static('public/fonts'));
-//app.use('/assets', express.static(path.join(distDirectory, 'assets')));
 app.use(express.static(path.join(distDirectory, '../dist')));
 app.use(morgan('combined'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/v1', cors(), v1);
 app.use('/api', cors(), apiRouter);
-
-app.use((req, res, next) => {
-  console.log(req.method, req.url, req.ip);
-  next();
-});
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect('/');
