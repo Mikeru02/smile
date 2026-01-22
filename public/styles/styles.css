@@ -40,7 +40,7 @@ table {
 }
 
 .analytics-table thead tr th, .analytics-table tbody tr td{
-    padding-left: 1rem;
+    text-align: center;
 }
 
 .analytics-table tbody {

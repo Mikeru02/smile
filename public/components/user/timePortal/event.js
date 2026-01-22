@@ -124,7 +124,7 @@ export default async function Events() {
 
     const updateTimeRemaining = async () => {
         const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time_remaining`, 
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`, 
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export default async function Events() {
 
     const updateEarnedTimeDisplay = async () => {
         const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time_earned`, 
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`, 
             {
                 headers: {
                     'Content-Type': 'application/json',

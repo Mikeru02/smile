@@ -1,26 +1,28 @@
-import { populateHeaders, populateTable } from "../../../utils/populateTable";
+import axios from "axios";
+import { populateHeaders, populateTable } from "../../../utils/populateTable.js";
 
-export default function PageEvents() {
+export default async function PageEvents() {
+    const response = await axios.get(
+        `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/all-clients`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': import.meta.env.VITE_SRC_KEY,
+                'token': localStorage.getItem('token') 
+            }
+        }
+    );
+
+    const clients = response.data.data;
     const selectValue = document.getElementById("select-filter");
     const table =  document.getElementById("analytics-table");
     const thead = table.querySelector("thead");
     const tbody = table.querySelector("tbody");
 
-    const sampleData = {
-        "all-users": [
-            { "UserID": "221284", "Name": "Michael Ponce", "Course": "BSCS", "Year Level": "4", "Time": "1min"},
-            { "UserID": "12356", "Name": "Allyana Marie Sarmiento", "Course": "BEED", "Year Level": "4", "Time": "1min"}
-        ],
-        "bin-count": [
-            {"Num of Full Bin": "4", "Date": "11/29/2025", "Time": "11:00:00"},
-            {"Num of Full Bin": "6", "Date": "11/20/2025", "Time": "17:00:00"}
-
-        ]
-    }
 
     let headers = populateHeaders(thead, selectValue);
-    populateTable(tbody, sampleData[selectValue.value], headers);
-
+    populateTable(tbody, clients, headers);
+    
     selectValue.addEventListener("change", () => {
         headers = populateHeaders(thead, selectValue);
         populateTable(tbody, sampleData[selectValue.value], headers);

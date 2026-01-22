@@ -90,19 +90,12 @@ class Client {
 
     async getClientTime(ip, type) {
         try {
-            if (type === 'time_earned') {
-                const [result, ] = await this.db.execute(
-                    'SELECT time_earned FROM clients WHERE ip=?',
-                    [ip]
-                );
-                return result?.[0];
-            } else if (type === 'time_remaining') {
-                const [result, ] = await this.db.execute(
-                    'SELECT time_remaining FROM clients WHERE ip=?',
-                    [ip]
-                );
-                return result?.[0];
-            }
+            console.log("DEBUG API: ", type)
+            const [result, ] = await this.db.execute(
+                `SELECT ${type} FROM clients WHERE ip=?`,
+                [ip]
+            );
+            return result?.[0];
         } catch (err) {
             console.error("[ERROR] client.getClientEarnedTime", err);
             throw err;
@@ -245,9 +238,8 @@ class Client {
 
     async getAllClients(n = 10) {
         try {
-            const [rows ] = this.db.execute(
-                'SELECT * FROM clients ORDER BY created_at DESC LIMIT ?',
-                [n]
+            const [rows ] = await this.db.execute(
+                `SELECT * FROM clients ORDER BY created_at DESC LIMIT ${n}`,
             );
             return rows;
         } catch(err) {

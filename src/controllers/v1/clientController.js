@@ -248,6 +248,7 @@ class ClientController {
     async getClientTime(req, res) {
         try {
             const response = await this.client.getClientTime(res.locals.ip, req.params.type);
+            
             return res.status(200).json({
                 success: true,
                 data: response
@@ -306,6 +307,21 @@ class ClientController {
                 success: true,
                 data: response
             });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async getAllClientByStatus(req, res) {
+        try {
+            const clients = await this.client.getClientByStatus(req.params.status);
+            return res.status(200).json({
+                success: true,
+                data: clients
+            })
         } catch (err) {
             return res.status(500).json({
                 success: false,

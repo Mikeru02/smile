@@ -11,7 +11,8 @@ clientRouter.use(authorization);
 // Get Methods
 clientRouter.get('/all-clients', client.getAllClients.bind(client));
 clientRouter.get('/outOfTime', client.getAllOutOfTimeClients.bind(client));
-clientRouter.get('/:type', authentication, client.getClientTime.bind(client));
+clientRouter.get('/status/:status', authentication, client.getAllClientByStatus.bind(client));
+clientRouter.get('/time/:type', authentication, client.getClientTime.bind(client));
 clientRouter.get('/', authentication, client.getClientByIP.bind(client));
 
 

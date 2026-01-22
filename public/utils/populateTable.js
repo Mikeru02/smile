@@ -1,44 +1,41 @@
+import { TABLE_CONFIG } from "../config/tableConfig.js";
+import { formatSeconds } from "./formatTime.js";
+
 export function populateTable(tbody, data, headers) {
     tbody.innerHTML = "";
 
-    if (!data || data.length === 0) return;
+    if (!Array.isArray(data)) return;
 
     data.forEach(row => {
-        const tr = document.createElement("tr");
-        headers.forEach(col => {
-            const td = document.createElement("td");
-            td.textContent = row[col] ?? "";
-            tr.appendChild(td);
-        })
-        tbody.appendChild(tr);
+        const trow = document.createElement("tr");    
+        headers.forEach(head => {
+            const tdata = document.createElement('td');
+            let value = row[head.key] ?? "";
+
+            if (head.key === 'time_remaining') {
+                value = formatSeconds(value);
+            }
+
+            tdata.textContent = value;
+            trow.appendChild(tdata);
+        });
+        tbody.appendChild(trow);
     });
 }
 
 export function populateHeaders(thead, select) {
     thead.innerHTML = "";
 
-    let headers = [];
+    const config = TABLE_CONFIG[select.value];
 
-    switch (select.value) {
-        case "all-users":
-            headers = ["UserID", "Name", "Course", "Year Level", "Time", "Action"];
-            break;
-        case "bin-count":
-            headers = ["Num of Full Bin", "Date", "Time"]
-            break;
-        default:
-            headers = [];
-    }
+    if (!config) return [];
 
-    if (headers.length === 0) return;
-
-    const headerRow = document.createElement("tr");
-    headers.forEach(head => {
-        const th = document.createElement("th");
-        th.textContent = head;
-        headerRow.appendChild(th);
+    const trow = document.createElement('tr');
+    config.forEach(head => {
+        const thead = document.createElement('th');
+        thead.textContent = head.label;
+        trow.appendChild(thead);
     });
-    thead.appendChild(headerRow);
-
-    return headers;
+    thead.appendChild(trow);
+    return config;
 }
