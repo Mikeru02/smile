@@ -6,6 +6,17 @@ const TABLE_CONFIG = {
         { label: "Year Level", key: "yearlevel" },
         { label: "Time", key: "time_remaining" },
         { label: "Details", key: "details" }
+    ],
+    "account-management": [
+        { label: "UserID", key: "id" },
+        { label: "Name", key: "name" },
+        { label: "Role", key: "role" },
+        { label: "Details", key: "details" },
+    ],
+    "logs": [
+        { label: "Timestamp", key: "timestamp" },
+        { label: "Event", key: "event" },
+        { label: "Description", key: "description" },
     ]
 };
 

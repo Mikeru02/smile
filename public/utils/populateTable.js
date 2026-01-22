@@ -14,6 +14,10 @@ export function populateTable(tbody, data, headers) {
 
             if (head.key === 'time_remaining') {
                 value = formatSeconds(value);
+                tdata.id = "time";
+            } else if (head.key === 'details') {
+                value = 'See more';
+                tdata.id = "see-more"
             }
 
             tdata.textContent = value;
@@ -26,7 +30,13 @@ export function populateTable(tbody, data, headers) {
 export function populateHeaders(thead, select) {
     thead.innerHTML = "";
 
-    const config = TABLE_CONFIG[select.value];
+    let config = null;
+
+    if (typeof select === 'string'){
+        config = TABLE_CONFIG[select];
+    } else {
+        config = TABLE_CONFIG[select.value]
+    }
 
     if (!config) return [];
 

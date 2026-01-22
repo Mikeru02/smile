@@ -2,6 +2,7 @@ import HeaderMainOnly from "../../layouts/headerMain";
 import Header from "../../components/admin/header";
 import MainCard from "../../components/admin/main";
 import AdminEvents from "../../components/admin/events";
+import PageEvents from "../../components/admin/logs/event";
 import MainContent from "../../components/admin/logs/main";
 
 export default class AdminLogs {
@@ -17,5 +18,6 @@ export default class AdminLogs {
         MainContent(card)
 
         AdminEvents();
+        PageEvents();
     }
 }

@@ -9,6 +9,7 @@ const account = new AccountController();
 accountRouter.use(authorization);
 
 // Get Methods
+accountRouter.get('/all', authentication, account.getAllAccounts.bind(account));
 
 // Post Methods
 accountRouter.post('/', account.create.bind(account));

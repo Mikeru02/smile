@@ -58,7 +58,7 @@ class AccountController {
         }
     }
 
-    async getAllAccounts() {
+    async getAllAccounts(req, res) {
         try {
             const response = await this.account.getAllAccounts();
             return res.status(200).json({
