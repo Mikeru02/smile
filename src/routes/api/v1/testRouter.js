@@ -6,6 +6,6 @@ export default function testRouter(ino) {
     const test = new TestController(ino);
 
     testRouter.get('/', test.test.bind(test));
-    testRouter.post('/', test.sendMessage.bind(test));
+    testRouter.post('/:message', test.sendMessage.bind(test));
     return testRouter;
 }
