@@ -5,10 +5,10 @@ class TestController {
 
     async sendMessage(req, res) {
         try {
-            await this.arduino.sendMessage(req.params.message)
+            const { message } = req.body;
+            await this.arduino.sendMessage(message)
             return res.status(200).json({
                 success: true,
-                message: req.params.message
             });
         } catch (err) {
             return res.status(500).json({
