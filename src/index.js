@@ -36,11 +36,11 @@ if (serviceFailure.length > 0) {
 }
 
 // Block for checking arduino
-// const arduino = new Arduino(
-//     process.env.SERIAL_PORT,
-//     Number(process.env.SERIAL_SPEED) || 9600,
-//     Number(process.env.SERIAL_TIMEOUT) || 1000
-// );
+const arduino = new Arduino(
+    process.env.SERIAL_PORT,
+    Number(process.env.SERIAL_SPEED) || 9600,
+    Number(process.env.SERIAL_TIMEOUT) || 1000
+);
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);
@@ -60,7 +60,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/api', cors(), apiRouter);
+app.use('/api', cors(), apiRouter(arduino));
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect('/');
