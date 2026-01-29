@@ -13,7 +13,6 @@ export default function Main(root){
                 <label for="course">Course / Strand</label>
                 <select id="course" data-value="course" class="${styles['courses']}"></select>
                 <label for="yearlvl">Year Level</label>
-                <select id="yearlvl" data-value="yearlvl"></select>
             </div>
             <button id="submit-credential" class="${styles["button-submit-cred"]}">SUBMIT</button>
         </div>

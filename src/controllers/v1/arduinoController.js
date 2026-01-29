@@ -3,7 +3,7 @@ class ArduinoController {
         this.arduino = arduino;
     }
 
-    async sendMessage(req, res) {
+    async sendMess(req, res) {
         try {
             
         } catch (err) {
@@ -13,6 +13,26 @@ class ArduinoController {
             })
         }
     }
+
+    async receiveMess(req, res) {
+        try {
+            const response = await this.arduino.readMessage();
+            if (response === "[EVENT][IP]") {
+                console.log("HOY")
+            }
+            console.log(response)
+            return res.status(200).json({
+                success: true,
+                timeEarned: ""
+            })
+        } catch (err) {
+            return res.status(500).json({
+            success: false,
+            message: err.toString()
+        })
+        }
+    }
+    
 
 }
 

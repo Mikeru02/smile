@@ -12,28 +12,9 @@ import Service from './utils/serviceChecker.js';
 import IPTSetup from './utils/iptablesSetup.js';
 import apiRouter from './routes/api/index.js';
 import startTimeDeductor from './workers/timeDeductor.js';
+import getLocalIP from './utils/getIp.js';
 
-// Block for checking the services needed
-console.log('Checking services...');
-const services = ['dnsmasq', 'NetworkManager'];
-const serviceFailure = [];
-for (const service of services) {
-    console.log(`Checking service ${service}`);
-    if (!Service.check(service)) {
-        console.warn(`[WARN] Service ${service} is not active!`);
-        const restart = Service.restart(service);
-        if (!restart) {
-            serviceFailure.push(service);
-        }
-    } else {
-        console.log(`[OK] Service ${service} is running!`);
-    }
-}
-if (serviceFailure.length > 0) {
-    console.error('[ERROR] Some services failed:', serviceFailure.join(', '));
-} else {
-    console.log('[OK] All services are running');
-}
+const ip = getLocalIP();
 
 // Block for checking arduino
 const arduino = new Arduino(
@@ -41,6 +22,7 @@ const arduino = new Arduino(
     Number(process.env.SERIAL_SPEED) || 9600,
     Number(process.env.SERIAL_TIMEOUT) || 1000
 );
+arduino.sendMessage(`[EVENT][IP][${ip}]`);
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);

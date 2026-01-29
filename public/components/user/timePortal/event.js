@@ -17,8 +17,23 @@ export default async function Events() {
 
     // Earn Intervals
     let earnInterval = null;
+    let timeEarnedResInterval = null;
     let isRunning = false;
-    const timeEarned = 10;
+    const timeEarnedRes = await axios.get(
+        `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/arduino/receive`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': import.meta.env.VITE_SRC_KEY,
+                'token': localStorage.getItem('token')
+            }
+        }
+    );
+
+    timeEarnedResInterval = setInterval(timeEarnedRes, 1000)
+
+    console.log("TIMEEARNEDRES", timeEarnedRes)
+    // let timeEarned = 10;
 
     // Time Remaining Intervals
     let timeRemainingSeconds = 0;

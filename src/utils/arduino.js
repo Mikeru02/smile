@@ -17,7 +17,14 @@ export default class Arduino {
             new ReadlineParser({ delimiter: '\n' })
         );
 
-        this.ready = new Promise(resolve => setTimeout(resolve, 3000));
+        this.ready = new Promise(resolve => {
+            this.parser.on('data', data => {
+                if (data.trim() === 'READY') {
+                    console.log('Arduino READY');
+                    resolve();
+                }
+            });
+        });
     }
 
     async sendMessage(message) {

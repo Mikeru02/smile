@@ -105,7 +105,7 @@
     transform: translateY(0);
 }
 
-.courses option {
+.courses option, .yearlvl option {
     color: black;
 }
 

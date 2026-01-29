@@ -1,15 +1,14 @@
 import { SELECT_CONFIG } from "../config/selectConfig";
 
-export function populateSelect(select) {
-    select.innerHTML = "";
-    const value = select.dataset.value;
-    const courses = SELECT_CONFIG[value];
+// Populate any select element
+export function populateSelect(select, items, valueKey = "name") {
+    select.innerHTML = ""; // clear existing options
+    if (!items) return;
 
-    for (const course of courses){
-        console.log(course)
-        let option = document.createElement("option");
-        option.textContent = course.name;
-        select.appendChild(option)
+    for (const item of items) {
+        const option = document.createElement("option");
+        option.textContent = item[valueKey];
+        option.value = item[valueKey];
+        select.appendChild(option);
     }
-
 }
