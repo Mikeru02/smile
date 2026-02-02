@@ -77,7 +77,7 @@ class TestController {
                 const handler = async (data) => {
                     console.log("DEBUG", data);
                     data = data.trim();
-                    if (data === "IR_DETECTED") {
+                    if (data === "IR DETECTED") {
                         clearTimeout(timeout); // cancel timeout
                         this.arduino.parser.off("data", handler); // remove listener
                         try {
