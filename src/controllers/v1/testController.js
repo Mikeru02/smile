@@ -75,6 +75,7 @@ class TestController {
                 const timeout = setTimeout(() => reject(new Error("IR not detected in time")), 15000);
 
                 const handler = async (data) => {
+                    console.log("DEBUG", data);
                     data = data.trim();
                     if (data === "IR_DETECTED") {
                         clearTimeout(timeout); // cancel timeout
