@@ -85,6 +85,7 @@ export default async function Events() {
             }
             }
         );
+        updateEarnedTimeDisplay();
 
         // await axios.post(
         //     `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/start`, 
