@@ -78,6 +78,7 @@ class TestController {
                     console.log("DEBUG", data);
                     data = data.trim();
                     if (data === "IR DETECTED") {
+                        console.log("DEBUG", "HIT BOY")
                         clearTimeout(timeout); // cancel timeout
                         this.arduino.parser.off("data", handler); // remove listener
                         try {
