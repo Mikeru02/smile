@@ -70,8 +70,10 @@ class TestController {
     async testAdd(req, res) {
         try {
             this.arduino.sendCommand('DROPPING:true');
+            async (data) => {
             data = data.trim();
             console.log("DEBUG", data);
+            }
             
         } catch (err) {
             return res.status(500).json({
