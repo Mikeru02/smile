@@ -70,7 +70,26 @@ class TestController {
     async testAdd(req, res) {
         try {
             this.arduino.sendCommand('DROPPING:true');
-            const result = await this.client.earned(req.ip, 10);
+            // Wait for IR_DETECTED once
+            const result = await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => reject(new Error("IR not detected in time")), 15000);
+
+                const handler = async (data) => {
+                    data = data.trim();
+                    if (data === "IR_DETECTED") {
+                        clearTimeout(timeout); // cancel timeout
+                        this.arduino.parser.off("data", handler); // remove listener
+                        try {
+                            const earnedResult = await this.client.earned(req.ip, 10); // add 10 seconds
+                            resolve(earnedResult);
+                        } catch (err) {
+                            reject(err);
+                        }
+                    }
+                };
+
+                this.arduino.parser.on("data", handler); // listen for IR_DETECTED
+            });
         } catch (err) {
             return res.status(500).json({
                 success: false,
