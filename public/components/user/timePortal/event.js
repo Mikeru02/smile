@@ -74,19 +74,8 @@ export default async function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         modal.style.display = 'block';
-        // const timeEarnedRes = await axios.post(
-        //     `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/arduino/capture`,
-        //     {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'apikey': import.meta.env.VITE_SRC_KEY,
-        //             'token': localStorage.getItem('token')
-        //         }
-        //     }
-        // );
-        // console.log("DEBUG", timeEarnedRes);
         await axios.post(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/start`, 
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/test/add`, 
             { "earned_time": timeEarned }, 
             {
                 headers: {
@@ -96,8 +85,20 @@ export default async function Events() {
             }
             }
         );
-        earn();
-        earnInterval = setInterval(earn, 1000);
+
+        // await axios.post(
+        //     `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/start`, 
+        //     { "earned_time": timeEarned }, 
+        //     {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'apikey': import.meta.env.VITE_SRC_KEY,
+        //             'token': localStorage.getItem('token')
+        //     }
+        //     }
+        // );
+        // earn();
+        // earnInterval = setInterval(earn, 1000);
     });
 
     const exit = document.getElementById('exit');

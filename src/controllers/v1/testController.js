@@ -1,8 +1,10 @@
 import { spawn } from "child_process";
+import Client from "../../models/v1/client.js";
 
 class TestController {
     constructor(arduino) {
         this.arduino = arduino;
+        this.client = new Client()
     }
 
     async sendMessage(req, res) {
@@ -63,6 +65,18 @@ class TestController {
             });
         }
         });
+    }
+
+    async testAdd(req, res) {
+        try {
+            this.arduino.sendCommand('DROPPING:true');
+            const result = await this.client.earned(req.ip, 10);
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            })
+        }
     }
 }
 
