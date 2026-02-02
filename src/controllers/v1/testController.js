@@ -70,10 +70,19 @@ class TestController {
     async testAdd(req, res) {
         try {
             this.arduino.sendCommand('DROPPING:true');
-            async (data) => {
-            data = data.trim();
-            console.log("DEBUG", data);
-            }
+            // Listen for Arduino events (IR_DETECTED)
+            const handler = async (data) => {
+                data = data.trim();
+                console.log("DEBUG", data);
+
+                if (data === "IR_DETECTED") {
+                    this.arduino.parser.off("data", handler); // remove listener
+                    const result = await this.client.earned(req.ip, 10);
+                    res.status(200).json({ success: true, message: "10 seconds added", result });
+                }
+            };
+
+            this.arduino.parser.on("data", handler); // attach listener
             
         } catch (err) {
             return res.status(500).json({
