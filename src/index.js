@@ -20,9 +20,11 @@ const ip = getLocalIP();
 const arduino = new Arduino(
     process.env.SERIAL_PORT,
     Number(process.env.SERIAL_SPEED) || 9600,
-    Number(process.env.SERIAL_TIMEOUT) || 1000
+    Number(process.env.SERIAL_TIMEOUT) || 1000,
+    () => {
+        arduino.sendCommand(`IP:${ip}`);
+    }
 );
-arduino.sendCommand(`IP:${ip}`);
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);

@@ -2,7 +2,7 @@ import { SerialPort } from 'serialport';
 import { ReadlineParser } from '@serialport/parser-readline';
 
 export default class Arduino {
-    constructor(serialPort, serialSpeed, serialTimeout) {
+    constructor(serialPort, serialSpeed, serialTimeout, onReady) {
         this.serialPort = serialPort;
         this.serialSpeed = serialSpeed;
         this.serialTimeout = serialTimeout;
@@ -25,6 +25,7 @@ export default class Arduino {
             if (!this.ready && data === "READY") {
                 this.ready = true;
                 console.log('Arduino initialized. Waiting for commands');
+                if (onReady) onReady();
             }
         })
     }
