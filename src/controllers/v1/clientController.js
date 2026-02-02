@@ -202,6 +202,7 @@ class ClientController {
     async earned(req, res) {
         try {
             const { earned_time } = req.body || {};
+            console.log("DEBUG: ",req.body);
             if (!earned_time) {
                 return res.status(400).json({
                     success: false,

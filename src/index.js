@@ -22,7 +22,7 @@ const arduino = new Arduino(
     Number(process.env.SERIAL_SPEED) || 9600,
     Number(process.env.SERIAL_TIMEOUT) || 1000
 );
-arduino.sendMessage(`[EVENT][IP][${ip}]`);
+arduino.sendCommand(`IP:${ip}`);
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);
@@ -36,12 +36,12 @@ const distDirectory = path.join(directory, "../dist");
 console.log("DIST DIRECTORY: ", distDirectory);
 app.use(compression());
 app.use('/fonts', express.static('public/fonts'));
-app.use(express.static(path.join(distDirectory, '../dist')));
 app.use(morgan('combined'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(express.static(path.join(distDirectory)));
 app.use('/api', cors(), apiRouter(arduino));
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {

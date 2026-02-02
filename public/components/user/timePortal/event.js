@@ -19,21 +19,9 @@ export default async function Events() {
     let earnInterval = null;
     let timeEarnedResInterval = null;
     let isRunning = false;
-    const timeEarnedRes = await axios.get(
-        `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/arduino/receive`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_SRC_KEY,
-                'token': localStorage.getItem('token')
-            }
-        }
-    );
-
-    timeEarnedResInterval = setInterval(timeEarnedRes, 1000)
-
-    console.log("TIMEEARNEDRES", timeEarnedRes)
-    // let timeEarned = 10;
+    
+    //console.log("TIMEEARNEDRES", timeEarnedRes)
+    const timeEarned = 10;
 
     // Time Remaining Intervals
     let timeRemainingSeconds = 0;
@@ -86,9 +74,20 @@ export default async function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         modal.style.display = 'block';
+        // const timeEarnedRes = await axios.post(
+        //     `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/arduino/capture`,
+        //     {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'apikey': import.meta.env.VITE_SRC_KEY,
+        //             'token': localStorage.getItem('token')
+        //         }
+        //     }
+        // );
+        // console.log("DEBUG", timeEarnedRes);
         await axios.post(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/start`, 
-            {}, 
+            { "earned_time": timeEarned }, 
             {
                 headers: {
                     'Content-Type': 'application/json',
