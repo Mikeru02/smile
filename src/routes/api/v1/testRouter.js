@@ -9,5 +9,6 @@ export default function testRouter(ino, io) {
     testRouter.get("/capture", test.capture.bind(test))
     testRouter.post('/', test.sendMessage.bind(test));
     testRouter.post('/add', test.testAdd.bind(test));
+    testRouter.post('/io', test.testIO.bind(test))
     return testRouter;
 }

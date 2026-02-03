@@ -12,7 +12,7 @@ export default async function Events() {
     socket.on('test:event', (data) => {
         console.log("Received test:event", data);
     })
-    
+
     document.body.style.backgroundImage = `url('${BGIMG}')`;
 
     const modal = document.getElementById('modal');
@@ -85,7 +85,7 @@ export default async function Events() {
     dropBtn.addEventListener('click', async function() {
         modal.style.display = 'block';
         await axios.post(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/test/add`, 
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/test/io`, 
             { "earned_time": timeEarned }, 
             {
                 headers: {
