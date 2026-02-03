@@ -75,7 +75,7 @@ class TestController {
                     data = data.trim();
                     console.log("DEBUG", data);
 
-                    if (data === "IR_DETECTED") {
+                    if (data === "IR DETECTED") {
                         this.arduino.parser.off("data", handler); // remove listener
                         try {
                             console.log("DEBUG: NAHIT BOY")
