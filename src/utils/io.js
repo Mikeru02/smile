@@ -27,5 +27,7 @@ export function initSocket(server, arduino) {
         socket.on('disconnect', () => {
             console.log('Client disconnected: ', socket.id);
         })
-    })
+    });
+
+    return io;
 }
