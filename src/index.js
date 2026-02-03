@@ -55,7 +55,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(distDirectory)));
-app.use('/api', cors(), apiRouter(arduino));
+app.use('/api', cors(), apiRouter({ arduino, io }));
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect('/');

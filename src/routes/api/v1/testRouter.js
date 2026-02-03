@@ -1,9 +1,9 @@
 import { Router } from "express";
 import TestController from "../../../controllers/v1/testController.js";
 
-export default function testRouter(ino) {
+export default function testRouter(ino, io) {
     const testRouter = new Router();
-    const test = new TestController(ino);
+    const test = new TestController(ino, io);
 
     testRouter.get('/', test.test.bind(test));
     testRouter.get("/capture", test.capture.bind(test))

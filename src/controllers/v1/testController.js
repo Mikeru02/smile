@@ -2,8 +2,9 @@ import { spawn } from "child_process";
 import Client from "../../models/v1/client.js";
 
 class TestController {
-    constructor(arduino) {
+    constructor(arduino, io) {
         this.arduino = arduino;
+        this.io = io
         this.client = new Client()
     }
 
@@ -13,6 +14,25 @@ class TestController {
             await this.arduino.sendMessage(message)
             return res.status(200).json({
                 success: true,
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            })
+        }
+    }
+
+    async testIO(req, res) {
+        try {
+            this.io.emit("test:event", {
+                message: "Hello from server",
+                time: Date.now(),
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "Socket.IO event emitted",
             });
         } catch (err) {
             return res.status(500).json({

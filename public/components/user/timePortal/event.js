@@ -1,8 +1,18 @@
 import axios from 'axios';
+import { io as socketClient } from 'socket.io-client';
 import { renderEarnTime, renderTimeRemaining } from '../../../utils/render.js';
 import  BGIMG from '/icons/bgimg.svg';
 
 export default async function Events() {
+    const socket = socketClient(`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`);
+    socket.on('connect', () => {
+        console.log('Socket connected:', socket.id);
+    })
+
+    socket.on('test:event', (data) => {
+        console.log("Received test:event", data);
+    })
+    
     document.body.style.backgroundImage = `url('${BGIMG}')`;
 
     const modal = document.getElementById('modal');
