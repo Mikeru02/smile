@@ -82,7 +82,7 @@ export default async function Events() {
                     'Content-Type': 'application/json',
                     'apikey': import.meta.env.VITE_SRC_KEY,
                     'token': localStorage.getItem('token')
-            }
+            }   
             }
         );
         updateEarnedTimeDisplay();
@@ -169,6 +169,7 @@ export default async function Events() {
         if (!response.data.success) return;
 
         const earnedSeconds = response.data.data.time_earned;
+        console.log(earnedSeconds);
         renderEarnTime({ hoursSpan, minSpan, secSpan }, earnedSeconds);
     }
 
