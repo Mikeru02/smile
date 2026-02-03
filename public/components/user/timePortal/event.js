@@ -87,7 +87,7 @@ export default async function Events() {
         socket.emit('DROPPING');
         socket.on('ARDUINO:IR', (data) => {
             console.log('IR DETECTED', data);
-            updateEarnedTimeDisplay();
+            earn();
         })
 
         // await axios.post(
