@@ -77,6 +77,7 @@ class ClientController {
     async addTime(req, res) {
         try {
             const clientData = await this.client.getClientByIP(res.locals.ip);
+            console.log("DEBUG API: ", clientData)
             const earnedTime = clientData.time_earned;
             if (earnedTime === 0 || clientData.status != 'dropping') {
                 return res.status(400).json({
