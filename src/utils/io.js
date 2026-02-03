@@ -16,11 +16,12 @@ export function initSocket(server, arduino) {
         console.log('New client connected: ', socket.id);
 
         // Emit
+        socket.emit('ARDUINO:IR', "HELLO")
         
         // On
-        socket.on('DROP', () => {
+        socket.on('DROPPING', () => {
             console.log('Client drop a trash');
-            arduino.sendCommand('DROP');
+            arduino.sendCommand('DROPPING');
         })
 
         socket.on('disconnect', () => {

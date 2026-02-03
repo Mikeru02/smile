@@ -84,7 +84,11 @@ export default async function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         modal.style.display = 'block';
-        socket.emit('DROP')
+        socket.emit('DROPPING');
+        socket.on('ARDUINO:IR', (data) => {
+            console.log('IR DETECTED', data);
+            updateEarnedTimeDisplay();
+        })
 
         // await axios.post(
         //     `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/test/io`, 
