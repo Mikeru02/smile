@@ -78,6 +78,7 @@ class TestController {
                     if (data === "IR_DETECTED") {
                         this.arduino.parser.off("data", handler); // remove listener
                         try {
+                            console.log("DEBUG: NAHIT BOY")
                             const earnedResult = await this.client.earned(req.ip, 10); // add 10 seconds
                             resolve(earnedResult);
                         } catch (err) {
