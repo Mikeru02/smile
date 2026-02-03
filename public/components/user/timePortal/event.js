@@ -5,13 +5,6 @@ import  BGIMG from '/icons/bgimg.svg';
 
 export default async function Events() {
     const socket = socketClient(`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`);
-    socket.on('connect', () => {
-        console.log('Socket connected:', socket.id);
-    })
-
-    socket.on('test:event', (data) => {
-        console.log("Received test:event", data);
-    })
 
     document.body.style.backgroundImage = `url('${BGIMG}')`;
 
@@ -83,6 +76,9 @@ export default async function Events() {
 
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
+        socket.on('connect', () => {
+            console.log('Socket connected:', socket.id);
+        });
         modal.style.display = 'block';
         updateEarnedTimeDisplay();
         socket.emit('DROPPING');
@@ -121,6 +117,7 @@ export default async function Events() {
 
     const exit = document.getElementById('exit');
     exit.addEventListener('click', async function() {
+        socket.emit('disconnect');
         modal.style.display = 'none';
         clearInterval(earnInterval);
         const response = await axios.patch(
