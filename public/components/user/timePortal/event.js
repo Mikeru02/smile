@@ -155,6 +155,7 @@ export default async function Events() {
     }
 
     const updateEarnedTimeDisplay = async () => {
+        console.log("DEBUG: FR, NAHIT YUNG FUNCTION")
         const response = await axios.get(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`, 
             {
