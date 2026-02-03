@@ -37,7 +37,7 @@ const host = process.env.SRC_HOST || '0.0.0.0';
 
 const server = http.createServer(app);
 
-const io = initSocket(server);
+const io = initSocket(server, arduino);
 
 const distDirectory = path.join(directory, "../dist");
 

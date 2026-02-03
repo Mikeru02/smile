@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 
 let io = null;
 
-export function initSocket(server) {
+export function initSocket(server, arduino) {
     if (io) return io;
 
     io = new Server(server, {
@@ -19,7 +19,8 @@ export function initSocket(server) {
         
         // On
         socket.on('DROP', () => {
-            console.log('Client drop a trash')
+            console.log('Client drop a trash');
+            arduino.sendCommand('DROP');
         })
 
         socket.on('disconnect', () => {
