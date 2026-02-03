@@ -84,18 +84,20 @@ export default async function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         modal.style.display = 'block';
-        await axios.post(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/test/io`, 
-            { "earned_time": timeEarned }, 
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-            }   
-            }
-        );
-        updateEarnedTimeDisplay();
+        socket.emit('DROP')
+
+        // await axios.post(
+        //     `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/test/io`, 
+        //     { "earned_time": timeEarned }, 
+        //     {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'apikey': import.meta.env.VITE_SRC_KEY,
+        //             'token': localStorage.getItem('token')
+        //     }   
+        //     }
+        // );
+        // updateEarnedTimeDisplay();
 
         // await axios.post(
         //     `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/start`, 

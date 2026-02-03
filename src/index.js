@@ -1,6 +1,6 @@
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
+import { initSocket } from './utils/io.js';
 import path from 'path';
 import compression from 'compression';
 import { fileURLToPath } from 'url';
@@ -37,12 +37,7 @@ const host = process.env.SRC_HOST || '0.0.0.0';
 
 const server = http.createServer(app);
 
-const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ['GET', 'POST']
-    }
-})
+const io = initSocket(server);
 
 const distDirectory = path.join(directory, "../dist");
 

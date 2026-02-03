@@ -124,6 +124,21 @@ class TestController {
             })
         }
     }
+
+    async testAdd2(req, res) {
+        try {
+            this.io.on('connection', (socket) => {
+                console.log('New client connected', socket.id);
+
+                socket.on('')
+            })
+        } catch(err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            })
+        }
+    }
 }
 
 export default TestController;
