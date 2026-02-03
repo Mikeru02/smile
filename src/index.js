@@ -1,4 +1,6 @@
 import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
 import path from 'path';
 import compression from 'compression';
 import { fileURLToPath } from 'url';
@@ -33,6 +35,15 @@ const app = express();
 const port = Number(process.env.SRC_PORT) || 80;
 const host = process.env.SRC_HOST || '0.0.0.0';
 
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ['GET', 'POST']
+    }
+})
+
 const distDirectory = path.join(directory, "../dist");
 
 console.log("DIST DIRECTORY: ", distDirectory);
@@ -54,7 +65,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(distDirectory, 'index.html'))
 });
 
-app.listen(port, host, () => {
+server.listen(port, host, () => {
     console.log(`Server is running at http://${host}:${port}`);
 });
 
