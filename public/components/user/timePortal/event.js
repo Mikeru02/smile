@@ -84,6 +84,7 @@ export default async function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         modal.style.display = 'block';
+        updateEarnedTimeDisplay();
         socket.emit('DROPPING');
         socket.on('ARDUINO:IR', (data) => {
             console.log('IR DETECTED', data);
