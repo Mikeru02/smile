@@ -51,7 +51,7 @@ export function initSocket(server, arduino) {
                         detected: true,
                         time: Date.now(),
                     });
-                    activeClient = null;
+                    //activeClient = null;
                 }
             }
         })
