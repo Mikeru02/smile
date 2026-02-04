@@ -48,7 +48,8 @@ app.use(express.static(path.join(distDirectory)));
 
 const server = http.createServer(app);
 
-const io = initSocket(server, arduino);
+//const io = initSocket(server, arduino);
+const io = "";
 
 app.use('/api', cors({ origin: "*" }), apiRouter({ arduino, io }));
 
