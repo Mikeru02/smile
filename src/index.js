@@ -50,7 +50,7 @@ const server = http.createServer(app);
 
 const io = initSocket(server, arduino);
 
-app.use('/api', cors(), apiRouter({ arduino, io }));
+app.use('/api', cors({ origin: "*" }), apiRouter({ arduino, io }));
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect('/');
