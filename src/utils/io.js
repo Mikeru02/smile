@@ -43,11 +43,11 @@ export function initSocket(server, arduino) {
     if (arduino) {
         arduino.parser.on("data", (data) => {
             data = data.trim();
-            if (data === "IR DETECTED") {
+            if (data === "SONAR DETECTED") {
                 console.log('IR Detected from Arduino');
 
                 if (activeClient) {
-                    activeClient.emit("ARDUINO:IR", {
+                    activeClient.emit("ARDUINO:SONAR", {
                         detected: true,
                         time: Date.now(),
                     });

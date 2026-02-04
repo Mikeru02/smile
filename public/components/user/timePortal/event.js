@@ -82,8 +82,8 @@ export default async function Events() {
         modal.style.display = 'block';
         updateEarnedTimeDisplay();
         socket.emit('DROPPING');
-        socket.on('ARDUINO:IR', (data) => {
-            console.log('IR DETECTED', data);
+        socket.on('ARDUINO:SONAR', (data) => {
+            console.log('SONAR DETECTED', data);
             earn();
         })
 
