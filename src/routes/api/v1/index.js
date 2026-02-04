@@ -10,6 +10,6 @@ export default function v1(arduino) {
     v1.use('/client', clientRouter);
     v1.use('/account', accountRouter);
     v1.use('/arduino', arduinoRouter(arduino));
-    v1.use('/test', testRouter(arduino));
+    // v1.use('/test', testRouter(arduino));
     return v1;
 }
