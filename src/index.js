@@ -46,9 +46,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(distDirectory)));
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 
-const io = await initSocket(server, arduino);
+// const io = await initSocket(server, arduino);
 
 app.use('/api', cors({ origin: "*" }), apiRouter({ arduino, io }));
 
@@ -60,7 +60,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(distDirectory, 'index.html'))
 });
 
-server.listen(port, host, () => {
+app.listen(port, host, () => {
     console.log(`Server is running at http://${host}:${port}`);
 });
 
