@@ -45,7 +45,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(distDirectory)));
-app.use('/api', cors(), apiRouter({ arduino }));
+
+const server = http.createServer(app);
+
+const io = initSocket(server, arduino);
+
+app.use('/api', cors(), apiRouter({ arduino, io }));
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect('/');
@@ -54,10 +59,6 @@ app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(distDirectory, 'index.html'))
 });
-
-const server = http.createServer(app);
-
-const io = initSocket(server, arduino);
 
 server.listen(port, host, () => {
     console.log(`Server is running at http://${host}:${port}`);
