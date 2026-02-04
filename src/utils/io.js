@@ -4,7 +4,7 @@ let io = null;
 
 let activeClient = null;    
 
-export function initSocket(server, arduino) {
+export async function initSocket(server, arduino) {
     if (io) return io;
 
     io = new Server(server, {
