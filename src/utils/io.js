@@ -9,6 +9,7 @@ export function initSocket(server, arduino) {
 
     io = new Server(server, {
         cors: {
+            path: '/socket.io',
             origin: "*",
             methods: ['GET', 'POST']
         }
