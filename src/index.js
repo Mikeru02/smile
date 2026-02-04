@@ -35,10 +35,6 @@ const app = express();
 const port = Number(process.env.SRC_PORT) || 80;
 const host = process.env.SRC_HOST || '0.0.0.0';
 
-const server = http.createServer(app);
-
-const io = initSocket(server, arduino);
-
 const distDirectory = path.join(directory, "../dist");
 
 app.use(compression());
@@ -58,6 +54,10 @@ app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(distDirectory, 'index.html'))
 });
+
+const server = http.createServer(app);
+
+const io = initSocket(server, arduino);
 
 server.listen(port, host, () => {
     console.log(`Server is running at http://${host}:${port}`);
