@@ -63,3 +63,7 @@ export function initSocket(server, arduino) {
 
     return io;
 }
+
+export function getIO() {
+    return io;
+}
