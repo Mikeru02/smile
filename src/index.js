@@ -50,7 +50,7 @@ app.use(express.static(path.join(distDirectory)));
 
 // const io = await initSocket(server, arduino);
 
-app.use('/api', cors({ origin: "*" }), apiRouter({ arduino, io }));
+app.use('/api', cors({ origin: "*" }), apiRouter({ arduino }));
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect('/');
