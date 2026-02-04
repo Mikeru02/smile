@@ -30,6 +30,10 @@ export function initSocket(server, arduino) {
             if (arduino) {
                 arduino.sendCommand("DROPPING");
             }
+        });
+
+        socket.on('UNDROP', () => {
+            activeClient = null;
         })
 
         socket.on('disconnect', () => {
@@ -44,7 +48,7 @@ export function initSocket(server, arduino) {
         arduino.parser.on("data", (data) => {
             data = data.trim();
             if (data === "SONAR DETECTED") {
-                console.log('IR Detected from Arduino');
+                console.log('SONAR Detected from Arduino');
 
                 if (activeClient) {
                     activeClient.emit("ARDUINO:SONAR", {

@@ -85,39 +85,12 @@ export default async function Events() {
         socket.on('ARDUINO:SONAR', (data) => {
             console.log('SONAR DETECTED', data);
             earn();
-        })
-
-        // await axios.post(
-        //     `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/test/io`, 
-        //     { "earned_time": timeEarned }, 
-        //     {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'apikey': import.meta.env.VITE_SRC_KEY,
-        //             'token': localStorage.getItem('token')
-        //     }   
-        //     }
-        // );
-        // updateEarnedTimeDisplay();
-
-        // await axios.post(
-        //     `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/start`, 
-        //     { "earned_time": timeEarned }, 
-        //     {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'apikey': import.meta.env.VITE_SRC_KEY,
-        //             'token': localStorage.getItem('token')
-        //     }
-        //     }
-        // );
-        // earn();
-        // earnInterval = setInterval(earn, 1000);
+        });
     });
 
     const exit = document.getElementById('exit');
     exit.addEventListener('click', async function() {
-        socket.emit('disconnect');
+        socket.emit('UNDROP');
         modal.style.display = 'none';
         clearInterval(earnInterval);
         const response = await axios.patch(

@@ -41,7 +41,6 @@ const io = initSocket(server, arduino);
 
 const distDirectory = path.join(directory, "../dist");
 
-console.log("DIST DIRECTORY: ", distDirectory);
 app.use(compression());
 app.use('/fonts', express.static('public/fonts'));
 app.use(morgan('combined'));
