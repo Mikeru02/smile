@@ -7,7 +7,7 @@ const __dirname = dirname(__filename);
 
 export function runModel() {
     return new Promise((resolve, reject) => {
-        const modelPath = path.join(__dirname, 'runModel.py');
+        const modelPath = join(__dirname, 'runModel.py');
         const py = spawn("python3", [modelPath]);
 
         let output = "";
