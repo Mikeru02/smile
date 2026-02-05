@@ -52,7 +52,7 @@ app.use(express.static(path.join(distDirectory)));
 
 const server = http.createServer(app);
 
-const socketServer = new SocketServer({ server, arduino, wecam });
+const socketServer = new SocketServer({ server, arduino, webcam });
 
 const io = socketServer.init();
 
