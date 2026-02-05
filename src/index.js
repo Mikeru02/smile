@@ -48,9 +48,9 @@ app.use(express.static(path.join(distDirectory)));
 
 const server = http.createServer(app);
 
-await initSocket(server, arduino);
+const io = await initSocket(server, arduino);
 
-app.use('/api', cors(), apiRouter({ arduino }));
+app.use('/api', cors(), apiRouter({ arduino, io }));
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect('/');
