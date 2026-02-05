@@ -79,11 +79,15 @@ export default async function Events() {
         modal.style.display = 'block';
         updateEarnedTimeDisplay();
         socketClient.connect();
-        socketClient.emit('DROPPING');
-        socketClient.on('ARDUINO:SONAR', (data) => {
-            console.log('SONAR DETECTED', data);
-            earn();
-        });
+        socketClient.on('connect', () => {
+            console.log('[SOCKET] connected, waiting for events')
+            socketClient.emit('DROPPING');
+            socketClient.on('ARDUINO:SONAR', (data) => {
+                console.log('SONAR DETECTED', data);
+                earn();
+            });
+        })
+        
     });
 
     const exit = document.getElementById('exit');
@@ -140,7 +144,6 @@ export default async function Events() {
     }
 
     const updateEarnedTimeDisplay = async () => {
-        console.log("DEBUG: FR, NAHIT YUNG FUNCTION")
         const response = await axios.get(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`, 
             {
