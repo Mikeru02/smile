@@ -1,4 +1,9 @@
 import NodeWebcamPkg from "node-webcam";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const NodeWebcam = NodeWebcamPkg
 
 const opts = {
@@ -8,7 +13,7 @@ const opts = {
     frames: 1,
     delay: 0,
     saveShot: true,
-    output: "jpeg",
+    output: "jpg",
     device: "/dev/video0",
     callbackReturn: "location",
     verbose: false
@@ -16,7 +21,9 @@ const opts = {
 
 const WebCam = NodeWebcam.create(opts);
 
-WebCam.capture("test", function( err, data ) {
+const filePath = join(__dirname, "test.jpg")
+
+WebCam.capture(filePath, function( err, data ) {
     if (err) {
         console.error("Capture error:", err);
         return;
