@@ -160,6 +160,7 @@ export default async function Events() {
     }
 
     const earn = async () => {
+        console.log("EARN FUNCTION HIT")
         if (isRunning) return;
 
         isRunning = true;
