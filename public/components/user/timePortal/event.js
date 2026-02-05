@@ -88,7 +88,7 @@ export default async function Events() {
 
     const exit = document.getElementById('exit');
     exit.addEventListener('click', async function() {
-        socket.disconnect();
+        socketClient.disconnect();
         modal.style.display = 'none';
         clearInterval(earnInterval);
         const response = await axios.patch(
