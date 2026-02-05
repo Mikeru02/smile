@@ -50,5 +50,4 @@ class Webcam {
     }
 }
 
-const cam = new Webcam();
-cam.capture();
+export default Webcam;
