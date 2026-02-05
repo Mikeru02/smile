@@ -2,9 +2,10 @@ import { Server } from 'socket.io';
 import { runModel } from '../utils/runModel.js';
 
 class SocketServer {
-    constructor({ server, arduino }) {
+    constructor({ server, arduino, webcam }) {
         this.server = server;
         this.arduino = arduino;
+        this.webcam = webcam
 
         this.io = null;
         this.activeClient = null;

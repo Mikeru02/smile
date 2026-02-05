@@ -9,7 +9,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import 'dotenv/config.js';
-import Arduino from './utils/arduino.js';
+import Arduino from './resources/arduino.js';
+import Webcam from './resources/webcam.js';
 import Service from './utils/serviceChecker.js';
 import IPTSetup from './utils/iptablesSetup.js';
 import apiRouter from './routes/api/index.js';
@@ -27,6 +28,9 @@ const arduino = new Arduino(
         arduino.sendCommand(`IP:${ip}`);
     }
 );
+
+// Block for Camera
+const webCam = new Webcam();
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);
@@ -48,11 +52,11 @@ app.use(express.static(path.join(distDirectory)));
 
 const server = http.createServer(app);
 
-const socketServer = new SocketServer({ server, arduino });
+const socketServer = new SocketServer({ server, arduino, webCam });
 
 const io = socketServer.init();
 
-app.use('/api', cors(), apiRouter({ arduino, io }));
+app.use('/api', cors(), apiRouter({ arduino, io, webCam }));
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect('/');
