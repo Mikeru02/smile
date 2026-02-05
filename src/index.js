@@ -46,9 +46,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(distDirectory)));
 
-// const server = http.createServer(app);
+const server = http.createServer(app);
 
-// const io = await initSocket(server, arduino);
+await initSocket(server, arduino);
 
 app.use('/api', cors(), apiRouter({ arduino }));
 
