@@ -4,7 +4,9 @@
     min-height: 15rem;
     border-radius: 2rem;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
     margin-bottom: 2rem;
     padding: 3rem;
 }
@@ -13,6 +15,11 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.card p:last-child {
+    margin-bottom: 0;
 }
 
 .stats {
@@ -25,4 +32,49 @@
     font-size: 5rem;
     color: #0C393C;
     font-weight: bold;
+}
+
+/* Responsiveness */
+@media (max-width: 425px) {
+    .card {
+        max-width: 35rem;
+    }
+
+    .stats {
+        font-size: 1.5rem;
+    }
+
+    .stats span {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .card {
+        max-width: 30rem;
+        min-height: 10rem;
+    }
+
+    .stats {
+        font-size: 1rem;
+    }
+
+    .stats span {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .card {
+        max-width: 25rem;
+        min-height: 10rem;
+    }
+
+    .stats {
+        font-size: 0.9rem;
+    }
+
+    .stats span {
+        font-size: 2.9rem;
+    }
 }

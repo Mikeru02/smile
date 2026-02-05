@@ -50,8 +50,36 @@
     margin-bottom: 3rem;
     font-size: 2rem;
     font-weight: bold;
+    color: #0C393C;
 }
 
-.card-content {
+/* .card-content {
 
+} */
+
+@media (max-width: 425px) {
+    .logo {
+        width: 6rem;
+        height: 6rem;
+    }
+    
+    .title-logo {
+        font-size: 1.5rem;
+    }
+
+    .button {
+        width: 4rem;
+        height: 4rem;
+    }
+
+    .button-logo {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .main h1 {
+        font-size: 1.7rem;
+    }
 }

@@ -1,0 +1,86 @@
+.account-container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.account-table-container {
+    width: 100%;
+    padding: 0;
+    overflow-x: auto;
+}
+
+.account-table {
+    width: 100%;
+    min-width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.account-table thead {
+    background-color: #145054;
+    height: 4rem;
+    text-align: left;
+    color: #FFFFFF;
+    border-bottom: solid .5rem #ECF1F0;
+}
+
+.account-table thead tr th,
+.account-table tbody tr td {
+    padding: 0 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.account-table tbody {
+    background-color: #FFFFFF;
+}
+
+.account-table tbody tr {
+    border-bottom: solid .5rem #ECF1F0;
+    height: 4rem;
+}
+
+/* Column widths */
+.account-table thead tr th:nth-child(1),
+.account-table tbody tr td:nth-child(1) {
+    width: 15%; /* UserID */
+}
+
+.account-table thead tr th:nth-child(2),
+.account-table tbody tr td:nth-child(2) {
+    width: 35%; /* Name */
+}
+
+.account-table thead tr th:nth-child(3),
+.account-table tbody tr td:nth-child(3) {
+    width: 30%; /* Role */
+}
+
+.account-table thead tr th:nth-child(4),
+.account-table tbody tr td:nth-child(4) {
+    width: 20%; /* Action */
+    text-align: center;
+}
+
+/* Responsiveness */
+@media (max-width: 425px) {
+    .account-table {
+        font-size: 0.8rem;
+    }
+    
+    .account-table thead {
+        height: 3rem;
+    }
+    
+    .account-table thead tr th,
+    .account-table tbody tr td {
+        padding: 0 0.5rem;
+    }
+    
+    .account-table tbody tr {
+        height: 3rem;
+    }
+}
