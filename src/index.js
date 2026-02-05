@@ -1,6 +1,6 @@
 import express from 'express';
 import http from 'http';
-import { initSocket } from './utils/io.js';
+import SocketServer from './sockets/socketServer.js';
 import path from 'path';
 import compression from 'compression';
 import { fileURLToPath } from 'url';
@@ -48,7 +48,9 @@ app.use(express.static(path.join(distDirectory)));
 
 const server = http.createServer(app);
 
-const io = await initSocket(server, arduino);
+const socketServer = new SocketServer({ server, arduino });
+
+const io = socketServer.init();
 
 app.use('/api', cors(), apiRouter({ arduino, io }));
 
@@ -60,7 +62,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(distDirectory, 'index.html'))
 });
 
-app.listen(port, host, () => {
+server.listen(port, host, () => {
     console.log(`Server is running at http://${host}:${port}`);
 });
 

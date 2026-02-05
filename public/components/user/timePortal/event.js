@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { io as socketClient } from 'socket.io-client';
+import SocketClient from '../../../sockets/socketClient.js';
 import { renderEarnTime, renderTimeRemaining } from '../../../utils/render.js';
 import  BGIMG from '/icons/bgimg.svg';
 
 export default async function Events() {
-    const socket = socketClient(`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`);
+    const socketClient = new SocketClient();
 
     document.body.style.backgroundImage = `url('${BGIMG}')`;
 
@@ -76,13 +76,11 @@ export default async function Events() {
 
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
-        socket.on('connect', () => {
-            console.log('Socket connected:', socket.id);
-        });
         modal.style.display = 'block';
         updateEarnedTimeDisplay();
-        socket.emit('DROPPING');
-        socket.on('ARDUINO:SONAR', (data) => {
+        socketClient.connect();
+        socketClient.emit('DROPPING');
+        socketClient.on('ARDUINO:SONAR', (data) => {
             console.log('SONAR DETECTED', data);
             earn();
         });
@@ -90,7 +88,7 @@ export default async function Events() {
 
     const exit = document.getElementById('exit');
     exit.addEventListener('click', async function() {
-        socket.emit('disconnect');
+        socket.disconnect();
         modal.style.display = 'none';
         clearInterval(earnInterval);
         const response = await axios.patch(
