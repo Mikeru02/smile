@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 
 export function runModel() {
     return new Promise((resolve, reject) => {
-        const py = spawn("python3", ["./runModel.py"]);
+        const py = spawn("python3", ["runModel.py"]);
 
         let output = "";
 
