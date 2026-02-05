@@ -1,8 +1,10 @@
 import { spawn } from "child_process";
+import path from "path";
 
 export function runModel() {
     return new Promise((resolve, reject) => {
-        const py = spawn("python3", ["runModel.py"]);
+        const modelPath = path.join(__dirname, 'runModel.py');
+        const py = spawn("python3", [modelPath]);
 
         let output = "";
 
