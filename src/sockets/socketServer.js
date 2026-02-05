@@ -73,6 +73,7 @@ class SocketServer {
                     time: Date.now(),
                 });
             }
+            this.webcam.capture("test_capture.jpg")
         }
     }
 }
