@@ -72,11 +72,6 @@ class SocketServer {
                     time: Date.now(),
                 });
             }
-
-            runModel()
-                .then((result) => {
-                    console.log(result)
-                })
         }
     }
 }
