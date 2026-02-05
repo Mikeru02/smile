@@ -30,7 +30,7 @@ const arduino = new Arduino(
 );
 
 // Block for Camera
-const webCam = new Webcam();
+const webcam = new Webcam();
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);
@@ -52,11 +52,11 @@ app.use(express.static(path.join(distDirectory)));
 
 const server = http.createServer(app);
 
-const socketServer = new SocketServer({ server, arduino, webCam });
+const socketServer = new SocketServer({ server, arduino, wecam });
 
 const io = socketServer.init();
 
-app.use('/api', cors(), apiRouter({ arduino, io, webCam }));
+app.use('/api', cors(), apiRouter({ arduino, io }));
 
 app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
     res.redirect('/');
