@@ -5,10 +5,12 @@ import { dirname, join } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const pythonPath = join(__dirname, '../venv/bin/python');
+const scriptPath = join(__dirname, 'runModel.py');
+
 export function runModel() {
     return new Promise((resolve, reject) => {
-        const modelPath = join(__dirname, 'runModel.py');
-        const py = spawn("python3", [modelPath]);
+        const py = spawn(pythonPath, [scriptPath]);
 
         let output = "";
 
