@@ -73,7 +73,8 @@ class SocketServer {
                     time: Date.now(),
                 });
             }
-            this.webcam.capture("test_capture.jpg")
+            this.webcam.capture("test_capture.jpg");
+            this.arduino.sendCommand("DONE CAPTURE");
         }
     }
 }
