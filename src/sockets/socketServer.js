@@ -79,6 +79,8 @@ class SocketServer {
                 } catch(err) {
                     console.error("Capture Error: ", err)
                 }
+            } else {
+                this.arduino.sendCommand('IGNORE')
             }
         }
     }
