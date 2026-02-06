@@ -62,7 +62,7 @@ class SocketServer {
         this.arduino.parser.on('data', this.onArduinoData);
     }
 
-    onArduinoData(data) {
+    async onArduinoData(data) {
         const message = data.trim();
         if (message === "SONAR DETECTED") {
             console.log('SONAR Detected from Arduino');
@@ -73,8 +73,13 @@ class SocketServer {
                     time: Date.now(),
                 });
             }
-            this.webcam.capture("test_capture.jpg");
-            this.arduino.sendCommand("DONE CAPTURE");
+            try {
+                await this.webcam.capture("test_capture.jpg");
+                console.log("Done capturing, sending command to arduino")
+                this.arduino.sendCommand("DONE CAPTURE");
+            } catch(err) {
+                console.error("Capture Error: ", err)
+            }
         }
     }
 }
