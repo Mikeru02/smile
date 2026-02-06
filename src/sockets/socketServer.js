@@ -72,13 +72,13 @@ class SocketServer {
                     detected: true,
                     time: Date.now(),
                 });
-            }
-            try {
-                await this.webcam.capture("test_capture.jpg");
-                console.log("Done capturing, sending command to arduino")
-                this.arduino.sendCommand("DONE CAPTURE");
-            } catch(err) {
-                console.error("Capture Error: ", err)
+                try {
+                    await this.webcam.capture("test_capture.jpg");
+                    console.log("Done capturing, sending command to arduino")
+                    this.arduino.sendCommand("DONE CAPTURE");
+                } catch(err) {
+                    console.error("Capture Error: ", err)
+                }
             }
         }
     }
