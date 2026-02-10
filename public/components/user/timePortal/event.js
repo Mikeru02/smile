@@ -111,6 +111,7 @@ export default async function Events() {
 
     const proceed = document.getElementById('proceed');
     proceed.addEventListener('click', async function() {
+        socketClient.disconnect();
         modal.style.display = 'none';
         clearInterval(earnInterval);
         await axios.post(

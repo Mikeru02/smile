@@ -1,32 +1,14 @@
-import NodeWebcamPkg from "node-webcam";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import cv2
+import numpy as np
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const NodeWebcam = NodeWebcamPkg
+# Load the ONNX model
+net = cv2.dnn.readNet("yolov8n.onnx")
 
-const opts = {
-    width: 1280,
-    height: 720,
-    quality: 100,
-    frames: 1,
-    delay: 0,
-    saveShot: true,
-    output: "jpg",
-    device: "/dev/video0",
-    callbackReturn: "location",
-    verbose: false
-}
+# Load image
+img = cv2.imread("test.jpg")
+blob = cv2.dnn.blobFromImage(img, 1/255.0, (320, 320), swapRB=True, crop=False)
+net.setInput(blob)
 
-const WebCam = NodeWebcam.create(opts);
-
-const filePath = join(__dirname, "test.jpg")
-
-WebCam.capture(filePath, function( err, data ) {
-    if (err) {
-        console.error("Capture error:", err);
-        return;
-    }
-    console.log("Image saved at:", data);
-})
+# Run forward pass
+outputs = net.forward()
+print(outputs.shape)
