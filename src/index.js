@@ -11,11 +11,10 @@ import morgan from 'morgan';
 import 'dotenv/config.js';
 import Arduino from './resources/arduino.js';
 import Webcam from './resources/webcam.js';
-import Service from './utils/serviceChecker.js';
-import IPTSetup from './utils/iptablesSetup.js';
 import apiRouter from './routes/api/index.js';
 import startTimeDeductor from './workers/timeDeductor.js';
 import getLocalIP from './utils/getIp.js';
+import Model from './utils/model.js';
 
 const ip = getLocalIP();
 
@@ -31,6 +30,9 @@ const arduino = new Arduino(
 
 // Block for Camera
 const webcam = new Webcam();
+
+// Block for Model API
+const modelApi = new Model(process.env);
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);
