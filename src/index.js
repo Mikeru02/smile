@@ -54,7 +54,7 @@ app.use(express.static(path.join(distDirectory)));
 
 const server = http.createServer(app);
 
-const socketServer = new SocketServer({ server, arduino, webcam, modelAPi });
+const socketServer = new SocketServer({ server, arduino, webcam, modelApi });
 
 const io = socketServer.init();
 
