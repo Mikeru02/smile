@@ -54,7 +54,7 @@ class Model {
 
         if (!prediction) return 0;
 
-        const category = prediction.class_name.toLower();
+        const category = prediction.class_name.toLowerCase();
         const timeEarned = this.timeMap[category] ?? 0;
 
         return timeEarned;
