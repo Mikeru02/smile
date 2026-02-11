@@ -85,8 +85,8 @@ export default async function Events() {
             socketClient.on('ARDUINO:SONAR', (data) => {
                 console.log('SONAR DETECTED', data);
             });
-            socketClient.on("EARN", (time) => {
-                earn(time);
+            socketClient.on("EARN", (earnedTime) => {
+                earn(earnedTime);
             })
         })
     });
