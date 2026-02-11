@@ -33,8 +33,8 @@ class Webcam {
                 filePath,
             ]);
 
-            ffmpeg.stderr.on("data", (data) => console.log("STDERR", data.toString()));
-            ffmpeg.stdout.on("data", (data) => console.log("STDOUT", data.toString()));
+            ffmpeg.stderr.on("data", (data) => {});
+            ffmpeg.stdout.on("data", (data) => {});
 
             ffmpeg.on("close", (code) => {
                 if (code === 0) {
