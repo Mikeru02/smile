@@ -74,7 +74,7 @@ class SocketServer {
                 });
                 try {
                     await this.webcam.capture("test_capture.jpg");
-                    await getPrediction();
+                    //await getPrediction();
                     console.log("Done capturing, sending command to arduino")
                     this.arduino.sendCommand("DONE CAPTURE");
                 } catch(err) {
