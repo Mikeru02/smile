@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config(); 
 
 export default async function getPrediction() {
-    console.log(`https://${process.env.MODEL_HOST}/${process.env.MODEL_VESRION}/model/predict`)
+    console.log(`https://${process.env.MODEL_HOST}/${process.env.MODEL_VERSION}/model/predict`)
     const filePath = path.join(process.cwd(), "src/captures/test_capture.jpg");
 
     const formData = new FormData();
@@ -19,10 +19,13 @@ export default async function getPrediction() {
         {
             headers: {
                 ...formData.getHeaders(),
+                "api-key": process.env.MODEL_APIKEY
 
             }
         }
     )
 
-    console.log(result);
+    console.log(result.data);
 }
+
+getPrediction();
