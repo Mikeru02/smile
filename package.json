@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev_frontend": "vite",
-    "dev_backend": "python3 server/main.py",
+    "dev_backend": "nodemon src/index.js",
     "dev_api": "nodemon api/index.js",
     "build_frontend": "vite build --emptyOutDir",
     "prod": "nodemon api/index.js & nodemon src/index.js",
@@ -26,6 +26,7 @@
     "crypto-js": "^4.2.0",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "form-data": "^4.0.5",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",

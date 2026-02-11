@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { runModel } from '../utils/runModel.js';
+import getPrediction from '../utils/model.js';
 
 class SocketServer {
     constructor({ server, arduino, webcam }) {
@@ -74,6 +74,7 @@ class SocketServer {
                 });
                 try {
                     await this.webcam.capture("test_capture.jpg");
+                    await getPrediction();
                     console.log("Done capturing, sending command to arduino")
                     this.arduino.sendCommand("DONE CAPTURE");
                 } catch(err) {
