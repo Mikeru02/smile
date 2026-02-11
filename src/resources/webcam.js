@@ -33,12 +33,12 @@ class Webcam {
                 filePath,
             ]);
 
-            ffmpeg.stderr.on("data", (data) => console.log(data.toString()));
-            ffmpeg.stdout.on("data", (data) => console.log(data.toString()));
+            // ffmpeg.stderr.on("data", (data) => console.log(data.toString()));
+            // ffmpeg.stdout.on("data", (data) => console.log(data.toString()));
 
             ffmpeg.on("close", (code) => {
                 if (code === 0) {
-                    console.log("Image captured at:", filePath);
+                    //console.log("Image captured at:", filePath);
                     resolve(filePath);
                 } else {
                     reject(new Error(`FFmpeg exited with code ${code}`));
