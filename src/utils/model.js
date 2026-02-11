@@ -63,7 +63,7 @@ class Model {
                 }
             }
         );
-        console.log(result.data);
+        console.log("DEBUG",result);
     }
 }
 
