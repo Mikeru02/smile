@@ -49,6 +49,7 @@ class Model {
     }
 
     async earnedTime() {
+        console.log("HIT FUNCTION")
         const prediction = await this.predict();
 
         if (!prediction) return 0;
