@@ -3,32 +3,14 @@ import fs from 'fs';
 import path from "path";
 import FormData from "form-data";
 
-async function getPrediction(env) {
-    console.log(`https://${env.MODEL_HOST}/${env.MODEL_VERSION}/model/predict`)
-    const filePath = path.join(process.cwd(), "src/captures/test_capture.jpg");
-
-    const formData = new FormData();
-
-    formData.append("file", fs.createReadStream(filePath));
-
-    const result = await axios.post(
-        `https://${process.env.MODEL_HOST}/${process.env.MODEL_VERSION}/model/predict`,
-        formData,
-        {
-            headers: {
-                ...formData.getHeaders(),
-                "api-key": process.env.MODEL_APIKEY
-
-            }
-        }
-    )
-
-    console.log(result.data);
-}
-
 class Model {
     constructor(env) {
         this.env = env;
+        this.timeMap = {
+            "general waste": parseInt(this.env.TIME_GENERAL_WASTE || 1),
+            "plastic bottle": parseInt(this.env.TIME_PLASTIC_BOTTLE || 5),
+            "paper": parseInt(this.env.TIME_PAPER || 2)
+        }
         this.baseUrl = `https://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
         this.client = axios.create({
             baseURL: this.baseUrl,
@@ -45,7 +27,7 @@ class Model {
                 }
             }
         )
-        console.log(result.data);
+        return result.data;
     }
 
     async predict(){
@@ -63,7 +45,19 @@ class Model {
                 }
             }
         );
-        console.log("DEBUG",result);
+        
+        return result.data.predictions[0];
+    }
+
+    async earnedTime() {
+        const prediction = await this.predict();
+
+        if (!prediction) return 0;
+
+        const category = prediction.class_name.toLower();
+        const timeEarned = this.timeMap[category] ?? 0;
+
+        return timeEarned;
     }
 }
 

@@ -84,10 +84,11 @@ export default async function Events() {
             socketClient.emit('DROPPING');
             socketClient.on('ARDUINO:SONAR', (data) => {
                 console.log('SONAR DETECTED', data);
-                earn();
             });
+            socketClient.on("EARN", (time) => {
+                earn(time);
+            })
         })
-        
     });
 
     const exit = document.getElementById('exit');
@@ -163,14 +164,13 @@ export default async function Events() {
         renderEarnTime({ hoursSpan, minSpan, secSpan }, earnedSeconds);
     }
 
-    const earn = async () => {
-        console.log("EARN FUNCTION HIT")
+    const earn = async (time) => {
         if (isRunning) return;
 
         isRunning = true;
 
         await axios.post(`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`, 
-            { earned_time: timeEarned },
+            { earned_time: time },
             {
                 headers: {
                     'Content-Type': 'application/json',
