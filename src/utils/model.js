@@ -45,11 +45,25 @@ class Model {
                 }
             }
         )
-        console.log(result);
+        console.log(result.data);
     }
 
     async predict(){
+        const filePath = path.join(process.cwd(), "src/captures/test_capture.jpg");
+        const formData = new FormData();
+        formData.append("file", fs.createReadStream(filePath));
 
+        const result = await this.client.post(
+            "/predict",
+            formData,
+            {
+                headers: {
+                    "api-key": this.env.MODEL_APIKEY,
+                    ...formData.getHeaders()
+                }
+            }
+        );
+        console.log(result.data);
     }
 }
 

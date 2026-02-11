@@ -2,10 +2,11 @@ import { Server } from 'socket.io';
 import getPrediction from '../utils/model.js';
 
 class SocketServer {
-    constructor({ server, arduino, webcam }) {
+    constructor({ server, arduino, modelApi }) {
         this.server = server;
         this.arduino = arduino;
-        this.webcam = webcam
+        this.webcam = webcam;
+        this.modelApi = modelApi;
 
         this.io = null;
         this.activeClient = null;
@@ -74,7 +75,8 @@ class SocketServer {
                 });
                 try {
                     await this.webcam.capture("test_capture.jpg"); 
-                    //await getPrediction();
+                    const prediction = await this.modelApi.predict();
+                    console.log(prediction)
                     console.log("Done capturing, sending command to arduino")
                     this.arduino.sendCommand("DONE CAPTURE");
                 } catch(err) {

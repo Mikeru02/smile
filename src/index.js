@@ -33,7 +33,6 @@ const webcam = new Webcam();
 
 // Block for Model API
 const modelApi = new Model(process.env);
-await modelApi.checkModel();
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);
@@ -55,7 +54,7 @@ app.use(express.static(path.join(distDirectory)));
 
 const server = http.createServer(app);
 
-const socketServer = new SocketServer({ server, arduino, webcam });
+const socketServer = new SocketServer({ server, arduino, webcam, modelAPi });
 
 const io = socketServer.init();
 
