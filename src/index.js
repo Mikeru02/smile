@@ -33,6 +33,7 @@ const webcam = new Webcam();
 
 // Block for Model API
 const modelApi = new Model(process.env);
+await modelApi.checkModel();
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);
