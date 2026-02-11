@@ -56,7 +56,7 @@ class Model {
         const category = prediction.class_name.toLowerCase();
         const timeEarned = this.timeMap[category] ?? 0;
 
-        return timeEarned;
+        return timeEarned * 60;
     }
 }
 
