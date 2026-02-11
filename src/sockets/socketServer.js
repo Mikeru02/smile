@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import getPrediction from '../utils/model.js';
 
 class SocketServer {
-    constructor({ server, arduino, modelApi }) {
+    constructor({ server, arduino, webcam, modelApi }) {
         this.server = server;
         this.arduino = arduino;
         this.webcam = webcam;
