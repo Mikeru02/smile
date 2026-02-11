@@ -29,7 +29,7 @@ async function getPrediction(env) {
 class Model {
     constructor(env) {
         this.env = env;
-        this.baseUrl = `https://${this.env.MODEL_HOST}`;
+        this.baseUrl = `https://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
         this.client = axios.create({
             baseURL: this.baseUrl,
             timeout: 10000,
