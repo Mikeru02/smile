@@ -9,7 +9,7 @@ export default function Main(root){
             <p class="${styles["desc"]}">Input Credentials</p>
             <div class="${styles["input-fields"]}">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" placeholder="Name">
+                <input type="text" name="name" id="name" placeholder="Name" autocomplete="off">
                 <label for="course">Course / Strand</label>
                 <select id="course" data-value="course" class="${styles['courses']}"></select>
                 <label for="yearlvl">Year Level</label>

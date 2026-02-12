@@ -23,6 +23,12 @@ html {
     font-family: "Inter";
 }
 
+body {
+    background: linear-gradient(135deg, rgb(12, 57, 60) 0%, rgb(18, 86, 90) 25%, rgb(15, 71, 75) 50%, rgb(12, 57, 60) 75%, rgb(6, 29, 30) 100%);
+    min-height: 100vh;
+    margin: 0;
+}
+
 table {
     border-collapse: collapse;
 }
