@@ -6,7 +6,7 @@ import  BGIMG from '/icons/bgimg.svg';
 export default async function Events() {
     const socketClient = new SocketClient();
 
-    document.body.style.backgroundImage = `url('${BGIMG}')`;
+    // document.body.style.backgroundImage = `url('${BGIMG}')`;
 
     const modal = document.getElementById('modal');
 
