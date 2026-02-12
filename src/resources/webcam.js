@@ -33,7 +33,7 @@ class Webcam {
                 filePath,
             ]);
 
-            ffmpeg.stderr.on("data", (data) => {});
+            ffmpeg.stderr.on("data", (data) => {}   );
             ffmpeg.stdout.on("data", (data) => {});
 
             ffmpeg.on("close", (code) => {
