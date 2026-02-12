@@ -2,44 +2,84 @@
     margin-bottom: 2rem;
 }
 
-.logo {
-    width: 8rem;
-    height: 8rem;
+.sidebar {
+    width: 25rem;
+    background-color: #13585C;
+    border-radius: 0 2.5rem 2.5rem 0;
+    padding: 2rem;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
 }
 
-.title-logo {
-    color: white;
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .logo-title {
     display: flex;
     align-items: center;
+    margin-bottom: 3rem;
 }
 
-.button {
-    background-color: #13585C;
-    width: 5rem;
-    height: 5rem;
+.logo {
+    width: 6rem;
+    height: 6rem;
+}
+
+.title-logo {
+    color: white;
+    font-size: 2.4rem;
+    margin-left: 1rem;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.nav-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 2.5rem;
+    padding: 1.2rem 1.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.button-logo {
-    width: 3rem;
-    height: 3rem;
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    /* transform: translateX(0.5rem); */
 }
 
-.nav-buttons {
-    display: flex;
-    justify-content: space-around;
+.nav-item.active {
+    background-color: #4CAF50;
+}
+
+.nav-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    filter: brightness(0) invert(1);
+}
+
+.nav-text {
+    color: white;
+    font-size: 1.6rem;
+    margin-left: 1.2rem;
 }
 
 .main {
     background-color: #ECF1F0;
     min-height: 100vh;
-    border-radius: 2.5rem;
+    border-radius: 2.5rem 0 0 2.5rem;
+    margin-left: 25rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,6 +92,28 @@
     font-weight: bold;
 }
 
-.card-content {
+.logout-section {
+    margin-top: auto;
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
 
+.refresh-btn {
+    background-color: rgba(33, 150, 243, 0.8) !important;
+    border: 1px solid rgba(33, 150, 243, 0.9);
+}
+
+.refresh-btn:hover {
+    background-color: rgba(33, 150, 243, 1) !important;
+}
+
+.logout-btn {
+    background-color: rgba(220, 53, 69, 0.8) !important;
+    border: 1px solid rgba(220, 53, 69, 0.9);
+}
+
+.logout-btn:hover {
+    background-color: rgba(220, 53, 69, 1) !important;
 }

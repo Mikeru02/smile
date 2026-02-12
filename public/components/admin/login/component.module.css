@@ -6,7 +6,11 @@
     align-items: center;
     padding: 2rem;
     box-sizing: border-box;
-
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .card {
@@ -84,6 +88,38 @@
 .input-fields input::placeholder {
     color: rgba(255, 255, 255, 0.5);
     font-size: 1.4rem;
+}
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.toggle-password {
+    color: rgba(255, 255, 255, 1);
+    position: absolute;
+    right: 1.5rem;
+    top: 40%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.4rem;
+    transition: all 0.3s ease;
+}
+
+.eye-icon {
+    width: 2rem;
+    height: 2rem;
+    filter: brightness(0) invert(1);
+}
+
+.toggle-password:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .button-submit-cred {

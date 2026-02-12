@@ -1,18 +1,18 @@
-import HeaderMainOnly from "../../layouts/default";
-import Header from "../../components/admin/header";
+import SidebarLayout from "../../layouts/sidebar";
+import Sidebar from "../../components/admin/sidebar";
 import MainCard from "../../components/admin/main";
-import MainContent from "../../components/admin/home/main";
+import MainContent from "../../components/admin/dashboard/main";
 import AdminEvents from "../../components/admin/events";
 
-export default class AdminHome {
+export default class AdminDashboard {
     constructor(root) {
         this.root = root;
     }
 
     render() {
-        const { header, main } = HeaderMainOnly(this.root);
+        const { sidebar, main } = SidebarLayout(this.root);
 
-        Header(header);
+        Sidebar(sidebar);
         const card = MainCard(main, "Dashboard");
         MainContent(card)
         

@@ -1,5 +1,5 @@
-import HeaderMainOnly from "../../layouts/headerMain";
-import Header from "../../components/admin/header";
+import SidebarLayout from "../../layouts/sidebar";
+import Sidebar from "../../components/admin/sidebar";
 import MainCard from "../../components/admin/main";
 import AdminEvents from "../../components/admin/events";
 import PageEvents from "../../components/admin/logs/event";
@@ -11,9 +11,9 @@ export default class AdminLogs {
     }
 
     render() {
-        const { header, main }= HeaderMainOnly(this.root);
+        const { sidebar, main } = SidebarLayout(this.root);
 
-        Header(header);
+        Sidebar(sidebar);
         const card = MainCard(main, "Logs");
         MainContent(card)
 
