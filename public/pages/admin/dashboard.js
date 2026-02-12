@@ -2,6 +2,7 @@ import SidebarLayout from "../../layouts/sidebar";
 import Sidebar from "../../components/admin/sidebar";
 import MainCard from "../../components/admin/main";
 import MainContent from "../../components/admin/dashboard/main";
+import AdminRoutingEvent from "../../components/admin/routingEvent";
 import AdminEvents from "../../components/admin/events";
 
 export default class AdminDashboard {
@@ -15,7 +16,8 @@ export default class AdminDashboard {
         Sidebar(sidebar);
         const card = MainCard(main, "Dashboard");
         MainContent(card)
-        
+
+        AdminRoutingEvent();
         AdminEvents();
     }
 }

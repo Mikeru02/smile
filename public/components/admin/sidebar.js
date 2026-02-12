@@ -1,5 +1,6 @@
 import styles from "./component.module.css";
 import Logo from "/icons/logo2.svg";
+import NavLink from "./navLink.js";
 import HomeIcon from "/icons/dashboard.svg";
 import MachineIcon from "/icons/machine.svg";
 import ClientIcon from "/icons/client.svg";
@@ -17,30 +18,12 @@ export default function Sidebar(root) {
                 <h1 class="${styles["title-logo"]}">SMILE</h1>
             </div>
             <nav class="${styles["nav-menu"]}">
-                <div class="${styles["nav-item"]}" data-value="/admin/dashboard">
-                    <img src="${HomeIcon}" class="${styles["nav-icon"]}">
-                    <span class="${styles["nav-text"]}">Dashboard</span>
-                </div>
-                <div class="${styles["nav-item"]}" data-value="/admin/machine">
-                    <img src="${MachineIcon}" class="${styles["nav-icon"]}">
-                    <span class="${styles["nav-text"]}">Machine</span>
-                </div>
-                <div class="${styles["nav-item"]}" data-value="/admin/clients">
-                    <img src="${ClientIcon}" class="${styles["nav-icon"]}">
-                    <span class="${styles["nav-text"]}">Clients</span>
-                </div>
-                <div class="${styles["nav-item"]}" data-value="/admin/logs">
-                    <img src="${LogsIcon}" class="${styles["nav-icon"]}">
-                    <span class="${styles["nav-text"]}">Logs</span>
-                </div>
-                <div class="${styles["nav-item"]}" data-value="/admin/settings">
-                    <img src="${SettingsIcon}" class="${styles["nav-icon"]}">
-                    <span class="${styles["nav-text"]}">Settings</span>
-                </div>
-                <div class="${styles["nav-item"]}" data-value="/admin/account-management">
-                    <img src="${AccountIcon}" class="${styles["nav-icon"]}">
-                    <span class="${styles["nav-text"]}">Accounts</span>
-                </div>
+                ${NavLink("Dashboard", HomeIcon, styles["nav-item"], "/admin/dashboard", null)}
+                ${NavLink("Machine", MachineIcon, styles["nav-item"], "/admin/machine", null)}
+                ${NavLink("Clients", ClientIcon, styles["nav-item"], "/admin/clients", null)}
+                ${NavLink("Logs", LogsIcon, styles["nav-item"], "/admin/logs", null)}
+                ${NavLink("Settings", SettingsIcon, styles["nav-item"], "/admin/settings", null)}
+                ${NavLink("Accounts", AccountIcon, styles["nav-item"], "/admin/account-management", null)}
             </nav>
             <div class="${styles["logout-section"]}">
                 <div class="${styles["nav-item"]} ${styles["refresh-btn"]}" id="refresh-btn">
@@ -56,58 +39,4 @@ export default function Sidebar(root) {
     `;
 
     root.className = styles["sidebar"];
-
-    const navItems = root.querySelectorAll(`.${styles["nav-item"]}:not(.${styles["logout-btn"]})`);
-
-    function setActiveLink() {
-        const currentPath = window.location.pathname;
-        navItems.forEach(item => {
-            if (item.dataset.value === currentPath) {
-                item.classList.add(styles["active"]);
-            } else {
-                item.classList.remove(styles["active"]);
-            }
-        });
-    }
-
-    // Set active link on initial load
-    setActiveLink();
-
-    // Add event listeners for navigation
-    navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const path = item.dataset.value;
-            if (path) {
-                window.history.pushState({}, '', path);
-                setActiveLink();
-                // Here you would typically load the content for the new path
-                // For this example, we'll just update the active link
-            }
-        });
-    });
-
-    // Listen for browser's back/forward buttons
-    window.addEventListener('popstate', setActiveLink);
-
-    // Add refresh functionality
-    const refreshBtn = root.querySelector('#refresh-btn');
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', () => {
-            // Refresh the current page
-            window.location.reload();
-        });
-    }
-
-    // Add logout functionality
-    const logoutBtn = root.querySelector('#logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            // Clear authentication token
-            localStorage.removeItem('token');
-            sessionStorage.removeItem('token');
-            
-            // Redirect to login page
-            window.location.href = '/login';
-        });
-    }
 }

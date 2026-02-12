@@ -4,6 +4,7 @@ import MainCard from "../../components/admin/main";
 import AdminEvents from "../../components/admin/events";
 import PageEvents from "../../components/admin/logs/event";
 import MainContent from "../../components/admin/logs/main";
+import AdminRoutingEvent from "../../components/admin/routingEvent";
 
 export default class AdminLogs {
     constructor(root) {
@@ -17,6 +18,7 @@ export default class AdminLogs {
         const card = MainCard(main, "Logs");
         MainContent(card)
 
+        AdminRoutingEvent();
         AdminEvents();
         PageEvents();
     }

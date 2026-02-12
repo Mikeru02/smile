@@ -3,6 +3,7 @@ import Sidebar from "../../components/admin/sidebar";
 import MainCard from "../../components/admin/main";
 import MainContent from "../../components/admin/clients/main";
 import AdminEvents from "../../components/admin/events";
+import AdminRoutingEvent from "../../components/admin/routingEvent";
 
 export default class AdminClients {
     constructor(root) {
@@ -16,6 +17,7 @@ export default class AdminClients {
         const card = MainCard(main, "Client Management");
         MainContent(card)
         
+        AdminRoutingEvent();
         AdminEvents();
     }
 }
