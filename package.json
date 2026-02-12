@@ -7,7 +7,7 @@
     "dev_frontend": "vite",
     "dev_backend": "nodemon src/index.js",
     "dev_api": "nodemon api/index.js",
-    "build_frontend": "vite build --emptyOutDir",
+    "build": "vite build --emptyOutDir",
     "prod": "nodemon api/index.js & nodemon src/index.js",
     "js": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
