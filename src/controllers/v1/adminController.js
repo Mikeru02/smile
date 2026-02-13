@@ -58,6 +58,21 @@ class AdminController {
         }
     }
 
+    async getDashboardInfo(req, res) {
+        try {
+            const result = await this.admin.getDashboardInfo();
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        } catch(err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     async getMachineInfo(req, res) {
         try {
             const result = await this.admin.getMachineInfo();

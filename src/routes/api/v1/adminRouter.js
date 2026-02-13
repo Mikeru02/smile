@@ -9,6 +9,7 @@ const admin = new AdminController();
 adminRouter.use(authorization);
 
 // Get Methods
+adminRouter.get('/dashboard-info', admin.getDashboardInfo.bind(admin));
 adminRouter.get('/machine-info', admin.getMachineInfo.bind(admin));
 
 // Post Methods
