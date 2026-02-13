@@ -19,7 +19,7 @@ export function memoryInfo() {
 }
 
 export function CPUInfo() {
-    const cpuInfo = runSpawnSync('cat', ['/proc/cpuinfo']);
+    const cpuInfo = runSpawnSync('lscpu', []);
     const cores = runSpawnSync('nproc', []);
 
     const modelMatch = cpuInfo.match(/^model name\s+:\s+(.*)/m);
