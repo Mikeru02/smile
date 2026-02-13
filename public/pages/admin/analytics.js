@@ -1,7 +1,7 @@
-import HeaderMainOnly from "../../layouts/headerMain";
+import SidebarLayout from "../../layouts/sidebar";
+import Sidebar from "../../components/admin/sidebar";
 import AdminEvents from "../../components/admin/events";
 import PageEvents from "../../components/admin/analytics/events";
-import Header from "../../components/admin/header";
 import MainCard from "../../components/admin/main";
 import MainContent from "../../components/admin/analytics/main";
 
@@ -20,9 +20,9 @@ export default class AdminAnalytics {
     }
 
     render() {
-        const { header, main } = HeaderMainOnly(this.root);
+        const { sidebar, main } = SidebarLayout(this.root);
 
-        Header(header);
+        Sidebar(sidebar);
         const card = MainCard(main, "Analytics");
         MainContent(card);
         

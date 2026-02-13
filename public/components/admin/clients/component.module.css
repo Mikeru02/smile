@@ -5,14 +5,14 @@
     width: 100%;
 }
 
-.accounts-container {
+.clients-container {
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
 }
 
-.accounts-header {
+.table-header {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -21,14 +21,14 @@
     gap: 1rem;
 }
 
-.accounts-header h2 {
+.table-header h2 {
     color: #0C393C;
     font-size: 2rem;
     font-weight: bold;
     margin: 0;
 }
 
-.accounts-actions {
+.table-actions {
     display: flex;
     gap: 1rem;
     align-items: center;
@@ -90,20 +90,20 @@
     border-color: #13585C;
 }
 
-.accounts-wrapper {
+.table-wrapper {
     background: white;
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
-.accounts-table {
+.clients-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9rem;
 }
 
-.accounts-table th {
+.clients-table th {
     background: #f8f9fa;
     color: #0C393C;
     font-weight: 600;
@@ -131,82 +131,66 @@
     opacity: 0.5;
 }
 
-.accounts-table td {
+.clients-table td {
     padding: 1rem;
     border-bottom: 1px solid #e0e0e0;
     vertical-align: middle;
 }
 
-.account-row {
+.table-row {
     transition: background-color 0.3s ease;
 }
 
-.account-row:hover {
+.table-row:hover {
     background: #f8f9fa;
 }
 
-.account-id {
+.client-id {
     font-weight: 600;
     color: #666;
     width: 60px;
 }
 
-.account-username {
+.client-ip {
+    color: #666;
+    min-width: 120px;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+.client-name {
     font-weight: 600;
     color: #0C393C;
     min-width: 150px;
 }
 
-.account-info {
+.client-info {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.username {
+.name {
     font-weight: 600;
 }
 
-.account-email {
+.client-email {
     color: #666;
     min-width: 200px;
 }
 
-.account-role {
-    min-width: 120px;
+.client-course {
+    font-weight: 500;
+    color: #333;
+    min-width: 80px;
 }
 
-.role-badge {
-    padding: 0.3rem 0.8rem;
-    border-radius: 1rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
+.client-year {
+    color: #666;
+    min-width: 80px;
 }
 
-.administrator {
-    background: #dc3545;
-    color: white;
-}
-
-.supervisor {
-    background: #6f42c1;
-    color: white;
-}
-
-.operator {
-    background: #0d6efd;
-    color: white;
-}
-
-.cashier {
-    background: #198754;
-    color: white;
-}
-
-.account-status {
+.client-status {
     min-width: 100px;
 }
 
@@ -225,29 +209,50 @@
     color: white;
 }
 
-.inactive {
-    background: #6c757d;
-    color: white;
-}
-
-.suspended {
+.pending {
     background: #ffc107;
     color: #212529;
 }
 
-.account-login {
-    color: #666;
-    min-width: 150px;
-    font-family: monospace;
-    font-size: 0.9rem;
+.dropping {
+    background: #007bff;
+    color: white;
 }
 
-.account-created {
+.inactive {
+    background: #dc3545;
+    color: white;
+}
+
+.client-date {
     color: #666;
     min-width: 100px;
 }
 
-.account-actions {
+.client-time {
+    color: #666;
+    min-width: 100px;
+    font-weight: 500;
+}
+
+.client-login {
+    color: #666;
+    min-width: 120px;
+}
+
+.client-usage {
+    font-weight: 500;
+    color: #0C393C;
+    min-width: 80px;
+}
+
+.client-waste {
+    font-weight: 500;
+    color: #13585C;
+    min-width: 100px;
+}
+
+.client-actions {
     min-width: 200px;
 }
 
@@ -294,7 +299,7 @@
     transform: translateY(-1px);
 }
 
-.accounts-footer {
+.table-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -342,21 +347,21 @@
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-    .accounts-table {
+    .clients-table {
         font-size: 0.8rem;
     }
     
-    .account-email {
+    .client-email {
         min-width: 150px;
     }
 }
 
 @media (max-width: 768px) {
-    .accounts-container {
+    .clients-container {
         padding: 1rem;
     }
     
-    .accounts-header {
+    .table-header {
         flex-direction: column;
         align-items: stretch;
         gap: 1rem;
@@ -366,12 +371,12 @@
         min-width: 100%;
     }
     
-    .accounts-wrapper {
+    .table-wrapper {
         overflow-x: auto;
     }
     
-    .accounts-table {
-        min-width: 900px;
+    .clients-table {
+        min-width: 800px;
     }
     
     .btn-action {
@@ -380,7 +385,7 @@
         font-size: 0.7rem;
     }
     
-    .accounts-footer {
+    .table-footer {
         flex-direction: column;
         gap: 1rem;
         align-items: center;

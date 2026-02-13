@@ -1,9 +1,10 @@
-import HeaderMainOnly from "../../layouts/headerMain";
-import Header from "../../components/admin/header";
+import SidebarLayout from "../../layouts/sidebar";
+import Sidebar from "../../components/admin/sidebar";
 import MainCard from "../../components/admin/main";
 import AdminEvents from "../../components/admin/events";
 import PageEvents from "../../components/admin/accountManagement/event";
 import MainContent from "../../components/admin/accountManagement/main";
+import AdminRoutingEvent from "../../components/admin/routingEvent";
 
 export default class AdminAccountManagement {
     constructor(root) {
@@ -11,12 +12,13 @@ export default class AdminAccountManagement {
     }
 
     render() {
-        const { header, main } = HeaderMainOnly(this.root);
+        const { sidebar, main } = SidebarLayout(this.root);
 
-        Header(header);
+        Sidebar(sidebar);
         const card = MainCard(main, "Account Management");
         MainContent(card);
 
+        AdminRoutingEvent();
         AdminEvents();
         PageEvents();
     }

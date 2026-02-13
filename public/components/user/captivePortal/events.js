@@ -4,7 +4,7 @@ import { populateSelect } from "../../../utils/populateSelect.js";
 import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
 export default async function Events() {
-    document.body.style.backgroundImage = `url('${BGIMG}')`;
+    // document.body.style.backgroundImage = `url('${BGIMG}')`;
 
     const courseSelect = document.getElementById('course');
     const yearSelect = document.getElementById('yearlvl');
