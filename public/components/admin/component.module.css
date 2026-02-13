@@ -21,6 +21,7 @@
 
 .logo-title {
     display: flex;
+    justify-content: center;
     align-items: center;
     margin-bottom: 3rem;
 }
@@ -116,4 +117,40 @@
 
 .logout-btn:hover {
     background-color: rgba(220, 53, 69, 1) !important;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 590px) {
+    .sidebar {
+        width: 8rem;
+        padding: 1rem;
+    }
+    
+    .main {
+        margin-left: 8rem;
+        padding: 1rem;
+    }
+    
+    .title-logo {
+        display: none;
+    }
+    
+    .logo {
+        width: 4rem;
+        height: 4rem;
+    }
+    
+    .nav-text {
+        display: none;
+    }
+    
+    .nav-item {
+        justify-content: center;
+    }
+    
+    .nav-icon {
+        width: 2rem;
+        height: 2rem;
+        margin: 0;
+    }
 }
