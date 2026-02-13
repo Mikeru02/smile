@@ -100,11 +100,11 @@ export default function MainContent(root) {
                     
                     <div class="${styles["card"]}">
                         <div class="${styles["card-header"]}">
-                            <h3>Data Usage</h3>
-                            <div class="${styles["icon"]}">📊</div>
+                            <h3>Full Bin Count</h3>
+                            <div class="${styles["icon"]}">�️</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>0</span>GB</p>
-                        <p class="${styles["sub-stats"]}">Total consumed</p>
+                        <p class="${styles["stats"]}"><span>0</span>bins</p>
+                        <p class="${styles["sub-stats"]}">Total full bins collected</p>
                     </div>
                 </div>
             </div>
