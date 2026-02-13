@@ -1,3 +1,5 @@
-export default function Events(){
+import axios from 'axios';
+
+export default async function Events(){
 
 }

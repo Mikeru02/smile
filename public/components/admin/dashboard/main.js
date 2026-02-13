@@ -112,9 +112,6 @@ export default function MainContent(root) {
     `;
     
     root.className = styles["main"];
-    
-    // Start real-time updates
-    startRealTimeUpdates();
 }
 
 function calculateUptime(startTime) {
@@ -126,12 +123,4 @@ function calculateUptime(startTime) {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     
     return { days, hours, minutes };
-}
-
-function startRealTimeUpdates() {
-    // Update uptime every minute
-    setInterval(() => {
-        // In real implementation, fetch updated data from server
-        console.log('Updating dashboard stats...');
-    }, 60000);
 }

@@ -1,5 +1,6 @@
 import { connection } from '../../core/database.js';
-import memoryInfo from '../../utils/getMemoryInfo.js';
+import runSpawnSync  from '../../utils/runSpawnSync.js';
+import { CPUInfo, memoryInfo, storageInfo, networkInfo, OSName } from '../../utils/machineInformation.js';
 
 class Admin {
     constructor() {
@@ -32,8 +33,25 @@ class Admin {
         }
     }
 
-    async getMemoryInfo() {
-        const memoryInfo = memoryInfo();
+    async getMachineInfo() {
+        try {
+            return {
+                cpu: CPUInfo(),
+                memory: memoryInfo(),
+                storage: storageInfo(),
+                network: networkInfo(),
+                system_info: {
+                    os_name: OSName(),
+                    uptime: runSpawnSync('uptime', ['-p']),
+                    kernel: runSpawnSync('uname', ['-r']),
+                    architecture: runSpawnSync('uname', ['-m'])
+                }
+            };
+        } catch(err) {
+            console.error("[ERROR] admin.machineInfo", err);
+            throw err;
+        }
+        
     }
 }
 

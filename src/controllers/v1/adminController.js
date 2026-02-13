@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import Admin from '../../models/v1/admin';
+import Admin from '../../models/v1/admin.js';
 
 class AdminController {
     constructor() {
@@ -60,7 +60,11 @@ class AdminController {
 
     async getMachineInfo(req, res) {
         try {
-
+            const result = await this.admin.getMachineInfo();
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
         } catch(err) {
             return res.status(500).json({
                 success: false,
