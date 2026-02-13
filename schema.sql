@@ -12,6 +12,7 @@ CREATE TABLE `accounts`(
     `name` VARCHAR(100) NOT NULL,
     `role` ENUM('staff', 'admin') NOT NULL,
     `password` VARCHAR(255) NOT NULL,
+    `last_login` DATETIME DEFAULT NULL,
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -26,8 +27,39 @@ CREATE TABLE `clients`(
     `time_remaining` BIGINT DEFAULT 0,
     `time_earned` BIGINT DEFAULT 0,
     `connection_start_at` DATETIME DEFAULT NULL,
+    `waste_collected` INT DEFAULT 0,
+    `total_points` DECIMAL(10,2) DEFAULT 0.00,
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `logs`(
+    `id`INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `timestamp` DATETIME NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `description` VARCHAR(255) NOT NULL,
+    `level` ENUM('INFO', 'WARN', 'ERR') NOT NULL,
+    `message` VARCHAR(255) NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `waste`(
+    `code` VARCHAR(5) NOT NULL PRIMARY KEY,
+    `name` VARCHAR(100) NOT NULL,
+    `time` INT NOT NULL,
+    `unit` VARCHAR(20) NOT NULL DEFAULT 'piece'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `waste_transactions`(
+    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `client_id` INT NOT NULL,
+    `waste_code` VARCHAR(5) NOT NULL,
+    `quantity` INT NOT NULL,
+    `earned_time` INT NOT NULL,
+    `transaction_date` DATETIME NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`waste_code`) REFERENCES `waste`(`code`) ON DELETE RESTRICT,
+    FOREIGN KEY (`processed_by`) REFERENCES `accounts`(`username`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- DUMP DATA
@@ -37,3 +69,6 @@ INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `u
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('gerigreizelle', 'Geri Greizelle Pineda', 'admin', 'a57d35cfc0f395f1950e0c01be9cdb87df03f25bb2c8061e4e967973845a7a2d', NOW(), NOW());
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('RodienJillian', 'Rodien Jillan Ellorando', 'admin', '249eef78f05a7831aa45c1be16ba5c80d8781d1895d8613c412f0534aa193e07', NOW(), NOW());
 
+INSERT INTO `waste` (`code`, `name`, `time`, `unit`) VALUES ('PBTL', 'Plastic Bottle', 5);
+INSERT INTO `waste` (`code`, `name`, `time`, `unit`) VALUES ('PPRS', 'Paper', 2);
+INSERT INTO `waste` (`code`, `name`, `time`, `unit`) VALUES ('GWST', 'General Waste', 1);

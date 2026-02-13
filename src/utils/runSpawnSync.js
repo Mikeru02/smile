@@ -1,7 +1,7 @@
 import { spawnSync } from 'child_process';
 
 export default function runSpawnSync(cmd, args) {
-    const result = spawnSync(cmd, args, { stdio: 'inherit'});
+    const result = spawnSync(cmd, args, { encoding: 'utf-8'});
 
     if (result.error) {
         throw result.error;
@@ -15,5 +15,5 @@ export default function runSpawnSync(cmd, args) {
         throw new Error(`[ERROR] ${cmd} failed: ${args.join(' ')}`);
     }
 
-    return;
+    return result.stdout.trim();
 }

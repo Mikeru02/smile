@@ -92,7 +92,6 @@ export default function MainContent(root) {
                             <th class="${styles["sortable"]}" data-sort="status">Status</th>
                             <th class="${styles["sortable"]}" data-sort="registrationDate">Registration Date</th>
                             <th class="${styles["sortable"]}" data-sort="timeRemaining">Time Remaining</th>
-                            <th class="${styles["sortable"]}" data-sort="dataUsage">Data Usage</th>
                             <th class="${styles["sortable"]}" data-sort="wasteCollected">Waste Collected</th>
                             <th>Actions</th>
                         </tr>
@@ -118,7 +117,6 @@ export default function MainContent(root) {
                                 </td>
                                 <td class="${styles["client-date"]}">${client.registrationDate}</td>
                                 <td class="${styles["client-time"]}">${client.timeRemaining}</td>
-                                <td class="${styles["client-usage"]}">${client.dataUsage}</td>
                                 <td class="${styles["client-waste"]}">${client.wasteCollected}</td>
                                 <td class="${styles["client-actions"]}">
                                     <button class="${styles["btn-action"]} ${styles["btn-view"]}" 
