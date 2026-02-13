@@ -16,8 +16,8 @@ export default function MainContent(root) {
                             <h3>Server Status</h3>
                             <div class="${styles["status-indicator"]} ${styles["online"]}"></div>
                         </div>
-                        <p class="${styles["stats"]}"><span>${uptime.days}</span>Days</p>
-                        <p class="${styles["sub-stats"]}">${uptime.hours}h ${uptime.minutes}m uptime</p>
+                        <p class="${styles["stats"]}"><span>Loading...</span>Hours</p>
+                        <p class="${styles["sub-stats"]}">Loading uptime...</p>
                     </div>
                     
                     <div class="${styles["card"]}">
@@ -25,8 +25,8 @@ export default function MainContent(root) {
                             <h3>Model Status</h3>
                             <div class="${styles["icon"]}">🤖</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>Active</span></p>
-                        <p class="${styles["sub-stats"]}">AI Model Running</p>
+                        <p class="${styles["stats"]}"><span>Loading...</span></p>
+                        <p class="${styles["sub-stats"]}">Loading...</p>
                     </div>
                     
                     <div class="${styles["card"]}">
@@ -34,8 +34,8 @@ export default function MainContent(root) {
                             <h3>Internet Status</h3>
                             <div class="${styles["icon"]}">🌐</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>Connected</span></p>
-                        <p class="${styles["sub-stats"]}">Network Online</p>
+                        <p class="${styles["stats"]}"><span>Loading...</span></p>
+                        <p class="${styles["sub-stats"]}">Loading...</p>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@ export default function MainContent(root) {
                             <h3>Total Users</h3>
                             <div class="${styles["icon"]}">👥</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>0</span>Registered</p>
+                        <p class="${styles["stats"]}"><span>Loading...</span>Registered</p>
                         <p class="${styles["sub-stats"]}">All time users</p>
                     </div>
                     
@@ -58,7 +58,7 @@ export default function MainContent(root) {
                             <h3>Active Sessions</h3>
                             <div class="${styles["icon"]}">📱</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>0</span>Connected</p>
+                        <p class="${styles["stats"]}"><span>Loading...</span>Connected</p>
                         <p class="${styles["sub-stats"]}">Currently online</p>
                     </div>
                 </div>
@@ -73,7 +73,7 @@ export default function MainContent(root) {
                             <h3>Today's Collection</h3>
                             <div class="${styles["icon"]}">♻️</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>0</span>items</p>
+                        <p class="${styles["stats"]}"><span>Loading...</span>items</p>
                         <p class="${styles["sub-stats"]}">Total collected today</p>
                     </div>
                     
@@ -85,15 +85,15 @@ export default function MainContent(root) {
                         <div class="${styles["waste-stats"]}">
                             <div class="${styles["waste-item"]}">
                                 <span class="${styles["waste-label"]}">Paper:</span>
-                                <span class="${styles["waste-value"]}">0 items</span>
+                                <span class="${styles["waste-value"]}">Loading items...</span>
                             </div>
                             <div class="${styles["waste-item"]}">
                                 <span class="${styles["waste-label"]}">Plastic:</span>
-                                <span class="${styles["waste-value"]}">0 items</span>
+                                <span class="${styles["waste-value"]}">Loading items...</span>
                             </div>
                             <div class="${styles["waste-item"]}">
                                 <span class="${styles["waste-label"]}">General:</span>
-                                <span class="${styles["waste-value"]}">0 items</span>
+                                <span class="${styles["waste-value"]}">Loading items...</span>
                             </div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@ export default function MainContent(root) {
                             <h3>Full Bin Count</h3>
                             <div class="${styles["icon"]}">�️</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>0</span>bins</p>
+                        <p class="${styles["stats"]}"><span>Loading...</span>bins</p>
                         <p class="${styles["sub-stats"]}">Total full bins collected</p>
                     </div>
                 </div>
