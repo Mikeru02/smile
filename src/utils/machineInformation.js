@@ -23,7 +23,7 @@ export function CPUInfo() {
     const cores = runSpawnSync('nproc', []);
 
     const modelMatch = cpuInfo.match(/^\s*Model name:\s+(.*)/m);
-    const speedMatch = cpuInfo.match(/^\s*CPU max MHz:\s+(.*)/ms);
+    const speedMatch = cpuInfo.match(/^\s*CPU max MHz:\s+(.*)/m);
 
     return {
         model: modelMatch ? modelMatch[1] : 'Unknown',
