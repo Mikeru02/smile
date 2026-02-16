@@ -2,6 +2,7 @@ import SPA from './core/spa';
 // TODO: Import the pages here
 import PageNotFound from './pages/pageNotFound';
 import CaptivePortal from './pages/user/captivePortal';
+import TermsAndConditions from './pages/user/termsAndConditions';
 import TimePortal from './pages/user/timePortal';
 import AdminLogin from './pages/admin/login';
 import AdminDashboard from './pages/admin/dashboard';
@@ -24,6 +25,7 @@ window.app = app;
 // TODO: Add the routes here
 app.add("/", CaptivePortal);
 app.add("/generate_204", CaptivePortal);
+app.add("/terms-and-conditions", TermsAndConditions);
 app.add("/portal", TimePortal, true);
 app.add("/admin/login", AdminLogin);
 app.add("/admin/dashboard", AdminDashboard);

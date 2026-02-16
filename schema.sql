@@ -62,6 +62,20 @@ CREATE TABLE `waste_transactions`(
     FOREIGN KEY (`processed_by`) REFERENCES `accounts`(`username`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `accessed_links`(
+    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `client_id` INT NOT NULL,
+    `link` VARCHAR(255) NOT NULL,
+    `accessed_at` DATETIME NOT NULL,
+    FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci; 
+
+CREATE TABLE `prohibited_links`(
+    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `link` VARCHAR(255) NOT NULL,
+    `created_at` DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- DUMP DATA
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('mikeru', 'Michael Alexis Ponce', 'admin', '83a1a3270b33c5a549e70cb938d904e058680a9f226238498641e17860aac924', NOW(), NOW());
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('BlancheTinsleye', 'Bj Ashley Mercado', 'admin', '2148d5ff3881c92d22f60c8f5d41cc1ff6856840079bd87e45dd6c728d8235ff', NOW(), NOW());

@@ -106,8 +106,36 @@
     transform: translateY(0);
 }
 
+.button-submit-cred:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 .courses option, .yearlvl option {
     color: black;
+}
+
+.consent-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.consent-container a {
+    color: white;
+    text-decoration: underline;
+}
+
+.consent-container input {
+    width: 1.6rem;
+    height: 1.6rem;
+    cursor: pointer;
+}
+
+.consent-container label {
+    font-size: 1.4rem;
+    cursor: pointer;
 }
 
 @media (min-width: 600px) and (max-width: 1024px) {
