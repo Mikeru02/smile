@@ -17,7 +17,7 @@ export default function Main(root){
             </div>
             <div class="${styles["consent-container"]}">
                 <input type="checkbox" id="consent" name="consent">
-                <label for="consent">I agree to the <a href="/terms-and-conditions" target="_blank">Terms and Conditions</a></label>
+                <label for="consent">I agree to the <a href="/terms-and-conditions">Terms and Conditions</a></label>
             </div>
             <button id="submit-credential" class="${styles["button-submit-cred"]}" disabled>SUBMIT</button>
         </div>

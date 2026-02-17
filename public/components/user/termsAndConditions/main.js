@@ -32,7 +32,7 @@ export default function Main(root){
                 <p>If you have any questions about these Terms and Conditions, please contact the system administrators at the campus IT department.</p>
             </div>
             <div class="${styles["actions"]}">
-                <button onclick="window.history.back()" class="${styles["back-button"]}">Back to Portal</button>
+                <button class="${styles["back-button"]}" id="back-button">Back to Portal</button>
             </div>
         </div>
     `;
