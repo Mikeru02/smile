@@ -2,8 +2,6 @@ import styles from "./component.module.css";
 
 export default function MainContent(root) {
     // Calculate server uptime (example - in real app, this would come from server)
-    const serverStartTime = new Date('2024-01-01T00:00:00');
-    const uptime = calculateUptime(serverStartTime);
     
     root.innerHTML = `
         <div class="${styles["dashboard-container"]}">
@@ -16,8 +14,8 @@ export default function MainContent(root) {
                             <h3>Server Status</h3>
                             <div class="${styles["status-indicator"]} ${styles["online"]}"></div>
                         </div>
-                        <p class="${styles["stats"]}"><span>${uptime.days}</span>Days</p>
-                        <p class="${styles["sub-stats"]}">${uptime.hours}h ${uptime.minutes}m uptime</p>
+                        <p class="${styles["stats"]}"><span id="days">Loading...</span>Days</p>
+                        <p class="${styles["sub-stats"]}" id="hours-mins">Loading uptime...</p>
                     </div>
                     
                     <div class="${styles["card"]}">
@@ -25,8 +23,8 @@ export default function MainContent(root) {
                             <h3>Model Status</h3>
                             <div class="${styles["icon"]}">🤖</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>Active</span></p>
-                        <p class="${styles["sub-stats"]}">AI Model Running</p>
+                        <p class="${styles["stats"]}"><span id="model-stat">Loading...</span></p>
+                        <p class="${styles["sub-stats"]}" id="model-substat">Loading...</p>
                     </div>
                     
                     <div class="${styles["card"]}">
@@ -34,8 +32,8 @@ export default function MainContent(root) {
                             <h3>Internet Status</h3>
                             <div class="${styles["icon"]}">🌐</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>Connected</span></p>
-                        <p class="${styles["sub-stats"]}">Network Online</p>
+                        <p class="${styles["stats"]}"><span id="internet-stat">Loading...</span></p>
+                        <p class="${styles["sub-stats"]}" id="internet-substat">Loading...</p>
                     </div>
                 </div>
             </div>
@@ -49,7 +47,7 @@ export default function MainContent(root) {
                             <h3>Total Users</h3>
                             <div class="${styles["icon"]}">👥</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>0</span>Registered</p>
+                        <p class="${styles["stats"]}"><span id="total-clients">Loading...</span>Registered</p>
                         <p class="${styles["sub-stats"]}">All time users</p>
                     </div>
                     
@@ -58,7 +56,7 @@ export default function MainContent(root) {
                             <h3>Active Sessions</h3>
                             <div class="${styles["icon"]}">📱</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>0</span>Connected</p>
+                        <p class="${styles["stats"]}"><span id="active-clients">Loading...</span>Connected</p>
                         <p class="${styles["sub-stats"]}">Currently online</p>
                     </div>
                 </div>
@@ -73,7 +71,7 @@ export default function MainContent(root) {
                             <h3>Today's Collection</h3>
                             <div class="${styles["icon"]}">♻️</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>0</span>items</p>
+                        <p class="${styles["stats"]}"><span id="waste-items">Loading...</span>Items</p>
                         <p class="${styles["sub-stats"]}">Total collected today</p>
                     </div>
                     
@@ -85,15 +83,15 @@ export default function MainContent(root) {
                         <div class="${styles["waste-stats"]}">
                             <div class="${styles["waste-item"]}">
                                 <span class="${styles["waste-label"]}">Paper:</span>
-                                <span class="${styles["waste-value"]}">0 items</span>
+                                <span class="${styles["waste-value"]}" id="paper">Loading items...</span>
                             </div>
                             <div class="${styles["waste-item"]}">
-                                <span class="${styles["waste-label"]}">Plastic:</span>
-                                <span class="${styles["waste-value"]}">0 items</span>
+                                <span class="${styles["waste-label"]}">Plastic Bottle:</span>
+                                <span class="${styles["waste-value"]}" id="plastic-bottle">Loading items...</span>
                             </div>
                             <div class="${styles["waste-item"]}">
                                 <span class="${styles["waste-label"]}">General:</span>
-                                <span class="${styles["waste-value"]}">0 items</span>
+                                <span class="${styles["waste-value"]}" id="general">Loading items...</span>
                             </div>
                         </div>
                     </div>
@@ -101,9 +99,9 @@ export default function MainContent(root) {
                     <div class="${styles["card"]}">
                         <div class="${styles["card-header"]}">
                             <h3>Full Bin Count</h3>
-                            <div class="${styles["icon"]}">�️</div>
+                            <div class="${styles["icon"]}">🗑️</div>
                         </div>
-                        <p class="${styles["stats"]}"><span>0</span>bins</p>
+                        <p class="${styles["stats"]}"><span id="bin-count">Loading...</span>Bins</p>
                         <p class="${styles["sub-stats"]}">Total full bins collected</p>
                     </div>
                 </div>
@@ -112,26 +110,4 @@ export default function MainContent(root) {
     `;
     
     root.className = styles["main"];
-    
-    // Start real-time updates
-    startRealTimeUpdates();
-}
-
-function calculateUptime(startTime) {
-    const now = new Date();
-    const diff = now - startTime;
-    
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
-    return { days, hours, minutes };
-}
-
-function startRealTimeUpdates() {
-    // Update uptime every minute
-    setInterval(() => {
-        // In real implementation, fetch updated data from server
-        console.log('Updating dashboard stats...');
-    }, 60000);
 }

@@ -1,5 +1,7 @@
 import { connection } from '../../core/database.js';
-import memoryInfo from '../../utils/getMemoryInfo.js';
+import runSpawnSync  from '../../utils/runSpawnSync.js';
+import { CPUInfo, memoryInfo, storageInfo, networkInfo, OSName } from '../../utils/machineInformation.js';
+import { checkInternet, checkModel } from '../../utils/dashboardInformation.js';
 
 class Admin {
     constructor() {
@@ -32,8 +34,106 @@ class Admin {
         }
     }
 
-    async getMemoryInfo() {
-        const memoryInfo = memoryInfo();
+    async getDashboardInfo() {
+        try {
+            return {
+                server_start_time: new Date(Date.now() - process.uptime() * 1000),
+                internet: checkInternet(),
+                model: await checkModel(),
+                total_clients: await this.getTotalClients(),
+                active_clients: await this.getActiveClients(),
+                waste_transactions: await this.getAllWasteTransaction(),
+                plastic_bottle: await this.getAllSpecificWaste("PBTL"),
+                paper: await this.getAllSpecificWaste("PPRS"),
+                general_waste: await this.getAllSpecificWaste("GWST"),
+                bn_count: await this.getAllBinTransaction()
+            }
+        } catch(err) {
+            console.error("[ERROR] admin.dashboardInfo", err);
+            throw err;
+        }
+    }
+
+    async getMachineInfo() {
+        try {
+            return {
+                cpu: CPUInfo(),
+                memory: memoryInfo(),
+                storage: storageInfo(),
+                network: networkInfo(),
+                system_info: {
+                    os_name: OSName(),
+                    uptime: runSpawnSync('uptime', ['-p']),
+                    kernel: runSpawnSync('uname', ['-r']),
+                    architecture: runSpawnSync('uname', ['-m'])
+                }
+            };
+        } catch(err) {
+            console.error("[ERROR] admin.machineInfo", err);
+            throw err;
+        }
+        
+    }
+
+    async getTotalClients() {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) FROM clients'
+            );
+            return result[0]['COUNT(*)'];
+        } catch(err) {
+            console.error("[ERROR] admin.getTotalClients", err);
+            throw err;
+        }
+    }
+
+    async getActiveClients() {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) FROM clients WHERE status="active"'
+            );
+            return result[0]['COUNT(*)'];
+        } catch(err) {
+            console.error("[ERROR] admin.getAtiveClients", err);
+            throw err;
+        }
+    }
+
+    async getAllWasteTransaction() {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) FROM waste_transactions WHERE DATE(created_at) = CURDATE()'
+            );
+            return result[0]['COUNT(*)'];
+        } catch(err) {
+            console.error("[ERROR] admin.getAllWasteTransaction", err);
+            throw err;
+        }
+    }
+
+    async getAllSpecificWaste(type) {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) FROM waste_transactions WHERE waste_code=?',
+                [type]
+            );
+            return result[0]['COUNT(*)'];
+        } catch(err) {
+            console.error("[ERROR] admin.getAllSpecificWaste", err);
+            throw err;
+        }
+    }
+
+    async getAllBinTransaction() {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) FROM bin_logs'
+            );
+            return result[0]['COUNT(*)'];
+        } catch(err) {
+            console.error("[ERROR] admin.getAllBinTransaction", err);
+            throw err;
+        }
     }
 }
 

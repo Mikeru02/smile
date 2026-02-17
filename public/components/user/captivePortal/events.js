@@ -1,5 +1,6 @@
 import axios from "axios";
 import BGIMG from "/icons/bgimg.svg";
+import { validateForm } from "../../../utils/validateInput.js";
 import { populateSelect } from "../../../utils/populateSelect.js";
 import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
@@ -30,6 +31,13 @@ export default async function Events() {
     courseSelect.dispatchEvent(new Event("change"));
 
     const submitBtn = document.getElementById("submit-credential");
+    const nameInput = document.getElementById('name');
+    const consentCheckbox = document.getElementById('consent');
+    
+    // Add event listeners for validation
+    nameInput.addEventListener('input', () => validateForm(nameInput, consentCheckbox, submitBtn));
+    consentCheckbox.addEventListener('change', () => validateForm(nameInput, consentCheckbox, submitBtn));
+
     submitBtn.addEventListener("click", async function() {
         const response = await axios.post(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`, 

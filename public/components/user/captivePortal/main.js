@@ -15,7 +15,11 @@ export default function Main(root){
                 <label for="yearlvl">Year Level</label>
                 <select id="yearlvl" data-value="yearlvl" class="${styles['courses']}"></select>
             </div>
-            <button id="submit-credential" class="${styles["button-submit-cred"]}">SUBMIT</button>
+            <div class="${styles["consent-container"]}">
+                <input type="checkbox" id="consent" name="consent">
+                <label for="consent">I agree to the <a href="/terms-and-conditions">Terms and Conditions</a></label>
+            </div>
+            <button id="submit-credential" class="${styles["button-submit-cred"]}" disabled>SUBMIT</button>
         </div>
     `;
 

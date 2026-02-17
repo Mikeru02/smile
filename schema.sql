@@ -39,14 +39,13 @@ CREATE TABLE `logs`(
     `name` VARCHAR(100) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
     `level` ENUM('INFO', 'WARN', 'ERR') NOT NULL,
-    `message` VARCHAR(255) NOT NULL,
+    `message` VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `waste`(
     `code` VARCHAR(5) NOT NULL PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
-    `time` INT NOT NULL,
-    `unit` VARCHAR(20) NOT NULL DEFAULT 'piece'
+    `time` INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `waste_transactions`(
@@ -58,8 +57,36 @@ CREATE TABLE `waste_transactions`(
     `transaction_date` DATETIME NOT NULL,
     `created_at` DATETIME NOT NULL,
     FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`waste_code`) REFERENCES `waste`(`code`) ON DELETE RESTRICT,
-    FOREIGN KEY (`processed_by`) REFERENCES `accounts`(`username`) ON DELETE SET NULL
+    FOREIGN KEY (`waste_code`) REFERENCES `waste`(`code`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `bins` (
+    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `bin_code` ENUM('PBTL', 'PPRS', 'GWST') NOT NULL UNIQUE,
+    `name` ENUM('Plastic Bottle', 'Paper', 'General Waste') NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `bin_logs` (
+    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `bin_code` ENUM('PBTL', 'PPRS', 'GWST') NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    FOREIGN KEY (`bin_code`) REFERENCES `bins`(`bin_code`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `accessed_links`(
+    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `client_id` INT NOT NULL,
+    `link` VARCHAR(255) NOT NULL,
+    `accessed_at` DATETIME NOT NULL,
+    FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci; 
+
+CREATE TABLE `prohibited_links`(
+    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `link` VARCHAR(255) NOT NULL,
+    `created_at` DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- DUMP DATA
@@ -69,6 +96,10 @@ INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `u
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('gerigreizelle', 'Geri Greizelle Pineda', 'admin', 'a57d35cfc0f395f1950e0c01be9cdb87df03f25bb2c8061e4e967973845a7a2d', NOW(), NOW());
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('RodienJillian', 'Rodien Jillan Ellorando', 'admin', '249eef78f05a7831aa45c1be16ba5c80d8781d1895d8613c412f0534aa193e07', NOW(), NOW());
 
-INSERT INTO `waste` (`code`, `name`, `time`, `unit`) VALUES ('PBTL', 'Plastic Bottle', 5);
-INSERT INTO `waste` (`code`, `name`, `time`, `unit`) VALUES ('PPRS', 'Paper', 2);
-INSERT INTO `waste` (`code`, `name`, `time`, `unit`) VALUES ('GWST', 'General Waste', 1);
+INSERT INTO `waste` (`code`, `name`, `time`) VALUES ('PBTL', 'Plastic Bottle', 5);
+INSERT INTO `waste` (`code`, `name`, `time`) VALUES ('PPRS', 'Paper', 2);
+INSERT INTO `waste` (`code`, `name`, `time`) VALUES ('GWST', 'General Waste', 1);
+
+INSERT INTO `bins` (`bin_code`, `name`, `created_at`, `updated_at`) VALUES ('PBTL', 'Plastic Bottle', NOW(), NOW());
+INSERT INTO `bins` (`bin_code`, `name`, `created_at`, `updated_at`) VALUES ('PPRS', 'Paper', NOW(), NOW());
+INSERT INTO `bins` (`bin_code`, `name`, `created_at`, `updated_at`) VALUES ('GWST', 'General Waste', NOW(), NOW());

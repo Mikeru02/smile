@@ -1,6 +1,6 @@
 import { spawnSync } from 'child_process';
 
-export default function runSpawnSync(cmd, args) {
+export default function runSpawnSync(cmd, args, raw = false) {
     const result = spawnSync(cmd, args, { encoding: 'utf-8'});
 
     if (result.error) {
@@ -9,11 +9,11 @@ export default function runSpawnSync(cmd, args) {
 
     if (result.status !== 0) {
         if (cmd === 'conntrack') {
-            return result;
+            return raw ? result : result.stdout.trim();
         }
 
         throw new Error(`[ERROR] ${cmd} failed: ${args.join(' ')}`);
     }
 
-    return result.stdout.trim();
+    return raw ? result : result.stdout.trim();
 }

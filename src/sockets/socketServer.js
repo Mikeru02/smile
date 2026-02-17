@@ -52,6 +52,7 @@ class SocketServer {
 
                 if (this.activeClient === socket) {
                     this.activeClient = null;
+                    this.arduino.sendCommand("DONE DROP")
                 }
             });
         })
