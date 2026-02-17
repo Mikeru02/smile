@@ -247,6 +247,30 @@ class Client {
             throw err;
         }
     }
+
+    async getTotalClients() {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) FROM clients'
+            );
+            return result[0]['COUNT(*)'];
+        } catch(err) {
+            console.error("[ERROR] client.getTotalClients", err);
+            throw err;
+        }
+    }
+
+    async getActiveClients() {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) FROM clients WHERE status="active"'
+            );
+            return result[0]['COUNT(*)'];
+        } catch(err) {
+            console.error("[ERROR] client.getAtiveClients", err);
+            throw err;
+        }
+    }
 }
 
 export default Client;
