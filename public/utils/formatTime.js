@@ -11,3 +11,18 @@ export function formatSeconds(seconds) {
         String(secs).padStart(2, "0")
     ].join(":");
 }
+
+export function formatDate(date) {
+    if (!date) return '';
+    
+    const dateObj = new Date(date);
+    if (isNaN(dateObj.getTime())) return date; // Return original if invalid date
+    
+    const options = { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit' 
+    };
+    
+    return dateObj.toLocaleDateString('en-US', options);
+}

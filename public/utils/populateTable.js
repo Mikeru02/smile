@@ -1,5 +1,6 @@
 import { TABLE_CONFIG } from "../config/tableConfig.js";
-import { formatSeconds } from "./formatTime.js";
+import { formatSeconds, formatDate } from "./formatTime.js";
+import styles from '../components/admin/clients/component.module.css';
 
 export function populateTable(tbody, data, headers) {
     tbody.innerHTML = "";
@@ -15,12 +16,39 @@ export function populateTable(tbody, data, headers) {
             if (head.key === 'time_remaining') {
                 value = formatSeconds(value);
                 tdata.id = "time";
+                tdata.textContent = value;
             } else if (head.key === 'details') {
                 value = 'See more';
                 tdata.id = "see-more"
-            }
+                tdata.className = styles.seeMore;
+                tdata.dataset.id = row.id;
+                tdata.textContent = value;
+            } else if (head.key === 'status') {
+                const span = document.createElement('span');
+                span.id = "status";
+                span.className = styles.spanStatus;
+                span.textContent = value;
 
-            tdata.textContent = value;
+                // Example status colors
+                if (value === 'active') {
+                    span.style.backgroundColor = 'green';
+                } else if (value === 'expired') {
+                    span.style.backgroundColor = 'red';
+                } else if (value === 'pending') {
+                    span.style.backgroundColor = 'orange';
+                } else {
+                    span.style.backgroundColor = 'gray';
+                }
+                tdata.appendChild(span);
+            } else if (head.key === 'created_at') {
+                value = formatDate(value);
+                tdata.textContent = value;
+            } else if (head.key === 'waste_collected') {
+                value = `${value} items`
+                tdata.textContent = value;
+            } else {
+                tdata.textContent = value;
+            }
             trow.appendChild(tdata);
         });
         tbody.appendChild(trow);
