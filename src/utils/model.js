@@ -61,7 +61,7 @@ class Model {
 
         return { 
             category: category,
-            timeEarned: timeEarned * 60
+            earnedTime: timeEarned * 60
         };
     }
 }

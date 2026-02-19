@@ -34,6 +34,9 @@ export default async function Events() {
     const nameInput = document.getElementById('name');
     const consentCheckbox = document.getElementById('consent');
     
+    // Initial validation to set button state
+    validateForm(nameInput, consentCheckbox, submitBtn);
+    
     // Add event listeners for validation
     nameInput.addEventListener('input', () => validateForm(nameInput, consentCheckbox, submitBtn));
     consentCheckbox.addEventListener('change', () => validateForm(nameInput, consentCheckbox, submitBtn));
