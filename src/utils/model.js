@@ -45,12 +45,12 @@ class Model {
             }
         );
         
-        return result.data.predictions[0];
+        return result.data.predictions;
     }
 
     async earnedTime() {
         console.log("HIT FUNCTION")
-        const prediction = await this.predict();
+        const predictions = await this.predict();
 
         if (!prediction) {
             return { category: null, timeEarned: 10}
