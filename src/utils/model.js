@@ -7,9 +7,9 @@ class Model {
     constructor(env) {
         this.env = env;
         this.timeMap = {
-            "general waste": parseInt(this.env.TIME_GENERAL_WASTE || 1),
-            "plastic bottle": parseInt(this.env.TIME_PLASTIC_BOTTLE || 5),
-            "paper": parseInt(this.env.TIME_PAPER || 2)
+            "General Waste": parseInt(this.env.TIME_GENERAL_WASTE || 1),
+            "Plastic Bottle": parseInt(this.env.TIME_PLASTIC_BOTTLE || 5),
+            "Paper": parseInt(this.env.TIME_PAPER || 2)
         }
         this.baseUrl = `https://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
         this.client = axios.create({
