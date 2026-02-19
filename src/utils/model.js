@@ -44,19 +44,19 @@ class Model {
                 }
             }
         );
-        
-        return result.data.predictions;
+        console.log(result.data);
+        return result.data.prediction;
     }
 
     async earnedTime() {
         console.log("HIT FUNCTION")
         const prediction = await this.predict();
-
-        if (!prediction) {
+        console.log(prediction);
+        if (!prediction[0]) {
             return { category: null, timeEarned: 10}
         };
 
-        const category = prediction.class_name.toLowerCase();
+        const category = prediction[0].class_name.toLowerCase();
         const timeEarned = this.timeMap[category] ?? 0;
 
         return { 
