@@ -52,12 +52,17 @@ class Model {
         console.log("HIT FUNCTION")
         const prediction = await this.predict();
 
-        if (!prediction) return 0;
+        if (!prediction) {
+            return { category: null, timeEarned: 10}
+        };
 
         const category = prediction.class_name.toLowerCase();
         const timeEarned = this.timeMap[category] ?? 0;
 
-        return timeEarned * 60;
+        return { 
+            category: category,
+            timeEarned: timeEarned * 60
+        };
     }
 }
 

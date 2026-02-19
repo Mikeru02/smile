@@ -1,11 +1,15 @@
 const TABLE_CONFIG = {
-    "all-users": [
+    "all-client": [
+        { label: "ID", key: "id" },
         { label: "IP", key: "ip" },
         { label: "Name", key: "name" },
         { label: "Course", key: "course" },
         { label: "Year Level", key: "yearlevel" },
-        { label: "Time", key: "time_remaining" },
-        { label: "Details", key: "details" }
+        { label: "Status", key: "status" },
+        { label: "Registration Date", key: "created_at" },
+        { label: "Time Remaining", key: "time_remaining" },
+        { label: "Waste Collected", key: "waste_collected" },
+        { label: "Details", key: "details" },
     ],
     "account-management": [
         { label: "UserID", key: "id" },

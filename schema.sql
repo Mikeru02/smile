@@ -28,7 +28,6 @@ CREATE TABLE `clients`(
     `time_earned` BIGINT DEFAULT 0,
     `connection_start_at` DATETIME DEFAULT NULL,
     `waste_collected` INT DEFAULT 0,
-    `total_points` DECIMAL(10,2) DEFAULT 0.00,
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -90,6 +89,10 @@ CREATE TABLE `prohibited_links`(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- DUMP DATA
+INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `connection_start_at`, `waste_collected`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost', 'BSCS', 4, 'pending', 0, 0, NULL, 0, NOW(), NOW());
+INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `connection_start_at`, `waste_collected`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost1', 'BSCS', 4, 'active', 0, 0, NULL, 0, NOW(), NOW());
+INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `connection_start_at`, `waste_collected`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost12', 'BSCS', 4, 'active', 0, 0, NULL, 0, NOW(), NOW());
+
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('mikeru', 'Michael Alexis Ponce', 'admin', '83a1a3270b33c5a549e70cb938d904e058680a9f226238498641e17860aac924', NOW(), NOW());
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('BlancheTinsleye', 'Bj Ashley Mercado', 'admin', '2148d5ff3881c92d22f60c8f5d41cc1ff6856840079bd87e45dd6c728d8235ff', NOW(), NOW());
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('ConcepcionPaul', 'Paul Dexter Concepcion', 'admin', '384e1bfb71a6311fe977064a42f1bd31295f2d9f0b9faf74fe63820903f44755', NOW(), NOW());

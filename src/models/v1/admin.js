@@ -39,8 +39,8 @@ class Admin {
     async getDashboardInfo() {
         try {
             return {
-                server_start_time: new Date(Date.now() - process.uptime() * 1000),
-                internet: checkInternet(),
+                server_start_time: new Date(Date.now() - process.uptime() * 1000).toISOString(),
+                internet: checkInternet(),  
                 model: await checkModel(),
                 total_clients: await this.client.getTotalClients(),
                 active_clients: await this.client.getActiveClients(),

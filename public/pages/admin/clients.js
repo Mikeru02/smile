@@ -3,6 +3,7 @@ import Sidebar from "../../components/admin/sidebar";
 import MainCard from "../../components/admin/main";
 import MainContent from "../../components/admin/clients/main";
 import AdminEvents from "../../components/admin/events";
+import Event from "../../components/admin/clients/event";
 import AdminRoutingEvent from "../../components/admin/routingEvent";
 
 export default class AdminClients {
@@ -19,5 +20,6 @@ export default class AdminClients {
         
         AdminRoutingEvent();
         AdminEvents();
+        Event();
     }
 }

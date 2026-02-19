@@ -89,87 +89,25 @@
     margin-top: 2.5rem;
     font-size: 1.6rem;
     font-weight: 600;
-    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-.button-submit-cred::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .button-submit-cred:hover, 
 .button-submit-cred:focus {
+    background-color: #45a049;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
-    background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
-}
-
-.button-submit-cred:hover::before,
-.button-submit-cred:focus::before {
-    left: 100%;
 }
 
 .button-submit-cred:active {
     transform: translateY(0);
-    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
-}
-
-.button-submit-cred:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    opacity: 0.6;
-    transform: none !important;
-    box-shadow: none !important;
-    background: #cccccc !important;
-}
-
-.button-submit-cred:disabled:hover {
-    transform: none !important;
-    box-shadow: none !important;
-    background: #cccccc !important;
-}
-
-.button-submit-cred:disabled:hover::before {
-    left: -100% !important;
 }
 
 .courses option, .yearlvl option {
     color: black;
-}
-
-.consent-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.consent-container a {
-    color: white;
-    text-decoration: underline;
-}
-
-.consent-container input {
-    width: 1.6rem;
-    height: 1.6rem;
-    cursor: pointer;
-}
-
-.consent-container label {
-    font-size: 1.4rem;
-    cursor: pointer;
 }
 
 @media (min-width: 600px) and (max-width: 1024px) {

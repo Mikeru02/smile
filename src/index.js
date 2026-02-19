@@ -27,6 +27,7 @@ const arduino = new Arduino(
         arduino.sendCommand(`IP:${ip}`);
     }
 );
+console.log("DEBUG", arduino)
 
 // Block for Camera
 const webcam = new Webcam();

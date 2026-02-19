@@ -345,6 +345,17 @@
     padding: 0 1rem;
 }
 
+.spanStatus {
+    width: 2rem;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    color: #ffff;
+}
+
+.seeMore {
+    cursor: pointer;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
     .clients-table {
