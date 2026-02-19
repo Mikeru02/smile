@@ -11,7 +11,8 @@ async def message_smile_members(app: Application, message: str):
         5127163539,
         7712666464,
         7182927413,
-        6068795985
+        6068795985,
+        698086841
     ]
 
     for uid in users:

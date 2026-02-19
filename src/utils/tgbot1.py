@@ -34,9 +34,6 @@ async def get_users_command(update = Update, context = ContextTypes.DEFAULT_TYPE
 
 async def message_smile_members(app: Application, message):
     users = [
-        5127163539,
-        7712666464,
-        7182927413
     ]
 
     for uid in users:
