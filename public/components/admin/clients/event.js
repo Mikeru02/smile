@@ -43,19 +43,27 @@ export default async function Event() {
             // Populate modal with client data
             const client = clientData.data.data;
             console.log("CLIENT: ", client.waste_collected);
+            console.log("Client status:", client.status);
+            
             document.getElementById('client-name').textContent = client.name || 'N/A';
             document.getElementById('client-ip').textContent = client.ip || 'N/A';
             
             // Set status dropdown to current client status
             const statusSelect = document.getElementById('client-status');
+            console.log("Setting status to:", client.status || 'active');
             statusSelect.value = client.status || 'active';
+            console.log("Status select value after setting:", statusSelect.value);
             
             document.getElementById('client-timeEarned').value = client.time_earned || 0;
             document.getElementById('client-timeRemaining').value = client.time_remaining || 0;
             document.getElementById('client-wasteCollected').textContent = client.waste_collected || 0;
             document.getElementById('client-createdAt').textContent = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
 
-            document.getElementById('modal').style.display = 'block';
+            // Show modal
+            const modal = document.getElementById('modal');
+            console.log("Modal element:", modal);
+            modal.style.display = 'block';
+            console.log("Modal display style:", modal.style.display);
             
             // Add event listeners for modal buttons
             document.getElementById('exit').addEventListener('click', () => {
