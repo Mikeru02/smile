@@ -75,11 +75,11 @@ class SocketServer {
                 });
                 try {
                     await this.webcam.capture("test_capture.jpg"); 
-                    const earned = await this.modelApi.earnedTime();
-                    this.activeClient.emit("EARN", earned.earnedTime);
+                    const response = await this.modelApi.earnedTime();
+                    this.activeClient.emit("EARN", { earnedTime: response.earnedTime, wasteCode: response.wasteCode });
                     console.log("Done capturing, sending command to arduino")
                     this.arduino.sendCommand("DONE CAPTURE");
-                    this.arduino.sendCommand(`DETECT:${earned.category}`);
+                    this.arduino.sendCommand(`DETECT:${response.category}`);
                 } catch(err) {
                     console.error("Capture Error: ", err)
                 }

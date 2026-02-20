@@ -11,6 +11,11 @@ class Model {
             "plastic bottle": parseInt(5),
             "paper": parseInt(2)
         }
+        this.wasteCodeMap = {
+            "general waste": "GWST",
+            "plastic bottle": "PBTL",
+            "paper": "PPRS"
+        }
         this.baseUrl = `https://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
         this.client = axios.create({
             baseURL: this.baseUrl,
@@ -58,6 +63,7 @@ class Model {
 
         return { 
             category: category,
+            wasteCode: this.wasteCodeMap[category],
             earnedTime: timeEarned * 60
         };
     }
