@@ -5,7 +5,7 @@ class Waste {
         this.db = connection;
     }
 
-    async createTrashTransaction(client_id, waste_code, quantity, earned_time, transaction_date) {
+    async createTrashTransaction(client_id, waste_code, quantity, earned_time) {
         try {
             console.log("WASTE DEBUG: ", client_id, waste_code, quantity, earned_time);
             const [result] = await this.db.execute(
