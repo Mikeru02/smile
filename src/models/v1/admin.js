@@ -80,7 +80,7 @@ class Admin {
     async getAllWasteTransaction() {
         try {
             const [result] = await this.db.execute(
-                'SELECT COUNT(*) FROM waste_transactions WHERE DATE(created_at) = CURDATE()'
+                'SELECT COUNT(*) FROM waste_transactions WHERE DATE(transaction_date) = CURDATE()'
             );
             return result[0]['COUNT(*)'];
         } catch(err) {
