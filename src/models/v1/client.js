@@ -21,11 +21,11 @@ class Client {
         }
     }
 
-    async verfyClient(ip, name) {
+    async verfyClient(ip, name, course, yearlevel) {
         try {
             const [result, ] = await this.db.execute(
-                'SELECT * FROM clients WHERE ip=? AND name=?',
-                [ip, name]
+                'SELECT * FROM clients WHERE ip=? AND name=? AND course=? AND yearlevel=?',
+                [ip, name, course, yearlevel]
             );
             return result;
         } catch (err) {

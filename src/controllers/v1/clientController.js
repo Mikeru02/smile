@@ -11,11 +11,17 @@ class ClientController {
         try {
             const ip = req.ip || req.socket.remoteAddress;
             const { name, course, yearlevel } = req.body || {};
+            if (!name || !course || !yearlevel) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'All fields are required'
+                })
+            }
 
             // Check client if it is existing in db
-            const existingClientData = await this.client.verfyClient(ip, name);
-            console.log("DEBUG: Existing client",existingClientData)
-            if (existingClientData) {
+            const existingClientData = await this.client.verfyClient(ip, name, course, yearlevel);
+            
+            if (existingClientData && existingClientData.length > 0) {
                 return res.status(200).json({
                     success: true,
                     data: {
@@ -24,14 +30,13 @@ class ClientController {
                         })
                     }
                 });
-            }
-            
-            if (!name || !course || !yearlevel) {
+            } else {
                 return res.status(400).json({
                     success: false,
-                    message: 'All fields are required'
+                    message: 'Client not found'
                 })
             }
+            
             const response = await this.client.create(ip, name, course, yearlevel);
             return res.status(200).json({
                 success: true,
