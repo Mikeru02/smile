@@ -52,6 +52,15 @@ export default async function Event() {
             document.getElementById('client-createdAt').textContent = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
 
             document.getElementById('modal').style.display = 'block';
+            
+            // Add event listeners for modal buttons
+            document.getElementById('exit').addEventListener('click', () => {
+                document.getElementById('modal').style.display = 'none';
+            });
+            
+            document.getElementById('proceed').addEventListener('click', () => {
+                document.getElementById('modal').style.display = 'none';
+            });
         });
     });
 }

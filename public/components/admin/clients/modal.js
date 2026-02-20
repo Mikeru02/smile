@@ -16,12 +16,6 @@ export default function Modal() {
                         <h2 class="${styles['modal-title']}">Client Details</h2>
                         <p class="${styles['modal-subtitle']}">View and manage client information</p>
                     </div>
-                    <button class="${styles['close-button']}" id="close-modal">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
                 </div>
                 
                 <div class="${styles['modal-body']}">
