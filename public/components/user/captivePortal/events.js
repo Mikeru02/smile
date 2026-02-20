@@ -61,7 +61,7 @@ export default async function Events() {
         );
         console.log(response.data);
 
-        if (response.data.success == 'true') {
+        if (response.data.success) {
             localStorage.setItem('token', response.data.data.token);
             window.app.pushRoute("/portal");
         } else {
