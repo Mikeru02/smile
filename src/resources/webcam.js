@@ -1,48 +1,49 @@
 import { spawn } from "child_process";
-import fs from "fs";
-import path from "path";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 class Webcam {
-  constructor(device = "/dev/video1", width = 1920, height = 1080) {
-    this.device = device;
-    this.width = width;
-    this.height = height;
-    this.outputFolder = path.join(process.cwd(), "captures");
-
-    if (!fs.existsSync(this.outputFolder)) {
-      fs.mkdirSync(this.outputFolder, { recursive: true });
+    constructor() {
+        this.device = process.env.DEVICE || "/dev/video1";
+        this.width = process.env.WIDTH || 640;
+        this.height = process.env.HEIGHT || 480;
+        this.outputFolder = join(__dirname, '../captures');
     }
-  }
 
-  getFilePath(filename = "last_capture.jpg") {
-    return path.join(this.outputFolder, filename);
-  }
+    getFilePath(filename = "last_capture.jpg") {
+        return join(this.outputFolder, filename);
+    }
 
-  capture(filename = "last_capture.jpg") {
-    const filePath = this.getFilePath(filename);
+    capture(filename = "last_capture.jpg") {
+        const filePath = this.getFilePath(filename);
 
-    return new Promise((resolve, reject) => {
-      const proc = spawn("v4l2-ctl", [
-        "--device", this.device,
-        "--stream-mmap",
-        "--stream-count=1",
-        "--stream-to", filePath,
-        `--set-fmt-video=width=${this.width},height=${this.height},pixelformat=MJPG`
-      ], {
-        stdio: ["ignore", "ignore", "ignore"] // ignore logs
-      });
+        return new Promise((resolve, reject) => {
+            const fswebcam = spawn("fswebcam", [
+                "-d", this.device,
+                "-r", `${this.width}x${this.height}`,
+                "--no-banner",
+                "-D", "0", // zero delay
+                filePath
+            ]);
 
-      proc.on("close", (code) => {
-        if (code === 0) {
-          resolve(filePath);
-        } else {
-          reject(new Error(`v4l2-ctl exited with code ${code}`));
-        }
-      });
+            fswebcam.stdout.on("data", (data) => {});
+            fswebcam.stderr.on("data", (data) => {});
 
-      proc.on("error", (err) => reject(err));
-    });
-  }
+            fswebcam.on("close", (code) => {
+                if (code === 0) {
+                    console.log("Image captured at:", filePath);
+                    resolve(filePath);
+                } else {
+                    reject(new Error(`fswebcam exited with code ${code}`));
+                }
+            });
+
+            fswebcam.on("error", (err) => reject(err));
+        });
+    }
 }
 
 export default Webcam;
