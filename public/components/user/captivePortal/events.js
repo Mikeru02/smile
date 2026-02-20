@@ -60,7 +60,14 @@ export default async function Events() {
             }
         );
 
-        localStorage.setItem('token', response.data.data.token);
-        window.app.pushRoute("/portal");
+        const responseData = response.data.data;
+        if (responseData.success) {
+            localStorage.setItem('token', response.data.data.token);
+            window.app.pushRoute("/portal");
+        } else {
+            // Show modal
+        }
+
+        
     });
 }
