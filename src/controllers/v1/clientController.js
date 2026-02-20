@@ -30,11 +30,6 @@ class ClientController {
                         })
                     }
                 });
-            } else {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Client not found'
-                })
             }
             
             const response = await this.client.create(ip, name, course, yearlevel);
