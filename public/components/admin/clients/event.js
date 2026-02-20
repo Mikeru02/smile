@@ -39,6 +39,16 @@ export default async function Event() {
                 }
             );
             console.log('Event: Received client data:', clientData.data);
+            
+            // Populate modal with client data
+            const client = clientData.data.data;
+            document.getElementById('client-name').textContent = client.name || 'N/A';
+            document.getElementById('client-email').textContent = client.email || 'N/A';
+            document.getElementById('client-phone').textContent = client.phone || 'N/A';
+            document.getElementById('client-address').textContent = client.address || 'N/A';
+            document.getElementById('client-status').textContent = client.status || 'N/A';
+            document.getElementById('client-created').textContent = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
+            
             document.getElementById('modal').style.display = 'block';
         });
     });
