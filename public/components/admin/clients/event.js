@@ -43,13 +43,21 @@ export default async function Event() {
             // Populate modal with client data
             const client = clientData.data.data;
             console.log("CLIENT: ", client.waste_collected);
-            document.getElementById('client-name').textContent = client.name || 'N/A';
-            document.getElementById('client-ip').textContent = client.ip || 'N/A';
-            document.getElementById('client-status').textContent = client.status || 'N/A';
-            document.getElementById('client-timeEarned').textContent = client.time_earned || 0;
-            document.getElementById('client-timeRemaining').textContent = client.time_remaining || 0;
-            document.getElementById('client-wasteCollected').textContent = client.waste_collected || 0;
-            document.getElementById('client-createdAt').textContent = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
+            
+            // Check if elements exist before setting values
+            const nameElement = document.getElementById('client-name');
+            const statusElement = document.getElementById('client-status');
+            const timeEarnedElement = document.getElementById('client-timeEarned');
+            const timeRemainingElement = document.getElementById('client-timeRemaining');
+            const wasteCollectedElement = document.getElementById('client-wasteCollected');
+            const createdAtElement = document.getElementById('client-createdAt');
+            
+            if (nameElement) nameElement.value = client.name || '';
+            if (statusElement) statusElement.value = client.status || 'active';
+            if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
+            if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;
+            if (wasteCollectedElement) wasteCollectedElement.value = client.waste_collected || 0;
+            if (createdAtElement) createdAtElement.value = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
 
             document.getElementById('modal').style.display = 'block';
             
