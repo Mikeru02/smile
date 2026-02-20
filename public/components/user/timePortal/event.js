@@ -1,9 +1,14 @@
 import axios from 'axios';
 import SocketClient from '../../../sockets/socketClient.js';
 import { renderEarnTime, renderTimeRemaining } from '../../../utils/render.js';
-import  BGIMG from '/icons/bgimg.svg';
+import checkToken from '../../../utils/checkToken.js';
 
 export default async function Events() {
+    const validToken = checkToken(localStorage.getItem('token'));
+    if (!validToken) {
+        window.app.pushRoute('/');
+    }
+    
     const socketClient = new SocketClient();
 
     // document.body.style.backgroundImage = `url('${BGIMG}')`;

@@ -21,6 +21,19 @@ class Client {
         }
     }
 
+    async verfyClient(ip, name) {
+        try {
+            const [result, ] = await this.db.execute(
+                'SELECT * FROM clients WHERE ip=? AND name=?',
+                [ip, name]
+            );
+            return result;
+        } catch (err) {
+            console.error("[ERROR] client.verfyClient", err);
+            throw err;
+        }
+    }
+
     async firstAuthenticate(ip) {
         try {
             const clientData = await this.getClientByIP(ip);
