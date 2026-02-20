@@ -43,65 +43,23 @@ export default async function Event() {
             // Populate modal with client data
             const client = clientData.data.data;
             console.log("CLIENT: ", client.waste_collected);
-            console.log("Client status:", client.status);
-            
             document.getElementById('client-name').textContent = client.name || 'N/A';
             document.getElementById('client-ip').textContent = client.ip || 'N/A';
-            
-            // Set status dropdown to current client status
-            const statusSelect = document.getElementById('client-status');
-            console.log("Setting status to:", client.status || 'active');
-            statusSelect.value = client.status || 'active';
-            console.log("Status select value after setting:", statusSelect.value);
-            
-            document.getElementById('client-timeEarned').value = client.time_earned || 0;
-            document.getElementById('client-timeRemaining').value = client.time_remaining || 0;
+            document.getElementById('client-status').textContent = client.status || 'N/A';
+            document.getElementById('client-timeEarned').textContent = client.time_earned || 0;
+            document.getElementById('client-timeRemaining').textContent = client.time_remaining || 0;
             document.getElementById('client-wasteCollected').textContent = client.waste_collected || 0;
             document.getElementById('client-createdAt').textContent = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
 
-            // Show modal
-            const modal = document.getElementById('modal');
-            console.log("Modal element:", modal);
-            modal.style.display = 'block';
-            console.log("Modal display style:", modal.style.display);
+            document.getElementById('modal').style.display = 'block';
             
             // Add event listeners for modal buttons
             document.getElementById('exit').addEventListener('click', () => {
                 document.getElementById('modal').style.display = 'none';
             });
             
-            document.getElementById('proceed').addEventListener('click', async () => {
-                // Get updated values from editable fields
-                const updatedData = {
-                    status: document.getElementById('client-status').value,
-                    time_earned: parseInt(document.getElementById('client-timeEarned').value) || 0,
-                    time_remaining: parseInt(document.getElementById('client-timeRemaining').value) || 0
-                };
-                
-                try {
-                    // Send update request to API
-                    await axios.put(
-                        `/api/v1/client/client/${button.dataset.id}`,
-                        updatedData,
-                        {
-                            headers: {
-                                "Content-Type": "application/json",
-                                "apikey": import.meta.env.VITE_SRC_KEY,
-                                "token": localStorage.getItem('token')
-                            }
-                        }
-                    );
-                    console.log('Client updated successfully:', updatedData);
-                    
-                    // Refresh the table to show updated data
-                    await Event();
-                    
-                    // Close modal
-                    document.getElementById('modal').style.display = 'none';
-                } catch (error) {
-                    console.error('Error updating client:', error);
-                    alert('Failed to update client. Please try again.');
-                }
+            document.getElementById('proceed').addEventListener('click', () => {
+                document.getElementById('modal').style.display = 'none';
             });
         });
     });
