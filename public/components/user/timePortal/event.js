@@ -63,14 +63,23 @@ export default async function Events() {
         const isInternetUp = await checkInternetConnection();
         const isTimeZero = timeRemainingSeconds <= 0;
         
+        console.log('[DEBUG] Button state check:', {
+            isInternetUp,
+            timeRemainingSeconds,
+            isTimeZero,
+            shouldDisable: isTimeZero || !isInternetUp
+        });
+        
         if (isTimeZero || !isInternetUp) {
             connect.disabled = true;
             connect.style.opacity = '0.5';
             connect.style.cursor = 'not-allowed';
+            console.log('[DEBUG] Button disabled');
         } else {
             connect.disabled = false;
             connect.style.opacity = '1';
             connect.style.cursor = 'pointer';
+            console.log('[DEBUG] Button enabled');
         }
     };
     
