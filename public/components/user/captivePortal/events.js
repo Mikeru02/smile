@@ -59,6 +59,7 @@ export default async function Events() {
                 }
             }
         );
+        console.log(response.data);
 
         if (response.data.success == 'true') {
             localStorage.setItem('token', response.data.data.token);
