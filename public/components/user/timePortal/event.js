@@ -10,6 +10,7 @@ export default async function Events() {
     }
     
     const socketClient = new SocketClient();
+    socketClient.connect();
 
     const modal = document.getElementById('modal');
 
@@ -27,12 +28,11 @@ export default async function Events() {
     
     const timeEarned = 10;
 
-    // Time Remaining Intervals
+    // Time Remaining - managed by socket
     let timeRemainingSeconds = 0;
-    let timeRemainingInterval = null;
+    let isConnected = false;
 
     const connect = document.getElementById('connect');
-    let isConnected = false;
 
     // --- Internet Check (once) ---
     let isInternetUp = false;
@@ -59,6 +59,25 @@ export default async function Events() {
 
     await checkInternetConnection(); // call once on load
 
+    // Socket listeners for time updates
+    socketClient.on('TIME_UPDATE', (data) => {
+        if (isConnected) {
+            timeRemainingSeconds = data.time_remaining;
+            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+            updateConnectButtonState();
+        }
+    });
+
+    socketClient.on('TIME_EXPIRED', (data) => {
+        if (isConnected) {
+            connect.textContent = 'Connect';
+            isConnected = false;
+            timeRemainingSeconds = 0;
+            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+            updateConnectButtonState();
+        }
+    });
+
     const updateConnectButtonState = () => {
         const isTimeZero = timeRemainingSeconds <= 0;
 
@@ -78,7 +97,6 @@ export default async function Events() {
             connect.textContent = 'Pause';
             isConnected = true;
 
-            startTime();
             await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
                 {},
@@ -92,9 +110,7 @@ export default async function Events() {
             );
         } else {
             connect.textContent = 'Connect';
-            clearInterval(timeRemainingInterval);
             isConnected = false;
-            timeRemainingInterval = null;
 
             await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
@@ -200,7 +216,7 @@ export default async function Events() {
 
     const getActualTimeRemaining = async () => {
         const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`,
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/calculated`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -251,44 +267,21 @@ export default async function Events() {
         isRunning = false;
     };
 
-    const startTime = () => {
-        if (timeRemainingInterval) return;
-        timeRemainingInterval = setInterval(async () => {
-            if (!isConnected) return;
-
-            if (timeRemainingSeconds <= 0) {
-                clearInterval(timeRemainingInterval);
-                timeRemainingInterval = null;
-                await axios.patch(
-                    `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
-                    {},
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'apikey': import.meta.env.VITE_SRC_KEY,
-                            'token': localStorage.getItem('token')
-                        }
-                    }
-                );
-                connect.textContent = 'Connect';
-                isConnected = false;
-                return;
-            }
-
-            timeRemainingSeconds -= 1;
-            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
-            updateConnectButtonState();
-        }, 1000);
-    };
-
     await updateTimeRemaining(); // initialize
     updateConnectButtonState();  // initial button state
     
     // Check and restore connection state if client is still active
     const clientData = await getClientStatus();
-    if (clientData.status === 'active' && timeRemainingSeconds > 0) {
-        isConnected = true;
-        connect.textContent = 'Pause';
-        startTime(); // Restart the timer
+    if (clientData.status === 'active') {
+        // Get the actual calculated time remaining
+        const actualTimeRemaining = await getActualTimeRemaining();
+        timeRemainingSeconds = actualTimeRemaining;
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+        
+        if (timeRemainingSeconds > 0) {
+            isConnected = true;
+            connect.textContent = 'Pause';
+            // Socket will handle time updates automatically
+        }
     }
 }

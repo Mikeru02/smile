@@ -1,45 +1,11 @@
 import axios from 'axios';
 
 export default function startTimeDeductor() {
-    console.log(`[RUNNING] Time deductor started (30s Interval)`);
-
-    setInterval(async () => {
-        await axios.patch(
-            `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/${process.env.SRC_ROUTE_VERSION}/client/all`, 
-            {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': process.env.API_KEY
-                }
-            }
-        )
-
-        const response = await axios.get(
-            `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/${process.env.SRC_ROUTE_VERSION}/client/outOfTime`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': process.env.API_KEY
-                }
-            }
-        )
-
-        const clients = response.data.data;
-
-        for (const client of clients) {
-            await axios.patch(
-                `http://${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_ROUTE_VERSION}/client/revoke`,
-                {},
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': process.env.API_KEY
-                    }
-                }
-            )
-        }
-
-
-    }, 30000);
+    console.log(`[DISABLED] Time deductor disabled - using socket-based time deduction`);
+    
+    // Worker disabled - time deduction now handled by socket server
+    // Keeping this file for reference but it's no longer needed
+    
+    // Old implementation (disabled):
+    // setInterval(async () => { ... }, 10000);
 }

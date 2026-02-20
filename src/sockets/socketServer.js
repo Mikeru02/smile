@@ -1,4 +1,5 @@
 import { Server } from 'socket.io';
+import Client from '../models/v1/client.js';
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi }) {
@@ -9,6 +10,8 @@ class SocketServer {
 
         this.io = null;
         this.activeClient = null;
+        this.client = new Client();
+        this.timeDeductionInterval = null;
 
         this.onArduinoData = this.onArduinoData.bind(this);
     }
@@ -25,8 +28,50 @@ class SocketServer {
 
         this.registerSocketEvents();
         this.registerArduinoEvents();
+        this.startTimeDeduction();
 
         return this.io;
+    }
+
+    startTimeDeduction() {
+        console.log('[SOCKET] Time deduction started (1s interval)');
+        
+        this.timeDeductionInterval = setInterval(async () => {
+            try {
+                const [clients] = await this.client.db.execute(
+                    "SELECT ip, time_remaining, connection_start_at FROM clients WHERE status='active' AND time_remaining > 0",
+                    []
+                );
+
+                for (const client of clients) {
+                    const newTimeRemaining = await this.client.updateClientTime(client.ip);
+                    
+                    // Emit time update to all connected sockets for this client
+                    this.io.emit('TIME_UPDATE', {
+                        ip: client.ip,
+                        time_remaining: newTimeRemaining,
+                        old_time: client.time_remaining
+                    });
+
+                    // Update database with new time
+                    if (newTimeRemaining <= 0) {
+                        await this.client.updateClientStatus(client.ip, 'outOfTime');
+                        await this.client.db.execute(
+                            "UPDATE clients SET connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=?",
+                            [null, 0, client.ip]
+                        );
+                        this.io.emit('TIME_EXPIRED', { ip: client.ip });
+                    } else {
+                        await this.client.db.execute(
+                            'UPDATE clients SET time_remaining=?, updated_at=NOW() WHERE ip=?',
+                            [newTimeRemaining, client.ip]
+                        );
+                    }
+                }
+            } catch (error) {
+                console.error('[SOCKET] Time deduction error:', error);
+            }
+        }, 1000);
     }
 
     registerSocketEvents() {
