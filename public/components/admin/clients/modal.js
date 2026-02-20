@@ -39,7 +39,7 @@ export default function Modal() {
                         </div>
                         <div class="${styles['form-group']}">
                             <label for="client-wasteCollected">Waste Collected</label>
-                            <input type="text" id="client-wasteCollected" class="${styles['form-input']}" placeholder="Enter waste collected">
+                            <input type="text" id="client-wasteCollected" class="${styles['form-input']}" readonly>
                         </div>
                         <div class="${styles['form-group']}">
                             <label for="client-createdAt">Created At</label>
