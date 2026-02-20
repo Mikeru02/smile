@@ -62,7 +62,7 @@ class Model {
         
         // Fail-safe: if category is null or undefined, return default values
         if (!category) {
-            return { category: "general waste", earnedTime: 10 };
+            return { category: "general waste", wasteCode: "GWST", earnedTime: 10 };
         }
         
         const timeEarned = this.timeMap[category] ?? 0;
