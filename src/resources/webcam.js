@@ -1,50 +1,65 @@
-import { spawn } from "child_process";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import fs from "fs";
+import path from "path";
+import V4L2Camera from "v4l2camera";
 
 class Webcam {
     constructor() {
         this.device = process.env.DEVICE || "/dev/video1";
-        this.width = process.env.WIDTH || 512;
-        this.height = process.env.HEIGHT || 384;
-        this.format = process.env.FORMAT || "mjpeg";
-        this.frames = process.env.FRAMES || 1;
-        this.outputFolder = join(__dirname, '../captures');
+        this.width = parseInt(process.env.WIDTH) || 1920;
+        this.height = parseInt(process.env.HEIGHT) || 1080;
+        this.outputFolder = path.join(process.cwd(), 'captures');
+
+        if (!fs.existsSync(this.outputFolder)) {
+            fs.mkdirSync(this.outputFolder, { recursive: true });
+        }
+
+        // Open camera persistently
+        this.cam = new V4L2Camera(this.device);
+
+        if (!this.cam.configGet().formatName.includes("MJPG")) {
+            throw new Error("Camera does not support MJPEG format!");
+        }
+
+        this.cam.configSet({
+            width: this.width,
+            height: this.height,
+            pixelFormat: "MJPG"
+        });
+
+        this.cam.start(); // Start streaming persistently
     }
 
     getFilePath(filename = "last_capture.jpg") {
-        return join(this.outputFolder, filename);
+        return path.join(this.outputFolder, filename);
     }
 
+    /**
+     * Capture a single frame as MJPEG and save to file
+     * Very fast because the camera is already streaming
+     */
     capture(filename = "last_capture.jpg") {
-        const filePath = this.getFilePath(filename);
-
         return new Promise((resolve, reject) => {
-            const ffmpeg = spawn("ffmpeg", [
-                "-y", // overwrite
-                "-f", "v4l2",
-                "-i", this.device,
-                "-frames:v", `${this.frames}`,
-                filePath,
-            ]);
+            const filePath = this.getFilePath(filename);
 
-            ffmpeg.stderr.on("data", (data) => {}   );
-            ffmpeg.stdout.on("data", (data) => {});
+            this.cam.capture((success) => {
+                if (!success) return reject(new Error("Failed to capture frame"));
 
-            ffmpeg.on("close", (code) => {
-                if (code === 0) {
-                    console.log("Image captured at:", filePath);
+                const frame = this.cam.toBuffer(); // MJPEG buffer
+                fs.writeFile(filePath, frame, (err) => {
+                    if (err) return reject(err);
+                    console.log("Captured frame at:", filePath);
                     resolve(filePath);
-                } else {
-                    reject(new Error(`FFmpeg exited with code ${code}`));
-                }
+                });
             });
-
-            ffmpeg.on("error", (err) => reject(err));
         });
+    }
+
+    /**
+     * Stop the camera when shutting down
+     */
+    stop() {
+        this.cam.stop();
+        console.log("Camera stopped");
     }
 }
 
