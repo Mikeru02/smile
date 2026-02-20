@@ -107,8 +107,6 @@ export default async function Events() {
                     }
                 }
             );
-
-            updateTimeRemaining();
         }
     });
 
