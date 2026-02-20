@@ -29,11 +29,11 @@ export default function Modal() {
                             </select>
                         </div>
                         <div class="${styles['form-group']}">
-                            <label for="client-timeRemaining">Time Remaining</label>
+                            <label for="client-timeRemaining">Time Remaining (in Seconds)</label>
                             <input type="text" id="client-timeRemaining" class="${styles['form-input']}" placeholder="Enter time remaining">
                         </div>
                         <div class="${styles['form-group']}">
-                            <label for="client-timeEarned">Time Earned</label>
+                            <label for="client-timeEarned">Time Earned (in Seconds)</label>
                             <input type="text" id="client-timeEarned" class="${styles['form-input']}" placeholder="Enter time earned">
                         </div>
                         <div class="${styles['form-group']}">
