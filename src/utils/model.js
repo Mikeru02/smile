@@ -44,14 +44,11 @@ class Model {
                 }
             }
         );
-        console.log(result.data);
         return result.data.prediction;
     }
 
     async earnedTime() {
-        console.log("HIT FUNCTION")
         const prediction = await this.predict();
-        console.log(prediction);
         if (!prediction[0]) {
             return { category: null, earnedTime: 10}
         };
