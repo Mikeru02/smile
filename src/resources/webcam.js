@@ -1,32 +1,40 @@
+import { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
-import V4L2Camera from "v4l2camera";
 
 class Webcam {
-    constructor() {
-        this.device = process.env.DEVICE || "/dev/video1";
-        this.width = parseInt(process.env.WIDTH) || 1920;
-        this.height = parseInt(process.env.HEIGHT) || 1080;
+    constructor(device = "/dev/video1", width = 1920, height = 1080) {
+        this.device = device;
+        this.width = width;
+        this.height = height;
         this.outputFolder = path.join(process.cwd(), 'captures');
+        this.frameBuffer = Buffer.alloc(0);
 
         if (!fs.existsSync(this.outputFolder)) {
             fs.mkdirSync(this.outputFolder, { recursive: true });
         }
 
-        // Open camera persistently
-        this.cam = new V4L2Camera(this.device);
+        // Spawn v4l2-ctl in persistent streaming mode
+        this.proc = spawn("v4l2-ctl", [
+            "--device", this.device,
+            "--stream-mmap",
+            "--stream-count=0",           // stream indefinitely
+            "--stream-to=-",               // output to stdout
+            `--set-fmt-video=width=${this.width},height=${this.height},pixelformat=MJPG`
+        ]);
 
-        if (!this.cam.configGet().formatName.includes("MJPG")) {
-            throw new Error("Camera does not support MJPEG format!");
-        }
-
-        this.cam.configSet({
-            width: this.width,
-            height: this.height,
-            pixelFormat: "MJPG"
+        this.proc.stdout.on("data", (chunk) => {
+            // accumulate incoming MJPEG data
+            this.frameBuffer = Buffer.concat([this.frameBuffer, chunk]);
         });
 
-        this.cam.start(); // Start streaming persistently
+        this.proc.stderr.on("data", (data) => {
+            console.error("v4l2-ctl error:", data.toString());
+        });
+
+        this.proc.on("close", (code) => {
+            console.log("v4l2-ctl exited with code", code);
+        });
     }
 
     getFilePath(filename = "last_capture.jpg") {
@@ -34,31 +42,37 @@ class Webcam {
     }
 
     /**
-     * Capture a single frame as MJPEG and save to file
-     * Very fast because the camera is already streaming
+     * Capture a single full MJPEG frame
      */
-    capture(filename = "last_capture.jpg") {
+    async capture(filename = "last_capture.jpg") {
+        const filePath = this.getFilePath(filename);
+
         return new Promise((resolve, reject) => {
-            const filePath = this.getFilePath(filename);
+            const tryFrame = () => {
+                const start = this.frameBuffer.indexOf(Buffer.from([0xFF, 0xD8])); // SOI
+                const end = this.frameBuffer.indexOf(Buffer.from([0xFF, 0xD9]));   // EOI
 
-            this.cam.capture((success) => {
-                if (!success) return reject(new Error("Failed to capture frame"));
+                if (start !== -1 && end !== -1 && end > start) {
+                    const frame = this.frameBuffer.slice(start, end + 2);
+                    this.frameBuffer = this.frameBuffer.slice(end + 2);
 
-                const frame = this.cam.toBuffer(); // MJPEG buffer
-                fs.writeFile(filePath, frame, (err) => {
-                    if (err) return reject(err);
-                    console.log("Captured frame at:", filePath);
-                    resolve(filePath);
-                });
-            });
+                    fs.writeFile(filePath, frame, (err) => {
+                        if (err) return reject(err);
+                        console.log("Captured frame at:", filePath);
+                        resolve(filePath);
+                    });
+                } else {
+                    // no full frame yet, try again shortly
+                    setTimeout(tryFrame, 10);
+                }
+            };
+
+            tryFrame();
         });
     }
 
-    /**
-     * Stop the camera when shutting down
-     */
     stop() {
-        this.cam.stop();
+        if (this.proc) this.proc.kill();
         console.log("Camera stopped");
     }
 }
