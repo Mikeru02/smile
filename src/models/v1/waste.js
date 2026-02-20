@@ -10,7 +10,7 @@ class Waste {
             console.log("WASTE DEBUG: ", client_id, waste_code, quantity, earned_time);
             const [result] = await this.db.execute(
                 'INSERT INTO waste_transactions (client_id, waste_code, quantity, earned_time, transaction_date) VALUES (?, ?, ?, ?, NOW())',
-                [client_id, waste_code, quantity, earned_time, transaction_date]
+                [client_id, waste_code, quantity, earned_time]
             );
             return result;
         } catch(err) {
