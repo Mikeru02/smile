@@ -57,8 +57,13 @@ export default function Modal() {
                                     </svg>
                                 </div>
                                 <div class="${styles['detail-content']}">
-                                    <label class="${styles['detail-label']}">Status</label>
-                                    <span class="${styles['status-badge']}" id="client-status"></span>
+                                    <label class="${styles['detail-label']}" for="client-status">Status</label>
+                                    <select class="${styles['detail-input']} ${styles['status-select']}" id="client-status">
+                                        <option value="active">Active</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="dropping">Dropping</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -72,8 +77,8 @@ export default function Modal() {
                                     </svg>
                                 </div>
                                 <div class="${styles['detail-content']}">
-                                    <label class="${styles['detail-label']}">Time Remaining</label>
-                                    <span class="${styles['detail-value']}" id="client-timeRemaining"></span>
+                                    <label class="${styles['detail-label']}" for="client-timeRemaining">Time Remaining</label>
+                                    <input type="number" class="${styles['detail-input']}" id="client-timeRemaining" min="0" step="1">
                                 </div>
                             </div>
                             
@@ -84,8 +89,8 @@ export default function Modal() {
                                     </svg>
                                 </div>
                                 <div class="${styles['detail-content']}">
-                                    <label class="${styles['detail-label']}">Time Earned</label>
-                                    <span class="${styles['detail-value']}" id="client-timeEarned"></span>
+                                    <label class="${styles['detail-label']}" for="client-timeEarned">Time Earned</label>
+                                    <input type="number" class="${styles['detail-input']}" id="client-timeEarned" min="0" step="1">
                                 </div>
                             </div>
                         </div>
