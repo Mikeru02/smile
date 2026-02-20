@@ -1,12 +1,16 @@
 import styles from './component.module.css';
-import ILLUSTRATION1 from '../../../icons/photographer.svg';
+import ILLUSTRATION1 from '../../../icons/details.svg';
 
 export default function Modal() {
     const modal = `
         <div class="${styles['modal']}" id="modal">
             <div class="${styles['modal-content']}">
                 <div class="${styles['top-container']}">
-                    <h1>Client Details</h1>
+                    <img src="${ILLUSTRATION1}">
+                    <div class="${styles['top-container-text']}">
+                        <h1>Client Details</h1>
+                        <p>Manage and View Client Information</p>
+                    </div>
                 </div>
                 <div class="${styles['center-container']}">
                     <div id="client-details">
