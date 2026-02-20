@@ -184,34 +184,6 @@ export default async function Events() {
         updateConnectButtonState();
     };
 
-    const getClientStatus = async () => {
-        const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
-        return response.data.data;
-    };
-
-    const getActualTimeRemaining = async () => {
-        const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/calculated`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
-        return response.data.data.time_remaining;
-    };
-
     const updateEarnedTimeDisplay = async () => {
         const response = await axios.get(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`,
@@ -283,19 +255,4 @@ export default async function Events() {
 
     await updateTimeRemaining(); // initialize
     updateConnectButtonState();  // initial button state
-    
-    // Check and restore connection state if client is still active
-    const clientData = await getClientStatus();
-    if (clientData.status === 'active') {
-        // Get the actual calculated time remaining
-        const actualTimeRemaining = await getActualTimeRemaining();
-        timeRemainingSeconds = actualTimeRemaining;
-        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
-        
-        if (timeRemainingSeconds > 0) {
-            isConnected = true;
-            connect.textContent = 'Pause';
-            startTime(); // Restart the timer
-        }
-    }
 }
