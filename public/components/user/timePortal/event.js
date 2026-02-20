@@ -52,15 +52,25 @@ export default async function Events() {
                     }
                 }
             );
-            return response.data.success && response.data.data.internet;
+            console.log('[DEBUG] Dashboard response:', response.data);
+            const internetStatus = response.data.success && response.data.data.internet;
+            console.log('[DEBUG] Internet status:', internetStatus);
+            return internetStatus;
         } catch (error) {
+            console.log('[DEBUG] Internet check error:', error);
             return false;
         }
     };
     
     // Update connect button state
     const updateConnectButtonState = async () => {
-        const isInternetUp = await checkInternetConnection();
+        let isInternetUp = false;
+        try {
+            isInternetUp = await checkInternetConnection();
+        } catch (error) {
+            console.log('[DEBUG] Error in updateConnectButtonState:', error);
+            isInternetUp = false;
+        }
         const isTimeZero = timeRemainingSeconds <= 0;
         
         console.log('[DEBUG] Button state check:', {
