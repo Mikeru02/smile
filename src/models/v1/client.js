@@ -120,24 +120,14 @@ class Client {
 
     async getClientByID(id) {
         try {
-            const [clientResult, ] = await this.db.execute(
+            const [result, ] = await this.db.execute(
                 'SELECT * FROM clients WHERE id=?',
                 [id]
             );
-            
-            // Get total waste from transactions
-            const [wasteResult, ] = await this.db.execute(
-                'SELECT SUM(quantity) as total_waste, SUM(earned_time) as total_time FROM waste_transactions WHERE client_id=?',
-                [id]
-            );
-            
-            const client = clientResult?.[0];
-            if (client) {
-                client.calculated_waste_collected = wasteResult[0]?.total_waste || 0;
-                client.calculated_time_earned = wasteResult[0]?.total_time || 0;
-            }
-            
-            return client;
+
+            const wasteCount = await this.waste.getTrashTransactionsByClient(id);
+            result[0].waste_collected = wasteCount[0].count;
+            return result?.[0];
         } catch (err) {
             console.error("[ERROR] client.getClientByID", err);
             throw err;

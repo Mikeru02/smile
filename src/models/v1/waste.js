@@ -31,6 +31,19 @@ class Waste {
             throw err;
         }
     }
+
+    async getTrashTransactionsByClient(client_id) {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) as count FROM waste_transactions WHERE client_id=?',
+                [client_id]
+            );
+            return result;
+        } catch(err) {
+            console.error("[ERROR] waste.getTrashTransactionsByClient", err);
+            throw err;
+        }
+    }
 }
 
 export default Waste;

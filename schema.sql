@@ -27,7 +27,6 @@ CREATE TABLE `clients`(
     `time_remaining` BIGINT DEFAULT 0,
     `time_earned` BIGINT DEFAULT 0,
     `connection_start_at` DATETIME DEFAULT NULL,
-    `waste_collected` INT DEFAULT 0,
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
