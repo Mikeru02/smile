@@ -289,7 +289,7 @@ class Client {
         }
     }
 
-    async checkInternet() {
+    async checkInternetConnection() {
         try {
             return {
                 internet: checkInternet()

@@ -9,7 +9,7 @@ const client = new ClientController();
 clientRouter.use(authorization);
 
 // Get Methods
-clientRouter.get('/check-internet', authentication, client.checkInternet.bind(client));
+clientRouter.get('/check-internet', authentication, client.checkInternetConnection.bind(client));
 clientRouter.get('/all-clients', client.getAllClients.bind(client));
 clientRouter.get('/outOfTime', client.getAllOutOfTimeClients.bind(client));
 clientRouter.get('/status/:status', authentication, client.getAllClientByStatus.bind(client));
