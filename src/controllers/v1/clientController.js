@@ -21,7 +21,7 @@ class ClientController {
 
             // Check client if it is existing in db
             const existingClientData = await this.client.verfyClient(ip, name);
-
+            console.log("Existing data: ", existingClientData)
             if (existingClientData) {
                 return res.status(200).json({
                     success: true,
