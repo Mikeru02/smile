@@ -1,11 +1,14 @@
 import axios from "axios";
-import BGIMG from "/icons/bgimg.svg";
+import checkToken from "../../../utils/checkToken.js";
 import { validateForm } from "../../../utils/validateInput.js";
 import { populateSelect } from "../../../utils/populateSelect.js";
 import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
 export default async function Events() {
-    // document.body.style.backgroundImage = `url('${BGIMG}')`;
+    const validToken = checkToken(localStorage.getItem('token'));
+    if (!validToken) {
+        window.location.href = '/login';
+    }
 
     const courseSelect = document.getElementById('course');
     const yearSelect = document.getElementById('yearlvl');
