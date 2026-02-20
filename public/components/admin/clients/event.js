@@ -46,9 +46,9 @@ export default async function Event() {
             document.getElementById('client-name').textContent = client.name || 'N/A';
             document.getElementById('client-ip').textContent = client.ip || 'N/A';
             document.getElementById('client-status').textContent = client.status || 'N/A';
-            document.getElementById('client-timeEarned').textContent = client.time_earned || 'N/A';
-            document.getElementById('client-timeRemaining').textContent = client.time_remaining || 'N/A';
-            document.getElementById('client-wasteCollected').textContent = client.waste_collected ? new Date(client.created_at).toLocaleDateString() : 'N/A';
+            document.getElementById('client-timeEarned').textContent = client.time_earned || 0;
+            document.getElementById('client-timeRemaining').textContent = client.time_remaining || 0;
+            document.getElementById('client-wasteCollected').textContent = client.waste_collected || 0;
             document.getElementById('client-createdAt').textContent = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
 
             document.getElementById('modal').style.display = 'block';
