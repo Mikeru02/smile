@@ -42,7 +42,7 @@ export default async function Event() {
             
             // Populate modal with client data
             const client = clientData.data.data;
-            console.log("CLIENT: ", client);
+            console.log("CLIENT: ", client.waste_collected);
             document.getElementById('client-name').textContent = client.name || 'N/A';
             document.getElementById('client-ip').textContent = client.ip || 'N/A';
             document.getElementById('client-status').textContent = client.status || 'N/A';
