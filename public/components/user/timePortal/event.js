@@ -11,8 +11,6 @@ export default async function Events() {
     
     const socketClient = new SocketClient();
 
-    // document.body.style.backgroundImage = `url('${BGIMG}')`;
-
     const modal = document.getElementById('modal');
 
     // Time Containers
@@ -25,33 +23,20 @@ export default async function Events() {
 
     // Earn Intervals
     let earnInterval = null;
-    let timeEarnedResInterval = null;
     let isRunning = false;
     
-    //console.log("TIMEEARNEDRES", timeEarnedRes)
     const timeEarned = 10;
 
     // Time Remaining Intervals
     let timeRemainingSeconds = 0;
     let timeRemainingInterval = null;
 
-    
     const connect = document.getElementById('connect');
     let isConnected = false;
-    
-    // Check internet connectivity using the same method as admin dashboard
-    let lastInternetCheck = 0;
-    let cachedInternetStatus = false;
-    const INTERNET_CHECK_INTERVAL = 10000; // Check every 10 seconds
-    
+
+    // --- Internet Check (once) ---
+    let isInternetUp = false;
     const checkInternetConnection = async () => {
-        const now = Date.now();
-        
-        // Return cached status if we checked recently
-        if (now - lastInternetCheck < INTERNET_CHECK_INTERVAL) {
-            return cachedInternetStatus;
-        }
-        
         try {
             const response = await axios.get(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/check-internet`,
@@ -63,28 +48,20 @@ export default async function Events() {
                     }
                 }
             );
-            cachedInternetStatus = response.data.success && response.data.data.internet;
-            lastInternetCheck = now;
-            return cachedInternetStatus;
+            isInternetUp = response.data.success && response.data.data.internet;
+            return isInternetUp;
         } catch (error) {
             console.log('[DEBUG] Internet check error:', error);
-            cachedInternetStatus = false;
-            lastInternetCheck = now;
+            isInternetUp = false;
             return false;
         }
     };
-    
-    // Update connect button state
-    const updateConnectButtonState = async () => {
-        let isInternetUp = false;
-        try {
-            isInternetUp = await checkInternetConnection();
-        } catch (error) {
-            console.log('[DEBUG] Error in updateConnectButtonState:', error);
-            isInternetUp = false;
-        }
+
+    await checkInternetConnection(); // call once on load
+
+    const updateConnectButtonState = () => {
         const isTimeZero = timeRemainingSeconds <= 0;
-        
+
         if (isTimeZero || !isInternetUp) {
             connect.disabled = true;
             connect.style.opacity = '0.5';
@@ -95,7 +72,7 @@ export default async function Events() {
             connect.style.cursor = 'pointer';
         }
     };
-    
+
     connect.addEventListener('click', async function() {
         if (!isConnected) {
             connect.textContent = 'Pause';
@@ -112,7 +89,6 @@ export default async function Events() {
                         'token': localStorage.getItem('token')
                     }
                 }
-
             );
         } else {
             connect.textContent = 'Connect';
@@ -120,7 +96,6 @@ export default async function Events() {
             isConnected = false;
             timeRemainingInterval = null;
 
-            // Call disconnect function from main server
             await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
                 {},
@@ -143,15 +118,15 @@ export default async function Events() {
         updateEarnedTimeDisplay();
         socketClient.connect();
         socketClient.on('connect', () => {
-            console.log('[SOCKET] connected, waiting for events')
+            console.log('[SOCKET] connected, waiting for events');
             socketClient.emit('DROPPING');
             socketClient.on('ARDUINO:SONAR', (data) => {
                 console.log('SONAR DETECTED', data);
             });
             socketClient.on("EARN", ({earnedTime, wasteCode}) => {
                 earn(earnedTime, wasteCode);
-            })
-        })
+            });
+        });
     });
 
     const exit = document.getElementById('exit');
@@ -159,9 +134,9 @@ export default async function Events() {
         socketClient.disconnect();
         modal.style.display = 'none';
         clearInterval(earnInterval);
-        const response = await axios.patch(
+        await axios.patch(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
-            { status: 'pending' }, 
+            { status: 'pending' },
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -180,7 +155,7 @@ export default async function Events() {
         clearInterval(earnInterval);
         await axios.post(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/add-time`,
-            {}, 
+            {},
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -195,7 +170,7 @@ export default async function Events() {
 
     const updateTimeRemaining = async () => {
         const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`, 
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -205,14 +180,13 @@ export default async function Events() {
             }
         );
         timeRemainingSeconds = response.data.data.time_remaining;
-        const timeRemaining = response.data.data.time_remaining;
-        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemaining)
-        await updateConnectButtonState();
-    }
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+        updateConnectButtonState();
+    };
 
     const updateEarnedTimeDisplay = async () => {
         const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`, 
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -225,16 +199,16 @@ export default async function Events() {
         if (!response.data.success) return;
 
         const earnedSeconds = response.data.data.time_earned;
-        console.log(earnedSeconds);
         renderEarnTime({ hoursSpan, minSpan, secSpan }, earnedSeconds);
-    }
+    };
 
     const earn = async (time, wasteCode) => {
         if (isRunning) return;
 
         isRunning = true;
 
-        await axios.post(`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`, 
+        await axios.post(
+            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`,
             { earned_time: time, waste_code: wasteCode },
             {
                 headers: {
@@ -247,7 +221,7 @@ export default async function Events() {
 
         updateEarnedTimeDisplay();
         isRunning = false;
-    }
+    };
 
     const startTime = () => {
         if (timeRemainingInterval) return;
@@ -267,7 +241,6 @@ export default async function Events() {
                             'token': localStorage.getItem('token')
                         }
                     }
-
                 );
                 connect.textContent = 'Connect';
                 isConnected = false;
@@ -276,14 +249,10 @@ export default async function Events() {
 
             timeRemainingSeconds -= 1;
             renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
-            await updateConnectButtonState();
+            updateConnectButtonState();
         }, 1000);
-    }
+    };
 
-    updateTimeRemaining();
-    
-    // Initial button state check
-    updateConnectButtonState();
-
-
+    await updateTimeRemaining(); // initialize
+    updateConnectButtonState();  // initial button state
 }
