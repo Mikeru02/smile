@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import 'dotenv/config.js';
+import 'dotenv/config';
 import Arduino from './resources/arduino.js';
 import Webcam from './resources/webcam.js';
 import apiRouter from './routes/api/index.js';
