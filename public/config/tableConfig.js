@@ -8,7 +8,6 @@ const TABLE_CONFIG = {
         { label: "Status", key: "status" },
         { label: "Registration Date", key: "created_at" },
         { label: "Time Remaining", key: "time_remaining" },
-        { label: "Waste Collected", key: "waste_collected" },
         { label: "Details", key: "details" },
     ],
     "account-management": [
