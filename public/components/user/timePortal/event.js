@@ -10,7 +10,6 @@ export default async function Events() {
     }
     
     const socketClient = new SocketClient();
-    socketClient.connect();
 
     const modal = document.getElementById('modal');
 
@@ -28,11 +27,12 @@ export default async function Events() {
     
     const timeEarned = 10;
 
-    // Time Remaining - managed by socket
+    // Time Remaining Intervals
     let timeRemainingSeconds = 0;
-    let isConnected = false;
+    let timeRemainingInterval = null;
 
     const connect = document.getElementById('connect');
+    let isConnected = false;
 
     // --- Internet Check (once) ---
     let isInternetUp = false;
@@ -59,25 +59,6 @@ export default async function Events() {
 
     await checkInternetConnection(); // call once on load
 
-    // Socket listeners for time updates
-    socketClient.on('TIME_UPDATE', (data) => {
-        if (isConnected) {
-            timeRemainingSeconds = data.time_remaining;
-            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
-            updateConnectButtonState();
-        }
-    });
-
-    socketClient.on('TIME_EXPIRED', (data) => {
-        if (isConnected) {
-            connect.textContent = 'Connect';
-            isConnected = false;
-            timeRemainingSeconds = 0;
-            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
-            updateConnectButtonState();
-        }
-    });
-
     const updateConnectButtonState = () => {
         const isTimeZero = timeRemainingSeconds <= 0;
 
@@ -97,6 +78,7 @@ export default async function Events() {
             connect.textContent = 'Pause';
             isConnected = true;
 
+            startTime();
             await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
                 {},
@@ -110,7 +92,9 @@ export default async function Events() {
             );
         } else {
             connect.textContent = 'Connect';
+            clearInterval(timeRemainingInterval);
             isConnected = false;
+            timeRemainingInterval = null;
 
             await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
@@ -267,6 +251,36 @@ export default async function Events() {
         isRunning = false;
     };
 
+    const startTime = () => {
+        if (timeRemainingInterval) return;
+        timeRemainingInterval = setInterval(async () => {
+            if (!isConnected) return;
+
+            if (timeRemainingSeconds <= 0) {
+                clearInterval(timeRemainingInterval);
+                timeRemainingInterval = null;
+                await axios.patch(
+                    `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
+                    {},
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': import.meta.env.VITE_SRC_KEY,
+                            'token': localStorage.getItem('token')
+                        }
+                    }
+                );
+                connect.textContent = 'Connect';
+                isConnected = false;
+                return;
+            }
+
+            timeRemainingSeconds -= 1;
+            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+            updateConnectButtonState();
+        }, 1000);
+    };
+
     await updateTimeRemaining(); // initialize
     updateConnectButtonState();  // initial button state
     
@@ -281,7 +295,7 @@ export default async function Events() {
         if (timeRemainingSeconds > 0) {
             isConnected = true;
             connect.textContent = 'Pause';
-            // Socket will handle time updates automatically
+            startTime(); // Restart the timer
         }
     }
 }
