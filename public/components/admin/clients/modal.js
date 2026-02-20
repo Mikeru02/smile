@@ -11,11 +11,13 @@ export default function Modal() {
                 <div class="${styles['center-container']}">
                     <div id="client-details">
                         <p><strong>Name:</strong> <span id="client-name"></span></p>
-                        <p><strong>Email:</strong> <span id="client-email"></span></p>
-                        <p><strong>Phone:</strong> <span id="client-phone"></span></p>
-                        <p><strong>Address:</strong> <span id="client-address"></span></p>
+                        <p><strong>IP:</strong> <span id="client-ip"></span></p>
                         <p><strong>Status:</strong> <span id="client-status"></span></p>
-                        <p><strong>Created At:</strong> <span id="client-created"></span></p>
+                        <p><strong>Time Remaining:</strong> <span id="client-timeRemaining"></span></p>
+                        <p><strong>Time Earned:</strong> <span id="client-timeEarned"></span></p>
+                        <p><strong>Waste Collected:</strong> <span id="client-wasteCollected"></span></p>
+                        <p><strong>Created At:</strong> <span id="client-createdAt"></span></p>
+
                     </div>
                 </div>
                 <div class="${styles['button-container']}">
