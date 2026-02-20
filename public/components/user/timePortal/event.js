@@ -38,6 +38,42 @@ export default async function Events() {
     
     const connect = document.getElementById('connect');
     let isConnected = false;
+    
+    // Check internet connectivity using the same method as admin dashboard
+    const checkInternetConnection = async () => {
+        try {
+            const response = await axios.get(
+                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/admin/dashboard`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': import.meta.env.VITE_SRC_KEY,
+                        'token': localStorage.getItem('token')
+                    }
+                }
+            );
+            return response.data.success && response.data.data.internet;
+        } catch (error) {
+            return false;
+        }
+    };
+    
+    // Update connect button state
+    const updateConnectButtonState = async () => {
+        const isInternetUp = await checkInternetConnection();
+        const isTimeZero = timeRemainingSeconds <= 0;
+        
+        if (isTimeZero || !isInternetUp) {
+            connect.disabled = true;
+            connect.style.opacity = '0.5';
+            connect.style.cursor = 'not-allowed';
+        } else {
+            connect.disabled = false;
+            connect.style.opacity = '1';
+            connect.style.cursor = 'pointer';
+        }
+    };
+    
     connect.addEventListener('click', async function() {
         if (!isConnected) {
             connect.textContent = 'Pause';
@@ -148,6 +184,7 @@ export default async function Events() {
         timeRemainingSeconds = response.data.data.time_remaining;
         const timeRemaining = response.data.data.time_remaining;
         renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemaining)
+        await updateConnectButtonState();
     }
 
     const updateEarnedTimeDisplay = async () => {
@@ -216,10 +253,14 @@ export default async function Events() {
 
             timeRemainingSeconds -= 1;
             renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+            await updateConnectButtonState();
         }, 1000);
     }
 
-    updateTimeRemaining()
+    updateTimeRemaining();
+    
+    // Initial button state check
+    updateConnectButtonState();
 
 
 }
