@@ -24,4 +24,11 @@ export default async function Event() {
 
     let headers = populateHeaders(thead, "all-client");
     populateTable(tbody, clients, headers);
+
+    const seeMore = document.querySelectorAll('#see-more');
+    seeMore.forEach(button => {
+        button.addEventListener('click', () => {
+            console.log('See more clicked');
+        });
+    });
 }

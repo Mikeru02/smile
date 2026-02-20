@@ -19,8 +19,9 @@ export function populateTable(tbody, data, headers) {
                 tdata.textContent = value;
             } else if (head.key === 'details') {
                 value = 'See more';
-                tdata.id = "see-more"
-                tdata.className = styles.seeMore;
+                tdata.classList.add('see-more');
+                tdata.classList.add(styles.seeMore);
+
                 tdata.dataset.id = row.id;
                 tdata.textContent = value;
             } else if (head.key === 'status') {
