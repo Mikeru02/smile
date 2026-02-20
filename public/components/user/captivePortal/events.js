@@ -6,8 +6,8 @@ import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
 export default async function Events() {
     const validToken = checkToken(localStorage.getItem('token'));
-    if (!validToken) {
-        window.app.pushRoute('/');
+    if (validToken) {
+        window.app.pushRoute('/portal');
     }
 
     const courseSelect = document.getElementById('course');
