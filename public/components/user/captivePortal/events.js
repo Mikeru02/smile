@@ -7,7 +7,7 @@ import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 export default async function Events() {
     const validToken = checkToken(localStorage.getItem('token'));
     if (!validToken) {
-        window.location.href = '/';
+        window.app.pushRoute = '/';
     }
 
     const courseSelect = document.getElementById('course');
