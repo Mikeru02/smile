@@ -202,7 +202,7 @@ class ClientController {
 
     async earned(req, res) {
         try {
-            const { earned_time } = req.body || {};
+            const { earned_time, waste_code } = req.body || {};
             console.log("DEBUG: ",req.body);
             if (!earned_time) {
                 return res.status(400).json({
@@ -218,7 +218,7 @@ class ClientController {
                 })
             }
 
-            await this.client.earned(res.locals.ip, convertedTime);
+            await this.client.earned(res.locals.ip, waste_code, convertedTime);
             return res.status(200).json({
                 success: true,
                 message: "Time earned is added"
