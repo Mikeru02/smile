@@ -1,4 +1,5 @@
 import Logo from '/icons/logo.svg';
+import Modal from './modal.js';
 import styles from './component.module.css';
 
 export default function Main(root){
@@ -21,6 +22,8 @@ export default function Main(root){
             </div>
             <button id="submit-credential" class="${styles["button-submit-cred"]}" disabled>SUBMIT</button>
         </div>
+        ${Modal()}
+
     `;
 
     root.className = styles["main"];

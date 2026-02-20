@@ -1,12 +1,12 @@
 import styles from './component.module.css';
 import ILLUSTRATION1 from '../../../icons/photographer.svg';
 
-export default function Modal(title) {
+export default function Modal() {
     const modal = `
         <div class="${styles['modal']}" id="modal">
             <div class="${styles['modal-content']}">
                 <div class="${styles['top-container']}">
-                    <h1>${title}</h1>
+                    <h1>Oops!</h1>
                 </div>
                 <div class="${styles['center-container']}">
                     <h1>Capturing the Trash</h1>
