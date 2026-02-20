@@ -40,7 +40,18 @@ export default async function Events() {
     let isConnected = false;
     
     // Check internet connectivity using the same method as admin dashboard
+    let lastInternetCheck = 0;
+    let cachedInternetStatus = false;
+    const INTERNET_CHECK_INTERVAL = 10000; // Check every 10 seconds
+    
     const checkInternetConnection = async () => {
+        const now = Date.now();
+        
+        // Return cached status if we checked recently
+        if (now - lastInternetCheck < INTERNET_CHECK_INTERVAL) {
+            return cachedInternetStatus;
+        }
+        
         try {
             const response = await axios.get(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/check-internet`,
@@ -52,12 +63,13 @@ export default async function Events() {
                     }
                 }
             );
-            console.log('[DEBUG] Dashboard response:', response.data);
-            const internetStatus = response.data.success && response.data.data.internet;
-            console.log('[DEBUG] Internet status:', internetStatus);
-            return internetStatus;
+            cachedInternetStatus = response.data.success && response.data.data.internet;
+            lastInternetCheck = now;
+            return cachedInternetStatus;
         } catch (error) {
             console.log('[DEBUG] Internet check error:', error);
+            cachedInternetStatus = false;
+            lastInternetCheck = now;
             return false;
         }
     };
@@ -73,23 +85,14 @@ export default async function Events() {
         }
         const isTimeZero = timeRemainingSeconds <= 0;
         
-        console.log('[DEBUG] Button state check:', {
-            isInternetUp,
-            timeRemainingSeconds,
-            isTimeZero,
-            shouldDisable: isTimeZero || !isInternetUp
-        });
-        
         if (isTimeZero || !isInternetUp) {
             connect.disabled = true;
             connect.style.opacity = '0.5';
             connect.style.cursor = 'not-allowed';
-            console.log('[DEBUG] Button disabled');
         } else {
             connect.disabled = false;
             connect.style.opacity = '1';
             connect.style.cursor = 'pointer';
-            console.log('[DEBUG] Button enabled');
         }
     };
     
