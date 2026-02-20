@@ -21,7 +21,7 @@ export default function MainContent(root) {
             
             <div class="${styles["table-footer"]}">
                 <div class="${styles["pagination-info"]}">
-                    Showing ${clients.length} of ${clients.length} clients
+                    Showing of clients
                 </div>
                 <div class="${styles["pagination-controls"]}">
                     <button class="${styles["btn-pagination"]}" id="prev-page">Previous</button>
