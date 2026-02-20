@@ -42,9 +42,6 @@ export default async function Event() {
             
             // Populate modal with client data
             const client = clientData.data.data;
-            console.log("CLIENT: ", client.waste_collected);
-            console.log("STATUS VALUE FROM API: ", client.status);
-            console.log("STATUS TYPE: ", typeof client.status);
             
             // Check if elements exist before setting values
             const nameElement = document.getElementById('client-name');
@@ -55,11 +52,7 @@ export default async function Event() {
             const createdAtElement = document.getElementById('client-createdAt');
             
             if (nameElement) nameElement.value = client.name || '';
-            if (statusElement) {
-                console.log("Setting status to:", client.status);
-                statusElement.value = client.status || 'active';
-                console.log("Status element value after setting:", statusElement.value);
-            }
+            if (statusElement) statusElement.value = client.status || 'active';
             if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
             if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;
             if (wasteCollectedElement) wasteCollectedElement.value = client.waste_collected || 0;

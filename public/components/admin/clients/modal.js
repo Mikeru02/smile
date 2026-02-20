@@ -22,8 +22,10 @@ export default function Modal() {
                             <label for="client-status">Status</label>
                             <select id="client-status" class="${styles['form-input']}">
                                 <option value="active">Active</option>
+                                <option value="paused">Paused</option>
                                 <option value="pending">Pending</option>
                                 <option value="dropping">Dropping</option>
+                                <option value="outOfTime">Out of Time</option>
                                 <option value="inactive">Inactive</option>
                             </select>
                         </div>

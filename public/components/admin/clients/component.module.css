@@ -204,6 +204,16 @@
     gap: 0.3rem;
 }
 
+.outOfTime {
+    background: #dc3545;
+    color: white;
+}
+
+.paused {
+    background: #ffc107;
+    color: #212529;
+}
+
 .active {
     background: #28a745;
     color: white;
@@ -586,6 +596,16 @@ select.form-input:hover {
 
 .action-button:active {
   transform: translateY(0);
+}
+
+.status-badge.outOfTime {
+  background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+  color: white;
+}
+
+.status-badge.paused {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+  color: #212529;
 }
 
 .status-badge.active {
