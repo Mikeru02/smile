@@ -346,6 +346,23 @@ class ClientController {
             });
         }
     }
+
+    async getCalculatedTimeRemaining(req, res) {
+        try {
+            const calculatedTime = await this.client.updateClientTime(res.locals.ip);
+            return res.status(200).json({
+                success: true,
+                data: {
+                    time_remaining: calculatedTime
+                }
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
 }
 
 export default ClientController;
