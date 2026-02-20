@@ -55,16 +55,10 @@ class Model {
     async earnedTime() {
         const prediction = await this.predict();
         if (!prediction[0]) {
-            return { category: null, wasteCode: "GWST", earnedTime: 10}
+            return { category: "general waste", wasteCode: "GWST", earnedTime: 10}
         };
 
         const category = prediction[0].class_name?.toLowerCase();
-        
-        // Fail-safe: if category is null or undefined, return default values
-        if (!category) {
-            return { category: "general waste", wasteCode: "GWST", earnedTime: 10 };
-        }
-        
         const timeEarned = this.timeMap[category] ?? 0;
 
         return { 
