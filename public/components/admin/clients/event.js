@@ -45,7 +45,11 @@ export default async function Event() {
             console.log("CLIENT: ", client.waste_collected);
             document.getElementById('client-name').textContent = client.name || 'N/A';
             document.getElementById('client-ip').textContent = client.ip || 'N/A';
-            document.getElementById('client-status').value = client.status || 'active';
+            
+            // Set status dropdown to current client status
+            const statusSelect = document.getElementById('client-status');
+            statusSelect.value = client.status || 'active';
+            
             document.getElementById('client-timeEarned').value = client.time_earned || 0;
             document.getElementById('client-timeRemaining').value = client.time_remaining || 0;
             document.getElementById('client-wasteCollected').textContent = client.waste_collected || 0;
