@@ -1,8 +1,10 @@
 import { connection } from '../../core/database.js';
+import Waste from './waste.js';
 
 class Client {
     constructor() {
         this.db = connection;
+        this.waste = new Waste();
     }
 
     // Create Account
@@ -155,7 +157,7 @@ class Client {
         }
     }
 
-    async earned(ip, timeEarned) {
+    async earned(ip, wasteCode, timeEarned) {
         try {
             const clientData = await this.getClientByIP(ip);
             const totalTime = clientData.time_earned + timeEarned;
@@ -163,6 +165,7 @@ class Client {
                 'UPDATE clients SET time_earned=?, updated_at=NOW() WHERE ip=?',
                 [totalTime, ip]
             );
+            await this.waste.createTrashTransaction(clientData.id, wasteCode, 1, timeEarned);
             return result;
         } catch (err) {
             console.error("[ERROR] client.earned", err);
@@ -273,4 +276,5 @@ class Client {
     }
 }
 
+export default Client;
 export default Client;

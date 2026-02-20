@@ -54,7 +54,6 @@ CREATE TABLE `waste_transactions`(
     `quantity` INT NOT NULL,
     `earned_time` INT NOT NULL,
     `transaction_date` DATETIME NOT NULL,
-    `created_at` DATETIME NOT NULL,
     FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`waste_code`) REFERENCES `waste`(`code`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
