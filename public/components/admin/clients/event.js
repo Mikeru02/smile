@@ -39,6 +39,7 @@ export default async function Event() {
                 }
             );
             console.log('Event: Received client data:', clientData.data);
+            document.getElementById('modal').style.display = 'block';
         });
     });
 }
