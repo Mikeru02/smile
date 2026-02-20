@@ -26,8 +26,6 @@ class Webcam {
             const ffmpeg = spawn("ffmpeg", [
                 "-y", // overwrite
                 "-f", "v4l2",
-                "-input_format", this.format,
-                "-video_size", `${this.width}x${this.height}`,
                 "-i", this.device,
                 "-frames:v", `${this.frames}`,
                 filePath,
