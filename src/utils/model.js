@@ -53,7 +53,7 @@ class Model {
         const prediction = await this.predict();
         console.log(prediction);
         if (!prediction[0]) {
-            return { category: null, timeEarned: 10}
+            return { category: null, earnedTime: 10}
         };
 
         const category = prediction[0].class_name.toLowerCase();
