@@ -33,7 +33,8 @@ export default async function Event() {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        "apikey": import.meta.env.VITE_SRC_KEY
+                        "apikey": import.meta.env.VITE_SRC_KEY,
+                        "token": localStorage.getItem('token')
                     }
                 }
             );
