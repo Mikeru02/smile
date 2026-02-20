@@ -7,6 +7,7 @@ class Waste {
 
     async createTrashTransaction(client_id, waste_code, quantity, earned_time, transaction_date) {
         try {
+            console.log("WASTE DEBUG: ", client_id, waste_code, quantity, earned_time, transaction_date);
             const [result] = await this.db.execute(
                 'INSERT INTO waste_transactions (client_id, waste_code, quantity, earned_time, transaction_date) VALUES (?, ?, ?, ?, NOW())',
                 [client_id, waste_code, quantity, earned_time, transaction_date]
