@@ -232,6 +232,21 @@ class ClientController {
         }
     }
 
+    async getClientByID(req, res) {
+        try {
+            const response = await this.client.getClientByID(req.params.id);
+            return res.status(200).json({
+                success: true,
+                data: response
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     async getClientByIP(req, res) {
         try {
             const response = await this.client.getClientByIP(res.locals.ip);

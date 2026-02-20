@@ -12,6 +12,7 @@ clientRouter.use(authorization);
 clientRouter.get('/check-internet', authentication, client.checkInternetConnection.bind(client));
 clientRouter.get('/all-clients', client.getAllClients.bind(client));
 clientRouter.get('/outOfTime', client.getAllOutOfTimeClients.bind(client));
+clientRouter.get('/client/:id', authentication, client.getClientByID.bind(client));
 clientRouter.get('/status/:status', authentication, client.getAllClientByStatus.bind(client));
 clientRouter.get('/time/:type', authentication, client.getClientTime.bind(client));
 clientRouter.get('/time/calculated', authentication, client.getCalculatedTimeRemaining.bind(client));

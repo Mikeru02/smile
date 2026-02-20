@@ -118,6 +118,19 @@ class Client {
         }
     }
 
+    async getClientByID(id) {
+        try {
+            const [result, ] = await this.db.execute(
+                'SELECT * FROM clients WHERE id=?',
+                [id]
+            );
+            return result?.[0];
+        } catch (err) {
+            console.error("[ERROR] client.getClientByID", err);
+            throw err;
+        }
+    }
+
     async getClientByIP(ip) {
         try {
             const [result, ] = await this.db.execute(

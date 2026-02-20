@@ -27,8 +27,17 @@ export default async function Event() {
 
     const seeMore = document.querySelectorAll('.see-more');
     seeMore.forEach(button => {
-        button.addEventListener('click', () => {
-            console.log('See more clicked');
+        button.addEventListener('click', async () => {
+            const clientData = await axios.get(
+                `/api/v1/client/client/${button.dataset.id}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": import.meta.env.VITE_SRC_KEY
+                    }
+                }
+            );
+            console.log('Event: Received client data:', clientData.data);
         });
     });
 }
