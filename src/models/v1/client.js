@@ -242,7 +242,7 @@ class Client {
     async getAllClients(n = 10) {
         try {
             const [rows ] = await this.db.execute(
-                `SELECT * FROM clients ORDER BY created_at DESC LIMIT ${n}`,
+                `SELECT * FROM clients ORDER BY id DESC LIMIT ${n}`,
             );
             return rows;
         } catch(err) {
