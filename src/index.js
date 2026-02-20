@@ -1,6 +1,5 @@
 import express from 'express';
 import http from 'http';
-import SocketServer from './sockets/socketServer.js';
 import path from 'path';
 import compression from 'compression';
 import { fileURLToPath } from 'url';
@@ -9,6 +8,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import 'dotenv/config';
+import SocketServer from './sockets/socketServer.js';
 import Arduino from './resources/arduino.js';
 import Webcam from './resources/webcam.js';
 import apiRouter from './routes/api/index.js';
