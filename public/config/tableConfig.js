@@ -6,7 +6,6 @@ const TABLE_CONFIG = {
         { label: "Course", key: "course" },
         { label: "Year Level", key: "yearlevel" },
         { label: "Status", key: "status" },
-        { label: "Registration Date", key: "created_at" },
         { label: "Time Remaining", key: "time_remaining" },
         { label: "Details", key: "details" },
     ],
