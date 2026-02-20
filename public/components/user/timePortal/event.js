@@ -168,6 +168,7 @@ export default async function Events() {
             }
         );
         updateTimeRemaining();
+        window.app.pushRoute("/portal");
     });
 
     const updateTimeRemaining = async () => {
