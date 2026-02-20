@@ -28,9 +28,7 @@ class Webcam {
             this.frameBuffer = Buffer.concat([this.frameBuffer, chunk]);
         });
 
-        this.proc.stderr.on("data", (data) => {
-            console.error("v4l2-ctl error:", data.toString());
-        });
+        this.proc.stderr.on("data", () => {});
 
         this.proc.on("close", (code) => {
             console.log("v4l2-ctl exited with code", code);
