@@ -7,8 +7,9 @@ export default async function Events() {
     const validToken = checkToken(localStorage.getItem('token'));
     if (!validToken) {
         window.app.pushRoute('/');
+        return;
     }
-    
+
     const socketClient = new SocketClient();
 
     const modal = document.getElementById('modal');
@@ -21,20 +22,13 @@ export default async function Events() {
     const TRminSpan = document.getElementById('min-span');
     const TRsecSpan = document.getElementById('sec-span');
 
-    // Earn Intervals
-    let earnInterval = null;
-    let isRunning = false;
-    
-    const timeEarned = 10;
-
-    // Time Remaining Intervals
-    let timeRemainingSeconds = 0;
+    // Polling Interval
     let timeRemainingInterval = null;
-
-    const connect = document.getElementById('connect');
     let isConnected = false;
 
-    // --- Internet Check (once) ---
+    const connect = document.getElementById('connect');
+
+    // --- Internet Check ---
     let isInternetUp = false;
     const checkInternetConnection = async () => {
         try {
@@ -59,7 +53,7 @@ export default async function Events() {
 
     await checkInternetConnection(); // call once on load
 
-    const updateConnectButtonState = () => {
+    const updateConnectButtonState = (timeRemainingSeconds) => {
         const isTimeZero = timeRemainingSeconds <= 0;
 
         if (isTimeZero || !isInternetUp) {
@@ -73,12 +67,64 @@ export default async function Events() {
         }
     };
 
-    connect.addEventListener('click', async function() {
+    // Fetch server-side time remaining
+    const getServerTimeRemaining = async () => {
+        try {
+            const response = await axios.get(
+                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': import.meta.env.VITE_SRC_KEY,
+                        'token': localStorage.getItem('token')
+                    }
+                }
+            );
+            return response.data.data.time_remaining;
+        } catch (err) {
+            console.log('[DEBUG] Error fetching time remaining:', err);
+            return 0;
+        }
+    };
+
+    const startTimePolling = () => {
+        if (timeRemainingInterval) return;
+
+        timeRemainingInterval = setInterval(async () => {
+            if (!isConnected) return;
+
+            const serverTime = await getServerTimeRemaining();
+            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, serverTime);
+            updateConnectButtonState(serverTime);
+
+            if (serverTime <= 0) {
+                clearInterval(timeRemainingInterval);
+                timeRemainingInterval = null;
+                connect.textContent = 'Connect';
+                isConnected = false;
+
+                // Revoke access on server
+                await axios.patch(
+                    `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
+                    {},
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': import.meta.env.VITE_SRC_KEY,
+                            'token': localStorage.getItem('token')
+                        }
+                    }
+                );
+            }
+        }, 1000); // poll every second
+    };
+
+    connect.addEventListener('click', async () => {
         if (!isConnected) {
             connect.textContent = 'Pause';
             isConnected = true;
 
-            startTime();
+            // Authenticate
             await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
                 {},
@@ -90,12 +136,16 @@ export default async function Events() {
                     }
                 }
             );
+
+            startTimePolling();
+
         } else {
             connect.textContent = 'Connect';
-            clearInterval(timeRemainingInterval);
             isConnected = false;
+            clearInterval(timeRemainingInterval);
             timeRemainingInterval = null;
 
+            // De-authenticate
             await axios.post(
                 `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
                 {},
@@ -107,13 +157,19 @@ export default async function Events() {
                     }
                 }
             );
+
+            // fetch server time once on pause
+            const serverTime = await getServerTimeRemaining();
+            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, serverTime);
+            updateConnectButtonState(serverTime);
         }
     });
 
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         modal.style.display = 'block';
-        updateEarnedTimeDisplay();
+        await updateEarnedTimeDisplay();
+
         socketClient.connect();
         socketClient.on('connect', () => {
             console.log('[SOCKET] connected, waiting for events');
@@ -131,7 +187,9 @@ export default async function Events() {
     exit.addEventListener('click', async function() {
         socketClient.disconnect();
         modal.style.display = 'none';
-        clearInterval(earnInterval);
+        clearInterval(timeRemainingInterval);
+        timeRemainingInterval = null;
+
         await axios.patch(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
             { status: 'pending' },
@@ -143,14 +201,20 @@ export default async function Events() {
                 }
             }
         );
-        updateTimeRemaining();
+
+        // refresh display from server
+        const serverTime = await getServerTimeRemaining();
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, serverTime);
+        updateConnectButtonState(serverTime);
     });
 
     const proceed = document.getElementById('proceed');
     proceed.addEventListener('click', async function() {
         socketClient.disconnect();
         modal.style.display = 'none';
-        clearInterval(earnInterval);
+        clearInterval(timeRemainingInterval);
+        timeRemainingInterval = null;
+
         await axios.post(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/add-time`,
             {},
@@ -162,25 +226,13 @@ export default async function Events() {
                 }
             }
         );
-        updateTimeRemaining();
+
+        const serverTime = await getServerTimeRemaining();
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, serverTime);
+        updateConnectButtonState(serverTime);
+
         window.app.pushRoute("/portal");
     });
-
-    const updateTimeRemaining = async () => {
-        const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
-        timeRemainingSeconds = response.data.data.time_remaining;
-        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
-        updateConnectButtonState();
-    };
 
     const updateEarnedTimeDisplay = async () => {
         const response = await axios.get(
@@ -201,10 +253,6 @@ export default async function Events() {
     };
 
     const earn = async (time, wasteCode) => {
-        if (isRunning) return;
-
-        isRunning = true;
-
         await axios.post(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`,
             { earned_time: time, waste_code: wasteCode },
@@ -217,40 +265,12 @@ export default async function Events() {
             }
         );
 
-        updateEarnedTimeDisplay();
-        isRunning = false;
+        await updateEarnedTimeDisplay();
     };
 
-    const startTime = () => {
-        if (timeRemainingInterval) return;
-        timeRemainingInterval = setInterval(async () => {
-            if (!isConnected) return;
-
-            if (timeRemainingSeconds <= 0) {
-                clearInterval(timeRemainingInterval);
-                timeRemainingInterval = null;
-                await axios.patch(
-                    `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
-                    {},
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'apikey': import.meta.env.VITE_SRC_KEY,
-                            'token': localStorage.getItem('token')
-                        }
-                    }
-                );
-                connect.textContent = 'Connect';
-                isConnected = false;
-                return;
-            }
-
-            timeRemainingSeconds -= 1;
-            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
-            updateConnectButtonState();
-        }, 1000);
-    };
-
-    await updateTimeRemaining(); // initialize
-    updateConnectButtonState();  // initial button state
+    // initialize display
+    const initialTime = await getServerTimeRemaining();
+    renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, initialTime);
+    updateConnectButtonState(initialTime);
+    await updateEarnedTimeDisplay();
 }
