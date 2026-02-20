@@ -43,7 +43,7 @@ export default async function Events() {
     const checkInternetConnection = async () => {
         try {
             const response = await axios.get(
-                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/admin/dashboard`,
+                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/check-internet`,
                 {
                     headers: {
                         'Content-Type': 'application/json',

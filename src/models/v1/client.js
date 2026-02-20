@@ -1,4 +1,5 @@
 import { connection } from '../../core/database.js';
+import { checkInternet } from '../../utils/dashboardInformation.js';
 import Waste from './waste.js';
 
 class Client {
@@ -284,6 +285,17 @@ class Client {
             return result[0]['COUNT(*)'];
         } catch(err) {
             console.error("[ERROR] client.getAtiveClients", err);
+            throw err;
+        }
+    }
+
+    async checkInternet() {
+        try {
+            return {
+                internet: checkInternet()
+            }
+        } catch(err) {
+            console.error("[ERROR] client.checkInternet", err);
             throw err;
         }
     }
