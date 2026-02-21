@@ -14,6 +14,7 @@ import AdminSettings from './pages/admin/settings';
 import AdminAccountManagement from './pages/admin/accountManagement';
 
 import './styles/styles.css';
+import Lost from './pages/lost';
 
 const app = new SPA({
     root: document.getElementById("app"),
@@ -25,15 +26,16 @@ window.app = app;
 // TODO: Add the routes here
 app.add("/", CaptivePortal);
 app.add("/generate_204", CaptivePortal);
-app.add("/terms-and-conditions", TermsAndConditions);
 app.add("/portal", TimePortal, true);
+app.add("/terms-and-conditions", TermsAndConditions);
+app.add("/lost", Lost);
 app.add("/admin/login", AdminLogin);
-app.add("/admin/dashboard", AdminDashboard);
-app.add("/admin/machine", AdminMachine);
-app.add("/admin/clients", AdminClients);
-app.add("/admin/analytics", AdminAnalytics);
-app.add("/admin/logs", AdminLogs);
-app.add("/admin/settings", AdminSettings);
-app.add("/admin/account-management", AdminAccountManagement);
+app.add("/admin/dashboard", AdminDashboard, true);
+app.add("/admin/machine", AdminMachine, true);
+app.add("/admin/clients", AdminClients, true);
+app.add("/admin/analytics", AdminAnalytics, true);
+app.add("/admin/logs", AdminLogs, true);
+app.add("/admin/settings", AdminSettings, true);
+app.add("/admin/account-management", AdminAccountManagement, true);
 
 app.handleRouteChanges();

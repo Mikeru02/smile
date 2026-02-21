@@ -25,7 +25,7 @@ class ClientController {
                 return res.status(200).json({
                     success: true,
                     data: {
-                        token: jwt.sign({ 'ip': ip }, process.env.API_SECRET_KEY, {
+                        token: jwt.sign({ 'ip': ip, 'role': 'user' }, process.env.API_SECRET_KEY, {
                             expiresIn: '1d'
                         })
                     }

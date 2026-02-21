@@ -39,7 +39,7 @@ export default async function Events() {
     const checkInternetConnection = async () => {
         try {
             const response = await axios.get(
-                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/check-internet`,
+                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/check-internet`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default async function Events() {
 
             startTime();
             await axios.post(
-                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
+                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
                 {},
                 {
                     headers: {
@@ -97,7 +97,7 @@ export default async function Events() {
             timeRemainingInterval = null;
 
             await axios.post(
-                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
+                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
                 {},
                 {
                     headers: {
@@ -135,7 +135,7 @@ export default async function Events() {
         modal.style.display = 'none';
         clearInterval(earnInterval);
         await axios.patch(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
             { status: 'pending' },
             {
                 headers: {
@@ -154,7 +154,7 @@ export default async function Events() {
         modal.style.display = 'none';
         clearInterval(earnInterval);
         await axios.post(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/add-time`,
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/add-time`,
             {},
             {
                 headers: {
@@ -170,7 +170,7 @@ export default async function Events() {
 
     const updateTimeRemaining = async () => {
         const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`,
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -186,7 +186,7 @@ export default async function Events() {
 
     const getClientStatus = async () => {
         const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client`,
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ export default async function Events() {
 
     const getActualTimeRemaining = async () => {
         const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/calculated`,
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/calculated`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -214,7 +214,7 @@ export default async function Events() {
 
     const updateEarnedTimeDisplay = async () => {
         const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`,
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -236,7 +236,7 @@ export default async function Events() {
         isRunning = true;
 
         await axios.post(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`,
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`,
             { earned_time: time, waste_code: wasteCode },
             {
                 headers: {
@@ -260,7 +260,7 @@ export default async function Events() {
                 clearInterval(timeRemainingInterval);
                 timeRemainingInterval = null;
                 await axios.patch(
-                    `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
+                    `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
                     {},
                     {
                         headers: {

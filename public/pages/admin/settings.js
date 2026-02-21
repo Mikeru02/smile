@@ -17,7 +17,9 @@ export default class AdminSettings {
         const card = MainCard(main, "Settings");
         MainContent(card)
         
-        AdminRoutingEvent();
-        AdminEvents();
+        const stopProcess = AdminEvents();
+        if (!stopProcess) {
+            AdminRoutingEvent();
+        }
     }
 }

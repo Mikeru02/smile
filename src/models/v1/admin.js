@@ -3,6 +3,7 @@ import Client from './client.js';
 import runSpawnSync  from '../../utils/runSpawnSync.js';
 import { CPUInfo, memoryInfo, storageInfo, networkInfo, OSName } from '../../utils/machineInformation.js';
 import { checkInternet, checkModel } from '../../utils/dashboardInformation.js';
+import { encryptPassword } from '../../utils/hash.js';
 
 class Admin {
     constructor() {
@@ -31,13 +32,14 @@ class Admin {
             );
             return result;
         } catch(err) {
-            console.error("[ERROR] account.verify", err);
+            console.error("[ERROR] admin.verifyAccount", err);
             throw err;
         }
     }
 
     async getDashboardInfo() {
         try {
+            console.log("DEBUG HIt getDshboardInfo")
             return {
                 server_start_time: new Date(Date.now() - process.uptime() * 1000).toISOString(),
                 internet: checkInternet(),  

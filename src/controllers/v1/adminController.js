@@ -41,7 +41,7 @@ class AdminController {
                     message: 'All fields are required'
                 })
             } 
-            const response = await this.account.verify(username, password);
+            const response = await this.admin.verifyAccount(username, password);
             return res.status(200).json({
                 success: true,
                 data: {

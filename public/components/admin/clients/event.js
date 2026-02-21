@@ -14,7 +14,6 @@ export default async function Event() {
     );
 
     const clients = allClients.data.data;
-    console.log('Event: Received clients data:', clients);
     const table = document.getElementById("clients-table");
     const thead = table.querySelector("thead");
     const tbody = table.querySelector("tbody");
@@ -42,6 +41,7 @@ export default async function Event() {
             
             // Populate modal with client data
             const client = clientData.data.data;
+            console.log("DEBUG: client/event.js: ", client)
             
             // Check if elements exist before setting values
             const nameElement = document.getElementById('client-name');

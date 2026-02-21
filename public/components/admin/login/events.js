@@ -18,7 +18,7 @@ export default function Events(){
     
     loginBtn.addEventListener('click', async function() {
         const response = await axios.post(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/account/login`,
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/admin/login`,
             {
                 username: document.getElementById('username').value,
                 password: document.getElementById('password').value
@@ -30,7 +30,6 @@ export default function Events(){
                 }
             }
         );
-        console.log(response.data);
         localStorage.setItem('token', response.data.data.token);
         window.app.pushRoute('/admin/dashboard')
     })
