@@ -12,6 +12,7 @@ export default async function Events() {
     const socketClient = new SocketClient();
 
     const modal = document.getElementById('modal');
+    const droppingModal = document.getElementById('dropping-modal');
 
     // Time Containers
     const hoursSpan = document.getElementById('earn-hours-span');
@@ -114,20 +115,41 @@ export default async function Events() {
 
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
-        modal.style.display = 'block';
-        updateEarnedTimeDisplay();
-        socketClient.connect();
-        socketClient.on('connect', () => {
-            console.log('[SOCKET] connected, waiting for events');
-            socketClient.emit('DROPPING');
-            socketClient.on('ARDUINO:SONAR', (data) => {
-                console.log('SONAR DETECTED', data);
+        const droppingClient = await axios.get(
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/status/dropping`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_SRC_KEY,
+                    'token': localStorage.getItem('token')
+                }
+            }
+        )
+        
+        const droppingClientData = droppingClient.data.data;
+        if (droppingClientData.length <= 0){
+            modal.style.display = 'block';
+            updateEarnedTimeDisplay();
+            socketClient.connect();
+            socketClient.on('connect', () => {
+                console.log('[SOCKET] connected, waiting for events');
+                socketClient.emit('DROPPING');
+                socketClient.on('ARDUINO:SONAR', (data) => {
+                    console.log('SONAR DETECTED', data);
+                });
+                socketClient.on("EARN", ({earnedTime, wasteCode}) => {
+                    earn(earnedTime, wasteCode);
+                });
             });
-            socketClient.on("EARN", ({earnedTime, wasteCode}) => {
-                earn(earnedTime, wasteCode);
-            });
-        });
+        } else {
+            droppingModal.style.display = 'block'
+        }
     });
+
+    const okBtn = document.getElementById('ok-button');
+    okBtn.addEventListener('click', function() {
+        droppingModal.style.display = 'none';
+    })
 
     const exit = document.getElementById('exit');
     exit.addEventListener('click', async function() {

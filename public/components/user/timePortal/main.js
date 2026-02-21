@@ -1,5 +1,6 @@
 import styles from './component.module.css';
 import Modal from './modal.js';
+import DroppingModal from './droppingModal.js';
 import Logo from '/icons/logo.svg';
 import ILLUSTRATION1 from '/icons/time.svg';
 
@@ -16,6 +17,7 @@ export default function Main(root) {
             <button id="connect" class="${styles["button-submit-cred"]}">Connect</button>
         </div>
         ${Modal()}
+        ${DroppingModal()}
     `;
 
     root.className = styles['main'];
