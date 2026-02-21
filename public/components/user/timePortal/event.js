@@ -25,9 +25,9 @@ export default async function Events() {
     // Earn Intervals
     let earnInterval = null;
     let isRunning = false;
+    let dropTimeout = null;
+    const dropTimeoutSec = 30;
     
-    const timeEarned = 10;
-
     // Time Remaining Intervals
     let timeRemainingSeconds = 0;
     let timeRemainingInterval = null;
@@ -134,8 +134,10 @@ export default async function Events() {
             socketClient.on('connect', () => {
                 console.log('[SOCKET] connected, waiting for events');
                 socketClient.emit('DROPPING');
+                startDropTimeout();
                 socketClient.on('ARDUINO:SONAR', (data) => {
                     console.log('SONAR DETECTED', data);
+                    startDropTimeout();
                 });
                 socketClient.on("EARN", ({earnedTime, wasteCode}) => {
                     earn(earnedTime, wasteCode);
@@ -302,6 +304,31 @@ export default async function Events() {
             updateConnectButtonState();
         }, 1000);
     };
+
+    const startDropTimeout = () => {
+        if (dropTimeout) clearTimeout(dropTimeout);
+
+        dropTimeout = setTimeout(() => {
+            (async () => {
+                modal.style.display = 'none';
+                socketClient.disconnect();
+                clearInterval(earnInterval);
+                dropTimeout = null;
+                await axios.patch(
+                    `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
+                    { status: 'pending' },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': import.meta.env.VITE_SRC_KEY,
+                            'token': localStorage.getItem('token')
+                        }
+                    }
+                );
+                updateTimeRemaining();
+            })()
+        }, dropTimeoutSec * 1000)
+    }
 
     await updateTimeRemaining(); // initialize
     updateConnectButtonState();  // initial button state
