@@ -66,6 +66,8 @@ export default async function Event() {
                     `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/id/${clientId}`,
                     {
                         name: document.getElementById('client-name').value,
+                        course: document.getElementById('client-course').value,
+                        year_level: document.getElementById('client-yearlevel').value,
                         status: clientStatus,
                         time_remaining: Number(document.getElementById('client-timeRemaining').value),
                         time_earned: Number(document.getElementById('client-timeEarned').value)
@@ -103,8 +105,11 @@ export default async function Event() {
                     );
 
                     const client = clientData.data.data;
+                    console.log(client);
 
                     const nameElement = document.getElementById('client-name');
+                    const courseElement = document.getElementById('client-course');
+                    const yearlvlElement = document.getElementById('client-yearlevel');
                     const statusElement = document.getElementById('client-status');
                     const timeEarnedElement = document.getElementById('client-timeEarned');
                     const timeRemainingElement = document.getElementById('client-timeRemaining');
@@ -112,6 +117,8 @@ export default async function Event() {
                     const createdAtElement = document.getElementById('client-createdAt');
 
                     if (nameElement) nameElement.value = client.name || '';
+                    if (courseElement) courseElement.value = client.course || '';
+                    if (yearlvlElement) yearlvlElement.value = client.yearlevel || '';
                     if (statusElement) statusElement.value = client.status || 'active';
                     if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
                     if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;

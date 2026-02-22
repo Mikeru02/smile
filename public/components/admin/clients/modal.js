@@ -20,7 +20,7 @@ export default function Modal() {
 
                         <div class="${styles['form-group']}">
                             <label for="client-course">Course</label>
-                            <select id="client-status" class="${styles['form-input']}">
+                            <select id="client-course" class="${styles['form-input']}">
                                 <option value="BSCS">BSCS</option>
                                 <option value="BEED">BEED</option>
                                 <option value="BSED">BSED</option>
@@ -35,8 +35,8 @@ export default function Modal() {
                         </div>
 
                         <div class="${styles['form-group']}">
-                            <label for="client-name">Name</label>
-                            <input type="text" id="client-yearlevel" class="${styles['form-input']}" placeholder="Enter client name">
+                            <label for="client-name">Year / Grade Level</label>
+                            <input type="text" id="client-yearlevel" class="${styles['form-input']}" placeholder="Enter client year / grade level">
                         </div>
 
                         <div class="${styles['form-group']}">

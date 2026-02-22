@@ -34,6 +34,8 @@ export default function startTimeDeductor() {
                     `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/id/${client.id}`,
                     {
                         name: client.name,
+                        course: client.course,
+                        year_level: client.yearlevel,
                         status: newStatus,
                         time_remaining: newTimeRemaining,
                         time_earned: client.time_earned,

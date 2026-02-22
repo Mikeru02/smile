@@ -37,8 +37,7 @@ CREATE TABLE `logs`(
     `timestamp` DATETIME NOT NULL,
     `name` VARCHAR(100) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
-    `level` ENUM('INFO', 'WARN', 'ERR') NOT NULL,
-    `message` VARCHAR(255) NOT NULL
+    `level` ENUM('INFO', 'WARN', 'ERR') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `waste`(

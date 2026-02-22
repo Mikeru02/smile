@@ -9,10 +9,31 @@ class LogController {
         try {
             const { name, description, level } = req.body;
             const result = await this.log.create(name, description, level);
-            return result;
+            
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
         } catch (err) {
-            console.error("[ERROR] logController.create", err);
-            throw err;
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async get(req, res) {
+        try {
+            const result = await this.log.getLogs();
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
         }
     }
 }

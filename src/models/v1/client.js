@@ -232,11 +232,11 @@ class Client {
         }
     }
 
-    async updateClientData(id, name, status, time_remaining, time_earned, expire_at=null) {
+    async updateClientData(id, name, course, year_level, status, time_remaining, time_earned, expire_at=null) {
         try {
             const [result] = await this.db.execute(
-                `UPDATE clients set name=?, status=?, time_remaining=?, time_earned=?, expire_at=? WHERE id=?`,
-                [name, status, time_remaining, time_earned, expire_at, id]
+                `UPDATE clients set name=?, course=?, yearlevel=?, status=?, time_remaining=?, time_earned=?, expire_at=? WHERE id=?`,
+                [name, course, year_level, status, time_remaining, time_earned, expire_at, id]
             )
             return result;
         } catch(err) {

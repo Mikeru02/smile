@@ -1,9 +1,11 @@
 import jwt from 'jsonwebtoken';
 import Admin from '../../models/v1/admin.js';
+import Log from  '../../models/v1/log.js';
 
 class AdminController {
     constructor() {
         this.admin = new Admin();
+        this.log = new Log();
     }
 
     async createAccount(req, res) {
@@ -49,6 +51,8 @@ class AdminController {
                     message: 'Invalid username or password'
                 });
             }
+
+            await this.log.create("Admin Login", `${response.username} logged in to dashboard`, "INFO")
 
             return res.status(200).json({
                 success: true,

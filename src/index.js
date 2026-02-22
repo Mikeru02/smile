@@ -74,4 +74,4 @@ server.listen(port, host, () => {
 });
 
 // Intialize workers
-//startTimeDeductor();
+startTimeDeductor();

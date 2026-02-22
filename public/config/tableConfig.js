@@ -17,8 +17,9 @@ const TABLE_CONFIG = {
     ],
     "logs": [
         { label: "Timestamp", key: "timestamp" },
-        { label: "Event", key: "event" },
+        { label: "Event", key: "name" },
         { label: "Description", key: "description" },
+        { label: "Level", key: "level" }
     ]
 };
 

@@ -333,8 +333,8 @@ class ClientController {
     async updateClientData(req, res) {
         try {
             const id = req.params.id;
-            const { name, status, time_remaining, time_earned, expire_at } = req.body || {};
-            const response = await this.client.updateClientData(id, name, status, time_remaining, time_earned, expire_at);
+            const { name, course, year_level, status, time_remaining, time_earned, expire_at } = req.body || {};
+            const response = await this.client.updateClientData(id, name, course, year_level, status, time_remaining, time_earned, expire_at);
             res.status(200).json({
                 success: true,
                 data: response
