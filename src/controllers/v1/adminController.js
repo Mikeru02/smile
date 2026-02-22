@@ -43,6 +43,13 @@ class AdminController {
                 })
             } 
             const response = await this.admin.verifyAccount(username, password);
+            if (!response) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid username or password'
+                });
+            }
+
             return res.status(200).json({
                 success: true,
                 data: {
@@ -51,6 +58,7 @@ class AdminController {
                     })
                 }
             });
+            
         } catch (err) {
             return res.status(500).json({
                 success: false,

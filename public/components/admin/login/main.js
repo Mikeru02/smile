@@ -1,5 +1,6 @@
 import Logo from '/icons/logo.svg';
 import OpenEye from '/icons/open-eye.svg';
+import Modal from './modal';
 import CloseEye from '/icons/close-eye.svg';
 import styles from './component.module.css';
 
@@ -23,6 +24,7 @@ export default function Main(root) {
             </div>
             <button id="submit-login" class="${styles["button-submit-cred"]}">Log In</button>
         </div>
+        ${Modal()}
     `;
 
     root.className = styles["main"];

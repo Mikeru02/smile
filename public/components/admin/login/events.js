@@ -5,8 +5,11 @@ import CloseEye from '/icons/close-eye.svg';
 export default function Events(){
     const loginBtn = document.getElementById('submit-login');
     const togglePasswordBtn = document.getElementById('toggle-password');
+    const okayButton = document.getElementById('ok-button');
     const passwordInput = document.getElementById('password');
     const eyeIcon = document.getElementById('eye-icon');
+    const modal = document.getElementById('modal');
+    const messageContainer = document.getElementById('message-container');
     
     // Toggle password visibility
     togglePasswordBtn.addEventListener('click', function() {
@@ -15,22 +18,38 @@ export default function Events(){
         eyeIcon.src = type === 'password' ? CloseEye : OpenEye;
         eyeIcon.alt = type === 'password' ? 'Show password' : 'Hide password';
     });
+
+    okayButton.addEventListener('click', function() {
+        modal.style.display = 'none';
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+
+
+    })
     
     loginBtn.addEventListener('click', async function() {
-        const response = await axios.post(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/admin/login`,
-            {
-                username: document.getElementById('username').value,
-                password: document.getElementById('password').value
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
+        try {
+            const response = await axios.post(
+                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/admin/login`,
+                {
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': import.meta.env.VITE_SRC_KEY,
+                    }
                 }
-            }
-        );
-        localStorage.setItem('token', response.data.data.token);
-        window.app.pushRoute('/admin/dashboard')
+            );
+
+            localStorage.setItem('token', response.data.data.token);
+            window.app.pushRoute('/admin/dashboard');
+
+        } catch (err) {
+            modal.style.display = 'block';
+            messageContainer.textContent = err.response?.data?.message || 'Login Failed';
+        }
+        
     })
 }
