@@ -17,6 +17,28 @@ export default function Modal() {
                             <label for="client-name">Name</label>
                             <input type="text" id="client-name" class="${styles['form-input']}" placeholder="Enter client name">
                         </div>
+
+                        <div class="${styles['form-group']}">
+                            <label for="client-course">Course</label>
+                            <select id="client-status" class="${styles['form-input']}">
+                                <option value="BSCS">BSCS</option>
+                                <option value="BEED">BEED</option>
+                                <option value="BSED">BSED</option>
+                                <option value="BSHM">BSHM</option>
+                                <option value="BSBA">BSBA</option>
+                                <option value="BSA">BSA</option>
+                                <option value="STEM">STEM</option>
+                                <option value="HUMSS">HUMSS</option>
+                                <option value="TVL">TVL</option>
+                                <option value="ABM">ABM</option>
+                            </select>
+                        </div>
+
+                        <div class="${styles['form-group']}">
+                            <label for="client-name">Name</label>
+                            <input type="text" id="client-yearlevel" class="${styles['form-input']}" placeholder="Enter client name">
+                        </div>
+
                         <div class="${styles['form-group']}">
                             <label for="client-status">Status</label>
                             <select id="client-status" class="${styles['form-input']}">
@@ -28,6 +50,7 @@ export default function Modal() {
                                 <option value="inactive">Inactive</option>
                             </select>
                         </div>
+
                         <div class="${styles['form-group']}">
                             <label for="client-timeRemaining">Time Remaining (in Seconds)</label>
                             <input type="text" id="client-timeRemaining" class="${styles['form-input']}" placeholder="Enter time remaining">
