@@ -2,11 +2,19 @@ import axios from 'axios';
 import SocketClient from '../../../sockets/socketClient.js';
 import { renderEarnTime, renderTimeRemaining } from '../../../utils/render.js';
 import checkToken from '../../../utils/checkToken.js';
+import { getRole } from '../../../utils/getRole.js';
 
 export default async function Events() {
-    const validToken = checkToken(localStorage.getItem('token'));
+    const token = localStorage.getItem('token')
+    const validToken = checkToken(token);
+    const role = getRole(token);
+
     if (!validToken) {
         window.app.pushRoute('/');
+    }
+
+    if (role === 'admin') {
+        window.app.pushRoute('/admin/dashboard');
     }
     
     const socketClient = new SocketClient();
@@ -26,6 +34,7 @@ export default async function Events() {
     let earnInterval = null;
     let isRunning = false;
     let dropTimeout = null;
+    let countdownInterval = null;
     const dropTimeoutSec = 30;
     
     // Time Remaining Intervals
@@ -129,12 +138,12 @@ export default async function Events() {
         const droppingClientData = droppingClient.data.data;
         if (droppingClientData.length <= 0){
             modal.style.display = 'block';
+            startDropTimeout();
             updateEarnedTimeDisplay();
             socketClient.connect();
             socketClient.on('connect', () => {
                 console.log('[SOCKET] connected, waiting for events');
                 socketClient.emit('DROPPING');
-                startDropTimeout();
                 socketClient.on('ARDUINO:SONAR', (data) => {
                     console.log('SONAR DETECTED', data);
                     startDropTimeout();
@@ -307,27 +316,49 @@ export default async function Events() {
 
     const startDropTimeout = () => {
         if (dropTimeout) clearTimeout(dropTimeout);
+        if (countdownInterval) clearInterval(countdownInterval);
 
-        dropTimeout = setTimeout(() => {
-            (async () => {
-                modal.style.display = 'none';
-                socketClient.disconnect();
-                clearInterval(earnInterval);
-                dropTimeout = null;
-                await axios.patch(
-                    `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
-                    { status: 'pending' },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'apikey': import.meta.env.VITE_SRC_KEY,
-                            'token': localStorage.getItem('token')
-                        }
+        // Reset visual timer
+        const timerElement = document.getElementById('countdown-timer');
+        if (timerElement) {
+            timerElement.textContent = dropTimeoutSec;
+        }
+
+        // Start visual countdown
+        let timeLeft = dropTimeoutSec;
+        countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (timerElement) {
+                timerElement.textContent = timeLeft;
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }, 1000);
+
+        dropTimeout = setTimeout(async () => {
+            console.log("TIMEOUT TRIGGERED");
+            modal.style.display = 'none';
+            socketClient.disconnect();
+            clearInterval(earnInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+            dropTimeout = null;
+            countdownInterval = null;
+            await axios.patch(
+                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
+                { status: 'pending' },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': import.meta.env.VITE_SRC_KEY,
+                        'token': localStorage.getItem('token')
                     }
-                );
-                updateTimeRemaining();
-            })()
-        }, dropTimeoutSec * 1000)
+                }
+            );
+            updateTimeRemaining();
+            }, dropTimeoutSec * 1000)
     }
 
     await updateTimeRemaining(); // initialize

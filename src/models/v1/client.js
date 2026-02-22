@@ -106,7 +106,7 @@ class Client {
 
     async getClientTime(ip, type) {
         try {
-            console.log("DEBUG API: ", type)
+            console.log("DEBUG API: ", type, ip)
             const [result, ] = await this.db.execute(
                 `SELECT ${type} FROM clients WHERE ip=?`,
                 [ip]

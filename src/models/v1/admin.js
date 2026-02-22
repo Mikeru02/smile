@@ -30,7 +30,7 @@ class Admin {
                 'SELECT * FROM accounts WHERE username=? AND password=?',
                 [username, encryptPassword(password)]
             );
-            return result;
+            return result?.[0];
         } catch(err) {
             console.error("[ERROR] admin.verifyAccount", err);
             throw err;

@@ -9,7 +9,7 @@ class ClientController {
 
     async create(req, res) {
         try {
-            const ip = req.ip || req.socket.remoteAddress;
+            const ipAddress = req.ip || req.socket.remoteAddress;
             const { name, course, yearlevel } = req.body || {};
             if (!name || !course || !yearlevel) {
                 return res.status(400).json({
@@ -19,24 +19,24 @@ class ClientController {
             }
 
             // Check client if it is existing in db
-            const existingClientData = await this.client.verfyClient(ip, name, course, yearlevel);
+            const existingClientData = await this.client.verfyClient(ipAddress, name, course, yearlevel);
             
             if (existingClientData && existingClientData.length > 0) {
                 return res.status(200).json({
                     success: true,
                     data: {
-                        token: jwt.sign({ 'ip': ip, 'role': 'user' }, process.env.API_SECRET_KEY, {
+                        token: jwt.sign({ ip: ipAddress, role: 'user' }, process.env.API_SECRET_KEY, {
                             expiresIn: '1d'
                         })
                     }
                 });
             }
             
-            const response = await this.client.create(ip, name, course, yearlevel);
+            const response = await this.client.create(ipAddress, name, course, yearlevel);
             return res.status(200).json({
                 success: true,
                 data: {
-                    token: jwt.sign({ 'ip': ip }, process.env.API_SECRET_KEY, {
+                    token: jwt.sign({ ip: ipAddress, role: 'user' }, process.env.API_SECRET_KEY, {
                         expiresIn: '1d'
                     })
                 }

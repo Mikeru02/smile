@@ -9,13 +9,14 @@ class AdminController {
     async createAccount(req, res) {
         try {
             const { username, name, role, password } = req.body || {};
+            console.log(req.body);
             if (!username || !name || !role || !password) {
                 return res.status(400).json({
                     success: false,
                     message: 'All fields are required'
                 })
             }
-            const response = await this.account.create(username, name, role, password);
+            const response = await this.admin.createAccount(username, name, role, password);
             return res.status(200).json({
                 success: true,
                 data: {
@@ -45,7 +46,7 @@ class AdminController {
             return res.status(200).json({
                 success: true,
                 data: {
-                    token: jwt.sign({ 'username': response.username, 'role': response.role}, process.env.API_SECRET_KEY, {
+                    token: jwt.sign({ username: response.username, role: response.role}, process.env.API_SECRET_KEY, {
                         expiresIn: '1d'
                     })
                 }
