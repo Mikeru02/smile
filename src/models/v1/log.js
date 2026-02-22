@@ -7,6 +7,7 @@ class Log {
 
     async create(name, description, level) {
         try {
+            console.log('Creating Logs');
             const result = this.db.execute(
                 "INSERT INTO logs (name, description, level, timestamp) VALUES (?, ?, ?, NOW())",
                 [name, description, level]

@@ -30,7 +30,6 @@ export default async function Event() {
 
         saveBtn.addEventListener('click', async () => {
             const clientId = saveBtn.dataset.clientId;
-            console.log('CLIENT ID:', clientId)
             if (!clientId) return;
 
             const clientStatus = document.getElementById('client-status').value;

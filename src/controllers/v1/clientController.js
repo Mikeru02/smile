@@ -1,10 +1,12 @@
 import jwt from 'jsonwebtoken';
 import Client from '../../models/v1/client.js';
+import Log from '../../models/v1/log.js';
 import ClientManagement from '../../utils/clientManagement.js';
 
 class ClientController {
     constructor() {
         this.client = new Client();
+        this.log = new Log();
     }
 
     async create(req, res) {
@@ -21,6 +23,7 @@ class ClientController {
             // Check client if it is existing in db
             const existingClientData = await this.client.verfyClient(ipAddress, name, course, yearlevel);
             if (existingClientData) {
+                await this.log.create("Client Connect", `Client ${name} has logged in with IP of ${ipAddress}`, "INFO")
                 return res.status(200).json({
                     success: true,
                     data: {
@@ -32,6 +35,7 @@ class ClientController {
             }
             
             const response = await this.client.create(ipAddress, name, course, yearlevel);
+            await this.log.create("Client Registered", `Client ${name} has resgitered with IP of ${ipAddress}`, "INFO")
             return res.status(200).json({
                 success: true,
                 data: {
@@ -84,6 +88,8 @@ class ClientController {
                 });
             }
             await this.client.addTime(res.locals.ip);
+            await this.log.create("Add Time", `Client ${clientData.name} added ${earnedTime} time to his/her time`, "INFO")
+
             return res.status(200).json({
                 success: true,
                 message: 'Add time success!'
@@ -130,6 +136,8 @@ class ClientController {
                     message: "Failed to allow client: " + err.message
                 });
             }
+            await this.log.create("Client Connected", `Client ${clientData.name} is connected and will expire on ${fomattedExpireAt}`, "INFO")
+
             return res.status(200).json({
                 sucess: true,
                 message: 'Client authenticated'
@@ -163,7 +171,7 @@ class ClientController {
                     message: "Failed to allow client: " + err.message
                 });
             }
-            
+            await this.log.create("Client Disconnected", `Client ${clientData.name} is disconnected`, "INFO")
             return res.status(200).json({
                 sucess: true,
                 message: 'Client deauthenticated'
@@ -216,6 +224,8 @@ class ClientController {
                 })
             }
             await this.client.updateClientStatus(res.locals.ip, 'dropping');
+            await this.log.create("Drop Initialize", `Client ${clientData.name} is currently dropping`, "INFO")
+
             return res.status(200).json({
                 success: true,
                 message: "You can now start dropping trash"
@@ -231,7 +241,6 @@ class ClientController {
     async earned(req, res) {
         try {
             const { earned_time, waste_code } = req.body || {};
-            console.log("DEBUG: ",req.body);
             if (!earned_time) {
                 return res.status(400).json({
                     success: false,
@@ -247,6 +256,7 @@ class ClientController {
             }
 
             await this.client.earned(res.locals.ip, waste_code, convertedTime);
+            await this.log.create("Earned Time", `Client ${clientData.name} earned ${convertedTime} time`, "INFO")
             return res.status(200).json({
                 success: true,
                 message: "Time earned is added"
@@ -317,6 +327,8 @@ class ClientController {
             }
 
             await this.client.updateClientStatus(res.locals.ip, res.locals.name, status);
+            await this.log.create("Update Status", `Client ${res.locals.name} change status to ${status}`, "INFO")
+
             return res.status(200).json({
                 success: true,
                 message: 'Updated successfully'
