@@ -91,7 +91,7 @@ INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_rema
 INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `connection_start_at`, `waste_collected`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost1', 'BSCS', 4, 'active', 0, 0, NULL, 0, NOW(), NOW());
 INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `connection_start_at`, `waste_collected`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost12', 'BSCS', 4, 'active', 0, 0, NULL, 0, NOW(), NOW());
 
-INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('mikeru', 'Michael Alexis Ponce', 'admin', '83a1a3270b33c5a549e70cb938d904e058680a9f226238498641e17860aac924', NOW(), NOW());
+INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('mikeru02', 'Michael Alexis Ponce', 'admin', '39de4811fa202334ad34e2b40df9aeb9af7f42e52427b9f36db16aad4c454231', NOW(), NOW());
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('BlancheTinsleye', 'Bj Ashley Mercado', 'admin', '2148d5ff3881c92d22f60c8f5d41cc1ff6856840079bd87e45dd6c728d8235ff', NOW(), NOW());
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('ConcepcionPaul', 'Paul Dexter Concepcion', 'admin', '384e1bfb71a6311fe977064a42f1bd31295f2d9f0b9faf74fe63820903f44755', NOW(), NOW());
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('gerigreizelle', 'Geri Greizelle Pineda', 'admin', 'a57d35cfc0f395f1950e0c01be9cdb87df03f25bb2c8061e4e967973845a7a2d', NOW(), NOW());
