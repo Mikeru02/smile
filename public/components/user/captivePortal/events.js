@@ -6,8 +6,16 @@ import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
 export default async function Events() {
     const validToken = checkToken(localStorage.getItem('token'));
+
     if (validToken) {
         window.app.pushRoute('/portal');
+    }
+
+    const logo = document.getElementById('logo');
+    if (logo) {
+        logo.addEventListener('dblclick', function() {
+            window.app.pushRoute('/admin/login');
+        })
     }
 
     const courseSelect = document.getElementById('course');

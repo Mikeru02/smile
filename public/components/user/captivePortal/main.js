@@ -4,7 +4,7 @@ import styles from './component.module.css';
 export default function Main(root){
     root.innerHTML = `
         <div class="${styles["card"]}">
-            <img src="${Logo}" class="${styles["logo"]}">
+            <img src="${Logo}" class="${styles["logo"]}" id="logo">
             <h1 class="${styles["title"]}">S.M.I.L.E</h1>
             <p class="${styles["desc"]}">Input Credentials</p>
             <div class="${styles["input-fields"]}">
