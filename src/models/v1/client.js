@@ -28,7 +28,7 @@ class Client {
                 'SELECT * FROM clients WHERE ip=? AND name=? AND course=? AND yearlevel=?',
                 [ip, name, course, yearlevel]
             );
-            return result;
+            return result?.[0];
         } catch (err) {
             console.error("[ERROR] client.verfyClient", err);
             throw err;
@@ -174,11 +174,11 @@ class Client {
         }
     }
 
-    async updateClientStatus(ip, status) {
+    async updateClientStatus(ip, name, status) {
         try {
             const [result, ] = await this.db.execute(
-                'UPDATE clients SET status=?, updated_at=NOW() WHERE ip=?',
-                [status, ip]
+                'UPDATE clients SET status=?, updated_at=NOW() WHERE ip=? AND name=?',
+                [status, ip, name]
             )
             return result;
         } catch (err) {
@@ -229,6 +229,19 @@ class Client {
             // return result;
         } catch(err) {
             console.error("[ERROR] client.updateAllClients", err);
+            throw err;
+        }
+    }
+
+    async updateClientData(id, name, status, time_remaining, time_earned) {
+        try {
+            const [result] = await this.db.execute(
+                `UPDATE clients set name=?, status=?, time_remaining=?, time_earned=? WHERE id=?`,
+                [name, status, time_remaining, time_earned, id]
+            )
+            return result;
+        } catch(err) {
+            console.error("[ERROR] client.updateClientData", err);
             throw err;
         }
     }

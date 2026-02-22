@@ -26,6 +26,7 @@ CREATE TABLE `clients`(
     `status` ENUM('pending', 'active', 'dropping', 'paused', 'outOfTime'),
     `time_remaining` BIGINT DEFAULT 0,
     `time_earned` BIGINT DEFAULT 0,
+    `expired_at` DATETIME DEFAULT NULL,
     `connection_start_at` DATETIME DEFAULT NULL,
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL

@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { decode } from 'jsonwebtoken';
 
 export default function authentication(req, res, next) {
     const token = req.headers.token;
@@ -23,6 +23,7 @@ export default function authentication(req, res, next) {
         res.locals.username = decoded?.username;
         res.locals.role = decoded?.role;
         res.locals.ip = decoded?.ip;
+        res.locals.name = decoded?.name;
         res.locals.authenticated = true;
         next();
     });

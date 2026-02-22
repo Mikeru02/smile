@@ -48,7 +48,7 @@ export default function Modal() {
                 </div>
                 <div class="${styles['button-container']}">
                     <button id="exit" class="${styles["action-button"]} ${styles["btn-cancel"]}">Cancel</button>
-                    <button id="proceed" class="${styles["action-button"]} ${styles["btn-save"]}">Save Changes</button>
+                    <button id="save" class="${styles["action-button"]} ${styles["btn-save"]}">Save Changes</button>
                 </div>
             </div>
         </div>

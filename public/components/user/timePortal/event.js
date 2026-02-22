@@ -134,6 +134,18 @@ export default async function Events() {
                 }
             }
         )
+
+        await axios.patch(
+            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
+            { status: "dropping" },
+            { 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_SRC_KEY,
+                    'token': localStorage.getItem('token')
+                }
+            }
+        )
         
         const droppingClientData = droppingClient.data.data;
         if (droppingClientData.length <= 0){

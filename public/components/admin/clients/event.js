@@ -65,8 +65,23 @@ export default async function Event() {
                 document.getElementById('modal').style.display = 'none';
             });
             
-            document.getElementById('proceed').addEventListener('click', () => {
+            document.getElementById('save').addEventListener('click', async () => {
                 document.getElementById('modal').style.display = 'none';
+                await axios.patch(
+                    `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/id/${button.dataset.id}`,
+                    {   
+                        name: document.getElementById('client-name').value,
+                        status: document.getElementById('client-status').value,
+                        time_remaining: document.getElementById('client-timeRemaining').value,
+                        time_earned: document.getElementById('client-timeEarned').value
+                    }, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "apikey": import.meta.env.VITE_SRC_KEY,
+                            "token": localStorage.getItem('token')
+                        }
+                    }
+                )
             });
         });
     });

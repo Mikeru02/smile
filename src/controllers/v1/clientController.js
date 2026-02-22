@@ -20,12 +20,12 @@ class ClientController {
 
             // Check client if it is existing in db
             const existingClientData = await this.client.verfyClient(ipAddress, name, course, yearlevel);
-            
-            if (existingClientData && existingClientData.length > 0) {
+            console.log("Existing: ", existingClientData)
+            if (existingClientData) {
                 return res.status(200).json({
                     success: true,
                     data: {
-                        token: jwt.sign({ ip: ipAddress, role: 'user' }, process.env.API_SECRET_KEY, {
+                        token: jwt.sign({ ip: ipAddress, name: existingClientData.name, role: 'user' }, process.env.API_SECRET_KEY, {
                             expiresIn: '1d'
                         })
                     }
@@ -36,7 +36,7 @@ class ClientController {
             return res.status(200).json({
                 success: true,
                 data: {
-                    token: jwt.sign({ ip: ipAddress, role: 'user' }, process.env.API_SECRET_KEY, {
+                    token: jwt.sign({ ip: ipAddress, name: name, role: 'user' }, process.env.API_SECRET_KEY, {
                         expiresIn: '1d'
                     })
                 }
@@ -288,12 +288,29 @@ class ClientController {
                 });
             }
 
-            await this.client.updateClientStatus(res.locals.ip, status);
+            await this.client.updateClientStatus(res.locals.ip, res.locals.name, status);
             return res.status(200).json({
                 success: true,
                 message: 'Updated successfully'
             });
 
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async updateClientData(req, res) {
+        try {
+            const id = req.params.id;
+            const { name, status, time_remaining, time_earned } = req.body || {};
+            const response = await this.client.updateClientData(id, name, status, time_remaining, time_earned);
+            res.status(200).json({
+                success: true,
+                data: response
+            })
         } catch (err) {
             return res.status(500).json({
                 success: false,
