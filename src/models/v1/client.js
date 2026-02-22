@@ -65,11 +65,11 @@ class Client {
         }
     }
 
-    async authenticate(ip) {
+    async authenticate(ip, name, expireAt) {
         try {
             const [result, ] = await this.db.execute(
-                'UPDATE clients SET status=?, connection_start_at=NOW(), updated_at=NOW() WHERE ip=?',
-                ['active', ip]
+                'UPDATE clients SET status=?, expire_at=?, connection_start_at=NOW(), updated_at=NOW() WHERE ip=? AND name=?',
+                ['active', expireAt, ip, name]
             );
             return result;
         } catch (err) {
@@ -78,12 +78,12 @@ class Client {
         }
     }
 
-    async deauthenticate(ip) {
+    async deauthenticate(ip, name) {
         try {
             const newTimeRemaining = await this.updateClientTime(ip);
             const [result, ] = await this.db.execute(
-                'UPDATE clients SET status=?, connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=?',
-                ['paused', null, newTimeRemaining, ip]
+                'UPDATE clients SET status=?, expire_at=?, connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=? and name=?',
+                ['paused', null, null, newTimeRemaining, ip, name]
             );
             return result;
         } catch (err) {
@@ -153,7 +153,6 @@ class Client {
                 'SELECT * FROM clients WHERE status=?',
                 [status]
             );
-            console.log(result);
             return result;
         } catch (err) {
             console.error("[ERROR] client.getClientByStatus", err);
@@ -233,11 +232,11 @@ class Client {
         }
     }
 
-    async updateClientData(id, name, status, time_remaining, time_earned) {
+    async updateClientData(id, name, status, time_remaining, time_earned, expire_at=null) {
         try {
             const [result] = await this.db.execute(
-                `UPDATE clients set name=?, status=?, time_remaining=?, time_earned=? WHERE id=?`,
-                [name, status, time_remaining, time_earned, id]
+                `UPDATE clients set name=?, status=?, time_remaining=?, time_earned=?, expire_at=? WHERE id=?`,
+                [name, status, time_remaining, time_earned, expire_at, id]
             )
             return result;
         } catch(err) {

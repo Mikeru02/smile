@@ -26,7 +26,7 @@ CREATE TABLE `clients`(
     `status` ENUM('pending', 'active', 'dropping', 'paused', 'outOfTime'),
     `time_remaining` BIGINT DEFAULT 0,
     `time_earned` BIGINT DEFAULT 0,
-    `expired_at` DATETIME DEFAULT NULL,
+    `expire_at` DATETIME DEFAULT NULL,
     `connection_start_at` DATETIME DEFAULT NULL,
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL
@@ -88,9 +88,7 @@ CREATE TABLE `prohibited_links`(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- DUMP DATA
-INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `connection_start_at`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost', 'BSCS', 4, 'pending', 0, 0, NULL, NOW(), NOW());
-INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `connection_start_at`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost1', 'BSCS', 4, 'active', 0, 0, NULL, NOW(), NOW());
-INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `connection_start_at`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost12', 'BSCS', 4, 'active', 0, 0, NULL, NOW(), NOW());
+INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `expire_at`, `connection_start_at`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost', 'BSCS', 4, 'pending', 0, 0, NULL, NULL, NOW(), NOW());
 
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('mikeru02', 'Michael Alexis Ponce', 'admin', '39de4811fa202334ad34e2b40df9aeb9af7f42e52427b9f36db16aad4c454231', NOW(), NOW());
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`) VALUES ('BlancheTinsleye', 'Bj Ashley Mercado', 'admin', '2148d5ff3881c92d22f60c8f5d41cc1ff6856840079bd87e45dd6c728d8235ff', NOW(), NOW());

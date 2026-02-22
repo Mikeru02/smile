@@ -2,87 +2,132 @@ import axios from 'axios';
 import { populateHeaders, populateTable } from '../../../utils/populateTable.js';
 
 export default async function Event() {
-    console.log('Event: Starting to fetch clients...');
-    const allClients = await axios.get(
-        '/api/v1/client/all-clients',
-        {
+    try {
+        const allClients = await axios.get('/api/v1/client/all-clients', {
             headers: {
                 "Content-Type": "application/json",
                 "apikey": import.meta.env.VITE_SRC_KEY
             }
-        }
-    );
+        });
 
-    const clients = allClients.data.data;
-    const table = document.getElementById("clients-table");
-    const thead = table.querySelector("thead");
-    const tbody = table.querySelector("tbody");
+        const clients = allClients.data.data;
+        const table = document.getElementById("clients-table");
+        const thead = table.querySelector("thead");
+        const tbody = table.querySelector("tbody");
 
-    // Clear existing content
-    tbody.innerHTML = '';
+        tbody.innerHTML = '';
 
-    let headers = populateHeaders(thead, "all-client");
-    populateTable(tbody, clients, headers);
+        const headers = populateHeaders(thead, "all-client");
+        populateTable(tbody, clients, headers);
 
-    const seeMore = document.querySelectorAll('.see-more');
-    seeMore.forEach(button => {
-        button.addEventListener('click', async () => {
-            const clientData = await axios.get(
-                `/api/v1/client/client/${button.dataset.id}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "apikey": import.meta.env.VITE_SRC_KEY,
-                        "token": localStorage.getItem('token')
-                    }
+        const modal = document.getElementById('modal');
+        const saveBtn = document.getElementById('save');
+        const exitBtn = document.getElementById('exit');
+
+        exitBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        saveBtn.addEventListener('click', async () => {
+            const clientId = saveBtn.dataset.clientId;
+            console.log('CLIENT ID:', clientId)
+            if (!clientId) return;
+
+            const clientStatus = document.getElementById('client-status').value;
+
+            try {
+                // Handle auth/deauth first
+                if (clientStatus === 'active') {
+                    await axios.post(`/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
+                        { clientId },
+                        { headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': import.meta.env.VITE_SRC_KEY,
+                            'token': localStorage.getItem('token')
+                        }}
+                    );
+                } else if (clientStatus === 'paused') {
+                    const deauthResponse = await axios.post(
+                        `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
+                        { clientId },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'apikey': import.meta.env.VITE_SRC_KEY,
+                                'token': localStorage.getItem('token')
+                            }
+                        }
+                    );
+                    console.log("Deauth Response:", deauthResponse);
                 }
-            );
-            console.log('Event: Received client data:', clientData.data);
-            
-            // Populate modal with client data
-            const client = clientData.data.data;
-            console.log("DEBUG: client/event.js: ", client)
-            
-            // Check if elements exist before setting values
-            const nameElement = document.getElementById('client-name');
-            const statusElement = document.getElementById('client-status');
-            const timeEarnedElement = document.getElementById('client-timeEarned');
-            const timeRemainingElement = document.getElementById('client-timeRemaining');
-            const wasteCollectedElement = document.getElementById('client-wasteCollected');
-            const createdAtElement = document.getElementById('client-createdAt');
-            
-            if (nameElement) nameElement.value = client.name || '';
-            if (statusElement) statusElement.value = client.status || 'active';
-            if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
-            if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;
-            if (wasteCollectedElement) wasteCollectedElement.value = client.waste_collected || 0;
-            if (createdAtElement) createdAtElement.value = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
 
-            document.getElementById('modal').style.display = 'block';
-            
-            // Add event listeners for modal buttons
-            document.getElementById('exit').addEventListener('click', () => {
-                document.getElementById('modal').style.display = 'none';
-            });
-            
-            document.getElementById('save').addEventListener('click', async () => {
-                document.getElementById('modal').style.display = 'none';
-                await axios.patch(
-                    `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/id/${button.dataset.id}`,
-                    {   
+                // Then update client info
+                const patchResponse = await axios.patch(
+                    `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/id/${clientId}`,
+                    {
                         name: document.getElementById('client-name').value,
-                        status: document.getElementById('client-status').value,
-                        time_remaining: document.getElementById('client-timeRemaining').value,
-                        time_earned: document.getElementById('client-timeEarned').value
-                    }, {
+                        status: clientStatus,
+                        time_remaining: Number(document.getElementById('client-timeRemaining').value),
+                        time_earned: Number(document.getElementById('client-timeEarned').value)
+                    },
+                    {
                         headers: {
                             "Content-Type": "application/json",
                             "apikey": import.meta.env.VITE_SRC_KEY,
                             "token": localStorage.getItem('token')
                         }
                     }
-                )
+                );
+
+            } catch (err) {
+                console.error('Error saving client:', err.response?.data || err.message);
+            } finally {
+                modal.style.display = 'none';
+                window.app.pushRoute('/admin/clients');
+            }
+        });
+
+        const seeMore = document.querySelectorAll('.see-more');
+        seeMore.forEach(button => {
+            button.addEventListener('click', async () => {
+                try {
+                    const clientData = await axios.get(
+                        `/api/v1/client/client/${button.dataset.id}`,
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "apikey": import.meta.env.VITE_SRC_KEY,
+                                "token": localStorage.getItem('token')
+                            }
+                        }
+                    );
+
+                    const client = clientData.data.data;
+
+                    const nameElement = document.getElementById('client-name');
+                    const statusElement = document.getElementById('client-status');
+                    const timeEarnedElement = document.getElementById('client-timeEarned');
+                    const timeRemainingElement = document.getElementById('client-timeRemaining');
+                    const wasteCollectedElement = document.getElementById('client-wasteCollected');
+                    const createdAtElement = document.getElementById('client-createdAt');
+
+                    if (nameElement) nameElement.value = client.name || '';
+                    if (statusElement) statusElement.value = client.status || 'active';
+                    if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
+                    if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;
+                    if (wasteCollectedElement) wasteCollectedElement.value = client.waste_collected || 0;
+                    if (createdAtElement) createdAtElement.value = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
+
+                    saveBtn.dataset.clientId = button.dataset.id;
+
+                    modal.style.display = 'block';
+                } catch (err) {
+                    console.error('Error fetching client details:', err);
+                }
             });
         });
-    });
+
+    } catch (err) {
+        console.error('Error fetching all clients:', err);
+    }
 }

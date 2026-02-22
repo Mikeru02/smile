@@ -20,7 +20,6 @@ class ClientController {
 
             // Check client if it is existing in db
             const existingClientData = await this.client.verfyClient(ipAddress, name, course, yearlevel);
-            console.log("Existing: ", existingClientData)
             if (existingClientData) {
                 return res.status(200).json({
                     success: true,
@@ -77,7 +76,6 @@ class ClientController {
     async addTime(req, res) {
         try {
             const clientData = await this.client.getClientByIP(res.locals.ip);
-            console.log("DEBUG API: ", clientData)
             const earnedTime = clientData.time_earned;
             if (earnedTime === 0) {
                 return res.status(400).json({
@@ -100,22 +98,34 @@ class ClientController {
 
     async authenticate(req, res) {
         try {
-            const clientData = await this.client.getClientByIP(res.locals.ip);
+            let clientData = null;
+
+            if (res.locals.role === "admin") {
+                const { clientId } = req.body;
+                clientData = await this.client.getClientByID(clientId);
+            } else {
+                clientData = await this.client.getClientByIP(res.locals.ip);
+            }
+
             const timeRemaining = clientData.time_remaining;
 
             if (timeRemaining <= 0 && clientData.status != 'paused') {
                 return res.status(400).json({
-                success: true,
-                message: 'No time or status is incorrect'
-            });
+                    success: true,
+                    message: 'No time or status is incorrect'
+                });
             }
 
-            await this.client.authenticate(res.locals.ip);
+            const now = new Date();
+            const expireAt = new Date(now.getTime() + (timeRemaining * 1000));
+            const fomattedExpireAt = expireAt.toLocaleString('sv-SE').replace('T', ' ');
+
+            await this.client.authenticate(clientData.ip, clientData.name, fomattedExpireAt);
             try {
-                ClientManagement.allowClient(res.locals.ip);
+                ClientManagement.allowClient(clientData.ip);
             } catch (err) {
                 console.error("Failed to allow client:", err);
-                return res.status(500).json({
+                return res.status(200).json({ // TODO: Change this status code to 500 after development
                     success: false,
                     message: "Failed to allow client: " + err.message
                 });
@@ -134,8 +144,26 @@ class ClientController {
 
     async deauthenticate(req, res) {
         try {
-            await this.client.deauthenticate(res.locals.ip);
-            ClientManagement.revokeClient(res.locals.ip);
+            let clientData = null;
+
+            if (res.locals.role === "admin") {
+                const { clientId } = req.body;
+                clientData = await this.client.getClientByID(clientId);
+            } else {
+                clientData = await this.client.getClientByIP(res.locals.ip);
+            }
+
+            await this.client.deauthenticate(clientData.ip, clientData.name);
+            try {
+                ClientManagement.revokeClient(clientData.ip);
+            } catch (err) {
+                console.error("Failed to allow client:", err);
+                return res.status(200).json({ // TODO: Change this status code to 500 after development
+                    success: false,
+                    message: "Failed to allow client: " + err.message
+                });
+            }
+            
             return res.status(200).json({
                 sucess: true,
                 message: 'Client deauthenticated'
@@ -305,8 +333,8 @@ class ClientController {
     async updateClientData(req, res) {
         try {
             const id = req.params.id;
-            const { name, status, time_remaining, time_earned } = req.body || {};
-            const response = await this.client.updateClientData(id, name, status, time_remaining, time_earned);
+            const { name, status, time_remaining, time_earned, expire_at } = req.body || {};
+            const response = await this.client.updateClientData(id, name, status, time_remaining, time_earned, expire_at);
             res.status(200).json({
                 success: true,
                 data: response
