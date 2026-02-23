@@ -20,15 +20,15 @@ import Model from './utils/model.js';
 const ip = getLocalIP();
 
 // Block for checking arduino
-// const arduino = new Arduino(
-//     process.env.SERIAL_PORT,
-//     Number(process.env.SERIAL_SPEED) || 9600,
-//     Number(process.env.SERIAL_TIMEOUT) || 1000,
-//     () => {
-//         arduino.sendCommand(`IP:${ip}`);
-//     }
-// );
-const arduino = "";
+const arduino = new Arduino(
+    process.env.SERIAL_PORT,
+    Number(process.env.SERIAL_SPEED) || 9600,
+    Number(process.env.SERIAL_TIMEOUT) || 1000,
+    () => {
+        arduino.sendCommand(`IP:${ip}`);
+    }
+);
+//const arduino = "";
 
 // Block for Camera
 const webcam = new Webcam();
