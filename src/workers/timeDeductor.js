@@ -55,5 +55,5 @@ export default function startTimeDeductor() {
         }
     }
 
-    deductLoop();
+    setTimeout(deductLoop, loopInterval * 1000);
 }

@@ -8,6 +8,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import 'dotenv/config';
+import limiter from './middlewares/rateLimiter.js';
 import SocketServer from './sockets/socketServer.js';
 import Arduino from './resources/arduino.js';
 import Webcam from './resources/webcam.js';
@@ -52,6 +53,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(distDirectory)));
+
+app.use(limiter);
 
 const server = http.createServer(app);
 
