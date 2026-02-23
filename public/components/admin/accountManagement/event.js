@@ -3,7 +3,7 @@ import { populateHeaders, populateTable } from "../../../utils/populateTable";
 
 export default async function PageEvents() {
     const response = await axios.get(
-        `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/account/all`,
+        `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/account/all`,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -14,7 +14,8 @@ export default async function PageEvents() {
     );
 
     const accounts = response.data.data;
-    const table =  document.getElementById("analytics-table");
+    console.log(accounts);
+    const table =  document.getElementById("accounts-table");
     const thead = table.querySelector("thead");
     const tbody = table.querySelector("tbody");
 

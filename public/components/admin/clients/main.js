@@ -19,6 +19,7 @@ export default function MainContent(root) {
                 </table>
             </div>
             
+            <!--
             <div class="${styles["table-footer"]}">
                 <div class="${styles["pagination-info"]}">
                     Showing of clients
@@ -29,6 +30,7 @@ export default function MainContent(root) {
                     <button class="${styles["btn-pagination"]}" id="next-page">Next</button>
                 </div>
             </div>
+            -->
         </div>
         ${Modal()}
     `;

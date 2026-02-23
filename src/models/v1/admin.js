@@ -4,11 +4,15 @@ import runSpawnSync  from '../../utils/runSpawnSync.js';
 import { CPUInfo, memoryInfo, storageInfo, networkInfo, OSName } from '../../utils/machineInformation.js';
 import { checkInternet, checkModel } from '../../utils/dashboardInformation.js';
 import { encryptPassword } from '../../utils/hash.js';
+import Log from './log.js';
+import Waste from './waste.js';
 
 class Admin {
     constructor() {
         this.db = connection;
         this.client = new Client();
+        this.waste = new Waste();
+        this.log = new Log();
     }
 
     async createAccount(username, name, role, password) {
@@ -26,13 +30,29 @@ class Admin {
 
     async verifyAccount(username, password) {
         try {
-            const [result] = await this.db.execute(
-                'SELECT * FROM accounts WHERE username=? AND password=?',
-                [username, encryptPassword(password)]
+            const [rows] = await this.db.execute(
+                'SELECT * FROM accounts WHERE username=?',
+                [username]
             );
-            return result?.[0];
+
+            if (rows.length === 0) return null;
+
+            const user = rows[0];
+
+            // Compare password in Node
+            if (encryptPassword(password) !== user.password) return null;
+
+            // Update last_login by ID
+            const [updateResult] = await this.db.execute(
+                'UPDATE accounts SET last_login=NOW() WHERE id=?',
+                [user.id]
+            );
+
+            console.log("Updated rows:", updateResult.affectedRows);
+
+            return user;
         } catch(err) {
-            console.error("[ERROR] admin.verifyAccount", err);
+            console.error("[ERROR] account.verify", err);
             throw err;
         }
     }
@@ -46,10 +66,10 @@ class Admin {
                 model: await checkModel(),
                 total_clients: await this.client.getTotalClients(),
                 active_clients: await this.client.getActiveClients(),
-                waste_transactions: await this.getAllWasteTransaction(),
-                plastic_bottle: await this.getAllSpecificWaste("PBTL"),
-                paper: await this.getAllSpecificWaste("PPRS"),
-                general_waste: await this.getAllSpecificWaste("GWST"),
+                waste_transactions: await this.waste.getAllWasteTransaction(),
+                plastic_bottle: await this.waste.getAllSpecificWaste("PBTL"),
+                paper: await this.waste.getAllSpecificWaste("PPRS"),
+                general_waste: await this.waste.getAllSpecificWaste("GWST"),
                 bn_count: await this.getAllBinTransaction()
             }
         } catch(err) {
@@ -78,31 +98,7 @@ class Admin {
         }
         
     }
-
-    async getAllWasteTransaction() {
-        try {
-            const [result] = await this.db.execute(
-                'SELECT COUNT(*) FROM waste_transactions WHERE DATE(transaction_date) = CURDATE()'
-            );
-            return result[0]['COUNT(*)'];
-        } catch(err) {
-            console.error("[ERROR] admin.getAllWasteTransaction", err);
-            throw err;
-        }
-    }
-
-    async getAllSpecificWaste(type) {
-        try {
-            const [result] = await this.db.execute(
-                'SELECT COUNT(*) FROM waste_transactions WHERE waste_code=?',
-                [type]
-            );
-            return result[0]['COUNT(*)'];
-        } catch(err) {
-            console.error("[ERROR] admin.getAllSpecificWaste", err);
-            throw err;
-        }
-    }
+    
 
     async getAllBinTransaction() {
         try {

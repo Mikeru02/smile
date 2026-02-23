@@ -11,6 +11,7 @@ adminRouter.use(authorization);
 // Get Methods
 adminRouter.get('/dashboard-info', admin.getDashboardInfo.bind(admin));
 adminRouter.get('/machine-info', admin.getMachineInfo.bind(admin));
+// adminRouter.get('/accounts', admin)
 
 // Post Methods
 adminRouter.post('/', admin.createAccount.bind(admin));

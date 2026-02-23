@@ -1,5 +1,5 @@
 import { TABLE_CONFIG } from "../config/tableConfig.js";
-import { formatSeconds, formatDate } from "./formatTime.js";
+import { formatSeconds, formatDate, formatDateTime } from "./formatTime.js";
 import styles from '../components/admin/clients/component.module.css';
 
 export function populateTable(tbody, data, headers) {
@@ -43,10 +43,15 @@ export function populateTable(tbody, data, headers) {
                 }
                 tdata.appendChild(span);
             } 
-            else if (head.key === 'created_at' || head.key === 'timestamp') {
+            else if (head.key === 'created_at') {
                 value = formatDate(value);
                 tdata.textContent = value;
-            } 
+            }
+            else if (head.key === 'timestamp' || head.key === 'last_login') {
+                value = formatDateTime(value);
+                tdata.textContent = value;
+            }
+
             else if (head.key === 'waste_collected') {
                 value = `${value} items`
                 tdata.textContent = value;

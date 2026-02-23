@@ -19,10 +19,10 @@ class Log {
         }
     }
 
-    async getLogs(limit = 10) {
+    async getLogs() {
         try {
             const [rows] = await this.db.execute(
-                `SELECT * FROM logs ORDER BY id DESC LIMIT ${limit}`,
+                `SELECT * FROM logs ORDER BY id DESC`,
             );
             return rows;
         } catch (err) {

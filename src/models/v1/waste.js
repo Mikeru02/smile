@@ -44,6 +44,33 @@ class Waste {
             throw err;
         }
     }
+
+    async getAllWasteTransaction() {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) FROM waste_transactions WHERE DATE(transaction_date) = CURDATE()'
+            );
+            return result[0]['COUNT(*)'];
+        } catch(err) {
+            console.error("[ERROR] admin.getAllWasteTransaction", err);
+            throw err;
+        }
+    }
+
+    async getAllSpecificWaste(type) {
+        try {
+            const [result] = await this.db.execute(
+                'SELECT COUNT(*) FROM waste_transactions WHERE waste_code=?',
+                [type]
+            );
+            return result[0]['COUNT(*)'];
+        } catch(err) {
+            console.error("[ERROR] admin.getAllSpecificWaste", err);
+            throw err;
+        }
+    }
+
+
 }
 
 export default Waste;

@@ -18,7 +18,7 @@ export default function MainContent(root) {
                     <tbody></tbody>
                 </table>
             </div>
-            
+            <!--
             <div class="${styles["logs-footer"]}">
                 <div class="${styles["pagination-info"]}">
                 </div>
@@ -28,6 +28,7 @@ export default function MainContent(root) {
                     <button class="${styles["btn-pagination"]}" id="next-page">Next</button>
                 </div>
             </div>
+            -->
         </div>
     `;
 

@@ -10,10 +10,12 @@ const TABLE_CONFIG = {
         { label: "Details", key: "details" },
     ],
     "account-management": [
-        { label: "UserID", key: "id" },
-        { label: "Name", key: "name" },
+        { label: "ID", key: "id" },
+        { label: "Username", key: "username" },
         { label: "Role", key: "role" },
-        { label: "Details", key: "details" },
+        { label: "Last Login", key: "last_login" },
+        { label: "Created At", key: "created_at" },
+        { label: "Action", key: "delete"}
     ],
     "logs": [
         { label: "Timestamp", key: "timestamp" },

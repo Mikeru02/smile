@@ -21,11 +21,27 @@ class Account {
 
     async verify(username, password) {
         try {
-            const [result] = await this.db.execute(
-                'SELECT * FROM accounts WHERE username=? AND password=?',
-                [username, encryptPassword(password)]
+            const [rows] = await this.db.execute(
+                'SELECT * FROM accounts WHERE username=?',
+                [username]
             );
-            return result;
+
+            if (rows.length === 0) return null;
+
+            const user = rows[0];
+
+            // Compare password in Node
+            if (encryptPassword(password) !== user.password) return null;
+
+            // Update last_login by ID
+            const [updateResult] = await this.db.execute(
+                'UPDATE accounts SET last_login=NOW() WHERE id=?',
+                [user.id]
+            );
+
+            console.log("Updated rows:", updateResult.affectedRows);
+
+            return user;
         } catch(err) {
             console.error("[ERROR] account.verify", err);
             throw err;
