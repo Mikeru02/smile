@@ -7,7 +7,8 @@ export default class ClientManagement {
         // Stop portal redirect
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
         runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "443", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
+        // TODO: Removed tentatively
+        // runSpawnSync("iptables", ["-t", "nat", "-I", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
 
         // Forward all traffic
         runSpawnSync("iptables", ["-I", "FORWARD", "-s", ip, "-o", routerPrimaryInterface, "-j", "ACCEPT"]);
@@ -23,7 +24,8 @@ export default class ClientManagement {
         // Restore portal redirect
         runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "80", "-j", "RETURN"]);
         runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "tcp", "--dport", "443", "-j", "RETURN"]);
-        runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
+        // TODO: Remove tentatively
+        // runSpawnSync("iptables", ["-t", "nat", "-D", "PREROUTING", "-s", ip, "-p", "udp", "--dport", "53", "-j", "RETURN"]);
 
         // Remove forwarding
         runSpawnSync("iptables", ["-D", "FORWARD", "-s", ip, "-o", routerPrimaryInterface, "-j", "ACCEPT"]);

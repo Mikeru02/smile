@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import Admin from '../../models/v1/admin.js';
 import Log from  '../../models/v1/log.js';
+import ContentFiltering from '../../utils/contentFiltering.js';
 
 class AdminController {
     constructor() {
@@ -89,6 +90,56 @@ class AdminController {
     async getMachineInfo(req, res) {
         try {
             const result = await this.admin.getMachineInfo();
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        } catch(err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async createProhibitedLinks(req, res) {
+        try {
+            const { link } = req.body || {};
+            const result = await this.admin.createProhibitedLinks(link);
+            ContentFiltering.addDomain(link);
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        } catch(err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async getProhibitedLinks(req, res) {
+        try {
+            const result = await this.admin.getProhibitedLinks();
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        } catch(err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async deleteProhibitedLink(req, res) {
+        try {
+            const id = req.params.id;
+            const link = await this.admin.getSpecificDomain(id);
+            const result = await this.admin.deleteProhibitedLink(id);
+            ContentFiltering.removeDomain(link.link)
             return res.status(200).json({
                 success: true,
                 data: result

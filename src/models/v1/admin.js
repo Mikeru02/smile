@@ -111,6 +111,57 @@ class Admin {
             throw err;
         }
     }
+
+    async createProhibitedLinks(link) {
+        try {
+            const [rows] = await this.db.execute(
+                `INSERT INTO prohibited_links (link, created_at) VALUES (?, NOW())`,
+                [link]
+            );
+            return rows;
+        } catch(err) {
+            console.error("[ERROR] admin.getProhibitedLinks", err);
+            throw err;
+        }
+    }
+
+    async getProhibitedLinks() {
+        try {
+            const [rows] = await this.db.execute(
+                `SELECT id, link FROM prohibited_links ORDER BY created_at DESC`
+            );
+            return rows;
+        } catch(err) {
+            console.error("[ERROR] admin.getProhibitedLinks", err);
+            throw err;
+        }
+    }
+
+    async getSpecificDomain(id) {
+        try {
+            const [row] = await this.db.execute(
+                `SELECT * FROM prohibited_links WHERE id=?`,
+                [id]
+            );
+            return row?.[0];
+        } catch(err) {
+            console.error("[ERROR] admin.getProhibitedLinks", err);
+            throw err;
+        }
+    }
+
+    async deleteProhibitedLink(id) {
+        try {
+            const [row] = await this.db.execute(
+                `DELETE FROM prohibited_links WHERE id=?`,
+                [id]
+            );
+            return row;
+        } catch(err) {
+            console.error("[ERROR] admin.getProhibitedLinks", err);
+            throw err;
+        }
+    }
 }
 
 export default Admin;

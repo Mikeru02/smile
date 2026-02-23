@@ -24,9 +24,9 @@ export default function startTimeDeductor() {
                 const connectionStart = new Date(client.connection_start_at).getTime();
                 const newExpireAt = new Date(connectionStart + newTimeRemaining * 1000);
                 const formattedExpireAt = newExpireAt.toLocaleString('sv-SE').replace('T', ' ')
-                const newStatus = newTimeRemaining <= 0 ? 'pending' : 'active';
+                const newStatus = newTimeRemaining <= 0 ? 'expired' : 'active';
 
-                if (newStatus === 'pending') {
+                if (newStatus === 'expired') {
                     ClientManagement.revokeClient(client.ip);
                 }
 
@@ -36,7 +36,7 @@ export default function startTimeDeductor() {
                         name: client.name,
                         course: client.course,
                         year_level: client.yearlevel,
-                        status: newStatus,
+                        status: "pending",
                         time_remaining: newTimeRemaining,
                         time_earned: client.time_earned,
                         expire_at: formattedExpireAt

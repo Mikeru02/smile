@@ -1,0 +1,57 @@
+import axios from "axios";
+import styles from './component.module.css';
+import populateDomainListContainer from "../../../utils/populateDomainList";
+
+export default async function PageEvent() {
+    const response = await axios.get(
+        '/api/v1/admin/prohibited-links',
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': import.meta.env.VITE_SRC_KEY,
+                'token': localStorage.getItem('token')
+            }
+        }
+    );
+
+    const prohibitedLinks = response.data.data;
+    const domainListContainer = document.getElementById('domain-list');
+
+    domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
+
+    const removeButtons = document.querySelectorAll(".remove-btn")
+    removeButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+            await axios.delete(
+                `/api/v1/admin/prohibited-links/${button.dataset.id}`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': import.meta.env.VITE_SRC_KEY,
+                        'token': localStorage.getItem('token')
+                    }
+                }
+            );
+
+            window.app.pushRoute('/admin/settings');
+        })
+    });
+
+    const addDomainBtn = document.getElementById('add-domain-btn');
+    const domainInput = document.getElementById('new-domain');
+
+    addDomainBtn.addEventListener('click', async function() {
+        await axios.post(
+            '/api/v1/admin/prohibited-links',
+            { link: domainInput.value },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': import.meta.env.VITE_SRC_KEY,
+                    'token': localStorage.getItem('token')
+                }
+            }
+        );
+        window.app.pushRoute('/admin/settings');
+    })
+}
