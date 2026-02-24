@@ -45,25 +45,26 @@ export default function startTimeDeductor() {
                             }
                         }
                     )
-                }
+                } else {
 
-                await axios.patch(
-                    `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/id/${client.id}`,
-                    {
-                        name: client.name,
-                        course: client.course,
-                        year_level: client.yearlevel,
-                        status: "active",
-                        time_remaining: newTimeRemaining,
-                        time_earned: client.time_earned,
-                        expire_at: formattedExpireAt
-                    }, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'apikey': process.env.SRC_KEY,
+                    await axios.patch(
+                        `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/id/${client.id}`,
+                        {
+                            name: client.name,
+                            course: client.course,
+                            year_level: client.yearlevel,
+                            status: "active",
+                            time_remaining: newTimeRemaining,
+                            time_earned: client.time_earned,
+                            expire_at: formattedExpireAt
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'apikey': process.env.SRC_KEY,
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         } catch (err) {
             console.error('Time Deductor Error: ', err);
