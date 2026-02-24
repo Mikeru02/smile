@@ -16,7 +16,12 @@ class Model {
             "plastic bottle": "PBTL",
             "paper": "PPRS"
         }
-        this.baseUrl = `http://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
+        if (this.env.MODEL_TYPE === 'deployed') {
+            this.baseUrl = `https://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
+        }
+        else {
+            this.baseUrl = `http://${this.env.MODEL_HOST}:${this.env.MODEL_PORT}/${this.env.MODEL_VERSION}/model`;
+        }
         this.client = axios.create({
             baseURL: this.baseUrl,
         })
