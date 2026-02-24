@@ -2,8 +2,10 @@ import axios from "axios";
 import { populateHeaders, populateTable } from "../../../utils/populateTable";
 
 export default async function PageEvents() {
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+
     const response = await axios.get(
-        `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/account/all`,
+        `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/account/all`,
         {
             headers: {
                 'Content-Type': 'application/json',

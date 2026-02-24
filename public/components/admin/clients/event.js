@@ -1,9 +1,12 @@
 import axios from 'axios';
-import { populateHeaders, populateTable } from '../../../utils/populateTable.js';
+import { populateHeaders, populateTable } from '..../../utils/populateTable.js';
 
 export default async function Event() {
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+
     try {
-        const allClients = await axios.get('/api/v1/client/all-clients', {
+        const allClients = await axios.get(
+            `${baseUrl}/api/v1/client/all-clients`, {
             headers: {
                 "Content-Type": "application/json",
                 "apikey": import.meta.env.VITE_SRC_KEY
@@ -37,7 +40,8 @@ export default async function Event() {
             try {
                 // Handle auth/deauth first
                 if (clientStatus === 'active') {
-                    await axios.post(`/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
+                    await axios.post(
+                        `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
                         { clientId },
                         { headers: {
                             'Content-Type': 'application/json',
@@ -47,7 +51,7 @@ export default async function Event() {
                     );
                 } else if (clientStatus === 'paused') {
                     const deauthResponse = await axios.post(
-                        `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
+                        `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
                         { clientId },
                         {
                             headers: {
@@ -62,7 +66,7 @@ export default async function Event() {
 
                 // Then update client info
                 const patchResponse = await axios.patch(
-                    `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/id/${clientId}`,
+                    `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/id/${clientId}`,
                     {
                         name: document.getElementById('client-name').value,
                         course: document.getElementById('client-course').value,
@@ -93,7 +97,7 @@ export default async function Event() {
             button.addEventListener('click', async () => {
                 try {
                     const clientData = await axios.get(
-                        `/api/v1/client/client/${button.dataset.id}`,
+                        `${baseUrl}/api/v1/client/client/${button.dataset.id}`,
                         {
                             headers: {
                                 "Content-Type": "application/json",

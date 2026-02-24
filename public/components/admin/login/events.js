@@ -3,6 +3,7 @@ import OpenEye from '/icons/open-eye.svg';
 import CloseEye from '/icons/close-eye.svg';
 
 export default function Events(){
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
     const loginBtn = document.getElementById('submit-login');
     const togglePasswordBtn = document.getElementById('toggle-password');
     const okayButton = document.getElementById('ok-button');
@@ -30,7 +31,7 @@ export default function Events(){
     loginBtn.addEventListener('click', async function() {
         try {
             const response = await axios.post(
-                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/admin/login`,
+                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/admin/login`,
                 {
                     username: document.getElementById('username').value,
                     password: document.getElementById('password').value

@@ -2,8 +2,10 @@ import axios from 'axios';
 import calculateUptime from '../../../utils/calculateUpTime.js';
 
 export default async function Events(){
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+
     const dashboardInfo = await axios.get(
-        '/api/v1/admin/dashboard-info',
+        `${baseUrl}/api/v1/admin/dashboard-info`,
         {
             headers: {
                 "Content-Type": "application/json",

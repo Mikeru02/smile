@@ -5,6 +5,7 @@ import checkToken from '../../../utils/checkToken.js';
 import { getRole } from '../../../utils/getRole.js';
 
 export default async function Events() {
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
     const token = localStorage.getItem('token')
     const validToken = checkToken(token);
     const role = getRole(token);
@@ -49,7 +50,7 @@ export default async function Events() {
     const checkInternetConnection = async () => {
         try {
             const response = await axios.get(
-                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/check-internet`,
+                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/check-internet`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ export default async function Events() {
 
             startTime();
             await axios.post(
-                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
+                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
                 {},
                 {
                     headers: {
@@ -107,7 +108,7 @@ export default async function Events() {
             timeRemainingInterval = null;
 
             await axios.post(
-                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
+                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
                 {},
                 {
                     headers: {
@@ -125,7 +126,7 @@ export default async function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         const droppingClient = await axios.get(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/status/dropping`,
+            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/status/dropping`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -136,7 +137,7 @@ export default async function Events() {
         )
 
         await axios.patch(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
+            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
             { status: "dropping" },
             { 
                 headers: {
@@ -180,7 +181,7 @@ export default async function Events() {
         modal.style.display = 'none';
         clearInterval(earnInterval);
         await axios.patch(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
+            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
             { status: 'pending' },
             {
                 headers: {
@@ -199,7 +200,7 @@ export default async function Events() {
         modal.style.display = 'none';
         clearInterval(earnInterval);
         await axios.post(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/add-time`,
+            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/add-time`,
             {},
             {
                 headers: {
@@ -215,7 +216,7 @@ export default async function Events() {
 
     const updateTimeRemaining = async () => {
         const response = await axios.get(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`,
+            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -231,7 +232,7 @@ export default async function Events() {
 
     const getClientStatus = async () => {
         const response = await axios.get(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client`,
+            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -245,7 +246,7 @@ export default async function Events() {
 
     const getActualTimeRemaining = async () => {
         const response = await axios.get(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/calculated`,
+            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/calculated`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -259,7 +260,7 @@ export default async function Events() {
 
     const updateEarnedTimeDisplay = async () => {
         const response = await axios.get(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`,
+            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -281,7 +282,7 @@ export default async function Events() {
         isRunning = true;
 
         await axios.post(
-            `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`,
+            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`,
             { earned_time: time, waste_code: wasteCode },
             {
                 headers: {
@@ -305,7 +306,7 @@ export default async function Events() {
                 clearInterval(timeRemainingInterval);
                 timeRemainingInterval = null;
                 await axios.patch(
-                    `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
+                    `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
                     {},
                     {
                         headers: {
@@ -359,7 +360,7 @@ export default async function Events() {
             dropTimeout = null;
             countdownInterval = null;
             await axios.patch(
-                `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
+                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
                 { status: 'pending' },
                 {
                     headers: {

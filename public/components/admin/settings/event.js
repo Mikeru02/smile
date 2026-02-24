@@ -3,8 +3,10 @@ import styles from './component.module.css';
 import populateDomainListContainer from "../../../utils/populateDomainList";
 
 export default async function PageEvent() {
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+
     const response = await axios.get(
-        '/api/v1/admin/prohibited-links',
+        `${baseUrl}/api/v1/admin/prohibited-links`,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +25,7 @@ export default async function PageEvent() {
     removeButtons.forEach(button => {
         button.addEventListener('click', async function() {
             await axios.delete(
-                `/api/v1/admin/prohibited-links/${button.dataset.id}`,
+                `${baseUrl}/api/v1/admin/prohibited-links/${button.dataset.id}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -42,7 +44,7 @@ export default async function PageEvent() {
 
     addDomainBtn.addEventListener('click', async function() {
         await axios.post(
-            '/api/v1/admin/prohibited-links',
+            `${baseUrl}/api/v1/admin/prohibited-links`,
             { link: domainInput.value },
             {
                 headers: {

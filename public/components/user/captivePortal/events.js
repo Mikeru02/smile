@@ -5,6 +5,7 @@ import { populateSelect } from "../../../utils/populateSelect.js";
 import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
 export default async function Events() {
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
     const validToken = checkToken(localStorage.getItem('token'));
 
     if (validToken) {
@@ -58,7 +59,7 @@ export default async function Events() {
         if (submitBtn) {
             submitBtn.addEventListener("click", async function() {
                 const response = await axios.post(
-                    `/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`, 
+                    `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`, 
                     {
                         name: document.getElementById('name').value,
                         course: courseSelect.value,
