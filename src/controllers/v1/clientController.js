@@ -256,7 +256,7 @@ class ClientController {
             }
 
             await this.client.earned(res.locals.ip, waste_code, convertedTime);
-            await this.log.create("Earned Time", `Client ${clientData.name} earned ${convertedTime} time`, "INFO")
+            await this.log.create("Earned Time", `Client ${res.locals.ip} earned ${convertedTime} time`, "INFO")
             return res.status(200).json({
                 success: true,
                 message: "Time earned is added"
