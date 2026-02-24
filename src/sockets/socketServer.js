@@ -1,5 +1,7 @@
 import { Server } from 'socket.io';
 import Client from '../models/v1/client.js';
+import path from 'path';
+import fs from 'fs';
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi }) {
@@ -118,6 +120,9 @@ class SocketServer {
                     time: Date.now(),
                 });
                 try {
+                    const timeStamp = Date.now();
+                    const filename = `capture_${timeStamp}.jpg`;
+                    await this.webcam.capture(filename);
                     await this.webcam.capture("test_capture.jpg"); 
                     const response = await this.modelApi.earnedTime();
                     console.log(response);
