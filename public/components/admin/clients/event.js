@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { populateHeaders, populateTable } from '..../../utils/populateTable.js';
+import { populateHeaders, populateTable } from '../../../utils/populateTable.js';
 
 export default async function Event() {
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
