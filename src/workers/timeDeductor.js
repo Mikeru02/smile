@@ -28,6 +28,23 @@ export default function startTimeDeductor() {
 
                 if (newStatus === 'expired') {
                     ClientManagement.revokeClient(client.ip);
+                    await axios.patch(
+                        `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/id/${client.id}`,
+                        {
+                            name: client.name,
+                            course: client.course,
+                            year_level: client.yearlevel,
+                            status: "pending",
+                            time_remaining: newTimeRemaining,
+                            time_earned: client.time_earned,
+                            expire_at: formattedExpireAt
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'apikey': process.env.SRC_KEY,
+                            }
+                        }
+                    )
                 }
 
                 await axios.patch(
@@ -36,7 +53,7 @@ export default function startTimeDeductor() {
                         name: client.name,
                         course: client.course,
                         year_level: client.yearlevel,
-                        status: "pending",
+                        status: "active",
                         time_remaining: newTimeRemaining,
                         time_earned: client.time_earned,
                         expire_at: formattedExpireAt
