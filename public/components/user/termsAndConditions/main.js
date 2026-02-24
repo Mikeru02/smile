@@ -8,28 +8,60 @@ export default function Main(root){
             <h1 class="${styles["title"]}">Terms and Conditions</h1>
             <div class="${styles["content"]}">
                 <h2>1. Acceptance of Terms</h2>
-                <p>By accessing and using the S.M.I.L.E system, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                <p>By accessing or using the S.M.I.L.E  system, you agree to be bound by these Terms and Conditions. If you do not agree to these Terms, you are not authorized to access or use the System.</p>
                 
-                <h2>2. Use License</h2>
-                <p>Permission is granted to temporarily use the S.M.I.L.E system for the purpose of educational activities and campus services. This is the grant of a license, not a transfer of title.</p>
+                <h2>2. License Grant</h2>
+                <p>Subject to these Terms, the System grants Users a limited, non-exclusive, non-transferable, and revocable license to access and use the System solely for lawful educational, campus-related, and authorized purposes. This license does not convey any ownership, title, or intellectual property rights in the System.</p>
                 
-                <h2>3. User Responsibilities</h2>
-                <p>Users are responsible for maintaining the confidentiality of their credentials and for all activities that occur under their account. You agree to immediately notify the system administrators of any unauthorized use of your account.</p>
+                <h2>3. User Obligations and Responsibilities</h2>
+                <pUsers shall maintain the confidentiality of any credentials, access codes, or account information provided by the System.<br><br>
+
+                Users are fully responsible for all activities conducted under their accounts.<br><br>
+
+                Users must immediately notify the System administrators of any unauthorized access or suspected security breach.<br><br>
+
+                Users shall comply with all operational requirements, including but not limited to the lawful exchange of plastic bottles for System access, and shall not circumvent or attempt to bypass such requirements.</p>
                 
-                <h2>4. Privacy</h2>
-                <p>Your personal information is collected solely for the purpose of system authentication and service delivery. We are committed to protecting your privacy and will not share your information with third parties without your consent, except as required by law.</p>
+                <h2>4. Privacy, Data Collection, and Monitoring</h2>
+                <p>The System collects personal information solely for the purpose of authentication, authorization, service provision, and operational monitoring.<br><br>
+
+                Users acknowledge and agree that their browsing activity, including visited websites, access times, and network usage, may be monitored and logged for the purpose of ensuring fair usage, system security, and compliance with these Terms.<br><br>
+
+                Collected data will be handled in accordance with applicable privacy laws and will not be shared with third parties except as required by law, legal process, or operational necessity.</p>
                 
-                <h2>5. System Usage</h2>
-                <p>The S.M.I.L.E system is provided for educational purposes only. Users must not attempt to compromise system security, interfere with system operations, or use the system for any illegal or unauthorized activities.</p>
+                <h2>5. Acceptable Use and Prohibited Conduct Users shall:</h2>
+                <p>Use the System solely for lawful purposes;<br><br>
+
+                Refrain from attempting to gain unauthorized access to any part of the System;<br><br>
+
+                Not interfere with the operation, performance, or security of the System;<br><br>
+
+                Not engage in illegal, fraudulent, or unauthorized activities;<br><br>
+
+                Not transmit viruses, malware, or other harmful code;<br><br>
+
+                Comply with all applicable laws, regulations, and institutional policies.</p>
                 
-                <h2>6. Limitations</h2>
-                <p>In no event shall the system administrators be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising from the use or inability to use the S.M.I.L.E system.</p>
+                <h2>6. Limitations of Liability</h2>
+                <p>The System is provided on an “as-is” and “as-available” basis.<br><br>
+
+                The System administrators and affiliated entities shall not be liable for any direct, indirect, incidental, consequential, or punitive damages, including but not limited to loss of data, interruption of service, or economic loss arising from the use or inability to use the System.<br><br>
+
+                Users acknowledge that internet speed, connectivity, and availability may vary, and the System makes no warranty regarding uninterrupted or error-free service.</p>
                 
-                <h2>7. Revisions</h2>
-                <p>We reserve the right to revise these terms and conditions at any time. Continued use of the system after any such changes shall constitute your consent to such changes.</p>
+                <h2>7. Rate Limiting and System Controls</h2>
+                <p>The System may implement usage limitations, including but not limited to rate limiting or temporary suspension, to ensure equitable access.<br><br>
+
+                Excessive, abusive, or unauthorized use may result in immediate restriction or termination of access without prior notice.</p>
                 
-                <h2>8. Contact Information</h2>
-                <p>If you have any questions about these Terms and Conditions, please contact the system administrators at the campus IT department.</p>
+                <h2>9. Modifications</h2>
+                <p>The System reserves the right to revise, amend, or modify these Terms at any time. Continued use of the System following any such modifications constitutes acceptance of the revised Terms.</p>
+
+                <h2>10. Governing Law and Dispute Resolution</h2>
+                <p>These Terms shall be governed by and construed in accordance with the laws of the Republic of the Philippines. Any disputes arising out of or relating to these Terms or the use of the System shall be subject to the exclusive jurisdiction of the courts located within the Pandi, Bulacan, Philippines.</p>
+
+                <h2>11. Contact Information</h2>
+                <p>For inquiries, complaints, or reports regarding these Terms or the System, Users may contact the S.M.I.L.E System administrators.</p>
             </div>
             <div class="${styles["actions"]}">
                 <button class="${styles["back-button"]}" id="back-button">Back to Portal</button>
