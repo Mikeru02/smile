@@ -4,6 +4,7 @@ const SELECT_CONFIG = {
         { name: "BEED", type: "college" },
         { name: "BSED", type: "college" },
         { name: "BSHM", type: "college" },
+        { name: "BSTM", type: "college" },
         { name: "BSBA", type: "college" },
         { name: "BSA", type: "college" },
         { name: "STEM", type: "shs" },
