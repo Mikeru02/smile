@@ -16,7 +16,7 @@ class Model {
             "plastic bottle": "PBTL",
             "paper": "PPRS"
         }
-        this.baseUrl = `https://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
+        this.baseUrl = `http://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
         this.client = axios.create({
             baseURL: this.baseUrl,
         })
