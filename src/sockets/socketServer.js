@@ -10,7 +10,7 @@ class SocketServer {
         this.arduino = arduino;
         this.webcam = webcam;
         this.modelApi = modelApi;
-        this.srcBaseUrl = `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/${process.env.SRC_ROUTE_VERSION}`
+        this.srcBaseUrl = `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/${process.env.SRC_ROUTE_VERSION}/`
         this.axiosClient = axios.create({
             baseURL: this.srcBaseUrl
         });
@@ -37,7 +37,7 @@ class SocketServer {
 
         return this.io;
     }
-    
+
     registerSocketEvents() {
         this.io.on('connection', (socket) => {
             console.log('[SOCKET] CLient connected', socket.id);
@@ -62,7 +62,7 @@ class SocketServer {
                     this.activeClient = null;
                     this.arduino.sendCommand("DONE DROP")
                     await axios.patch(
-                        `/client/`,
+                        `client/`,
                         { status: "pending"},
                         {
                             headers: {
