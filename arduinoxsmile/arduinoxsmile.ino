@@ -364,12 +364,12 @@ void loop() {
 
     // Sequential reading with small delays to avoid interference
     bool frontDetected   = sonarObjectDetected(sonarTrigPin, frontEchoPin, frontTreshold);
-    delay(120);
+    delay(150);
     bool rightDetected = sonarObjectDetected(sonarTrigPin, rightEchoPin, rightTreshold);
-    delay(120);
+    delay(150);
     bool leftDetected = sonarObjectDetected(sonarTrigPin, leftEchoPin, leftTreshold);
-    delay(120);
-    
+    delay(150);
+
     Serial.print("Front: "); Serial.print(frontDetected);
     Serial.print("  Right: "); Serial.print(rightDetected);
     Serial.print("  Left: "); Serial.println(leftDetected);
