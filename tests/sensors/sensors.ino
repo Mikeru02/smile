@@ -1,7 +1,11 @@
 #include <Wire.h>
 #include <Servo.h>
+#include <AccelStepper.h>
 #include <LiquidCrystal_I2C.h>
 
+const int stepPin = 2;
+const int dirPin = 3;
+const int enablePin = 4;
 const int servoLeftPin = 12;
 const int servoRightPin = 13;
 const int trigPin = 8;
@@ -13,13 +17,18 @@ const int bottlesEchoPin = 5;
 const int generalEchoPin = 6;
 const int paperEchoPin = 7;
 
+Servo servoRight;
+Servo servoLeft;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+AccelStepper stepper(AccelStepper::DRIVER, stepPin, dirPin);
 
 long readDistance(int echoPin);
+void openGate(Servo servoLeft, Servo servoRight);
+void closeGate(Servo servoLeft, Servo servoRight);
 
 void setup() {
-  // servoLeft.attach(servoLeftPin);
-  // servoRight.attach(servoRightPin);
+  servoLeft.attach(servoLeftPin);
+  servoRight.attach(servoRightPin);
 
   // servoRight.write(90);
   // servoLeft.write(90);
@@ -44,6 +53,8 @@ void setup() {
   lcd.print("Ultrasonic Ready");
   delay(2000);
   lcd.clear();
+
+
 }
 
 void loop() {
@@ -121,4 +132,37 @@ long readDistance(int trigPin, int echoPin) {
   }
 
   return distance;
+}
+
+void openGate(Servo servoLeft, Servo servoRight) {
+  // servoRight.write(0);
+  // servoLeft.write(180);
+  // Move both servos simultaneously
+  // servoLeft.writeMicroseconds(backward);
+  // servoRight.writeMicroseconds(forward);
+  // delay(openTime);
+
+  servoLeft.writeMicroseconds(forward);
+  servoRight.writeMicroseconds(backward);
+  delay(openTime);
+
+  // Stop both servos
+  servoLeft.writeMicroseconds(stop);
+  servoRight.writeMicroseconds(stop);
+}
+
+void closeGate(Servo servoLeft, Servo servoRight) {
+  // servoRight.write(90);
+  // servoLeft.write(80);
+  // servoLeft.writeMicroseconds(forward);
+  // servoRight.writeMicroseconds(backward);
+  // delay(closeTime);
+
+  servoLeft.writeMicroseconds(backward);
+  servoRight.writeMicroseconds(forward);
+  delay(closeTime);
+
+  // Stop both servos
+  servoLeft.writeMicroseconds(stop);
+  servoRight.writeMicroseconds(stop);
 }
