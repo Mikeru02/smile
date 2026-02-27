@@ -91,8 +91,11 @@ void calibratePlatform() {
   delay(2000);
 
   baseTop = readSonarDistance(trigPin, frontEchoPin);
+  delay(200);
   baseLeft = readDistance(trigPin, leftEchoPin);
+  delay(200);
   baseRight = readDistance(trigPin, rightEchoPin);
+  delay(200);
 
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -392,16 +395,20 @@ void loop() {
     // }
 
     // Sequential reading with small delays to avoid interference
-    bool frontDetected   = sonarObjectDetected(sonarTrigPin, frontEchoPin, frontTreshold);
+    long frontDistance = sonarObjectDetected(sonarTrigPin, frontEchoPin, frontTreshold);
     delay(100);
-    bool rightDetected = sonarObjectDetected(sonarTrigPin, rightEchoPin, rightTreshold);
+    long rightDistance = sonarObjectDetected(sonarTrigPin, rightEchoPin, rightTreshold);
     delay(100);
-    bool leftDetected = sonarObjectDetected(sonarTrigPin, leftEchoPin, leftTreshold);
+    long leftDistance = sonarObjectDetected(sonarTrigPin, leftEchoPin, leftTreshold);
     delay(100);
 
-    Serial.print("Front: "); Serial.print(frontDetected);
-    Serial.print("  Right: "); Serial.print(rightDetected);
-    Serial.print("  Left: "); Serial.println(leftDetected);
+    bool frontDetected = (frontDistance < (baseTop - detectTreshold - tolerance));
+    bool rightDetected = (rightDistance < (baseRight - detectTreshold - tolerance));
+    bool leftDetected  = (leftDistance  < (baseLeft - detectTreshold - tolerance));
+
+    Serial.print("Front: "); Serial.print(frontDistance);
+    Serial.print("  Right: "); Serial.print(rightDistance);
+    Serial.print("  Left: "); Serial.println(leftDistance);
 
     lcd.setCursor(0, 0);
     lcd.print("F:");
