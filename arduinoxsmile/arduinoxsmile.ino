@@ -373,6 +373,24 @@ void loop() {
     Serial.print("  Right: "); Serial.print(rightDetected);
     Serial.print("  Left: "); Serial.println(leftDetected);
 
+    lcd.setCursor(0, 0);
+    lcd.print("T:");
+    lcd.print(topDistance);
+    lcd.print("/");
+    lcd.print(frontTreshold);
+
+    lcd.print(" L:");
+    lcd.print(side1Distance);
+    lcd.print("/");
+    lcd.print(leftTreshold);
+
+    lcd.setCursor(0, 1);
+    lcd.print(" R:");
+    lcd.print(side2Distance);
+    lcd.print("/");
+    lcd.print(rightTreshold);
+
+
     // ---------------- TOP SONAR FILTER ----------------
     if (frontDetected) { frontDetectCount++; frontClearCount = 0; } 
     else { frontClearCount++; frontDetectCount = 0; }
