@@ -40,9 +40,9 @@ const int clearConfirmCount = 25;
 const int detectConfirmCount = 5;
 
 // Sonar tresholds
-const float rightTreshold = 22;
-const float leftTreshold = 22;
-const float frontTreshold = 22;
+const float rightTreshold = 18;
+const float leftTreshold = 18;
+const float frontTreshold = 18;
 const float plasticTreshold = 40;
 const float generalTreshold = 35;
 const float paperTreshold = 38;
