@@ -22,8 +22,8 @@ const int paperEchoPin = 7;
 const int stop = 1500;
 const int forward = 2100;
 const int backward = 1000;
-const int openTime = 230;
-const int closeTime = 750;
+const int openTime = 220;
+const int closeTime = 800;
 
 // Variable needed
 String ip;
@@ -402,9 +402,9 @@ void loop() {
     long leftDistance = readSonarDistance(sonarTrigPin, leftEchoPin);
     delay(70);
 
-    bool frontDetected = (frontDistance < (baseTop - detectTreshold - tolerance));
-    bool rightDetected = (rightDistance < (baseRight - detectTreshold - tolerance));
-    bool leftDetected  = (leftDistance  < (baseLeft - detectTreshold - tolerance));
+    bool frontDetected = (frontDistance != 999) && ((baseTop - frontDistance) > frontDistance);
+    bool rightDetected = (rightDistance != 999) && ((baseRight - rightDistance) > rightDistance);
+    bool leftDetected  = (leftDistance != 999) && ((baseRight - rightDistance) > leftDistance);
 
     Serial.print("Front: "); Serial.print(frontDistance);
     Serial.print("  Right: "); Serial.print(rightDistance);
