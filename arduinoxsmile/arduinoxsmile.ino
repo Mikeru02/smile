@@ -90,11 +90,11 @@ void calibratePlatform() {
   lcd.print("Calibrating...");
   delay(2000);
 
-  baseTop = readSonarDistance(trigPin, frontEchoPin);
+  baseTop = readSonarDistance(sonarTrigPin, frontEchoPin);
   delay(200);
-  baseLeft = readDistance(trigPin, leftEchoPin);
+  baseLeft = readDistance(sonarTrigPin, leftEchoPin);
   delay(200);
-  baseRight = readDistance(trigPin, rightEchoPin);
+  baseRight = readDistance(sonarTrigPin, rightEchoPin);
   delay(200);
 
   lcd.clear();
