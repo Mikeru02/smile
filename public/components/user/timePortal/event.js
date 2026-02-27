@@ -6,6 +6,7 @@ import { getRole } from '../../../utils/getRole.js';
 
 export default async function Events() {
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+    socketClient.connect();
     socketClient.on('connect', () => {
         console.log('[SOCKET] connected, waiting for events');
     })
