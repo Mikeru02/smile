@@ -7,12 +7,15 @@ class SocketClient {
 
     connect() {
         if (this.socket) return;
+
+        const token = localStorage.getItem('token');
         
         this.socket = io(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`,
             {
                 autoConnect: true,
-                transports: ['websocket', 'polling']
+                transports: ['websocket', 'polling'],
+                auth: { token }
             }
         );
 

@@ -30,7 +30,6 @@ clientRouter.post('/add-time', authentication, client.addTime.bind(client));
 
 // Patch Methods
 clientRouter.patch('/', authentication, client.updateClientStatus.bind(client));
-clientRouter.patch('/client', client.updateClientStatus.bind(client));
 clientRouter.patch('/id/:id', client.updateClientData.bind(client));
 clientRouter.patch('/all', client.updateAllClientsTime.bind(client));
 clientRouter.patch('/revoke', authentication, client.revoke.bind(client));

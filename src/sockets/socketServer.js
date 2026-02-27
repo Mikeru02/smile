@@ -40,6 +40,7 @@ class SocketServer {
 
     registerSocketEvents() {
         this.io.on('connection', (socket) => {
+            const token = socket.handshake.auth.token;
             console.log('[SOCKET] CLient connected', socket.id);
 
             socket.on('DROPPING', () => {
@@ -62,12 +63,13 @@ class SocketServer {
                     this.activeClient = null;
                     this.arduino.sendCommand("DONE DROP")
                     await this.axiosClient.patch(
-                        `client/client`,
+                        `client/`,
                         { status: "pending"},
                         {
                             headers: {
                                 'Content-Type': "application/json",
                                 'apikey': process.env.SRC_KEY,
+                                'token': token
                             }
                         }
                     )
