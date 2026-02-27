@@ -17,6 +17,12 @@ const int bottlesEchoPin = 5;
 const int generalEchoPin = 6;
 const int paperEchoPin = 7;
 
+const int stop = 1500;
+const int forward = 2100;
+const int backward = 1000;
+const int openTime = 250;
+const int closeTime = 700;
+
 Servo servoRight;
 Servo servoLeft;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
