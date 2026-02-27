@@ -60,6 +60,12 @@ void setup() {
   delay(2000);
   lcd.clear();
 
+  openGate(servoLeft, servoRight);
+  delay(1000);
+  closeGate(servoLeft, servoRight);
+
+  servoLeft.writeMicroseconds(stop);
+  servoRight.writeMicroseconds(stop);
 
 }
 
