@@ -23,6 +23,13 @@ const int backward = 1000;
 const int openTime = 250;
 const int closeTime = 700;
 
+const float rightTreshold = 45;
+const float leftTreshold = 20;
+const float frontTreshold = 10;
+const float plasticTreshold = 40;
+const float generalTreshold = 35;
+const float paperTreshold = 38;
+
 Servo servoRight;
 Servo servoLeft;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -70,57 +77,114 @@ void setup() {
 }
 
 void loop() {
+    // Read distances
+    long topDistance   = readDistance(trigPin, topEcho);
+    delay(60);
 
-  long topDistance   = readDistance(trigPin, topEcho);
-  delay(60);
+    long side1Distance = readDistance(trigPin, sideEcho1);
+    delay(60);
 
-  long side1Distance = readDistance(trigPin, sideEcho1);
-  delay(60);
+    long side2Distance = readDistance(trigPin, sideEcho2);
+    delay(60);
 
-  long side2Distance = readDistance(trigPin, sideEcho2);
-  delay(60);
+    long bottlesDistance = readDistance(binTrigPin, bottlesEchoPin);
+    delay(60);
 
-  long bottlesDistance = readDistance(binTrigPin, bottlesEchoPin);
-  delay(60);
+    long generalDistance = readDistance(binTrigPin, generalEchoPin);
+    delay(60);
 
-  long generalDistance = readDistance(binTrigPin, generalEchoPin);
-  delay(60);
+    long paperDistance = readDistance(binTrigPin, paperEchoPin);
+    delay(60);
 
-  long paperDistance = readDistance(binTrigPin, paperEchoPin);
-  delay(60);
+    // Display top, left, right distances and thresholds on first line
+    lcd.setCursor(0, 0);
+    lcd.print("T:");
+    lcd.print(topDistance);
+    lcd.print("/");
+    lcd.print(frontTreshold);
 
-  lcd.setCursor(0, 0);
-  lcd.print("T:");
-  lcd.print(topDistance);
-  lcd.print(" S1:");
-  lcd.print(side1Distance);
-  lcd.print(" S2:");
-  lcd.print(side2Distance);
+    lcd.print(" L:");
+    lcd.print(side1Distance);
+    lcd.print("/");
+    lcd.print(leftTreshold);
 
-  lcd.setCursor(0, 1);
-  lcd.print("B:");
-  lcd.print(bottlesDistance);
-  lcd.print(" G:");
-  lcd.print(generalDistance);
-  lcd.print(" P:");
-  lcd.print(paperDistance);
+    lcd.print(" R:");
+    lcd.print(side2Distance);
+    lcd.print("/");
+    lcd.print(rightTreshold);
 
-  // Object detection threshold (example: 15 cm)
-  // int threshold = 25;
+    // Display bin distances and thresholds on second line
+    lcd.setCursor(0, 1);
+    lcd.print("B:");
+    lcd.print(bottlesDistance);
+    lcd.print("/");
+    lcd.print(plasticTreshold);
 
-  // if (topDistance < threshold || 
-  //     side1Distance < threshold || 
-  //     side2Distance < threshold) {
+    lcd.print(" G:");
+    lcd.print(generalDistance);
+    lcd.print("/");
+    lcd.print(generalTreshold);
 
-  //     lcd.setCursor(10, 1);
-  //     lcd.print("OBJ ");
-  // } else {
-  //     lcd.setCursor(10, 1);
-  //     lcd.print("    ");
-  // }
+    lcd.print(" P:");
+    lcd.print(paperDistance);
+    lcd.print("/");
+    lcd.print(paperTreshold);
 
-  delay(200);
+    delay(200);
 }
+
+// void loop() {
+
+//   long topDistance   = readDistance(trigPin, topEcho);
+//   delay(60);
+
+//   long side1Distance = readDistance(trigPin, sideEcho1);
+//   delay(60);
+
+//   long side2Distance = readDistance(trigPin, sideEcho2);
+//   delay(60);
+
+//   long bottlesDistance = readDistance(binTrigPin, bottlesEchoPin);
+//   delay(60);
+
+//   long generalDistance = readDistance(binTrigPin, generalEchoPin);
+//   delay(60);
+
+//   long paperDistance = readDistance(binTrigPin, paperEchoPin);
+//   delay(60);
+
+//   lcd.setCursor(0, 0);
+//   lcd.print("T:");
+//   lcd.print(topDistance);
+//   lcd.print(" S1:");
+//   lcd.print(side1Distance);
+//   lcd.print(" S2:");
+//   lcd.print(side2Distance);
+
+//   lcd.setCursor(0, 1);
+//   lcd.print("B:");
+//   lcd.print(bottlesDistance);
+//   lcd.print(" G:");
+//   lcd.print(generalDistance);
+//   lcd.print(" P:");
+//   lcd.print(paperDistance);
+
+//   // Object detection threshold (example: 15 cm)
+//   // int threshold = 25;
+
+//   // if (topDistance < threshold || 
+//   //     side1Distance < threshold || 
+//   //     side2Distance < threshold) {
+
+//   //     lcd.setCursor(10, 1);
+//   //     lcd.print("OBJ ");
+//   // } else {
+//   //     lcd.setCursor(10, 1);
+//   //     lcd.print("    ");
+//   // }
+
+//   delay(200);
+// }
 
 long readDistance(int trigPin, int echoPin) {
 
