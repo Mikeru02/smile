@@ -15,7 +15,7 @@ export function checkInternet() {
 export async function checkModel() {
     if (!checkInternet()) return false;
     const result = await axios.get(
-        `https://${process.env.MODEL_LOCALHOST}:${process.env.MODEL_PORT}/${process.env.MODEL_VERSION}/model/`,
+        `http://${process.env.MODEL_LOCALHOST}:${process.env.MODEL_PORT}/${process.env.MODEL_VERSION}/model/`,
         {
             headers: {
                 "Content-Type": "application/json",
