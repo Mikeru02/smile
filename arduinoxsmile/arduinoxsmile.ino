@@ -40,9 +40,9 @@ const int clearConfirmCount = 25;
 const int detectConfirmCount = 5;
 
 // Sonar tresholds
-const float rightTreshold = 22;
-const float leftTreshold = 22;
-const float frontTreshold = 22;
+const float rightTreshold = 20;
+const float leftTreshold = 20;
+const float frontTreshold = 20;
 const float plasticTreshold = 40;
 const float generalTreshold = 35;
 const float paperTreshold = 38;
@@ -122,14 +122,17 @@ void resetSonar() {
   leftClearCount = 0;
 }
 
-bool atLeastTwoDetected() {
-  int count = 0;
-  if (frontSonarLastState) count++;
-  if (rightSonarLastState) count++;
-  if (leftSonarLastState) count++;
-  return count >= 2;
-}
+// bool atLeastDetected(int min = 2) {
+//   int count = 0;
+//   if (frontSonarLastState) count++;
+//   if (rightSonarLastState) count++;
+//   if (leftSonarLastState) count++;
+//   return count >= min;
+// }
 
+bool anySonarDetected() {
+  return frontSonarLastState || rightSonarLastState || leftSonarLastState;
+}
 void openGate(Servo servoLeft, Servo servoRight) {
   // servoRight.write(0);
   // servoLeft.write(180);
@@ -368,11 +371,11 @@ void loop() {
 
     // Sequential reading with small delays to avoid interference
     bool frontDetected   = sonarObjectDetected(sonarTrigPin, frontEchoPin, frontTreshold);
-    delay(150);
+    delay(100);
     bool rightDetected = sonarObjectDetected(sonarTrigPin, rightEchoPin, rightTreshold);
-    delay(150);
+    delay(100);
     bool leftDetected = sonarObjectDetected(sonarTrigPin, leftEchoPin, leftTreshold);
-    delay(150);
+    delay(100);
 
     Serial.print("Front: "); Serial.print(frontDetected);
     Serial.print("  Right: "); Serial.print(rightDetected);
@@ -430,7 +433,7 @@ void loop() {
     }
 
     // ---------------- FINAL CONFIRM ----------------
-    if (atLeastTwoDetected()) {
+    if (anySonarDetected()) {
       respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
       isCapturing = true;
     }
