@@ -4,8 +4,7 @@ import path from "path";
 import FormData from "form-data";
 
 class Model {
-    constructor(env) {
-        this.env = env;
+    constructor() {
         this.timeMap = {
             "general waste": parseInt(1),
             "plastic bottle": parseInt(5),
@@ -17,10 +16,10 @@ class Model {
             "paper": "PPRS"
         }
         if (this.env.MODEL_TYPE === 'deployed') {
-            this.baseUrl = `https://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
+            this.baseUrl = `https://${process.env.MODEL_HOST}/${process.env.MODEL_VERSION}/model`;
         }
         else {
-            this.baseUrl = `http://${this.env.MODEL_LOCALHOST}:${this.env.MODEL_PORT}/${this.env.MODEL_VERSION}/model`;
+            this.baseUrl = `http://${process.env.MODEL_LOCALHOST}:${process.env.MODEL_PORT}/${process.env.MODEL_VERSION}/model`;
         }
         this.client = axios.create({
             baseURL: this.baseUrl,
