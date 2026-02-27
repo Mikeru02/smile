@@ -15,7 +15,7 @@ class Model {
             "plastic bottle": "PBTL",
             "paper": "PPRS"
         }
-        if (this.env.MODEL_TYPE === 'deployed') {
+        if (process.env.MODEL_TYPE === 'deployed') {
             this.baseUrl = `https://${process.env.MODEL_HOST}/${process.env.MODEL_VERSION}/model`;
         }
         else {
