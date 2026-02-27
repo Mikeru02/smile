@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import axios from 'axios';
 import Client from '../models/v1/client.js';
 import path from 'path';
-import fs from 'fs';
+import fs from "fs/promises";
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi }) {
@@ -96,9 +96,15 @@ class SocketServer {
                 });
                 try {
                     const timeStamp = Date.now();
-                    const filename = `capture_${timeStamp}.jpg`;
-                    await this.webcam.capture(filename);
-                    await this.webcam.capture("test_capture.jpg"); 
+                    const uniqueFilename = `capture_${timeStamp}.jpg`;
+                    const savedPath = await this.webcam.capture(uniqueFilename);
+
+                    const testPath = this.webcam.getFilePath("test_capture.jpg");
+                    await fs.copyFile(savedPath, testPath);
+
+                    console.log("Unique image saved:", savedPath);
+                    console.log("test_capture overwritten:", testPath);
+
                     const response = await this.modelApi.earnedTime();
                     console.log(response);
                     this.activeClient.emit("EARN", { earnedTime: response.earnedTime, wasteCode: response.wasteCode });
