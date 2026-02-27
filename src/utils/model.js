@@ -25,6 +25,8 @@ class Model {
         this.client = axios.create({
             baseURL: this.baseUrl,
         })
+
+        console.log(this.baseUrl);
     }
 
     async checkModel() {
