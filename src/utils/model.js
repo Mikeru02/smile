@@ -20,7 +20,7 @@ class Model {
             this.baseUrl = `https://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
         }
         else {
-            this.baseUrl = `http://${this.env.MODEL_HOST}:${this.env.MODEL_PORT}/${this.env.MODEL_VERSION}/model`;
+            this.baseUrl = `http://${this.env.MODEL_LOCALHOST}:${this.env.MODEL_PORT}/${this.env.MODEL_VERSION}/model`;
         }
         this.client = axios.create({
             baseURL: this.baseUrl,
