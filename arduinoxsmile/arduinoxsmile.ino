@@ -105,7 +105,7 @@ bool sonarObjectDetected(int trigPin, int echoPin, int treshold, int margin = 2)
 
   if (distance == 999) return false;
 
-  return (distance <= treshold - margin);
+  return (distance < treshold - margin);
 }
 
 void resetSonar() {
