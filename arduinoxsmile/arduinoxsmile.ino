@@ -374,19 +374,19 @@ void loop() {
     Serial.print("  Left: "); Serial.println(leftDetected);
 
     lcd.setCursor(0, 0);
-    lcd.print("T:");
-    lcd.print(topDistance);
+    lcd.print("F:");
+    lcd.print(frontDetected);
     lcd.print("/");
     lcd.print(frontTreshold);
 
     lcd.print(" L:");
-    lcd.print(side1Distance);
+    lcd.print(leftDetected);
     lcd.print("/");
     lcd.print(leftTreshold);
 
     lcd.setCursor(0, 1);
     lcd.print(" R:");
-    lcd.print(side2Distance);
+    lcd.print(rightDetected);
     lcd.print("/");
     lcd.print(rightTreshold);
 
