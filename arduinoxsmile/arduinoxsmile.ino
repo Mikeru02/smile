@@ -35,7 +35,7 @@ bool laserDetected = false;
 
 // Varibles for Sonars
 const int sonarDistanceTreshold = 20;
-const int sonarPulseIn = 10000;
+const int sonarPulseIn = 30000;
 const int clearConfirmCount = 25;
 const int detectConfirmCount = 5;
 
@@ -396,11 +396,11 @@ void loop() {
 
     // Sequential reading with small delays to avoid interference
     long frontDistance = readSonarDistance(sonarTrigPin, frontEchoPin);
-    delay(100);
+    delay(70);
     long rightDistance = readSonarDistance(sonarTrigPin, rightEchoPin);
-    delay(100);
+    delay(70);
     long leftDistance = readSonarDistance(sonarTrigPin, leftEchoPin);
-    delay(100);
+    delay(70);
 
     bool frontDetected = (frontDistance < (baseTop - detectTreshold - tolerance));
     bool rightDetected = (rightDistance < (baseRight - detectTreshold - tolerance));
