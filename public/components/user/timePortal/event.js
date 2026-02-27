@@ -6,6 +6,10 @@ import { getRole } from '../../../utils/getRole.js';
 
 export default async function Events() {
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+    socketClient.on('connect', () => {
+        console.log('[SOCKET] connected, waiting for events');
+    })
+    
     const token = localStorage.getItem('token')
     const validToken = checkToken(token);
     const role = getRole(token);
@@ -153,17 +157,13 @@ export default async function Events() {
             modal.style.display = 'block';
             startDropTimeout();
             updateEarnedTimeDisplay();
-            socketClient.connect();
-            socketClient.on('connect', () => {
-                console.log('[SOCKET] connected, waiting for events');
-                socketClient.emit('DROPPING');
-                socketClient.on('ARDUINO:SONAR', (data) => {
-                    console.log('SONAR DETECTED', data);
-                    startDropTimeout();
-                });
-                socketClient.on("EARN", ({earnedTime, wasteCode}) => {
-                    earn(earnedTime, wasteCode);
-                });
+            socketClient.emit('DROPPING');
+            socketClient.on('ARDUINO:SONAR', (data) => {
+                console.log('SONAR DETECTED', data);
+                startDropTimeout();
+            });
+            socketClient.on("EARN", ({earnedTime, wasteCode}) => {
+                earn(earnedTime, wasteCode);
             });
         } else {
             droppingModal.style.display = 'block'

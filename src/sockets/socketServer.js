@@ -1,4 +1,5 @@
 import { Server } from 'socket.io';
+import axios from 'axios';
 import Client from '../models/v1/client.js';
 import path from 'path';
 import fs from 'fs';
@@ -9,7 +10,10 @@ class SocketServer {
         this.arduino = arduino;
         this.webcam = webcam;
         this.modelApi = modelApi;
-
+        this.srcBaseUrl = `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/${process.env.SRC_ROUTE_VERSION}`
+        this.axiosClient = axios.create({
+            baseURL: this.srcBaseUrl
+        });
         this.io = null;
         this.activeClient = null;
         this.client = new Client();
@@ -33,48 +37,7 @@ class SocketServer {
 
         return this.io;
     }
-
-    // startTimeDeduction() {
-    //     console.log('[SOCKET] Time deduction started (1s interval)');
-        
-    //     this.timeDeductionInterval = setInterval(async () => {
-    //         try {
-    //             const [clients] = await this.client.db.execute(
-    //                 "SELECT ip, time_remaining, connection_start_at FROM clients WHERE status='active' AND time_remaining > 0",
-    //                 []
-    //             );
-
-    //             for (const client of clients) {
-    //                 const newTimeRemaining = await this.client.updateClientTime(client.ip);
-                    
-    //                 // Emit time update to all connected sockets for this client
-    //                 this.io.emit('TIME_UPDATE', {
-    //                     ip: client.ip,
-    //                     time_remaining: newTimeRemaining,
-    //                     old_time: client.time_remaining
-    //                 });
-
-    //                 // Update database with new time
-    //                 if (newTimeRemaining <= 0) {
-    //                     await this.client.updateClientStatus(client.ip, 'outOfTime');
-    //                     await this.client.db.execute(
-    //                         "UPDATE clients SET connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=?",
-    //                         [null, 0, client.ip]
-    //                     );
-    //                     this.io.emit('TIME_EXPIRED', { ip: client.ip });
-    //                 } else {
-    //                     await this.client.db.execute(
-    //                         'UPDATE clients SET time_remaining=?, updated_at=NOW() WHERE ip=?',
-    //                         [newTimeRemaining, client.ip]
-    //                     );
-    //                 }
-    //             }
-    //         } catch (error) {
-    //             console.error('[SOCKET] Time deduction error:', error);
-    //         }
-    //     }, 1000);
-    // }
-
+    
     registerSocketEvents() {
         this.io.on('connection', (socket) => {
             console.log('[SOCKET] CLient connected', socket.id);
@@ -92,12 +55,22 @@ class SocketServer {
                 this.arduino.sendCommand('DROPPING');
             });
 
-            socket.on('disconnect', () => {
+            socket.on('disconnect', async () => {
                 console.log('[SOCKET] disconnected:', socket.id);
 
                 if (this.activeClient === socket) {
                     this.activeClient = null;
                     this.arduino.sendCommand("DONE DROP")
+                    await axios.patch(
+                        `/client/`,
+                        { status: "pending"},
+                        {
+                            headers: {
+                                'Content-Type': "application/json",
+                                'apikey': process.env.SRC_KEY
+                            }
+                        }
+                    )
                 }
             });
         })
