@@ -67,7 +67,8 @@ class SocketServer {
                         {
                             headers: {
                                 'Content-Type': "application/json",
-                                'apikey': process.env.SRC_KEY
+                                'apikey': process.env.SRC_KEY,
+                                'token': localStorage.getItem('token')
                             }
                         }
                     )
