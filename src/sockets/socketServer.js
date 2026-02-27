@@ -10,7 +10,7 @@ class SocketServer {
         this.arduino = arduino;
         this.webcam = webcam;
         this.modelApi = modelApi;
-        this.srcBaseUrl = `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/${process.env.SRC_ROUTE_VERSION}/`
+        this.srcBaseUrl = `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/${process.env.SRC_ROUTE_VERSION}/`
         this.axiosClient = axios.create({
             baseURL: this.srcBaseUrl
         });
