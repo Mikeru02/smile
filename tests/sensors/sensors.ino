@@ -23,9 +23,9 @@ const int backward = 1000;
 const int openTime = 250;
 const int closeTime = 700;
 
-const int rightTreshold = 22;
-const int leftTreshold = 22;
-const int frontTreshold = 20;
+const int rightTreshold = 24;
+const int leftTreshold = 24;
+const int frontTreshold = 24;
 const int plasticTreshold = 40;
 const int generalTreshold = 35;
 const int paperTreshold = 38;
