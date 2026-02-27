@@ -32,7 +32,7 @@ class Model {
             "/",
             {
                 headers: {
-                    "api-key": this.env.MODEL_APIKEY 
+                    "apikey": this.env.MODEL_APIKEY 
                 }
             }
         )
@@ -49,7 +49,7 @@ class Model {
             formData,
             {
                 headers: {
-                    "api-key": this.env.MODEL_APIKEY,
+                    "apikey": this.env.MODEL_APIKEY,
                     ...formData.getHeaders()
                 }
             }
