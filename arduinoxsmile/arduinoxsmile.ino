@@ -40,9 +40,9 @@ const int clearConfirmCount = 25;
 const int detectConfirmCount = 5;
 
 // Sonar tresholds
-const float rightTreshold = 18;
-const float leftTreshold = 18;
-const float frontTreshold = 18;
+const float rightTreshold = 22;
+const float leftTreshold = 22;
+const float frontTreshold = 22;
 const float plasticTreshold = 40;
 const float generalTreshold = 35;
 const float paperTreshold = 38;
@@ -100,7 +100,7 @@ long readSonarDistance(int trigPin, int echoPin) {
   return distanceCm;
 }
 
-bool sonarObjectDetected(int trigPin, int echoPin, int treshold, int margin = 2) {
+bool sonarObjectDetected(int trigPin, int echoPin, int treshold, int margin = 0) {
   long distance = readSonarDistance(trigPin, echoPin);
 
   if (distance == 999) return false;
