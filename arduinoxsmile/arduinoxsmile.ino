@@ -92,9 +92,9 @@ void calibratePlatform() {
 
   baseTop = readSonarDistance(sonarTrigPin, frontEchoPin);
   delay(200);
-  baseLeft = readDistance(sonarTrigPin, leftEchoPin);
+  baseLeft = readSonarDistance(sonarTrigPin, leftEchoPin);
   delay(200);
-  baseRight = readDistance(sonarTrigPin, rightEchoPin);
+  baseRight = readSonarDistance(sonarTrigPin, rightEchoPin);
   delay(200);
 
   lcd.clear();
