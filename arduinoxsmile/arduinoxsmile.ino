@@ -100,7 +100,7 @@ long readSonarDistance(int trigPin, int echoPin) {
   return distanceCm;
 }
 
-bool sonarObjectDetected(int trigPin, int echoPin, int treshold, int margin = 0) {
+bool sonarObjectDetected(int trigPin, int echoPin, int treshold, int margin = 1) {
   long distance = readSonarDistance(trigPin, echoPin);
 
   if (distance == 999) return false;
@@ -328,6 +328,10 @@ void loop() {
     else if (command == "DONE DROP") {
       respondAndDisplay("DONE DROP", value, "DONE DROP");
       isUserDropping = false;
+      openGate(servoLeft, servoRight);
+      delay(2000);
+      closeGate(servoLeft, servoRight);
+      delay(2000);
       controlMotor("disable");
     }
     else if (command == "DONE CAPTURE" || command == "IGNORE") {
