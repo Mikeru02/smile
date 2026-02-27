@@ -43,10 +43,16 @@ const int detectConfirmCount = 5;
 const float rightTreshold = 20;
 const float leftTreshold = 20;
 const float frontTreshold = 20;
+const int detectTreshold = 15;
+const int tolerance = 4;
 const float plasticTreshold = 40;
 const float generalTreshold = 35;
 const float paperTreshold = 38;
   
+int baseTop = 0;
+int baseLeft = 0;
+int baseRight = 0;
+
 // Sonar filters
 bool frontSonarLastState = false;
 int frontDetectCount =  0;
@@ -78,6 +84,22 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 AccelStepper stepper(AccelStepper::DRIVER, stepPin, dirPin);
 
 // Helper functions
+void calibratePlatform() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Calibrating...");
+  delay(2000);
+
+  baseTop = readSonarDistance(trigPin, frontEchoPin);
+  baseLeft = readDistance(trigPin, leftEchoPin);
+  baseRight = readDistance(trigPin, rightEchoPin);
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Baseline Set!");
+  delay(2000);
+}
+
 void respondAndDisplay(String lcdTitle, String lcdMsg, String serialMsg) {
   lcd.setCursor(0, 0);
   lcd.print(lcdTitle + "                ");
@@ -286,7 +308,7 @@ void setup() {
   }
   delay(2000);
 
-
+  calibratePlatform();
   controlMotor("disable");
 }
 
