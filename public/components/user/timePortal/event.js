@@ -4,13 +4,7 @@ import { renderEarnTime, renderTimeRemaining } from '../../../utils/render.js';
 import checkToken from '../../../utils/checkToken.js';
 import { getRole } from '../../../utils/getRole.js';
 
-export default async function Events() {
-    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
-    socketClient.connect();
-    socketClient.on('connect', () => {
-        console.log('[SOCKET] connected, waiting for events');
-    })
-    
+export default async function Events() {    
     const token = localStorage.getItem('token')
     const validToken = checkToken(token);
     const role = getRole(token);
@@ -24,6 +18,12 @@ export default async function Events() {
     }
     
     const socketClient = new SocketClient();
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+    socketClient.connect();
+    socketClient.on('connect', () => {
+        console.log('[SOCKET] connected, waiting for events');
+    })
+    
 
     const modal = document.getElementById('modal');
     const droppingModal = document.getElementById('dropping-modal');
