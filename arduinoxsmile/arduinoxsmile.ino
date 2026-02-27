@@ -100,12 +100,12 @@ long readSonarDistance(int trigPin, int echoPin) {
   return distanceCm;
 }
 
-bool sonarObjectDetected(int trigPin, int echoPin, int treshold) {
+bool sonarObjectDetected(int trigPin, int echoPin, int treshold, int margin = 2) {
   long distance = readSonarDistance(trigPin, echoPin);
 
   if (distance == 999) return false;
 
-  return (distance <= treshold);
+  return (distance <= treshold - margin);
 }
 
 void resetSonar() {
