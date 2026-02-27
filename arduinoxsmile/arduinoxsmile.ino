@@ -395,11 +395,11 @@ void loop() {
     // }
 
     // Sequential reading with small delays to avoid interference
-    long frontDistance = sonarObjectDetected(sonarTrigPin, frontEchoPin, frontTreshold);
+    long frontDistance = readSonarDistance(sonarTrigPin, frontEchoPin);
     delay(100);
-    long rightDistance = sonarObjectDetected(sonarTrigPin, rightEchoPin, rightTreshold);
+    long rightDistance = readSonarDistance(sonarTrigPin, rightEchoPin);
     delay(100);
-    long leftDistance = sonarObjectDetected(sonarTrigPin, leftEchoPin, leftTreshold);
+    long leftDistance = readSonarDistance(sonarTrigPin, leftEchoPin);
     delay(100);
 
     bool frontDetected = (frontDistance < (baseTop - detectTreshold - tolerance));
