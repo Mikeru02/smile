@@ -23,12 +23,12 @@ const int backward = 1000;
 const int openTime = 250;
 const int closeTime = 700;
 
-const float rightTreshold = 45;
-const float leftTreshold = 20;
-const float frontTreshold = 10;
-const float plasticTreshold = 40;
-const float generalTreshold = 35;
-const float paperTreshold = 38;
+const int rightTreshold = 45;
+const int leftTreshold = 20;
+const int frontTreshold = 10;
+const int plasticTreshold = 40;
+const int generalTreshold = 35;
+const int paperTreshold = 38;
 
 Servo servoRight;
 Servo servoLeft;
@@ -87,15 +87,6 @@ void loop() {
     long side2Distance = readDistance(trigPin, sideEcho2);
     delay(60);
 
-    long bottlesDistance = readDistance(binTrigPin, bottlesEchoPin);
-    delay(60);
-
-    long generalDistance = readDistance(binTrigPin, generalEchoPin);
-    delay(60);
-
-    long paperDistance = readDistance(binTrigPin, paperEchoPin);
-    delay(60);
-
     // Display top, left, right distances and thresholds on first line
     lcd.setCursor(0, 0);
     lcd.print("T:");
@@ -108,27 +99,11 @@ void loop() {
     lcd.print("/");
     lcd.print(leftTreshold);
 
+    lcd.setCursor(0, 1);
     lcd.print(" R:");
     lcd.print(side2Distance);
     lcd.print("/");
     lcd.print(rightTreshold);
-
-    // Display bin distances and thresholds on second line
-    lcd.setCursor(0, 1);
-    lcd.print("B:");
-    lcd.print(bottlesDistance);
-    lcd.print("/");
-    lcd.print(plasticTreshold);
-
-    lcd.print(" G:");
-    lcd.print(generalDistance);
-    lcd.print("/");
-    lcd.print(generalTreshold);
-
-    lcd.print(" P:");
-    lcd.print(paperDistance);
-    lcd.print("/");
-    lcd.print(paperTreshold);
 
     delay(200);
 }
