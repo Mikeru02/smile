@@ -61,7 +61,7 @@ class SocketServer {
                 if (this.activeClient === socket) {
                     this.activeClient = null;
                     this.arduino.sendCommand("DONE DROP")
-                    await axios.patch(
+                    await this.axiosClient.patch(
                         `client/`,
                         { status: "pending"},
                         {
