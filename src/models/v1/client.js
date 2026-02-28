@@ -263,12 +263,12 @@ class Client {
 
     async updateClientTime(ip) {
         try {
-            const client = await this.getTimeRemainingAndConnectionStart(ip);
+            const client = await this.getClientByIP(ip);
             let newTimeRemaining = client.time_remaining;
 
-            if (client.connection_start_at) {
+            if (client.expire_at) {
                 const now = new Date();
-                const connectionStart = new Date(client.connection_start_at);
+                const expire_at = new Date(client.expire_at);
 
                 const consumedSeconds = Math.floor((now - connectionStart) / 1000);
 
