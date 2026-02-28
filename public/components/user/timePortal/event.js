@@ -16,6 +16,7 @@ export default function Events() {
     let countdownInterval = null;
     const dropTimeoutSec = 60;
     let timeRemainingSeconds = 0;
+    let timeEarnedSeconds = 0;
     let timeRemainingInterval = null;
 
     let isConnected = false;
@@ -134,6 +135,7 @@ export default function Events() {
 
     socketClient.on('TIME_REMAINING', (data) => {
         timeRemainingSeconds = data.timeRemaining;
+        updateConnectButtonState();
         renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.timeRemaining);
     });
 
@@ -143,7 +145,21 @@ export default function Events() {
             isConnected = true;
             startTime();
         }
-    })
+    });
+
+    const updateProceedButtonState = () => {
+        const isEarnedTimeZero = timeEarnedSeconds <= 0;
+
+        if (isEarnedTimeZero) {
+            proceedBtn.disabled = true;
+            proceedBtn.style.opacity = '0.5';
+            proceedBtn.style.cursor = 'not-allowed';
+        } else {
+            proceedBtn.disabled = false;
+            proceedBtn.style.opacity = '1';
+            proceedBtn.style.cursor = 'pointer';
+        }
+    }
 
     const updateConnectButtonState = () => {
         const isTimeZero = timeRemainingSeconds <= 0;
@@ -228,7 +244,9 @@ export default function Events() {
             modal.style.display = 'block';
             startDropTimeout();
             socketClient.on('TIME_EARNED', (data) => {
+                timeEarnedSeconds = data.timeEarned;
                 renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
+                updateProceedButtonState();
             })
             startDropListeners();
         });
@@ -250,8 +268,8 @@ export default function Events() {
         updateTimeRemaining();
     });
 
-    const proceed = document.getElementById('proceed');
-    proceed.addEventListener('click', async function() {
+    const proceedBtn = document.getElementById('proceed');
+    proceedBtn.addEventListener('click', async function() {
         socketClient.emit('DROP_COMPLETE');
         stopDropListeners();
         modal.style.display = 'none';
