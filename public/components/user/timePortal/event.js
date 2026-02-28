@@ -257,7 +257,6 @@ export default function Events() {
         modal.style.display = 'none';
         clearInterval(earnInterval);
         socketClient.emit('ADD_TIME');
-        updateTimeRemaining();
         window.app.pushRoute("/portal");
     });
 }
