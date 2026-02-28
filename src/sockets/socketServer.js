@@ -52,7 +52,7 @@ class SocketServer {
                     `client/`,
                     {
                         headers: {
-                            'token': token
+                            'token': socket.token
                         }
                     }
                 )
@@ -91,7 +91,7 @@ class SocketServer {
                     `client/status/dropping`,
                     {
                         headers: {
-                            'token': token
+                            'token': socket.token
                         }
                     }
                 );
@@ -104,7 +104,7 @@ class SocketServer {
                     {},
                     {
                         headers: {
-                            'token': token
+                            'token': socket.token
                         }
                     }
                 )
@@ -116,7 +116,7 @@ class SocketServer {
                     {},
                     {
                         headers: {
-                            'token': token
+                            'token': socket.token
                         }
                     }
                 )
@@ -140,7 +140,7 @@ class SocketServer {
                         { status: "pending"},
                         {
                             headers: {
-                                'token': token
+                                'token': socket.token
                             }
                         }
                     )
@@ -154,7 +154,7 @@ class SocketServer {
                     {},
                     {
                         headers: {
-                            'token': token
+                            'token': socket.token
                         }
                     }
                 )
@@ -165,7 +165,7 @@ class SocketServer {
                     `client/time/time_earned`,
                     {
                         headers: {
-                            'token': token
+                            'token': socket.token
                         }
                     }
                 )
@@ -181,7 +181,7 @@ class SocketServer {
                     `client/time/time_remaining`,
                     {
                         headers: {
-                            'token': token
+                            'token': socket.token
                         }
                     }
                 );
@@ -197,7 +197,7 @@ class SocketServer {
                     { earned_time: time, waste_code: wasteCode },
                     {
                         headers: {
-                            'token': token
+                            'token': socket.token
                         }
                     }
                 )
@@ -216,7 +216,7 @@ class SocketServer {
                             headers: {
                                 'Content-Type': "application/json",
                                 'apikey': process.env.SRC_KEY,
-                                'token': token
+                                'token': socket.token
                             }
                         }
                     )
