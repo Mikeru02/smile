@@ -162,16 +162,6 @@ class SocketServer {
             socket.on('disconnect', async () => {
                 console.log('[SOCKET] disconnected:', socket.id);
 
-                await this.axiosClient.patch(
-                    `client/time-remaining`,
-                    { },
-                    {
-                        headers: {
-                            'token': socket.token
-                        }
-                    }
-                )
-
                 if (this.activeClient === socket) {
                     this.activeClient = null;
                     this.arduino.sendCommand("DONE DROP")
