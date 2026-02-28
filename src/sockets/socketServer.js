@@ -171,7 +171,10 @@ class SocketServer {
     startClientSync(socket) {
         if (socket.syncInterval) return;
 
+        console.log("✅ Starting sync for:", socket.id);    
+
         socket.syncInterval = setInterval(async () => {
+            console.log("🔄 Sync running for:", socket.id);
             try {
                 const response = await this.axiosClient.get(
                     `client/`,
