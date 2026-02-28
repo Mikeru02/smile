@@ -246,7 +246,7 @@ class SocketServer {
                     const uniqueFilename = `capture_${timeStamp}.jpg`;
                     const savedPath = await this.webcam.capture(uniqueFilename);
 
-                    const testPath = this.webcam.getFilePath("test_capture.jpg");
+                    const testPath = await this.webcam.getFilePath("test_capture.jpg");
                     await fs.copyFile(savedPath, testPath);
 
                     console.log("Unique image saved:", savedPath);
