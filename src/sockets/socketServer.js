@@ -163,8 +163,8 @@ class SocketServer {
                 console.log('[SOCKET] disconnected:', socket.id);
 
                 await this.axiosClient.patch(
-                    `client/`,
-                    {},
+                    `client/time-remaining`,
+                    { },
                     {
                         headers: {
                             'token': socket.token
