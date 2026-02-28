@@ -246,9 +246,8 @@ class SocketServer {
                     const uniqueFilename = `capture_${timeStamp}.jpg`;
                     const savedPath = await this.webcam.capture(uniqueFilename);
                     console.log("Unique image saved:", savedPath);
-                    
-                    const testPath = await this.webcam.getFilePath("test_capture.jpg");
-                    await fs.copyFile(savedPath, testPath);
+
+                    const testPath = await this.webcam.capture("test_capture.jpg");
 
                     console.log("test_capture overwritten:", testPath);
 
