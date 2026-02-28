@@ -44,7 +44,7 @@ class SocketServer {
 
     registerSocketEvents() {
         this.io.on('connection', async (socket) => {
-            const token = socket.handshake.auth.token;
+            socket.token = socket.handshake.auth.token;
             console.log('[SOCKET] CLient connected', socket.id);
 
             try {
@@ -260,7 +260,7 @@ class SocketServer {
                         { earned_time: response.earnedTime, waste_code: response.wasteCode },
                         {
                             headers: {
-                                'token': token
+                                'token': client.token
                             }
                         }
                     );
