@@ -270,9 +270,7 @@ class Client {
                 const now = new Date();
                 const expire_at = new Date(client.expire_at);
 
-                const consumedSeconds = Math.floor((now - connectionStart) / 1000);
-
-                newTimeRemaining = Math.max(client.time_remaining - consumedSeconds, 0);
+                newTimeRemaining = Math.max(Math.floor((expire_at - now) / 1000), 0);
             }
             return newTimeRemaining;
         } catch(err) {
