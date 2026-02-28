@@ -283,11 +283,11 @@ class Client {
 
     async updateClientTimeRemaining(ip, name, timeRemaining) {
         try {
-            const [row] = this.db.execute(
+            const [result] = await this.db.execute(
                 'UPDATE clients SET time_remaining=? WHERE ip=? AND name=?',
                 [timeRemaining, ip, name]
             )
-            return row;
+            return result;
         } catch(err) {
             console.error("[ERROR] client.updateClientTimeRemaining", err);
             throw err;
