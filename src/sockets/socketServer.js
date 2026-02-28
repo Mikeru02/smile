@@ -103,7 +103,7 @@ class SocketServer {
                 this.startClientSync(socket);
             })
 
-            socket.on('DEAUTH_CLIENT', async (data) => {
+            socket.on('DEAUTH_CLIENT', async () => {
                 await this.axiosClient.post(
                     `client/deauth`,
                     {},
@@ -114,7 +114,6 @@ class SocketServer {
                     }
                 )
 
-                socket.clientData.time_remaining = data.timeRemaining;
                 this.stopClientSync(socket);
             })
 
