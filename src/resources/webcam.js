@@ -11,6 +11,9 @@ class Webcam {
         this.width = process.env.WIDTH || 1920;
         this.height = process.env.HEIGHT || 1080;
         this.outputFolder = join(__dirname, '../captures');
+        fs.mkdir(this.outputFolder, { recursive: true }).catch(err => {
+            console.error("Failed to create capture folder:", err);
+        });
     }
 
     getFilePath(filename = "last_capture.jpg") {
