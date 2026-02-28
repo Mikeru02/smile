@@ -22,13 +22,19 @@ export default function Events() {
     socketClient.connect();
     socketClient.on('connect', () => {
         console.log('[SOCKET] connected, waiting for commands.');
-    })
+    });
+
+    // Time containers
+    const hoursSpan = document.getElementById('earn-hours-span');
+    const minSpan = document.getElementById('earn-min-span');
+    const secSpan = document.getElementById('earn-sec-span');
 
     // Modals
     const modal = document.getElementById('modal');
     const droppingModal = document.getElementById('dropping-modal');
 
     // Intervals
+    let timeEarned = 0;
     let earnInterval = null;
     let isRunning = false;
     let dropTimeout = null;
@@ -135,6 +141,24 @@ export default function Events() {
         }
     };
 
+    const connectBtn = document.getElementById('connect');
+    connectBtn.addEventListener('click', async function() {
+        if (!isConnected) { 
+            connect.textContent = 'Pause';
+            isConnected = true;
+            startTime();
+            socketClient.emit('AUTH_CLIENT');
+        } else {
+            connect.textContent = 'Connect';
+            clearInterval(timeRemainingInterval);
+            isConnected = false;
+            timeRemainingInterval = null;
+            socketClient.emit('DEAUTH_CLIENT')
+            updateTimeRemaining();
+        }
+    });
+
+
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         console.log("DROP BTN TRIGGER");
@@ -147,11 +171,40 @@ export default function Events() {
             modal.style.display = 'block';
             startDropTimeout();
             // updateEarnedTimeDisplay();
+            socketClient.on('TIME_EARNED', (data) => {
+                renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
+            })
             startDropListeners();
         });
 
         socketClient.emit('DROPPING');
     });
+
+    const okBtn = document.getElementById('ok-button');
+    okBtn.addEventListener('click', function() {
+        droppingModal.style.display = 'none';
+    })
+
+    const exit = document.getElementById('exit');
+    exit.addEventListener('click', async function() {
+        socketClient.emit('DROP_COMPLETE');
+        stopDropListeners();
+        modal.style.display = 'none';
+        clearInterval(earnInterval);
+        updateTimeRemaining();
+    });
+
+    const proceed = document.getElementById('proceed');
+    proceed.addEventListener('click', async function() {
+        socketClient.emit('DROP_COMPLETE');
+        stopDropListeners();
+        modal.style.display = 'none';
+        clearInterval(earnInterval);
+        socketClient.emit('ADD_TIME');
+        updateTimeRemaining();
+        window.app.pushRoute("/portal");
+    });
+
 
 
     updateConnectButtonState()

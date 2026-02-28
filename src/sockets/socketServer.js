@@ -21,7 +21,6 @@ class SocketServer {
         });
         this.io = null;
         this.activeClient = null;
-        this.clientData = null;
         this.timeDeductionInterval = null;
 
         this.onArduinoData = this.onArduinoData.bind(this);
@@ -57,14 +56,14 @@ class SocketServer {
                         }
                     }
                 )
-                this.clientData = response.data.data;
-                console.log('Client Data Loaded:', this.clientData);
+                socket.clientData = response.data.data;
+                console.log('Client Data Loaded:', socket.clientData);
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
                 return;
             }
 
-            socket.on('DROPPING', async () => {
+            socket.on('DROPPING', () => {
                 if (this.activeClient) {
                     socket.emit('DROP:busy', {
                         message: 'Another user is dropping',
@@ -74,15 +73,15 @@ class SocketServer {
 
                 socket.emit('DROP:allowed');
                 console.log('[DROP] started by: ', socket.id);
-                await this.axiosClient.patch(
-                    `client/`,
-                    { status: 'dropping' },
-                    {
-                        headers: {
-                            'token': token
-                        }
-                    }
-                )
+                // await this.axiosClient.patch(
+                //     `client/`,
+                //     { status: 'dropping' },
+                //     {
+                //         headers: {
+                //             'token': token
+                //         }
+                //     }
+                // )
                 this.activeClient = socket;
                 this.arduino.sendCommand('DROPPING');
             });
@@ -255,9 +254,17 @@ class SocketServer {
 
                     const response = await this.modelApi.earnedTime();
                     
-
-
-                    this.activeClient.emit("EARN", { earnedTime: response.earnedTime, wasteCode: response.wasteCode });
+                    this.activeClient.clientData.time_earned += response.earnedTime;
+                    await this.axiosClient.post(
+                        `client/earn`,
+                        { earned_time: time, waste_code: wasteCode },
+                        {
+                            headers: {
+                                'token': token
+                            }
+                        }
+                    );
+                    this.activeClient.emit('TIME_EARNED', { timeEarned: response.earnedTime })
                     console.log("Done capturing, sending command to arduino")
                     this.arduino.sendCommand("DONE CAPTURE");
                     this.arduino.sendCommand(`DETECT:${response.category}`);
