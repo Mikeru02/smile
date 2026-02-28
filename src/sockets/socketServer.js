@@ -153,6 +153,18 @@ class SocketServer {
                         }
                     }
                 )
+
+                const response = await this.axiosClient.get(
+                    `client/`,
+                    {
+                        headers: {
+                            'token': socket.token
+                        }
+                    }
+                )
+                socket.clientData = response.data.data;
+                socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
+
             });
 
             socket.on('DEDUCT_TIME', (data) => {
