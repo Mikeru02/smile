@@ -155,8 +155,22 @@ class SocketServer {
                 )
             });
 
+            socket.on('DEDUCT_TIME', (data) => {
+                socket.clientData.time_remaining = data.timeRemaining;
+            })
+
             socket.on('disconnect', async () => {
                 console.log('[SOCKET] disconnected:', socket.id);
+
+                await this.axiosClient.patch(
+                    `client/time-remaining`,
+                    {},
+                    {
+                        headers: {
+                            'token': socket.token
+                        }
+                    }
+                )
 
                 if (this.activeClient === socket) {
                     this.activeClient = null;

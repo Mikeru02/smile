@@ -178,13 +178,14 @@ export default function Events() {
                 //         }
                 //     }
                 // );
-                socketClient.emit('DEAUTH_CLIENT', { timeRemaining: timeRemainingSeconds });
+                socketClient.emit('DEAUTH_CLIENT');
                 connect.textContent = 'Connect';
                 isConnected = false;
                 return;
             }
 
             timeRemainingSeconds -= 1;
+            socketClient.emit('DEDUCT_TIME', {timeRemaining: timeRemainingSeconds });
             renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
             updateConnectButtonState();
         }, 1000);
