@@ -188,7 +188,7 @@ export default function Events() {
         if (!isConnected) { 
             connect.textContent = 'Pause';
             isConnected = true;
-            //startTime();
+            startTime();
             socketClient.emit('AUTH_CLIENT');
             // socketClient.on('TIME_REMAINING', (data) => {
             //     renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);

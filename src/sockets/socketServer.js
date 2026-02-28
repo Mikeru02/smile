@@ -100,7 +100,7 @@ class SocketServer {
                         }
                     }
                 )
-                this.startClientSync(socket);
+                //this.startClientSync(socket);
             })
 
             socket.on('DEAUTH_CLIENT', async () => {
@@ -113,8 +113,16 @@ class SocketServer {
                         }
                     }
                 )
-
-                this.stopClientSync(socket);
+                const response = await this.axiosClient.get(
+                    `client/`,
+                    {
+                        headers: {
+                            'token': socket.token
+                        }
+                    }
+                )
+                socket.clientData = response.data.data;
+                socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
             })
 
             socket.on('DROP_COMPLETE', async () => {
