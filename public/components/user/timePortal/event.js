@@ -135,6 +135,12 @@ export default function Events() {
     socketClient.on('TIME_REMAINING', (data) => {
         timeRemainingSeconds = data.timeRemaining;
         renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.timeRemaining);
+    });
+
+    socketClient.on('CLIENT_STATUS', (data) => {
+        if (data.status === 'active') {
+            startTime();
+        }
     })
 
     const updateConnectButtonState = () => {

@@ -57,6 +57,7 @@ class SocketServer {
                 socket.clientData = response.data.data;
                 console.log('Client Data Loaded:', socket.clientData);
                 socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
+                socket.emit('CLIENT_STATUS', { status: socket.clientData.status });
                 socket.emit('INTERNET_STATUS', { online: checkInternet() });
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
