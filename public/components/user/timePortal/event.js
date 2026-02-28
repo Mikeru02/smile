@@ -36,11 +36,6 @@ export default function Events() {
         console.log('[SOCKET] connected, waiting for commands.');
     });
 
-    socketClient.on('TIME_REMAINING', (data) => {
-        timeRemainingSeconds = data.timeRemaining;
-        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.timeRemaining);
-    })
-
     // Time containers
     const hoursSpan = document.getElementById('earn-hours-span');
     const minSpan = document.getElementById('earn-min-span');
@@ -137,6 +132,11 @@ export default function Events() {
         updateConnectButtonState();
     });
 
+    socketClient.on('TIME_REMAINING', (data) => {
+        timeRemainingSeconds = data.timeRemaining;
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.timeRemaining);
+    })
+
     const updateConnectButtonState = () => {
         const isTimeZero = timeRemainingSeconds <= 0;
 
@@ -180,7 +180,6 @@ export default function Events() {
         socketClient.once('DROP:allowed', () => {
             modal.style.display = 'block';
             startDropTimeout();
-            // updateEarnedTimeDisplay();
             socketClient.on('TIME_EARNED', (data) => {
                 renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
             })

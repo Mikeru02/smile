@@ -1,9 +1,6 @@
 import { Server } from 'socket.io';
 import axios from 'axios';
 import { checkInternet } from '../utils/dashboardInformation.js';
-import Client from '../models/v1/client.js';
-import path from 'path';
-import fs from "fs/promises";
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi }) {
@@ -76,15 +73,6 @@ class SocketServer {
                 socket.emit('DROP:allowed');
                 socket.emit('TIME_EARNED', { timeEarned: socket.clientData.time_earned })
                 console.log('[DROP] started by: ', socket.id);
-                // await this.axiosClient.patch(
-                //     `client/`,
-                //     { status: 'dropping' },
-                //     {
-                //         headers: {
-                //             'token': token
-                //         }
-                //     }
-                // )
                 this.activeClient = socket;
                 this.arduino.sendCommand('DROPPING');
             });
@@ -125,15 +113,6 @@ class SocketServer {
                 )
             })
 
-            socket.on('CHECK_INTERNET', () => {
-                const hasInternet = checkInternet();
-
-                socket.emit('INTERNET_STATUS', {
-                    online: hasInternet,
-                    timestamp: Date.now()
-                });
-            })
-
             socket.on('DROP_COMPLETE', async () => {
                 if (this.activeClient === socket) {
                     this.activeClient = null;
@@ -161,50 +140,7 @@ class SocketServer {
                         }
                     }
                 )
-            })
-
-            socket.on('GET_TIME_EARNED', async() => {
-                const response = await this.axiosClient.get(
-                    `client/time/time_earned`,
-                    {
-                        headers: {
-                            'token': socket.token
-                        }
-                    }
-                )
-
-                socket.emit('TIME_EARNED', {
-                    timeEarned: response.data.data.time_earned,
-                    timestamp: Date.now()
-                })
             });
-
-            socket.on('GET_TIME_REMAINING', async () => {
-                const response = await this.axiosClient.get(
-                    `client/time/time_remaining`,
-                    {
-                        headers: {
-                            'token': socket.token
-                        }
-                    }
-                );
-                socket.emit('TIME_REMAINING', {
-                    timeRemaining: response.data.data.time_remaining,
-                    timestamp: Date.now()
-                })
-            });
-
-            socket.on('EARNED', async ({ time, wasteCode }) => {
-                await this.axiosClient.post(
-                    `client/earn`,
-                    { earned_time: time, waste_code: wasteCode },
-                    {
-                        headers: {
-                            'token': socket.token
-                        }
-                    }
-                )
-            })
 
             socket.on('disconnect', async () => {
                 console.log('[SOCKET] disconnected:', socket.id);

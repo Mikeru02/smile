@@ -1,3 +1,4 @@
+import { off } from 'cluster';
 import { io } from 'socket.io-client';
 
 class SocketClient {
@@ -41,6 +42,11 @@ class SocketClient {
     emit(event, payload) {
         if (!this.socket || !this.socket.connected) return;
         this.socket.emit(event, payload);
+    }
+
+    off(event, handler) {
+        if (!this.socket) return;
+        this.socket.off(event, handler);
     }
 
     disconnect() {
