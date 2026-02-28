@@ -115,6 +115,7 @@ class SocketServer {
                 )
 
                 socket.clientData.time_remaining = data.timeRemaining;
+                console.log("DEBUG: Time Remaining", socket.clientData.time_remaining);
                 this.stopClientSync(socket);
 
             })
