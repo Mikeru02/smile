@@ -235,8 +235,9 @@ class SocketServer {
         const message = data.trim();
         if (message === "SONAR DETECTED") {
             console.log('SONAR Detected from Arduino');
+            const client = this.activeClient;
 
-            if (this.activeClient) {
+            if (client) {
                 this.activeClient.emit("ARDUINO:SONAR", {
                     detected: true,
                     time: Date.now(),
@@ -253,7 +254,7 @@ class SocketServer {
 
                     const response = await this.modelApi.earnedTime();
                     
-                    this.activeClient.clientData.time_earned += response.earnedTime;
+                    client.clientData.time_earned += response.earnedTime;
                     await this.axiosClient.post(
                         `client/earn`,
                         { earned_time: time, waste_code: wasteCode },
@@ -263,7 +264,7 @@ class SocketServer {
                             }
                         }
                     );
-                    this.activeClient.emit('TIME_EARNED', { timeEarned: response.earnedTime })
+                    client.emit('TIME_EARNED', { timeEarned: response.earnedTime })
                     console.log("Done capturing, sending command to arduino")
                     this.arduino.sendCommand("DONE CAPTURE");
                     this.arduino.sendCommand(`DETECT:${response.category}`);
