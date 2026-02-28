@@ -170,7 +170,7 @@ export default function Events() {
                 //         }
                 //     }
                 // );
-                socketClient.emit('DEAUTH_CLIENT');
+                socketClient.emit('DEAUTH_CLIENT', { timeRemaining: timeRemainingSeconds });
                 connect.textContent = 'Connect';
                 isConnected = false;
                 return;
@@ -195,8 +195,11 @@ export default function Events() {
             clearInterval(timeRemainingInterval);
             isConnected = false;
             timeRemainingInterval = null;
-            socketClient.emit('DEAUTH_CLIENT')
-            updateTimeRemaining();
+            socketClient.emit('DEAUTH_CLIENT', { timeRemaining: timeRemainingSeconds })
+            // updateTimeRemaining();
+            socketClient.on('TIME_EARNED', (data) => {
+                renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
+            })
         }
     });
 

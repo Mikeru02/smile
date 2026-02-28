@@ -42,6 +42,7 @@ class SocketServer {
     registerSocketEvents() {
         this.io.on('connection', async (socket) => {
             socket.token = socket.handshake.auth.token;
+            socket.syncInterval = null;
             console.log('[SOCKET] CLient connected', socket.id);
 
             try {
@@ -99,9 +100,10 @@ class SocketServer {
                         }
                     }
                 )
+                this.startClientSync(socket);
             })
 
-            socket.on('DEAUTH_CLIENT', async () => {
+            socket.on('DEAUTH_CLIENT', async (data) => {
                 await this.axiosClient.post(
                     `client/deauth`,
                     {},
@@ -111,6 +113,10 @@ class SocketServer {
                         }
                     }
                 )
+
+                socket.clientData.time_remaining = data.timeRemaining;
+                this.stopClientSync(socket);
+
             })
 
             socket.on('DROP_COMPLETE', async () => {
@@ -162,6 +168,40 @@ class SocketServer {
                 }
             });
         })
+    }
+
+    startClientSync(socket) {
+        if (socket.syncInterval) return;
+
+        socket.syncInterval = setInterval(async () => {
+            try {
+                const response = await this.axiosClient.get(
+                    `client/`,
+                    { headers: { token: socket.token } }
+                );
+
+                socket.clientData = response.data.data;
+
+                socket.emit('TIME_REMAINING', {
+                    timeRemaining: socket.clientData.time_remaining
+                });
+
+                if (socket.clientData.status === 'pending') {
+                    socket.emit('SESSION_EXPIRED');
+                    this.stopClientSync(socket);
+                }
+
+            } catch (err) {
+                console.error('Client Sync Error:', err.message);
+            }
+        }, 5000); // check every 5 seconds
+    }
+
+    stopClientSync(socket) {
+        if (socket.syncInterval) {
+            clearInterval(socket.syncInterval);
+            socket.syncInterval = null;
+        }
     }
 
     registerArduinoEvents() {
