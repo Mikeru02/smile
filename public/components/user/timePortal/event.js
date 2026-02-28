@@ -139,6 +139,8 @@ export default function Events() {
 
     socketClient.on('CLIENT_STATUS', (data) => {
         if (data.status === 'active') {
+            connect.textContent = 'Pause';
+            isConnected = true;
             startTime();
         }
     })
