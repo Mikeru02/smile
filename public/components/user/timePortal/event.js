@@ -134,19 +134,20 @@ export default function Events() {
     socketClient.on('INTERNET_STATUS', (data) => {
         console.log("DEBUG: ", data)
         isInternetUp = data.online;
+        updateConnectButtonState();
     });
 
     const updateConnectButtonState = () => {
         const isTimeZero = timeRemainingSeconds <= 0;
 
         if (isTimeZero || !isInternetUp) {
-            connect.disabled = true;
-            connect.style.opacity = '0.5';
-            connect.style.cursor = 'not-allowed';
+            connectBtn.disabled = true;
+            connectBtn.style.opacity = '0.5';
+            connectBtn.style.cursor = 'not-allowed';
         } else {
-            connect.disabled = false;
-            connect.style.opacity = '1';
-            connect.style.cursor = 'pointer';
+            connectBtn.disabled = false;
+            connectBtn.style.opacity = '1';
+            connectBtn.style.cursor = 'pointer';
         }
     };
 
@@ -213,10 +214,4 @@ export default function Events() {
         updateTimeRemaining();
         window.app.pushRoute("/portal");
     });
-
-
-    console.log("Time Remaining Seconds", timeRemainingSeconds);
-    console.log('Internet', isInternetUp)
-    updateConnectButtonState()
-
 }
