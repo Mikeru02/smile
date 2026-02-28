@@ -151,6 +151,38 @@ export default function Events() {
         }
     };
 
+    const startTime = () => {
+        if (timeRemainingInterval) return;
+        timeRemainingInterval = setInterval(async () => {
+            if (!isConnected) return;
+
+            if (timeRemainingSeconds <= 0) {
+                clearInterval(timeRemainingInterval);
+                timeRemainingInterval = null;
+                // await axios.patch(
+                //     `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
+                //     {},
+                //     {
+                //         headers: {
+                //             'Content-Type': 'application/json',
+                //             'apikey': import.meta.env.VITE_SRC_KEY,
+                //             'token': localStorage.getItem('token')
+                //         }
+                //     }
+                // );
+                socketClient.emit('DEAUTH_CLIENT');
+                connect.textContent = 'Connect';
+                isConnected = false;
+                return;
+            }
+
+            timeRemainingSeconds -= 1;
+            renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+            updateConnectButtonState();
+        }, 1000);
+    };
+
+
     const connectBtn = document.getElementById('connect');
     connectBtn.addEventListener('click', async function() {
         if (!isConnected) { 
