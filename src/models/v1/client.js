@@ -281,6 +281,18 @@ class Client {
         }
     }
 
+    async updateClientTimeRemaining(ip, name, timeRemaining) {
+        try {
+            const [row] = this.db.execute(
+                'UPDATE clients SET time_remaining=? WHERE ip=? AND name=?',
+                [timeRemaining, ip, name]
+            )
+        } catch(err) {
+            console.error("[ERROR] client.updateClientTimeRemaining", err);
+            throw err;
+        }
+    }
+
     async getAllClients() {
         try {
             const [rows ] = await this.db.execute(

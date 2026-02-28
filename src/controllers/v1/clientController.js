@@ -435,6 +435,24 @@ class ClientController {
             });
         }
     }
+
+    async updateTimeRemaining(req, res) {
+        try {
+            const { timeRemaining } = req.body || {};
+            const response = await this.client.updateClientTimeRemaining(res.locals.ip, res.locals.name, timeRemaining);
+            return res.status(200).json({
+                success: true,
+                data: {
+                    response
+                }
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
 }
 
 export default ClientController;
