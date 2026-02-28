@@ -15,9 +15,11 @@ export function checkInternet() {
     try {
         const result = runSpawnSync('ping', ['-c', '1', '-W', '2', '8.8.8.8'], true);
         lastStatus = result.status === 0;
+        lastCheck = Date.now();
         return lastStatus;
     } catch (err) {
         console.error("[ERROR] checkInternet", err);
+        lastCheck = Date.now();
         lastStatus = false;
         return lastStatus;
     }
