@@ -137,22 +137,16 @@ export default function Events() {
 
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
-        const droppingClientData = await new Promise(resolve => {
-            socketClient.on('DROPING_CLIENT_DATA', (data) => {
-                resolve(data);
-            })
-            socketClient.emit('DROPPING_CLIENT');
-        })
-        
-        if (droppingClientData.length <= 0){
-            modal.style.display = 'block';
-            startDropTimeout();
-            updateEarnedTimeDisplay();
-            startDropListeners();
-            socketClient.emit('DROPPING');
-        } else {
+        console.log("DROP BTN TRIGGER");
+        socketClient.emit('DROPPING')
+        socketClient.on('DROP:busy', () => {
             droppingModal.style.display = 'block';
-        }
+        });
+
+        modal.style.display = 'block';
+        startDropTimeout();
+        updateEarnedTimeDisplay();
+        startDropListeners();
     });
 
 
