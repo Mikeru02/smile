@@ -215,7 +215,8 @@ export default function Events() {
     });
 
 
-
+    console.log("Time Remaining Seconds", timeRemainingSeconds);
+    console.log('Internet', isInternetUp)
     updateConnectButtonState()
 
 }
