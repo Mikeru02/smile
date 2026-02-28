@@ -21,7 +21,7 @@ class SocketServer {
         });
         this.io = null;
         this.activeClient = null;
-        this.client = new Client();
+        this.clientData = null;
         this.timeDeductionInterval = null;
 
         this.onArduinoData = this.onArduinoData.bind(this);
@@ -44,9 +44,25 @@ class SocketServer {
     }
 
     registerSocketEvents() {
-        this.io.on('connection', (socket) => {
+        this.io.on('connection', async (socket) => {
             const token = socket.handshake.auth.token;
             console.log('[SOCKET] CLient connected', socket.id);
+
+            try {
+                const response = await this.axiosClient.get(
+                    `client/`,
+                    {
+                        headers: {
+                            'token': token
+                        }
+                    }
+                )
+                this.clientData = response.data.data;
+                console.log('Client Data Loaded:', this.clientData);
+            } catch (err) {
+                console.error('[ERROR] Failed to fetch client data:', err.message);
+                return;
+            }
 
             socket.on('DROPPING', async () => {
                 if (this.activeClient) {
@@ -132,6 +148,18 @@ class SocketServer {
                 }
             })
 
+            socket.on('ADD_TIME', async() => {
+                await this.axiosClient.post(
+                    `client/add-time`,
+                    {},
+                    {
+                        headers: {
+                            'token': token
+                        }
+                    }
+                )
+            })
+
             socket.on('GET_TIME_EARNED', async() => {
                 const response = await this.axiosClient.get(
                     `client/time/time_earned`,
@@ -146,6 +174,33 @@ class SocketServer {
                     timeEarned: response.data.data.time_earned,
                     timestamp: Date.now()
                 })
+            });
+
+            socket.on('GET_TIME_REMAINING', async () => {
+                const response = await this.axiosClient.get(
+                    `client/time/time_remaining`,
+                    {
+                        headers: {
+                            'token': token
+                        }
+                    }
+                );
+                socket.emit('TIME_REMAINING', {
+                    timeRemaining: response.data.data.time_remaining,
+                    timestamp: Date.now()
+                })
+            });
+
+            socket.on('EARNED', async ({ time, wasteCode }) => {
+                await this.axiosClient.post(
+                    `client/earn`,
+                    { earned_time: time, waste_code: wasteCode },
+                    {
+                        headers: {
+                            'token': token
+                        }
+                    }
+                )
             })
 
             socket.on('disconnect', async () => {
