@@ -17,6 +17,7 @@ export function checkInternet() {
         console.log(result.status, result.stdout);
         console.log(result);
         lastStatus = result.status === 0;
+        console.log("DEBUG lastStatus: ", lastStatus);
         lastCheck = Date.now();
         return lastStatus;
     } catch (err) {
