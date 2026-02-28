@@ -439,6 +439,7 @@ class ClientController {
     async updateTimeRemaining(req, res) {
         try {
             const { timeRemaining } = req.body || {};
+            console.log("TIME REMAINING: ", timeRemaining);
             const response = await this.client.updateClientTimeRemaining(res.locals.ip, res.locals.name, timeRemaining);
             return res.status(200).json({
                 success: true,
