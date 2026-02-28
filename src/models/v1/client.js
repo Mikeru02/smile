@@ -287,6 +287,7 @@ class Client {
                 'UPDATE clients SET time_remaining=? WHERE ip=? AND name=?',
                 [timeRemaining, ip, name]
             )
+            return row;
         } catch(err) {
             console.error("[ERROR] client.updateClientTimeRemaining", err);
             throw err;
