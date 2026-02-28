@@ -265,7 +265,6 @@ export default function Events() {
         stopDropListeners();
         modal.style.display = 'none';
         clearInterval(earnInterval);
-        updateTimeRemaining();
     });
 
     const proceedBtn = document.getElementById('proceed');
