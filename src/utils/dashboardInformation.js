@@ -1,14 +1,25 @@
 import axios from "axios";
 import runSpawnSync from "./runSpawnSync.js";
 
+let lastCheck = 0;
+let lastStatus = false;
+const checkInterval = 5000;
+
 export function checkInternet() {
+    const now = Date.now();
+
+    if (now - lastCheck < checkInterval) {
+        return lastStatus;
+    }
+
     try {
-        const result = runSpawnSync('ping', ['-c', '1', '8.8.8.8'], true);
-        console.log("DEBUG", result)
-        return result.status === 0;
+        const result = runSpawnSync('ping', ['-c', '1', '-W', '2', '8.8.8.8'], true);
+        lastStatus = result.status === 0;
+        return lastStatus;
     } catch (err) {
         console.error("[ERROR] checkInternet", err);
-        return false;
+        lastStatus = false;
+        return lastStatus;
     }
 }
 

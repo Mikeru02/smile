@@ -11,10 +11,12 @@ export default async function Events() {
 
     if (!validToken) {
         window.app.pushRoute('/');
+        return;
     }
 
     if (role === 'admin') {
         window.app.pushRoute('/admin/dashboard');
+        return;
     }
     
     const socketClient = new SocketClient();
@@ -41,7 +43,7 @@ export default async function Events() {
     let isRunning = false;
     let dropTimeout = null;
     let countdownInterval = null;
-    const dropTimeoutSec = 30;
+    const dropTimeoutSec = 60;
     
     // Time Remaining Intervals
     let timeRemainingSeconds = 0;
@@ -50,30 +52,40 @@ export default async function Events() {
     const connect = document.getElementById('connect');
     let isConnected = false;
 
+    const handleSonar = (data) => {
+        console.log("SONAR DETECTED", data);
+        startDropTimeout();
+    }
+
+    const handleEarn = ({ earnedTime, wasteCode }) => {
+        earn(earnedTime, wasteCode);
+    }
+
+    const handleDropFinished = () => {
+        modal.style.display = 'none';
+        clearInterval(earnInterval);
+        stopDropListeners();
+        updateTimeRemaining();
+    }
+
+    const startDropListeners = () => {
+        socketClient.on('ARDUINO:SONAR', handleSonar);
+        socketClient.on('EARN', handleEarn);
+        socketClient.on('DROP_FINISHED', handleDropFinished);
+    }
+
+    const stopDropListeners = () => {
+        socketClient.off('ARDUINO:SONAR', handleSonar);
+        socketClient.off('EARN', handleEarn);
+        socketClient.off('DROP_FINISHED', handleDropFinished);
+    }
+
     // --- Internet Check (once) ---
     let isInternetUp = false;
-    const checkInternetConnection = async () => {
-        try {
-            const response = await axios.get(
-                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/check-internet`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_SRC_KEY,
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
-            isInternetUp = response.data.success && response.data.data.internet;
-            return isInternetUp;
-        } catch (error) {
-            console.log('[DEBUG] Internet check error:', error);
-            isInternetUp = false;
-            return false;
-        }
-    };
-
-    await checkInternetConnection(); // call once on load
+    socketClient.emit('CHECK_INTERNET');
+    socketClient.on('INTERNET_STATUS', (data) => {
+        isInternetUp = data.online;
+    })
 
     const updateConnectButtonState = () => {
         const isTimeZero = timeRemainingSeconds <= 0;
@@ -93,81 +105,35 @@ export default async function Events() {
         if (!isConnected) {
             connect.textContent = 'Pause';
             isConnected = true;
-
             startTime();
-            await axios.post(
-                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
-                {},
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_SRC_KEY,
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
+            socketClient.emit('AUTH_CLIENT');
         } else {
             connect.textContent = 'Connect';
             clearInterval(timeRemainingInterval);
             isConnected = false;
             timeRemainingInterval = null;
-
-            await axios.post(
-                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
-                {},
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_SRC_KEY,
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
-
+            socketClient.emit('DEAUTH_CLIENT')
             updateTimeRemaining();
         }
     });
 
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
-        const droppingClient = await axios.get(
-            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/status/dropping`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        )
-
-        await axios.patch(
-            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
-            { status: "dropping" },
-            { 
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        )
+        const droppingClientData = await new Promise(resolve => {
+            socketClient.once('DROPING_CLIENT_DATA', (data) => {
+                resolve(data);
+            })
+            socketClient.emit('DROPPING_CLIENT');
+        })
         
-        const droppingClientData = droppingClient.data.data;
         if (droppingClientData.length <= 0){
             modal.style.display = 'block';
             startDropTimeout();
             updateEarnedTimeDisplay();
+            startDropListeners();
             socketClient.emit('DROPPING');
-            socketClient.on('ARDUINO:SONAR', (data) => {
-                console.log('SONAR DETECTED', data);
-                startDropTimeout();
-            });
-            socketClient.on("EARN", ({earnedTime, wasteCode}) => {
-                earn(earnedTime, wasteCode);
-            });
         } else {
-            droppingModal.style.display = 'block'
+            droppingModal.style.display = 'block';
         }
     });
 
@@ -178,26 +144,17 @@ export default async function Events() {
 
     const exit = document.getElementById('exit');
     exit.addEventListener('click', async function() {
-        socketClient.disconnect();
+        socketClient.emit('DROP_COMPLETE');
+        stopDropListeners();
         modal.style.display = 'none';
         clearInterval(earnInterval);
-        await axios.patch(
-            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
-            { status: 'pending' },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
         updateTimeRemaining();
     });
 
     const proceed = document.getElementById('proceed');
     proceed.addEventListener('click', async function() {
-        socketClient.disconnect();
+        socketClient.emit('DROP_COMPLETE');
+        stopDropListeners();
         modal.style.display = 'none';
         clearInterval(earnInterval);
         await axios.post(
@@ -260,20 +217,13 @@ export default async function Events() {
     };
 
     const updateEarnedTimeDisplay = async () => {
-        const response = await axios.get(
-            `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
+        const earnedSeconds = await new Promise(resolve => {
+            socketClient.once('TIME_EARNED', (data) => {
+                resolve(data.timeEarned)
+            });
+            socketClient.emit('GET_TIME_EARNED');
+        });
 
-        if (!response.data.success) return;
-
-        const earnedSeconds = response.data.data.time_earned;
         renderEarnTime({ hoursSpan, minSpan, secSpan }, earnedSeconds);
     };
 
@@ -355,7 +305,8 @@ export default async function Events() {
         dropTimeout = setTimeout(async () => {
             console.log("TIMEOUT TRIGGERED");
             modal.style.display = 'none';
-            socketClient.disconnect();
+            socketClient.emit('DROP_COMPLETE');
+            stopDropListeners();
             clearInterval(earnInterval);
             if (countdownInterval) clearInterval(countdownInterval);
             dropTimeout = null;

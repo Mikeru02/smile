@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import axios from 'axios';
+import { checkInternet } from '../utils/dashboardInformation.js';
 import Client from '../models/v1/client.js';
 import path from 'path';
 import fs from "fs/promises";
@@ -12,7 +13,11 @@ class SocketServer {
         this.modelApi = modelApi;
         this.srcBaseUrl = `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/${process.env.SRC_ROUTE_VERSION}/`
         this.axiosClient = axios.create({
-            baseURL: this.srcBaseUrl
+            baseURL: this.srcBaseUrl,
+            headers: {
+                'Content-Type': "application/json",
+                'apikey': process.env.SRC_KEY,
+            }
         });
         this.io = null;
         this.activeClient = null;
@@ -43,7 +48,7 @@ class SocketServer {
             const token = socket.handshake.auth.token;
             console.log('[SOCKET] CLient connected', socket.id);
 
-            socket.on('DROPPING', () => {
+            socket.on('DROPPING', async () => {
                 if (this.activeClient) {
                     socket.emit('DROP:busy', {
                         message: 'Another user is dropping',
@@ -52,9 +57,96 @@ class SocketServer {
                 }
 
                 console.log('[DROP] started by: ', socket.id);
+                await this.axiosClient.patch(
+                    `client/`,
+                    { status: 'dropping' },
+                    {
+                        headers: {
+                            'token': token
+                        }
+                    }
+                )
                 this.activeClient = socket;
                 this.arduino.sendCommand('DROPPING');
             });
+
+            socket.on('DROPPING_CLIENT', async () => {
+                const droppingClient = await this.axiosClient.get(
+                    `client/status/dropping`,
+                    {
+                        headers: {
+                            'token': token
+                        }
+                    }
+                );
+                socket.emit('DROPPING_CLIENT_DATA', droppingClient.data.data);
+            })
+
+            socket.on('AUTH_CLIENT', async () => {
+                await this.axiosClient.post(
+                    `client/auth`,
+                    {},
+                    {
+                        headers: {
+                            'token': token
+                        }
+                    }
+                )
+            })
+
+            socket.on('DEAUTH_CLIENT', async () => {
+                await this.axiosClient.post(
+                    `client/deauth`,
+                    {},
+                    {
+                        headers: {
+                            'token': token
+                        }
+                    }
+                )
+            })
+
+            socket.on('CHECK_INTERNET', () => {
+                const hasInternet = checkInternet();
+
+                socket.emit('INTERNET_STATUS', {
+                    online: hasInternet,
+                    timestamp: Date.now()
+                });
+            })
+
+            socket.on('DROP_COMPLETE', async () => {
+                if (this.activeClient === socket) {
+                    this.activeClient = null;
+                    this.arduino.sendCommand("DONE DROP")
+                    await this.axiosClient.patch(
+                        `client/`,
+                        { status: "pending"},
+                        {
+                            headers: {
+                                'token': token
+                            }
+                        }
+                    )
+                    socket.emit('DROP_FINISHED');
+                }
+            })
+
+            socket.on('GET_TIME_EARNED', async() => {
+                const response = await this.axiosClient.get(
+                    `client/time/time_earned`,
+                    {
+                        headers: {
+                            'token': token
+                        }
+                    }
+                )
+
+                socket.emit('TIME_EARNED', {
+                    timeEarned: response.data.data.time_earned,
+                    timestamp: Date.now()
+                })
+            })
 
             socket.on('disconnect', async () => {
                 console.log('[SOCKET] disconnected:', socket.id);
