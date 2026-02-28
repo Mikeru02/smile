@@ -138,17 +138,19 @@ export default function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         console.log("DROP BTN TRIGGER");
-        socketClient.emit('DROPPING');
+    
         socketClient.once('DROP:busy', () => {
             droppingModal.style.display = 'block';
         });
 
-        socketClient.once('DROP: allowed', () => {
+        socketClient.once('DROP:allowed', () => {
             modal.style.display = 'block';
             startDropTimeout();
             // updateEarnedTimeDisplay();
             startDropListeners();
-        })
+        });
+
+        socketClient.emit('DROPPING');
     });
 
 
