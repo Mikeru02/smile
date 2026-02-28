@@ -72,6 +72,7 @@ class SocketServer {
                     return;
                 }
 
+                socket.emit('DROP:allowed');
                 console.log('[DROP] started by: ', socket.id);
                 await this.axiosClient.patch(
                     `client/`,
@@ -254,7 +255,7 @@ class SocketServer {
 
                     const response = await this.modelApi.earnedTime();
                     
-                    
+
 
                     this.activeClient.emit("EARN", { earnedTime: response.earnedTime, wasteCode: response.wasteCode });
                     console.log("Done capturing, sending command to arduino")

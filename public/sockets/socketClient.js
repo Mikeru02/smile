@@ -33,6 +33,11 @@ class SocketClient {
         this.socket.on(event, handler);
     }
 
+    once(event, handler) {
+        if (!this.socket) return;
+        this.socket.once(event, handler);
+    }
+    
     emit(event, payload) {
         if (!this.socket || !this.socket.connected) return;
         this.socket.emit(event, payload);
