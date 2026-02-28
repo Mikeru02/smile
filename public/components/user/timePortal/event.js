@@ -134,6 +134,28 @@ export default function Events() {
             connect.style.cursor = 'pointer';
         }
     };
+
+    const dropBtn = document.getElementById('start-drop');
+    dropBtn.addEventListener('click', async function() {
+        const droppingClientData = await new Promise(resolve => {
+            socketClient.once('DROPING_CLIENT_DATA', (data) => {
+                resolve(data);
+            })
+            socketClient.emit('DROPPING_CLIENT');
+        })
+        
+        if (droppingClientData.length <= 0){
+            modal.style.display = 'block';
+            startDropTimeout();
+            updateEarnedTimeDisplay();
+            startDropListeners();
+            socketClient.emit('DROPPING');
+        } else {
+            droppingModal.style.display = 'block';
+        }
+    });
+
+
     updateConnectButtonState()
 
 }
