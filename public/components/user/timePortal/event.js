@@ -25,7 +25,7 @@ export default function Events() {
     });
 
     socketClient.on('TIME_REMAINING', (data) => {
-        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.time_remaining);
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.timeRemaining);
     })
 
     // Time containers
