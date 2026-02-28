@@ -138,7 +138,7 @@ export default function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         const droppingClientData = await new Promise(resolve => {
-            socketClient.once('DROPING_CLIENT_DATA', (data) => {
+            socketClient.on('DROPING_CLIENT_DATA', (data) => {
                 resolve(data);
             })
             socketClient.emit('DROPPING_CLIENT');
