@@ -8,6 +8,18 @@ export default function Events() {
     const validToken = checkToken(token);
     const role = getRole(token);
 
+    // Intervals
+    let timeEarned = 0;
+    let earnInterval = null;
+    let isRunning = false;
+    let dropTimeout = null;
+    let countdownInterval = null;
+    const dropTimeoutSec = 60;
+    let timeRemainingSeconds = 0;
+    let timeRemainingInterval = null;
+
+    let isConnected = false;
+
     if (!validToken) {
         window.app.pushRoute('/');
         return;
@@ -25,6 +37,7 @@ export default function Events() {
     });
 
     socketClient.on('TIME_REMAINING', (data) => {
+        timeRemainingSeconds = data.timeRemaining;
         renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.timeRemaining);
     })
 
@@ -40,18 +53,6 @@ export default function Events() {
     // Modals
     const modal = document.getElementById('modal');
     const droppingModal = document.getElementById('dropping-modal');
-
-    // Intervals
-    let timeEarned = 0;
-    let earnInterval = null;
-    let isRunning = false;
-    let dropTimeout = null;
-    let countdownInterval = null;
-    const dropTimeoutSec = 60;
-    let timeRemainingSeconds = 0;
-    let timeRemainingInterval = null;
-
-    let isConnected = false;
 
     const handleSonar = (data) => {
         console.log("SONAR DETECTED", data);
