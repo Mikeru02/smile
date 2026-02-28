@@ -402,9 +402,9 @@ void loop() {
     long leftDistance = readSonarDistance(sonarTrigPin, leftEchoPin);
     delay(70);
 
-    bool frontDetected = (frontDistance != 999) && ((baseTop - frontDistance) > frontDistance);
-    bool rightDetected = (rightDistance != 999) && ((baseRight - rightDistance) > rightDistance);
-    bool leftDetected  = (leftDistance != 999) && ((baseRight - rightDistance) > leftDistance);
+    bool frontDetected = (frontDistance != 999) && ((baseTop - frontDistance) > tolerance);
+    bool rightDetected = (rightDistance != 999) && ((baseRight - rightDistance) > tolerance);
+    bool leftDetected  = (leftDistance != 999) && ((baseLeft - leftDistance) > tolerance);
 
     Serial.print("Front: "); Serial.print(frontDistance);
     Serial.print("  Right: "); Serial.print(rightDistance);
