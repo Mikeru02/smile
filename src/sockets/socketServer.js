@@ -245,11 +245,11 @@ class SocketServer {
                     const timeStamp = Date.now();
                     const uniqueFilename = `capture_${timeStamp}.jpg`;
                     const savedPath = await this.webcam.capture(uniqueFilename);
-
+                    console.log("Unique image saved:", savedPath);
+                    
                     const testPath = await this.webcam.getFilePath("test_capture.jpg");
                     await fs.copyFile(savedPath, testPath);
 
-                    console.log("Unique image saved:", savedPath);
                     console.log("test_capture overwritten:", testPath);
 
                     const response = await this.modelApi.earnedTime();
