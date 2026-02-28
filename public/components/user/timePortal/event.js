@@ -130,7 +130,7 @@ export default function Events() {
             }, dropTimeoutSec * 1000)
     }
 
-    let isInternetUp = false;
+    let isInternetUp;
     socketClient.on('INTERNET_STATUS', (data) => {
         console.log("DEBUG: ", data)
         isInternetUp = data.online;
