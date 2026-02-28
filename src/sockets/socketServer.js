@@ -164,7 +164,7 @@ class SocketServer {
 
                 await this.axiosClient.patch(
                     `client/time-remaining`,
-                    {},
+                    { timeRemaining: socket.clientData.time_remaining },
                     {
                         headers: {
                             'token': socket.token
