@@ -24,10 +24,18 @@ export default function Events() {
         console.log('[SOCKET] connected, waiting for commands.');
     });
 
+    socketClient.on('TIME_REMAINING', (data) => {
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.time_remaining);
+    })
+
     // Time containers
     const hoursSpan = document.getElementById('earn-hours-span');
     const minSpan = document.getElementById('earn-min-span');
     const secSpan = document.getElementById('earn-sec-span');
+    const TRhoursSpan = document.getElementById('hours-span');
+    const TRminSpan = document.getElementById('min-span');
+    const TRsecSpan = document.getElementById('sec-span');
+
 
     // Modals
     const modal = document.getElementById('modal');
