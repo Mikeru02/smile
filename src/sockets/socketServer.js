@@ -100,6 +100,7 @@ class SocketServer {
                         }
                     }
                 )
+                this.startClientSync(socket);
             })
 
             socket.on('DEAUTH_CLIENT', async (data) => {
@@ -114,7 +115,7 @@ class SocketServer {
                 )
 
                 socket.clientData.time_remaining = data.timeRemaining;
-                console.log("DEBUG: Time Remaining", socket.clientData.time_remaining);
+                this.stopClientSync(socket);
             })
 
             socket.on('DROP_COMPLETE', async () => {

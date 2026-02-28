@@ -188,14 +188,17 @@ export default function Events() {
         if (!isConnected) { 
             connect.textContent = 'Pause';
             isConnected = true;
-            startTime();
+            //startTime();
             socketClient.emit('AUTH_CLIENT');
+            socketClient.on('TIME_EARNED', (data) => {
+                renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
+            })
         } else {
             connect.textContent = 'Connect';
             clearInterval(timeRemainingInterval);
             isConnected = false;
             timeRemainingInterval = null;
-            socketClient.emit('DEAUTH_CLIENT', { timeRemaining: timeRemainingSeconds })
+            socketClient.emit('DEAUTH_CLIENT')
             // updateTimeRemaining();
             socketClient.on('TIME_EARNED', (data) => {
                 renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
