@@ -72,6 +72,7 @@ class SocketServer {
                 }
 
                 socket.emit('DROP:allowed');
+                socket.emit('TIME_EARNED', { timeEarned: socket.clientData.time_earned })
                 console.log('[DROP] started by: ', socket.id);
                 // await this.axiosClient.patch(
                 //     `client/`,
@@ -264,7 +265,7 @@ class SocketServer {
                             }
                         }
                     );
-                    client.emit('TIME_EARNED', { timeEarned: response.earnedTime })
+                    client.emit('TIME_EARNED', { timeEarned: client.clientData.time_earned })
                     console.log("Done capturing, sending command to arduino")
                     this.arduino.sendCommand("DONE CAPTURE");
                     this.arduino.sendCommand(`DETECT:${response.category}`);
