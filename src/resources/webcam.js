@@ -35,7 +35,7 @@ class Webcam {
 
             fswebcam.stdout.on("data", (data) => {});
             fswebcam.stderr.on("data", (data) => {
-                console.log(data);
+                console.log(data.toString());
             });
 
             fswebcam.on("close", (code) => {
