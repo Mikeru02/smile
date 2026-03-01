@@ -130,7 +130,10 @@ export default function Events() {
     socketClient.on('INTERNET_STATUS', (data) => {
         console.log("DEBUG: ", data);
         isInternetUp = data.online;
-        document.getElementById('internet-anouncement').style.display = 'flex';
+
+        if (!isInternetUp){
+            document.getElementById('internet-anouncement').style.display = 'flex';
+        }
         updateConnectButtonState();
     });
 
