@@ -46,7 +46,6 @@ const float rightTreshold = 20;
 const float leftTreshold = 20;
 const float frontTreshold = 20;
 const int detectTreshold = 15;
-const int tolerance = 4;
 const float plasticTreshold = 40;
 const float generalTreshold = 35;
 const float paperTreshold = 38;
@@ -408,9 +407,9 @@ void loop() {
     long leftDistance = readSonarDistance(sonarTrigPin, leftEchoPin);
     delay(70);
 
-    bool frontDetected = (frontDistance != 999) && ((baseTop - frontDistance) > tolerance);
-    bool rightDetected = (rightDistance != 999) && ((baseRight - rightDistance) > tolerance);
-    bool leftDetected  = (leftDistance != 999) && ((baseLeft - leftDistance) > tolerance);
+    bool frontDetected = (frontDistance != 999) && (frontDistance < baseTop);
+    bool rightDetected = (rightDistance != 999) && (rightDistance < baseRight);
+    bool leftDetected  = (leftDistance != 999) && (leftDistance < baseLeft);
 
     Serial.print("Front: "); Serial.print(frontDistance);
     Serial.print("  Right: "); Serial.print(rightDistance);
