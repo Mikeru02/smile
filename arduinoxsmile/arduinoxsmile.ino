@@ -242,6 +242,13 @@ void controlMotor(String state) {
   }
 }
 
+bool readIRStable(int pin, int stableTime = 50) {
+    bool firstRead = digitalRead(pin);
+    delay(stableTime);
+    bool secondRead = digitalRead(pin);
+    return (firstRead == secondRead) ? firstRead : LOW; // only return HIGH if stable
+}
+
 void setup() {
   // Pinmode for Sonars
   pinMode(sonarTrigPin, OUTPUT);
@@ -376,7 +383,7 @@ void loop() {
   }
 
   if (!isCapturing && isUserDropping) {
-    bool currentIRState = digitalRead(IRPin);
+    bool currentIRState = readIRStable(IRPin);
 
     if (previousIRState == LOW && currentIRState == HIGH) {
         isScanning = true;
