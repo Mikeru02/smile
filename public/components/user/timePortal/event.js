@@ -37,6 +37,7 @@ export default function Events() {
     socketClient.connect();
     socketClient.on('connect', () => {
         console.log('[SOCKET] connected, waiting for commands.');
+        socketClient.emit('GET_BIN_STATUS');
     });
 
     // Time containers
@@ -161,12 +162,16 @@ export default function Events() {
 
     socketClient.on('BIN_STATUS', (data) => {
         updateDropButtonState(data);
-        annoucementContainer.innerHTML = '';
-        annoucementContainer.innerHTML = `
-            <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
-            <p>${data.status} is bin. Waiting for removal.</p>
-        `
-        annoucementContainer.style.display = 'flex';
+        if (data.status !== 'all_ok') {
+            annoucementContainer.innerHTML = `
+                <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
+                <p>${data.status.replace('_', ' ')} is full. Waiting for removal.</p>
+            `;
+            annoucementContainer.style.display = 'flex';
+        } else {
+            annoucementContainer.style.display = 'none';
+            annoucementContainer.innerHTML = '';
+        }
     });
 
     const updateDropButtonState = (data) => {

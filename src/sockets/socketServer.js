@@ -60,11 +60,16 @@ class SocketServer {
                 socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
                 socket.emit('CLIENT_STATUS', { status: socket.clientData.status });
                 socket.emit('INTERNET_STATUS', { online: checkInternet() });
-                socket.emit('BIN_STATUS', { status: this.currentBinStatus });
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
                 return;
             }
+
+            socket.on('GET_BIN_STATUS', () => {
+                socket.emit('BIN_STATUS', {
+                    status: this.currentBinStatus
+                })
+            })
 
             socket.on('DROPPING', () => {
                 if (this.currentBinStatus !== 'all_ok') {
@@ -252,10 +257,6 @@ class SocketServer {
             const status = message.split(":")[1];
             console.log('[INFO] Bin Status: ', status);
             this.currentBinStatus = status;
-
-            if (this.io) {
-                this.io.emit('BIN_STATUS', { status });
-            }
             return;
         }
 
