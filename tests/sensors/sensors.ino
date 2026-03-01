@@ -91,6 +91,8 @@ void loop() {
         delay(500);
     }
 
+    previousIRState = currentIRState;
+
     if (isScanning){
     // Read distances
     long topDistance   = readDistance(trigPin, topEcho);
@@ -122,7 +124,6 @@ void loop() {
 
     delay(200);
     }
-    previousIRState = currentIRState;
 }
 
 // void loop() {
