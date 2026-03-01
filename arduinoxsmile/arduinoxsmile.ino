@@ -459,6 +459,7 @@ void loop() {
     if (anySonarDetected()) {
       respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
       isCapturing = true;
+      isScanning = false;
     }
   }
   }
