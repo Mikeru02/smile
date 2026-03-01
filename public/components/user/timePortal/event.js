@@ -222,6 +222,12 @@ export default function Events() {
             // socketClient.on('TIME_REMAINING', (data) => {
             //     renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
             // })
+
+            const redirectToSurvey = Math.random() < 0.5;
+            if (redirectToSurvey) {
+                window.location.href = 'https://forms.gle/LEGksfLDYJH5Ws9r7';
+                return;
+            }
         } else {
             connect.textContent = 'Connect';
             clearInterval(timeRemainingInterval);
