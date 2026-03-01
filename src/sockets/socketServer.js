@@ -67,9 +67,10 @@ class SocketServer {
 
             socket.on('GET_BIN_STATUS', () => {
                 // this.arduino.sendCommand('CHECK_BIN');
-                // socket.emit('BIN_STATUS', {
-                //     status: this.currentBinStatus
-                // })
+                console.log('[DEBUG] Bin Status: ', this.currentBinStatus);
+                socket.emit('BIN_STATUS', {
+                    status: this.currentBinStatus
+                })
             })
 
             socket.on('DROPPING', () => {
