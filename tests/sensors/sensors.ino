@@ -22,7 +22,7 @@ const int stop = 1500;
 const int forward = 2100;
 const int backward = 1000;
 const int openTime = 250;
-const int closeTime = 700;
+const int closeTime = 750;
 
 const int rightTreshold = 22;
 const int leftTreshold = 22;
