@@ -478,7 +478,7 @@ void loop() {
       isCapturing = true;
       isScanning = false;
     }
-    else if (milis() - scanningStartTime >= sonarTimeOut * 1000) {
+    else if (millis() - scanningStartTime >= sonarTimeOut * 1000) {
       respondAndDisplay("TIMEOUT", "Sonar Time Out", "SONAR DETECTED");
       isCapturing = true;
       isScanning = false;
