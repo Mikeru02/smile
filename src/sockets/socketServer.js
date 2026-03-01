@@ -48,6 +48,7 @@ class SocketServer {
             console.log('[SOCKET] CLient connected', socket.id);
 
             try {
+                this.arduino.sendCommand('CHECK_BIN');
                 const response = await this.axiosClient.get(
                     `client/`,
                     {
@@ -55,11 +56,12 @@ class SocketServer {
                             'token': socket.token
                         }
                     }
-                )
+                );
                 socket.clientData = response.data.data;
                 socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
                 socket.emit('CLIENT_STATUS', { status: socket.clientData.status });
                 socket.emit('INTERNET_STATUS', { online: checkInternet() });
+                socket.emit('BIN_STATUS', { status: this.currentBinStatus });
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
                 return;
