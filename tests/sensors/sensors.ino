@@ -86,7 +86,7 @@ void loop() {
     lcd.print("IR: ");
     lcd.print(currentIRState);
 
-    if (previousIRState == HIGH && currentIRState == LOW){
+    if (previousIRState == LOW && currentIRState == HIGH){
     // Read distances
     long topDistance   = readDistance(trigPin, topEcho);
     delay(120);
