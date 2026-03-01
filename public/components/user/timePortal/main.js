@@ -13,7 +13,7 @@ export default function Main(root) {
             <p class="${styles["desc"]}">Time Management Portal</p>
             <img src="${ILLUSTRATION1}" class="${styles['illustration']}">
             <div id="internet-annoucement" class='${styles['announcement']}'>
-                <img src"${ILLUSTRATION2}" class="${styles['illustration2']}">
+                <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
                 <p>No Internet. Please wait</p>
             </div>
             <p class="${styles['time-remaining']}">Time Remaining</p>
