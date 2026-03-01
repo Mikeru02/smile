@@ -23,7 +23,7 @@ const int stop = 1500;
 const int forward = 2000;
 const int backward = 1000;
 const int openTime = 220;
-const int closeTime = 780;
+const int closeTime = 800;
 
 // Variable needed
 String ip;
@@ -187,10 +187,6 @@ void closeGate(Servo servoLeft, Servo servoRight) {
   servoRight.writeMicroseconds(forward);
   servoLeft.writeMicroseconds(backward);
   delay(closeTime);
-
-  servoLeft.writeMicroseconds(forward);
-  servoRight.writeMicroseconds(backward);
-  delay(50);
 
   // Stop both servos
   servoLeft.writeMicroseconds(stop);
