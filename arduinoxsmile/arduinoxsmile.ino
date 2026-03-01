@@ -418,20 +418,20 @@ void loop() {
 
     lcd.setCursor(0, 0);
     lcd.print("F:");
-    lcd.print(frontDetected);
+    lcd.print(frontDistance);
     lcd.print("/");
-    lcd.print(frontTreshold);
+    lcd.print(baseTop);
 
     lcd.print(" L:");
-    lcd.print(leftDetected);
+    lcd.print(leftDistance);
     lcd.print("/");
-    lcd.print(leftTreshold);
+    lcd.print(baseLeft);
 
     lcd.setCursor(0, 1);
     lcd.print(" R:");
-    lcd.print(rightDetected);
+    lcd.print(rightDistance);
     lcd.print("/");
-    lcd.print(rightTreshold);
+    lcd.print(baseRight);
 
 
     // ---------------- TOP SONAR FILTER ----------------
