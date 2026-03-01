@@ -24,6 +24,8 @@ const int forward = 1950;
 const int backward = 1050;
 const int openTime = 220;
 const int closeTime = 780;
+unsigned long scanningStartTime = 0;
+const int sonarTimeOut = 3;
 
 // Variable needed
 String ip;
@@ -391,6 +393,7 @@ void loop() {
 
     if (previousIRState == LOW && currentIRState == HIGH) {
         isScanning = true;
+        scanningStartTime = millis();
         lcd.clear();
         lcd.print("Scanning Start");
         delay(500);
@@ -472,6 +475,11 @@ void loop() {
     // ---------------- FINAL CONFIRM ----------------
     if (anySonarDetected()) {
       respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
+      isCapturing = true;
+      isScanning = false;
+    }
+    else if (milis() - scanningStartTime >= sonarTimeOut * 1000) {
+      respondAndDisplay("TIMEOUT", "Sonar Time Out", "SONAR DETECTED");
       isCapturing = true;
       isScanning = false;
     }
