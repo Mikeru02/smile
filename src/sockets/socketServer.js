@@ -253,7 +253,7 @@ class SocketServer {
     async onArduinoData(data) {
         const message = data.trim();
 
-        if (message.startsWith("BIN:")) {
+        if (message.startsWith("BINS:")) {
             const status = message.split(":")[1];
             console.log('[INFO] Bin Status: ', status);
             this.currentBinStatus = status;
