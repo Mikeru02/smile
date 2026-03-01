@@ -29,7 +29,7 @@ const arduino = new Arduino(
         arduino.sendCommand(`IP:${ip}`);
     }
 );
-//const arduino = "";
+// const arduino = "";
 
 // Block for Camera
 const webcam = new Webcam();
