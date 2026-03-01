@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import axios from 'axios';
 import { checkInternet } from '../utils/dashboardInformation.js';
+import fs from 'fs/promises';
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi }) {
