@@ -414,6 +414,9 @@ void loop() {
     Serial.print("Front: "); Serial.print(frontDistance);
     Serial.print("  Right: "); Serial.print(rightDistance);
     Serial.print("  Left: "); Serial.println(leftDistance);
+    Serial.print("FD: "); Serial.println(frontDetected);
+    Serial.print("  RD: "); Serial.println(rightDetected);
+    Serial.print("  LD: "); Serial.println(leftDetected);
 
     lcd.setCursor(0, 0);
     lcd.print("F:");
