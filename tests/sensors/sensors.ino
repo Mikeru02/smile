@@ -31,6 +31,7 @@ const int plasticTreshold = 40;
 const int generalTreshold = 35;
 const int paperTreshold = 38;
 
+bool previousIRState = false;
 Servo servoRight;
 Servo servoLeft;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -80,11 +81,12 @@ void setup() {
 
 void loop() {
 
-    const IRState = digitalRead(IRPin);
-    lcd.clear();
-    lcd.print(IRState);
+    bool currentIRState = digitalRead(IRPin);
+    lcd.setCursor(0, 0);
+    lcd.print("IR: ");
+    lcd.print(currentIRState);
 
-    if (IRState){
+    if (previousIRState == HIGH && currentIRState == LOW){
     // Read distances
     long topDistance   = readDistance(trigPin, topEcho);
     delay(120);
@@ -115,6 +117,7 @@ void loop() {
 
     delay(200);
     }
+    previousIRState = currentIRState;
 }
 
 // void loop() {
