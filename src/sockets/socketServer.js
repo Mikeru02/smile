@@ -4,11 +4,12 @@ import { checkInternet } from '../utils/dashboardInformation.js';
 import fs from 'fs/promises';
 
 class SocketServer {
-    constructor({ server, arduino, webcam, modelApi }) {
+    constructor({ server, arduino, webcam, modelApi, messageBot }) {
         this.server = server;
         this.arduino = arduino;
         this.webcam = webcam;
         this.modelApi = modelApi;
+        this.messageBot = messageBot;
         this.srcBaseUrl = `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/${process.env.SRC_ROUTE_VERSION}/`
         this.axiosClient = axios.create({
             baseURL: this.srcBaseUrl,
@@ -266,7 +267,10 @@ class SocketServer {
             const status = message.split(":")[1];
             console.log('[INFO] Bin Status: ', status);
             this.currentBinStatus = status;
-            this.io.emit('BIN_STATUS', { status: status});
+            this.io.emit('BIN_STATUS', { status: status });
+            if (status !== "all_ok") {
+                await this.messageBot.sendMessageToMaintainers(`${status} bin is full. Kindly take it out.`)
+            }
             return;
         }
 

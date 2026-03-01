@@ -16,6 +16,7 @@ import apiRouter from './routes/api/index.js';
 import startTimeDeductor from './workers/timeDeductor.js';
 import getLocalIP from './utils/getIp.js';
 import Model from './utils/model.js';
+import MessageBot from './utils/tgBot.js';
 import checkInternetWorker from './workers/internetWorker.js';
 
 const ip = getLocalIP();
@@ -36,6 +37,8 @@ const webcam = new Webcam();
 
 // Block for Model API
 const modelApi = new Model(process.env);
+
+const messageBot = new MessageBot(process.env.BOT_TOKEN, process.env.BOT_USERS);
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);
@@ -59,7 +62,7 @@ app.use(limiter);
 
 const server = http.createServer(app);
 
-const socketServer = new SocketServer({ server, arduino, webcam, modelApi });
+const socketServer = new SocketServer({ server, arduino, webcam, modelApi, messageBot });
 
 const io = socketServer.init();
 
