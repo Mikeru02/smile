@@ -27,9 +27,11 @@ export default function checkInternetWorker() {
                         `client/deauth`,
                         { clientId: client.id },
                         {
-                            headers: jwt.sign({ 'role': 'admin' }, process.env.API_SECRET_KEY, {
-                                expiresIn: '1m'
-                            }) 
+                            headers: {
+                                'token': jwt.sign({ 'role': 'admin' }, process.env.API_SECRET_KEY, {
+                                    expiresIn: '1m'
+                                    }) 
+                            }
                         }
                     )
                 }
