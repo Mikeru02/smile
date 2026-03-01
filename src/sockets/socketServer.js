@@ -264,6 +264,7 @@ class SocketServer {
             const status = message.split(":")[1];
             console.log('[INFO] Bin Status: ', status);
             this.currentBinStatus = status;
+            this.io.emit('BIN_STATUS', { status: status});
             return;
         }
 
