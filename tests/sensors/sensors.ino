@@ -8,6 +8,7 @@ const int dirPin = 3;
 const int enablePin = 4;
 const int servoLeftPin = 12;
 const int servoRightPin = 13;
+const int IRPin = A1;
 const int trigPin = 8;
 const int sideEcho1 = 9;
 const int sideEcho2 = 10;
@@ -55,6 +56,7 @@ void setup() {
   pinMode(bottlesEchoPin, INPUT);
   pinMode(generalEchoPin, INPUT);
   pinMode(paperEchoPin, INPUT);
+  pinMode(IRPin, INPUT);
 
   digitalWrite(trigPin, LOW);
   digitalWrite(binTrigPin, LOW);
@@ -77,6 +79,12 @@ void setup() {
 }
 
 void loop() {
+
+    const IRState = digitalRead(IRPin);
+    lcd.clear();
+    lcd.print(IRState);
+
+    if (IRState){
     // Read distances
     long topDistance   = readDistance(trigPin, topEcho);
     delay(120);
@@ -106,6 +114,7 @@ void loop() {
     lcd.print(rightTreshold);
 
     delay(200);
+    }
 }
 
 // void loop() {
