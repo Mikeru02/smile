@@ -233,6 +233,10 @@ void closeGate(Servo servoLeft, Servo servoRight) {
   servoRight.writeMicroseconds(forward);
   delay(closeTime);
 
+  servoLeft.writeMicroseconds(forward);
+  servoRight.writeMicroseconds(backward);
+  delay(2);
+
   // Stop both servos
   servoLeft.writeMicroseconds(stop);
   servoRight.writeMicroseconds(stop);
