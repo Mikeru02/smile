@@ -32,6 +32,8 @@ String ip;
 bool isUserDropping = false;
 bool isCapturing = false;
 bool laserDetected = false;
+bool previousIRState;
+bool isScanning = false;
 
 // Varibles for Sonars
 const int sonarDistanceTreshold = 20;
@@ -312,6 +314,7 @@ void setup() {
   delay(2000);
 
   calibratePlatform();
+  previousIRState = digitalRead(IRPin);
   controlMotor("disable");
 }
 
@@ -373,28 +376,19 @@ void loop() {
   }
 
   if (!isCapturing && isUserDropping) {
+    bool currentIRState = digitalRead(IRPin);
 
-    // bool irDetected = !digitalRead(IRPin);
+    if (previousIRState == LOW && currentIRState == HIGH) {
+        isScanning = true;
+        lcd.clear();
+        lcd.print("Scanning Start");
+        delay(500);
+    }
 
-    // if (irDetected) { hasObjectDetectCount++;}
-    // else { hasObjectDetectCount = 0; }
+    previousIRState = currentIRState;
 
-    // if (!IRLastState && hasObjectDetectCount >= hasOjectCount) {
-    //   IRLastState = true;
-    //   hasObjectDetectCount = 0;
-    // }
+    if (isScanning) {
 
-    // if (IRLastState && !irDetected) {
-    //   IRLastState = false;
-    // }
-
-    // if (irDetected) {
-    //   respondAndDisplay("IR DETECTED", "Object Close", "IR TRIGGERED");
-    //   isCapturing = true;
-    //   return;   // Skip sonars
-    // }
-
-    // Sequential reading with small delays to avoid interference
     long frontDistance = readSonarDistance(sonarTrigPin, frontEchoPin);
     delay(70);
     long rightDistance = readSonarDistance(sonarTrigPin, rightEchoPin);
@@ -466,5 +460,6 @@ void loop() {
       respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
       isCapturing = true;
     }
+  }
   }
 }
