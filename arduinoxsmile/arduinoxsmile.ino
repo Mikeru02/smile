@@ -264,6 +264,9 @@ void setup() {
   servoRight.attach(servoRightPin);
   servoLeft.attach(servoLeftPin);
 
+  servoLeft.writeMicroseconds(stop);
+  servoRight.writeMicroseconds(stop);
+
   // Stepper Motor setup
   float maxRPM = 30;
   float accelRPMPerSec = 80;
