@@ -23,7 +23,7 @@ const int stop = 1500;
 const int forward = 1950;
 const int backward = 1050;
 const int openTime = 220;
-const int closeTime = 800;
+const int closeTime = 780;
 
 // Variable needed
 String ip;
