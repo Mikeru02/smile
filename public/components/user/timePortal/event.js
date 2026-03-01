@@ -162,6 +162,7 @@ export default function Events() {
 
     socketClient.on('BIN_STATUS', (data) => {
         updateDropButtonState(data);
+        console.log('[SOCKET] Bin status: ', data.status);
         if (data.status !== 'all_ok') {
             annoucementContainer.innerHTML = `
                 <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
