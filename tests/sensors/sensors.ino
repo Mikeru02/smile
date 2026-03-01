@@ -78,6 +78,8 @@ void setup() {
   servoLeft.writeMicroseconds(stop);
   servoRight.writeMicroseconds(stop);
 
+  previousIRState = digitalRead(IRPin);
+
 }
 
 void loop() {
