@@ -8,7 +8,7 @@ export default function runSpawnSync(cmd, args, raw = false) {
     }
 
     if (result.status !== 0) {
-        if (cmd === 'conntrack') {
+        if (cmd === 'conntrack' || cmd === 'ping') {
             return raw ? result : result.stdout.trim();
         }
 
