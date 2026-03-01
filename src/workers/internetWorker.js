@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { checkInternet } from "../utils/dashboardInformation.js";
 
 export default function checkInternetWorker() {
-    const loopInterval = 60;
+    const loopInterval = 5;
     const axiosClient = axios.create({
         baseURL: `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/`,
         headers: {
@@ -13,6 +13,7 @@ export default function checkInternetWorker() {
     })
     const checkInternetLoop = async() => {
         try {
+            console.log('Check Internet Worker starts')
             const hasInternet = checkInternet();
 
             if (!hasInternet) {

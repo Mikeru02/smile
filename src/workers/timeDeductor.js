@@ -2,9 +2,10 @@ import axios from 'axios';
 import ClientManagement from '../utils/clientManagement.js';
 
 export default function startTimeDeductor() {
-    const loopInterval = 60
+    const loopInterval = 30;
     const deductLoop = async () => {
         try {
+            console.log('Time Deductor Worker starts')
             const activeClientsResponse = await axios.get(
                 `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/status/active`,
                 {
