@@ -21,8 +21,8 @@ const int paperEchoPin = 7;
 const int stop = 1500;
 const int forward = 2100;
 const int backward = 1000;
-const int openTime = 250;
-const int closeTime = 800;
+const int openTime = 220;
+const int closeTime = 780;
 
 const int rightTreshold = 22;
 const int leftTreshold = 22;
