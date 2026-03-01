@@ -20,7 +20,7 @@ class SocketServer {
         this.io = null;
         this.activeClient = null;
         this.timeDeductionInterval = null;
-
+        this.currentBinStatus = "unknown"; 
         this.onArduinoData = this.onArduinoData.bind(this);
     }
 
@@ -56,7 +56,7 @@ class SocketServer {
                     }
                 )
                 socket.clientData = response.data.data;
-                console.log('Client Data Loaded:', socket.clientData);
+                this.arduino.sendCommand('CHECK_BIN');
                 socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
                 socket.emit('CLIENT_STATUS', { status: socket.clientData.status });
                 socket.emit('INTERNET_STATUS', { online: checkInternet() });
@@ -66,6 +66,13 @@ class SocketServer {
             }
 
             socket.on('DROPPING', () => {
+                if (this.currentBinStatus !== 'all_ok') {
+                    socket.emit('DROP:blocked', {
+                        message: this.currentBinStatus
+                    });
+                    return;
+                }
+
                 if (this.activeClient) {
                     socket.emit('DROP:busy', {
                         message: 'Another user is dropping',
@@ -239,6 +246,18 @@ class SocketServer {
 
     async onArduinoData(data) {
         const message = data.trim();
+
+        if (message.startsWith("BIN:")) {
+            const status = message.split(":")[1];
+            console.log('[INFO] Bin Status: ', status);
+            this.currentBinStatus = status;
+
+            if (this.io) {
+                this.io.emit('BIN_STATUS', { status });
+            }
+            return;
+        }
+
         if (message === "SONAR DETECTED") {
             console.log('SONAR Detected from Arduino');
             const client = this.activeClient;

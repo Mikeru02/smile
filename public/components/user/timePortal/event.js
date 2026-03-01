@@ -2,6 +2,8 @@ import SocketClient from '../../../sockets/socketClient.js';
 import { renderEarnTime, renderTimeRemaining } from '../../../utils/render.js';
 import checkToken from '../../../utils/checkToken.js';
 import { getRole } from '../../../utils/getRole.js';
+import ILLUSTRATION2 from '/icons/warning.svg';
+import styles from './component.module.css';
 
 export default function Events() {
     const token = localStorage.getItem('token');
@@ -45,6 +47,7 @@ export default function Events() {
     const TRminSpan = document.getElementById('min-span');
     const TRsecSpan = document.getElementById('sec-span');
 
+    const annoucementContainer = document.getElementById('announcement-container')
 
     // Modals
     const modal = document.getElementById('modal');
@@ -132,7 +135,12 @@ export default function Events() {
         isInternetUp = data.online;
 
         if (!isInternetUp){
-            document.getElementById('internet-anouncement').style.display = 'flex';
+            annoucementContainer.innerHTML = '';
+            annoucementContainer.innerHTML = `
+                <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
+                <p>No Internet. Please wait</p>
+            `
+            annoucementContainer.style.display = 'flex';
         }
         updateConnectButtonState();
     });
@@ -150,6 +158,28 @@ export default function Events() {
             startTime();
         }
     });
+
+    socketClient.on('BIN_STATUS', (data) => {
+        updateDropButtonState(data);
+        annoucementContainer.innerHTML = '';
+        annoucementContainer.innerHTML = `
+            <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
+            <p>${data.status} is bin. Waiting for removal.</p>
+        `
+        annoucementContainer.style.display = 'flex';
+    });
+
+    const updateDropButtonState = (data) => {
+        if (data.status !== 'all_ok') {
+            dropBtn.disabled = true;
+            dropBtn.style.opacity = '0.5';
+            dropBtn.style.cursor = 'not-allowed';
+        } else {
+            dropBtn.disabled = false;
+            dropBtn.style.opacity = '1';
+            dropBtn.style.cursor = 'pointer';
+        }
+    }
 
     const updateProceedButtonState = () => {
         const isEarnedTimeZero = timeEarnedSeconds <= 0;
