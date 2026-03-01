@@ -61,7 +61,7 @@ class Model {
     async earnedTime() {
         const prediction = await this.predict();
         if (!prediction[0]) {
-            return { category: "general waste", wasteCode: "GWST", earnedTime: 60}
+            return { category: "none", wasteCode: "none", earnedTime: 60}
         };
 
         const category = prediction[0].class_name?.toLowerCase();

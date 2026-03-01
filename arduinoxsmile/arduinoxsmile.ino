@@ -226,9 +226,16 @@ void runPlatform(String objectType) {
     closeGate(servoLeft, servoRight);
     delay(2000);
   } else {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print('Redirecting...');
+    lcd.setCursor(0,1);
+    lcd.print('general waste');
     openGate(servoLeft, servoRight);
     delay(2000);
     closeGate(servoLeft, servoRight);
+    delay(2000);
+    lcd.clear();
   }
 }
 
@@ -349,7 +356,7 @@ void loop() {
     }
 
     if (command == "DETECT") {
-      respondAndDisplay("DETECT", value, "MODEL DETECTED");
+      respondAndDisplay("MODEL DETECT", value, "MODEL DETECTED");
       runPlatform(value);
       isCapturing = false;
       resetSonar();
