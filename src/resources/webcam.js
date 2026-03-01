@@ -29,7 +29,7 @@ class Webcam {
                 "-d", this.device,
                 "-r", `${this.width}x${this.height}`,
                 "--no-banner",
-                "-D", "1000", // zero delay
+                "-D", "0", // zero delay
                 filePath
             ]);
 
