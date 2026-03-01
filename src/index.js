@@ -16,6 +16,7 @@ import apiRouter from './routes/api/index.js';
 import startTimeDeductor from './workers/timeDeductor.js';
 import getLocalIP from './utils/getIp.js';
 import Model from './utils/model.js';
+import checkInternetWorker from './workers/internetWorker.js';
 
 const ip = getLocalIP();
 
@@ -78,3 +79,4 @@ server.listen(port, host, () => {
 
 // Intialize workers
 startTimeDeductor();
+checkInternetWorker();
