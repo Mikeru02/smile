@@ -79,13 +79,13 @@ void setup() {
 void loop() {
     // Read distances
     long topDistance   = readDistance(trigPin, topEcho);
-    delay(100);
+    delay(120);
 
     long side1Distance = readDistance(trigPin, sideEcho1);
-    delay(100);
+    delay(120);
 
     long side2Distance = readDistance(trigPin, sideEcho2);
-    delay(100);
+    delay(120);
 
     // Display top, left, right distances and thresholds on first line
     lcd.setCursor(0, 0);
