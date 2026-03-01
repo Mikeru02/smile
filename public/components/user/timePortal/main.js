@@ -10,10 +10,10 @@ export default function Main(root) {
             <img src="${Logo}" class="${styles["logo"]}">
             <h1 class="${styles["title"]}">S.M.I.L.E</h1>
             <p class="${styles["desc"]}">Time Management Portal</p>
-            <div id="internet-annoucement">
+            <img src="${ILLUSTRATION1}" class="${styles['illustration']}">
+            <div id="internet-annoucement" class='${styles['announcement']}>
                 <p>⚠️ No Internet. Please wait</p>
             </div>
-            <img src="${ILLUSTRATION1}" class="${styles['illustration']}">
             <p class="${styles['time-remaining']}">Time Remaining</p>
             <p class="${styles['time-container']}"><span id="hours-span" class="${styles['indiv-time']}">00</span> Hrs <span id="min-span" class="${styles['indiv-time']}">00</span> Min <span id="sec-span" class="${styles['indiv-time']}">00</span> Sec</p>
             <button id="start-drop" class="${styles["button-submit-cred"]}">Drop Trash</button>
