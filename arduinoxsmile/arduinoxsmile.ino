@@ -225,12 +225,12 @@ void runPlatform(String objectType) {
     delay(2000);
     closeGate(servoLeft, servoRight);
     delay(2000);
-  } else {
+  } else if (objectType.equalsIgnoreCase("none")){
     lcd.clear();
     lcd.setCursor(0,0);
-    lcd.print('Redirecting...');
+    lcd.print("Redirecting...");
     lcd.setCursor(0,1);
-    lcd.print('general waste');
+    lcd.print("general waste");
     openGate(servoLeft, servoRight);
     delay(2000);
     closeGate(servoLeft, servoRight);
