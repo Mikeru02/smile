@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 
 class Webcam {
     constructor() {
-        this.device = process.env.DEVICE || "/dev/video1";
+        this.device = process.env.DEVICE || "/dev/video0";
         this.width = process.env.WIDTH || 1920;
         this.height = process.env.HEIGHT || 1080;
         this.outputFolder = join(__dirname, '../captures');
