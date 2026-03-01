@@ -20,10 +20,10 @@ const int bottlesEchoPin = 5;
 const int generalEchoPin = 6;
 const int paperEchoPin = 7;
 const int stop = 1500;
-const int forward = 2100;
+const int forward = 2000;
 const int backward = 1000;
 const int openTime = 220;
-const int closeTime = 800;
+const int closeTime = 780;
 
 // Variable needed
 String ip;
