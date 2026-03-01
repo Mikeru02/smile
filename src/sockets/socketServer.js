@@ -1,7 +1,6 @@
 import { Server } from 'socket.io';
 import axios from 'axios';
 import { checkInternet } from '../utils/dashboardInformation.js';
-import waitForFile from '../utils/waitFile.js';
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi }) {
@@ -253,9 +252,8 @@ class SocketServer {
                     const uniqueFilename = `capture_${timeStamp}.jpg`;
                     const savedPath = await this.webcam.capture(uniqueFilename);
                     console.log("Unique image saved:", savedPath);
-                    await waitForFile(savedPath);
-                    const testPath = this.webcam.getFilePath("test_capture.jpg");
-                    await fs.copyFile(savedPath, testPath);
+
+                    const testPath = await this.webcam.capture("test_capture.jpg");
 
                     console.log("test_capture overwritten:", testPath);
 
