@@ -18,7 +18,7 @@ class SocketServer {
             }
         });
         this.io = null;
-        this.pendingBinRequest = null;
+        this.doneRequest = false;
         this.activeClient = null;
         this.timeDeductionInterval = null;
         this.currentBinStatus = "unknown"; 
@@ -66,9 +66,7 @@ class SocketServer {
             }
 
             socket.on('GET_BIN_STATUS', () => {
-                this.pendingBinRequest = socket;
-
-                this.arduino.sendCommand('CHECK_BIN');
+                // this.arduino.sendCommand('CHECK_BIN');
                 // socket.emit('BIN_STATUS', {
                 //     status: this.currentBinStatus
                 // })
@@ -256,14 +254,15 @@ class SocketServer {
     async onArduinoData(data) {
         const message = data.trim();
 
+        if (message === 'READY') {
+            console.log("CHECKING BINS");
+            this.arduino.sendCommand('CHECK_BIN');
+        }
+
         if (message.startsWith("BINS:")) {
             const status = message.split(":")[1];
             console.log('[INFO] Bin Status: ', status);
             this.currentBinStatus = status;
-            if (this.pendingBinRequest) {
-                this.pendingBinRequest.emit('BIN_STATUS', { status });
-                this.pendingBinRequest = null;
-            }
             return;
         }
 
