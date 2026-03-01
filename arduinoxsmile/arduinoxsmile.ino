@@ -20,8 +20,8 @@ const int bottlesEchoPin = 5;
 const int generalEchoPin = 6;
 const int paperEchoPin = 7;
 const int stop = 1500;
-const int forward = 2000;
-const int backward = 1000;
+const int forward = 1950;
+const int backward = 1050;
 const int openTime = 220;
 const int closeTime = 800;
 
@@ -186,11 +186,12 @@ void closeGate(Servo servoLeft, Servo servoRight) {
 
   servoRight.writeMicroseconds(forward);
   servoLeft.writeMicroseconds(backward);
-  delay(closeTime);
+  delay(closeTime + 150);
 
   // Stop both servos
   servoLeft.writeMicroseconds(stop);
   servoRight.writeMicroseconds(stop);
+  delay(50);
 }
 
 void runPlatform(String objectType) {
@@ -263,6 +264,7 @@ void setup() {
   // Servos
   servoRight.attach(servoRightPin);
   servoLeft.attach(servoLeftPin);
+  delay(500);
 
   servoLeft.writeMicroseconds(stop);
   servoRight.writeMicroseconds(stop);
