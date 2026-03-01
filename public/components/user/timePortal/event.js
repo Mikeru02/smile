@@ -37,9 +37,9 @@ export default function Events() {
     socketClient.connect();
     socketClient.on('connect', () => {
         console.log('[SOCKET] connected, waiting for commands.');
-    });
 
-    socketClient.emit('GET_BIN_STATUS');
+        socketClient.emit('GET_BIN_STATUS');
+    });
 
     // Time containers
     const hoursSpan = document.getElementById('earn-hours-span');
