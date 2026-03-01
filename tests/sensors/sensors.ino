@@ -31,6 +31,7 @@ const int plasticTreshold = 40;
 const int generalTreshold = 35;
 const int paperTreshold = 38;
 
+bool previousIRState;
 bool isScanning = false;
 Servo servoRight;
 Servo servoLeft;
@@ -42,7 +43,6 @@ void openGate(Servo servoLeft, Servo servoRight);
 void closeGate(Servo servoLeft, Servo servoRight);
 
 void setup() {
-  bool previousIRState;
   servoLeft.attach(servoLeftPin);
   servoRight.attach(servoRightPin);
 
