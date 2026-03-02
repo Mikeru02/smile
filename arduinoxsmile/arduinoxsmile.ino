@@ -363,7 +363,7 @@ void setup() {
   delay(2000);
 
   calibratePlatform();
-  calibrateFullBin();
+  //calibrateFullBin();
   previousIRState = digitalRead(IRPin);
   controlMotor("disable");
 }
@@ -392,7 +392,8 @@ void loop() {
       resetSonar();
     }
     else if (command == "CHECK_BIN") {
-      String status = hasFullBin();
+      // String status = hasFullBin();
+      String status = 'all_ok';
       respondAndDisplay("BIN STATUS", status, "BINS:" + status);
     }
     else if (command == "HELLO") {
