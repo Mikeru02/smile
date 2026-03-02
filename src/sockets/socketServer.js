@@ -293,6 +293,8 @@ class SocketServer {
                     fs.copyFile(savedPath, testPath);
                     console.log("test_capture overwritten:", testPath);
 
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
                     const response = await this.modelApi.earnedTime();
                     
                     client.clientData.time_earned += response.earnedTime;
