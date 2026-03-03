@@ -35,7 +35,6 @@ export default async function PageEvents() {
     const seeMoreBtns = document.querySelectorAll('.see-more');
     seeMoreBtns.forEach(button => {
         button.addEventListener('click', async function() {
-            try {
             const accountData = await axiosClient.get(
                 `admin/account/${button.dataset.id}`,
                 {
@@ -43,10 +42,7 @@ export default async function PageEvents() {
                         'token': localStorage.getItem('token')
                     }
                 }
-            )
-        } catch (err) {
-            console.error(err.message)
-        }
+            );
 
             const account = accountData.data.data;
         })
