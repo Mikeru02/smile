@@ -2,18 +2,22 @@ import axios from "axios";
 import { populateHeaders, populateTable } from "../../../utils/populateTable.js";
 
 export default async function PageEvents() {
+    const axiosClient = axios.create({
+        baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`,
+        headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SRC_KEY,
+        }
+    })
     const addAccountBtn = document.getElementById('add-account');
         addAccountBtn.addEventListener('click', function() {
     })
 
-    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
 
-    const response = await axios.get(
-        `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/account/all`,
+    const response = await axiosClient.get(
+        `admin/accounts`,
         {
             headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_SRC_KEY,
                 'token': localStorage.getItem('token') 
             }
         }

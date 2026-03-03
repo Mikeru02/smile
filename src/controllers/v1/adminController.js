@@ -72,6 +72,21 @@ class AdminController {
         }
     }
 
+    async getAllAccounts(req, res) {
+        try {
+            const response = await this.admin.getAllAccounts();
+            return res.status(200).json({
+                success: true,
+                data: response
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     async getDashboardInfo(req, res) {
         try {
             const result = await this.admin.getDashboardInfo();

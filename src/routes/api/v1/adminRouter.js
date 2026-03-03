@@ -12,10 +12,10 @@ adminRouter.use(authorization);
 adminRouter.get('/dashboard-info', admin.getDashboardInfo.bind(admin));
 adminRouter.get('/machine-info', admin.getMachineInfo.bind(admin));
 adminRouter.get('/prohibited-links', authentication, admin.getProhibitedLinks.bind(admin));
-// adminRouter.get('/accounts', admin)
+adminRouter.get('/accounts', authentication, admin.getAllAccounts.bind(admin));
 
 // Post Methods
-adminRouter.post('/', admin.createAccount.bind(admin));
+adminRouter.post('/', authentication, admin.createAccount.bind(admin));
 adminRouter.post('/login', admin.loginAccount.bind(admin));
 adminRouter.post('/prohibited-links', authentication, admin.createProhibitedLinks.bind(admin));
 

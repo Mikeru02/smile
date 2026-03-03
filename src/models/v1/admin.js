@@ -57,6 +57,18 @@ class Admin {
         }
     }
 
+    async getAllAccounts() {
+        try {
+            const [rows] = await this.db.execute(
+                'SELECT * FROM accounts ORDER BY created_at DESC'
+            );
+            return rows;
+        } catch(err) {
+            console.error("[ERROR] account.getAllAccounts", err);
+            throw err;
+        }
+    }
+
     async getDashboardInfo() {
         try {
             console.log("DEBUG HIt getDshboardInfo")
