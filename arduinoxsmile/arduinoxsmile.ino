@@ -513,8 +513,11 @@ void loop() {
     else if (command == "CHECK_MODE") {
       if (isUtilityMode) {
         respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
+        lcd.clear();
       } else {
-        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");      }
+        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");
+        lcd.clear();     
+      }
     }
     else if (command == "HELLO") {
       respondAndDisplay("HELLO", "HELLO FROM NODE", "HELLO DISPLAYED");
