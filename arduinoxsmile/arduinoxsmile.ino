@@ -512,9 +512,9 @@ void loop() {
     }
     else if (command == "CHECK_MODE") {
       if (isUtilityMode) {
-        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF",, "UTILITY_MODE:on");
+        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
       } else {
-        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF",, "UTILITY_MODE:off");      }
+        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");      }
     }
     else if (command == "HELLO") {
       respondAndDisplay("HELLO", "HELLO FROM NODE", "HELLO DISPLAYED");
@@ -559,11 +559,11 @@ void loop() {
       lcd.clear();
       if (isUtilityMode) {
         lcd.setCursor(0,0);
-        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF",, "UTILITY_MODE:on");
+        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
         resetSonar();
       } else {
         lcd.setCursor(0,0);
-        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF",, "UTILITY_MODE:off");
+        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");
         resetSonar();
       }
     }
