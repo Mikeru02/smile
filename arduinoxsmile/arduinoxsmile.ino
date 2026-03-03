@@ -442,7 +442,6 @@ void setup() {
   lcd.clear();
 
   Serial.begin(9600);
-  Serial.println("READY");
 
   // servoRight.write(90);
   // servoLeft.write(80);
