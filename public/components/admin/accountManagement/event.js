@@ -3,7 +3,7 @@ import { populateHeaders, populateTable } from "../../../utils/populateTable.js"
 
 export default async function PageEvents() {
     const axiosClient = axios.create({
-        baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`,
+        baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
         headers: {
             'Content-Type': 'application/json',
             'apikey': import.meta.env.VITE_SRC_KEY,
@@ -18,7 +18,7 @@ export default async function PageEvents() {
         `admin/accounts`,
         {
             headers: {
-                'token': localStorage.getItem('token') 
+                'token': localStorage.getItem('token')
             }
         }
     );

@@ -31,6 +31,10 @@ const arduino = new Arduino(
         server.listen(port, host, () => {
             console.log(`Server is running at http://${host}:${port}`);
         });
+
+        // Intialize workers
+        startTimeDeductor();
+        checkInternetWorker();
     }
 );
 // const arduino = "";
@@ -78,7 +82,3 @@ app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(distDirectory, 'index.html'))
 });
-
-// Intialize workers
-startTimeDeductor();
-checkInternetWorker();
