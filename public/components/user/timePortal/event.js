@@ -193,11 +193,17 @@ export default function Events() {
     });
 
     const updateDropButtonState = (data) => {
-        if (data.status !== 'all_ok' || data.mode === "on") {
+        if (data.status !== 'all_ok') {
             dropBtn.disabled = true;
             dropBtn.style.opacity = '0.5';
             dropBtn.style.cursor = 'not-allowed';
-        } else {
+        } 
+        else if (data.mode === "on"){
+            dropBtn.disabled = true;
+            dropBtn.style.opacity = '0.5';
+            dropBtn.style.cursor = 'not-allowed';
+        }
+        else {
             console.log("Changing state of drop button")
             dropBtn.disabled = false;
             dropBtn.style.opacity = '1';
