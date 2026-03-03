@@ -193,21 +193,35 @@ export default function Events() {
     });
 
     const updateDropButtonState = (data) => {
-        if (data.status !== 'all_ok') {
-            dropBtn.disabled = true;
-            dropBtn.style.opacity = '0.5';
-            dropBtn.style.cursor = 'not-allowed';
-        } 
-        else if (data.mode === "on"){
-            dropBtn.disabled = true;
-            dropBtn.style.opacity = '0.5';
-            dropBtn.style.cursor = 'not-allowed';
+        const status = data.status; // can me undefined
+        const mode = data.mode; // can be undefined
+
+        if (status) {
+            if (status !== 'all_ok') {
+                dropBtn.disabled = true;
+                dropBtn.style.opacity = '0.5';
+                dropBtn.style.cursor = 'not-allowed';
+            }
+            else {
+                console.log("Changing state of drop button")
+                dropBtn.disabled = false;
+                dropBtn.style.opacity = '1';
+                dropBtn.style.cursor = 'pointer';
+            }
         }
-        else {
-            console.log("Changing state of drop button")
-            dropBtn.disabled = false;
-            dropBtn.style.opacity = '1';
-            dropBtn.style.cursor = 'pointer';
+
+        if (mode) {
+            if (mode === "on"){
+                dropBtn.disabled = true;
+                dropBtn.style.opacity = '0.5';
+                dropBtn.style.cursor = 'not-allowed';
+            }
+            else {
+                console.log("Changing state of drop button")
+                dropBtn.disabled = false;
+                dropBtn.style.opacity = '1';
+                dropBtn.style.cursor = 'pointer';
+            }
         }
     }
 
