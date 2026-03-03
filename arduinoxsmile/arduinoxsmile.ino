@@ -24,6 +24,7 @@ const int forward = 1950;
 const int backward = 1050;
 const int openTime = 220;
 const int closeTime = 780;
+const int buttonPin = A2;
 unsigned long scanningStartTime = 0;
 const int sonarTimeOut = 3;
 
@@ -35,7 +36,11 @@ bool isUserDropping = false;
 bool isCapturing = false;
 bool laserDetected = false;
 bool previousIRState;
+bool alreadyDetectIR = false;
+bool previousButtonState;
+bool alreadyPressButton = false;
 bool isScanning = false;
+bool isUtilityMode = false;
 
 // Varibles for Sonars
 const int sonarDistanceTreshold = 20;
@@ -287,6 +292,113 @@ String hasFullBin() {
   return "all_ok";
 }
 
+void runPlatformSonars() {
+  bool currentIRState = readIRStable(IRPin);
+
+  if (previousIRState == LOW && currentIRState == HIGH) {
+    isScanning = true;
+    alreadyDetectIR = true;
+    scanningStartTime = millis();
+    lcd.clear();
+    lcd.print("Scanning Start");
+    delay(500);
+  }
+
+  previousIRState = currentIRState;
+  if (isScanning && alreadyDetectIR) {
+    long frontDistance = readSonarDistance(sonarTrigPin, frontEchoPin);
+    delay(70);
+    long rightDistance = readSonarDistance(sonarTrigPin, rightEchoPin);
+    delay(70);
+    long leftDistance = readSonarDistance(sonarTrigPin, leftEchoPin);
+    delay(70);
+
+    bool frontDetected = (frontDistance != 999) && (frontDistance < baseTop);
+    bool rightDetected = (rightDistance != 999) && (rightDistance < baseRight);
+    bool leftDetected  = (leftDistance != 999) && (leftDistance < baseLeft);
+
+    Serial.print("Front: "); Serial.print(frontDistance);
+    Serial.print("  Right: "); Serial.print(rightDistance);
+    Serial.print("  Left: "); Serial.println(leftDistance);
+    Serial.print("FD: "); Serial.println(frontDetected);
+    Serial.print("  RD: "); Serial.println(rightDetected);
+    Serial.print("  LD: "); Serial.println(leftDetected);
+
+    lcd.setCursor(0, 0);
+    lcd.print("F:");
+    lcd.print(frontDistance);
+    lcd.print("/");
+    lcd.print(baseTop);
+
+    lcd.print(" L:");
+    lcd.print(leftDistance);
+    lcd.print("/");
+    lcd.print(baseLeft);
+
+    lcd.setCursor(0, 1);
+    lcd.print(" R:");
+    lcd.print(rightDistance);
+    lcd.print("/");
+    lcd.print(baseRight);
+
+
+    // ---------------- TOP SONAR FILTER ----------------
+    if (frontDetected) { frontDetectCount++; frontClearCount = 0; } 
+    else { frontClearCount++; frontDetectCount = 0; }
+
+    if (!frontSonarLastState && frontDetectCount >= detectConfirmCount) {
+      frontSonarLastState = true; frontDetectCount = 0;
+    }
+    if (frontSonarLastState && frontClearCount >= clearConfirmCount) {
+      frontSonarLastState = false; frontClearCount = 0;
+    }
+
+    // ---------------- SIDE1 SONAR FILTER ----------------
+    if (rightDetected) { rightDetectCount++; rightClearCount = 0; } 
+    else { rightClearCount++; rightDetectCount = 0; }
+
+    if (!rightSonarLastState && rightDetectCount >= detectConfirmCount) {
+      rightSonarLastState = true; rightDetectCount = 0;
+    }
+    if (rightSonarLastState && rightClearCount >= clearConfirmCount) {
+      rightSonarLastState = false; rightClearCount = 0;
+    }
+
+    // ---------------- SIDE2 SONAR FILTER ----------------
+    if (leftDetected) { leftDetectCount++; leftClearCount = 0; } 
+    else { leftClearCount++; leftDetectCount = 0; }
+
+    if (!leftSonarLastState && leftDetectCount >= detectConfirmCount) {
+      leftSonarLastState = true; leftDetectCount = 0;
+    }
+    if (leftSonarLastState && leftClearCount >= clearConfirmCount) {
+      leftSonarLastState = false; leftClearCount = 0;
+    }
+
+    // ---------------- FINAL CONFIRM ----------------
+    if (anySonarDetected()) {
+      if (isUtilityMode) {
+        respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
+      } else {
+        respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
+      }
+      isCapturing = true;
+      isScanning = false;
+      alreadyDetectIR = false;
+    }
+    else if (millis() - scanningStartTime >= sonarTimeOut * 1000) {
+      if (isUtilityMode) {
+        respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
+      } else {
+        respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
+      }
+      isCapturing = true;
+      isScanning = false;
+      alreadyDetectIR = false;
+    }
+  }
+}
+
 void setup() {
   // Pinmode for Sonars
   pinMode(sonarTrigPin, OUTPUT);
@@ -295,6 +407,7 @@ void setup() {
   pinMode(leftEchoPin, INPUT);
   pinMode(enablePin, OUTPUT);
   pinMode(IRPin, INPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
   
   controlMotor("enable");
 
@@ -365,6 +478,7 @@ void setup() {
   calibratePlatform();
   //calibrateFullBin();
   previousIRState = digitalRead(IRPin);
+  previousButtonState = digitalRead(buttonPin);
   controlMotor("disable");
 }
 
@@ -430,100 +544,34 @@ void loop() {
     }
   }
 
-  if (!isCapturing && isUserDropping) {
-    bool currentIRState = readIRStable(IRPin);
+  bool currentButtonState = digitalRead(buttonPin);
+  if (previousButtonState == HIGH && currentButtonState == LOW) {
+    delay(50);
 
-    if (previousIRState == LOW && currentIRState == HIGH) {
-      isScanning = true;
-      scanningStartTime = millis();
+    if (digitalRead(buttonPin) == LOW) {
+      isUtilityMode = !isUtilityMode;
       lcd.clear();
-      lcd.print("Scanning Start");
-      delay(500);
-    }
-
-    previousIRState = currentIRState;
-
-    if (isScanning) {
-      long frontDistance = readSonarDistance(sonarTrigPin, frontEchoPin);
-      delay(70);
-      long rightDistance = readSonarDistance(sonarTrigPin, rightEchoPin);
-      delay(70);
-      long leftDistance = readSonarDistance(sonarTrigPin, leftEchoPin);
-      delay(70);
-
-      bool frontDetected = (frontDistance != 999) && (frontDistance < baseTop);
-      bool rightDetected = (rightDistance != 999) && (rightDistance < baseRight);
-      bool leftDetected  = (leftDistance != 999) && (leftDistance < baseLeft);
-
-      Serial.print("Front: "); Serial.print(frontDistance);
-      Serial.print("  Right: "); Serial.print(rightDistance);
-      Serial.print("  Left: "); Serial.println(leftDistance);
-      Serial.print("FD: "); Serial.println(frontDetected);
-      Serial.print("  RD: "); Serial.println(rightDetected);
-      Serial.print("  LD: "); Serial.println(leftDetected);
-
-      lcd.setCursor(0, 0);
-      lcd.print("F:");
-      lcd.print(frontDistance);
-      lcd.print("/");
-      lcd.print(baseTop);
-
-      lcd.print(" L:");
-      lcd.print(leftDistance);
-      lcd.print("/");
-      lcd.print(baseLeft);
-
-      lcd.setCursor(0, 1);
-      lcd.print(" R:");
-      lcd.print(rightDistance);
-      lcd.print("/");
-      lcd.print(baseRight);
-
-
-      // ---------------- TOP SONAR FILTER ----------------
-      if (frontDetected) { frontDetectCount++; frontClearCount = 0; } 
-      else { frontClearCount++; frontDetectCount = 0; }
-
-      if (!frontSonarLastState && frontDetectCount >= detectConfirmCount) {
-        frontSonarLastState = true; frontDetectCount = 0;
-      }
-      if (frontSonarLastState && frontClearCount >= clearConfirmCount) {
-        frontSonarLastState = false; frontClearCount = 0;
-      }
-
-      // ---------------- SIDE1 SONAR FILTER ----------------
-      if (rightDetected) { rightDetectCount++; rightClearCount = 0; } 
-      else { rightClearCount++; rightDetectCount = 0; }
-
-      if (!rightSonarLastState && rightDetectCount >= detectConfirmCount) {
-        rightSonarLastState = true; rightDetectCount = 0;
-      }
-      if (rightSonarLastState && rightClearCount >= clearConfirmCount) {
-        rightSonarLastState = false; rightClearCount = 0;
-      }
-
-      // ---------------- SIDE2 SONAR FILTER ----------------
-      if (leftDetected) { leftDetectCount++; leftClearCount = 0; } 
-      else { leftClearCount++; leftDetectCount = 0; }
-
-      if (!leftSonarLastState && leftDetectCount >= detectConfirmCount) {
-        leftSonarLastState = true; leftDetectCount = 0;
-      }
-      if (leftSonarLastState && leftClearCount >= clearConfirmCount) {
-        leftSonarLastState = false; leftClearCount = 0;
-      }
-
-      // ---------------- FINAL CONFIRM ----------------
-      if (anySonarDetected()) {
-        respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
-        isCapturing = true;
-        isScanning = false;
-      }
-      else if (millis() - scanningStartTime >= sonarTimeOut * 1000) {
-        respondAndDisplay("TIMEOUT", "Sonar Time Out", "SONAR DETECTED");
-        isCapturing = true;
-        isScanning = false;
+      if (isUtilityMode) {
+        lcd.setCursor(0,0);
+        lcd.print("UTILITY MODE ON");
+        resetSonar();
+      } else {
+        lcd.setCursor(0,0);
+        lcd.print("UTILITY MODE OFF");
+        resetSonar();
       }
     }
+    delay(700);
+    lcd.clear();
+  }
+
+  previousButtonState = currentButtonState;
+
+  if (isUtilityMode) {
+    runPlatformSonars();
+  }
+
+  if (!isCapturing && isUserDropping && !isUtilityMode) {
+    runPlatformSonars();
   }
 }

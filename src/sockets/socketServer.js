@@ -274,6 +274,29 @@ class SocketServer {
             return;
         }
 
+        if (message == "SONAR DETECTED:utility") {
+            try {
+                const timeStamp = Date.now();
+                const uniqueFilename = `capture_${timeStamp}.jpg`;
+                const savedPath = await this.webcam.capture(uniqueFilename);
+                console.log("Unique image saved:", savedPath);
+
+                const testPath = await this.webcam.getFilePath("test_capture.jpg");
+                fs.copyFile(savedPath, testPath);
+                console.log("test_capture overwritten:", testPath);
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                const response = await this.modelApi.earnedTime();
+                
+                console.log("Done capturing, sending command to arduino")
+                this.arduino.sendCommand("DONE CAPTURE");
+                this.arduino.sendCommand(`DETECT:${response.category}`);
+            } catch(err) {
+                console.error("Capture Error: ", err)
+            }
+        }
+
         if (message === "SONAR DETECTED") {
             console.log('SONAR Detected from Arduino');
             const client = this.activeClient;
