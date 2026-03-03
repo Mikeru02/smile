@@ -1,21 +1,30 @@
 import axios from "axios";
-import { populateHeaders, populateTable } from "../../../utils/populateTable";
+import { populateHeaders, populateTable } from "../../../utils/populateTable.js";
 
 export default async function PageEvents() {
-    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+    let accounts;
+    socketClient.on("ALL_ACCOUNTS", (data) => {
+        accounts = data.accounts;
+    })
 
-    const response = await axios.get(
-        `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/account/all`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_SRC_KEY,
-                'token': localStorage.getItem('token') 
-            }
-        }
-    );
+    const addAccountBtn = document.getElementById('add-account');
+        addAccountBtn.addEventListener('click', function() {
+    })
 
-    const accounts = response.data.data;
+    //const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+
+    // const response = await axios.get(
+    //     `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/account/all`,
+    //     {
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'apikey': import.meta.env.VITE_SRC_KEY,
+    //             'token': localStorage.getItem('token') 
+    //         }
+    //     }
+    // );
+
+    // const accounts = response.data.data;
     console.log(accounts);
     const table =  document.getElementById("accounts-table");
     const thead = table.querySelector("thead");

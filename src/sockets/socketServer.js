@@ -98,6 +98,19 @@ class SocketServer {
                 this.arduino.sendCommand('DROPPING');
             });
 
+            socket.on('GET_ACCOUNTS', async () => {
+                const response = await this.axiosClient.get(
+                    `account/all`,
+                    {
+                        headers: {
+                            token: socket.token
+                        }
+                    }
+                );
+
+                socket.emit('ALL_ACCOUNTS', { accounts: response.data.data })
+            });
+
             socket.on('DROPPING_CLIENT', async () => {
                 const droppingClient = await this.axiosClient.get(
                     `client/status/dropping`,

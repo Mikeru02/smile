@@ -1,3 +1,4 @@
+import SocketClient from "../../sockets/socketClient.js";
 import { getRole } from "../../utils/getRole";
 
 export default function AdminEvents(){
@@ -8,6 +9,8 @@ export default function AdminEvents(){
         return true;
     }
     
+    const socketClient = new SocketClient();
+
     // Add refresh button functionality
     const refreshBtn = document.getElementById('refresh-btn');
     if (refreshBtn) {
