@@ -28,6 +28,9 @@ const arduino = new Arduino(
     Number(process.env.SERIAL_TIMEOUT) || 1000,
     () => {
         arduino.sendCommand(`IP:${ip}`);
+        server.listen(port, host, () => {
+            console.log(`Server is running at http://${host}:${port}`);
+        });
     }
 );
 // const arduino = "";
@@ -74,10 +77,6 @@ app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(distDirectory, 'index.html'))
-});
-
-server.listen(port, host, () => {
-    console.log(`Server is running at http://${host}:${port}`);
 });
 
 // Intialize workers
