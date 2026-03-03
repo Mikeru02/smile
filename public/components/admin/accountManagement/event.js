@@ -40,7 +40,7 @@ export default async function PageEvents() {
                 `admin/account/${button.dataset.id}`,
                 {
                     headers: {
-                        token: localStorage.getItem('token')
+                        'token': localStorage.getItem('token')
                     }
                 }
             )
