@@ -8,8 +8,6 @@ export default function AdminEvents(){
         window.app.pushRoute('/lost');
         return true;
     }
-    
-    const socketClient = new SocketClient();
 
     // Add refresh button functionality
     const refreshBtn = document.getElementById('refresh-btn');

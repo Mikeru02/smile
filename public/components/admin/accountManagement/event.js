@@ -1,8 +1,10 @@
 import axios from "axios";
+import SocketClient from "../../../sockets/socketClient.js";
 import { populateHeaders, populateTable } from "../../../utils/populateTable.js";
 
 export default async function PageEvents() {
     let accounts;
+    const socketClient = new SocketClient();
     socketClient.on("ALL_ACCOUNTS", (data) => {
         accounts = data.accounts;
     })
