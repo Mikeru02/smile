@@ -431,8 +431,6 @@ void setup() {
   stepper.setAcceleration(accelStepsPerSec2);
   stepper.setCurrentPosition(0);
 
-  Serial.println("READY");
-
   digitalWrite(sonarTrigPin, LOW);
 
   lcd.init();
@@ -480,6 +478,7 @@ void setup() {
   previousIRState = digitalRead(IRPin);
   previousButtonState = digitalRead(buttonPin);
   controlMotor("disable");
+  Serial.println("READY");
 }
 
 void loop() {
