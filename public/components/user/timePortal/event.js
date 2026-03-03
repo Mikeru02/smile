@@ -162,6 +162,7 @@ export default function Events() {
     });
 
     socketClient.on('UTILITY_MODE', (data) => {
+        console.log(data);
         updateDropButtonState(data);
         if (data.mode === "on") {
             annoucementContainer.innerHTML = `
