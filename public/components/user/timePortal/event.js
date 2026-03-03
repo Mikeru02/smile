@@ -168,6 +168,7 @@ export default function Events() {
                 <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
                 <p>Utility staff is currently using the bin. Please wait</p>
             `;
+            annoucementContainer.style.display = 'flex';
         }
         else {
             annoucementContainer.style.display = 'none';
