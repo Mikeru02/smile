@@ -15,7 +15,7 @@ const TABLE_CONFIG = {
         { label: "Role", key: "role" },
         { label: "Last Login", key: "last_login" },
         { label: "Created At", key: "created_at" },
-        { label: "Action", key: "delete"}
+        { label: "Details", key: "details"}
     ],
     "logs": [
         { label: "Timestamp", key: "timestamp" },
