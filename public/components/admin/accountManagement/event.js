@@ -31,4 +31,20 @@ export default async function PageEvents() {
 
     let headers = populateHeaders(thead, "account-management");
     populateTable(tbody, accounts, headers);
+
+    const seeMoreBtns = document.querySelectorAll('.see-more');
+    seeMoreBtns.forEach(button => {
+        button.addEventListener('click', async function() {
+            const accountData = await axiosClient.get(
+                `admin/account/${button.dataset.id}`,
+                {
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                }
+            )
+
+            const account = accountData.data.data;
+        })
+    })
 }

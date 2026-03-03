@@ -1,4 +1,5 @@
 import styles from "./component.module.css";
+import Modal from "./modal.js";
 
 export default function MainContent(root) {
     root.innerHTML = `
@@ -30,6 +31,7 @@ export default function MainContent(root) {
             </div>
             -->
         </div>
+        ${Modal()}
     `;
 
     root.className = styles["main"];

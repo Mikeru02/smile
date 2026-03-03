@@ -13,6 +13,7 @@ adminRouter.get('/dashboard-info', admin.getDashboardInfo.bind(admin));
 adminRouter.get('/machine-info', admin.getMachineInfo.bind(admin));
 adminRouter.get('/prohibited-links', authentication, admin.getProhibitedLinks.bind(admin));
 adminRouter.get('/accounts', authentication, admin.getAllAccounts.bind(admin));
+adminRouter.get('/account/:id', authentication, admin.getSpecificAccount.bind(admin));
 
 // Post Methods
 adminRouter.post('/', authentication, admin.createAccount.bind(admin));

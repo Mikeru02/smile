@@ -69,6 +69,19 @@ class Admin {
         }
     }
 
+    async getSpecifiAccount(id) {
+        try {
+            const [rows] = await this.db.execute(
+                'SELECT * FROM accounts WHERE id=?',
+                [id]
+            );
+            return rows;
+        } catch(err) {
+            console.error("[ERROR] account.getAllAccounts", err);
+            throw err;
+        }
+    }
+
     async getDashboardInfo() {
         try {
             console.log("DEBUG HIt getDshboardInfo")
