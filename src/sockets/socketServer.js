@@ -276,7 +276,7 @@ class SocketServer {
             else {
                 console.error("Invalid mode");
             }
-            this.io.emit('BIN_STATUS', { mode: utilityMode });
+            this.io.emit('UTILITY_MODE', { mode: utilityMode });
         }
 
         if (message.startsWith("BINS:")) {
