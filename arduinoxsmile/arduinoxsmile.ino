@@ -510,6 +510,12 @@ void loop() {
       String status = "all_ok";
       respondAndDisplay("BIN STATUS", status, "BINS:" + status);
     }
+    else if (command == "CHECK_MODE") {
+      if (isUtilityMode) {
+        respondAndDisplay("UTILITY MODE", isUtilityMode, "UTILITY_MODE:on");
+      } else {
+        respondAndDisplay("UTILITY MODE", isUtilityMode, "UTILITY_MODE:off");      }
+    }
     else if (command == "HELLO") {
       respondAndDisplay("HELLO", "HELLO FROM NODE", "HELLO DISPLAYED");
     } 
@@ -553,16 +559,15 @@ void loop() {
       lcd.clear();
       if (isUtilityMode) {
         lcd.setCursor(0,0);
-        lcd.print("UTILITY MODE ON");
+        respondAndDisplay("UTILITY MODE", isUtilityMode, "UTILITY_MODE:on");
         resetSonar();
       } else {
         lcd.setCursor(0,0);
-        lcd.print("UTILITY MODE OFF");
+        respondAndDisplay("UTILITY MODE", isUtilityMode, "UTILITY_MODE:off");
         resetSonar();
       }
     }
     delay(700);
-    lcd.clear();
   }
 
   previousButtonState = currentButtonState;

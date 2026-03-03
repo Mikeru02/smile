@@ -19,10 +19,10 @@ class SocketServer {
             }
         });
         this.io = null;
-        this.doneRequest = false;
         this.activeClient = null;
         this.timeDeductionInterval = null;
-        this.currentBinStatus = "unknown"; 
+        this.currentBinStatus = "unknown";
+        this.utilityMode = false;
         this.onArduinoData = this.onArduinoData.bind(this);
     }
 
@@ -261,6 +261,22 @@ class SocketServer {
         if (message === 'READY') {
             console.log("CHECKING BINS");
             this.arduino.sendCommand('CHECK_BIN');
+            console.log("CHECKING MODE");
+            this.arduino.sendCommand('CHECK_MODE');
+        }
+
+        if (message.startsWith("UTILITY_MODE:")) {
+            const utilityMode = message.split(":")[1];
+            if (utilityMode === "on") {
+                this.utilityMode = true;
+            }
+            else if (utilityMode === "off") {
+                this.utilityMode = false;
+            } 
+            else {
+                console.error("Invalid mode");
+            }
+            this.io.emit('BIN_STATUS', { mode: utilityMode });
         }
 
         if (message.startsWith("BINS:")) {

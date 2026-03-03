@@ -161,6 +161,20 @@ export default function Events() {
         }
     });
 
+    socketClient.on('UTILITY_MODE', (data) => {
+        updateDropButtonState(data);
+        if (data.mode === "on") {
+            annoucementContainer.innerHTML = `
+                <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
+                <p>Utility staff is currently using the bin. Please wait</p>
+            `;
+        }
+        else {
+            annoucementContainer.style.display = 'none';
+            annoucementContainer.innerHTML = '';
+        }
+    })
+
     socketClient.on('BIN_STATUS', (data) => {
         updateDropButtonState(data);
         console.log('[SOCKET] Bin status: ', data.status);
@@ -177,7 +191,7 @@ export default function Events() {
     });
 
     const updateDropButtonState = (data) => {
-        if (data.status !== 'all_ok') {
+        if (data.status !== 'all_ok' || data.mode === "on") {
             dropBtn.disabled = true;
             dropBtn.style.opacity = '0.5';
             dropBtn.style.cursor = 'not-allowed';
