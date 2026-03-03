@@ -8,11 +8,11 @@ export default async function PageEvents() {
             'Content-Type': 'application/json',
             'apikey': import.meta.env.VITE_SRC_KEY,
         }
-    })
+    });
+
     const addAccountBtn = document.getElementById('add-account');
         addAccountBtn.addEventListener('click', function() {
     })
-
 
     const response = await axiosClient.get(
         `admin/accounts`,
@@ -23,6 +23,8 @@ export default async function PageEvents() {
         }
     );
 
+    const modal = document.getElementById('modal');
+    
     const accounts = response.data.data;
     console.log(accounts);
     const table =  document.getElementById("accounts-table");
@@ -45,6 +47,7 @@ export default async function PageEvents() {
             );
 
             const account = accountData.data.data;
+            modal.style.display = 'block';
         })
     })
 }
