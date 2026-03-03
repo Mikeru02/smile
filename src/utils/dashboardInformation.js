@@ -26,16 +26,25 @@ export function checkInternet() {
 }
 
 export async function checkModel() {
+    let baseUrl;
     if (!checkInternet()) return false;
-    const result = await axios.get(
-        `http://${process.env.MODEL_LOCALHOST}:${process.env.MODEL_PORT}/${process.env.MODEL_VERSION}/model/`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "apikey": process.env.MODEL_APIKEY
-            }
+    if (process.env.MODEL_TYPE === 'deployed') {
+        baseUrl = `https://${process.env.MODEL_HOST}/${process.env.MODEL_VERSION}/model`;
+    }
+    else {
+        baseUrl = `http://${process.env.MODEL_LOCALHOST}:${process.env.MODEL_PORT}/${process.env.MODEL_VERSION}/model`;
+    }
+
+    const axiosClient = axios.create({
+        baseURL: baseUrl,
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": process.env.MODEL_APIKEY
         }
-    )
+    })
+    const result = await axiosClient.get(
+        `/`
+    );
     
     if (result.data) return true;
     return false;
