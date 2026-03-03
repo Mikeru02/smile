@@ -69,7 +69,7 @@ class Admin {
         }
     }
 
-    async getSpecifiAccount(id) {
+    async getSpecificAccount(id) {
         try {
             const [rows] = await this.db.execute(
                 'SELECT * FROM accounts WHERE id=?',
