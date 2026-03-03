@@ -108,6 +108,8 @@ class SocketServer {
                     }
                 );
 
+                
+
                 socket.emit('ALL_ACCOUNTS', { accounts: response.data.data })
             });
 
