@@ -130,7 +130,7 @@ class Admin {
                 paper: await this.waste.getAllSpecificWaste("PPRS"),
                 general_waste: await this.waste.getAllSpecificWaste("GWST"),
                 bin_count: await this.getAllBinTransaction(),
-                most_visited: await this.getTopVisitedSites();
+                most_visited: await this.getTopVisitedSites()
             }
         } catch(err) {
             console.error("[ERROR] admin.dashboardInfo", err);
