@@ -11,15 +11,13 @@ export default function watchDnsmasq(logFilePath) {
 
     console.log(`Watching ${logFilePath} (tail -F mode)...`);
 
-    // Map to track recent client-domain accesses to prevent duplicates
     const recentAccesses = new Map(); // key: `${clientIP}-${domain}`, value: timestamp
 
-    // Spawn tail process
+
     const processTail = spawn("tail", ["-F", logFilePath], {
         stdio: ["ignore", "pipe", "pipe"]
     });
 
-    // Use readline for clean line-by-line processing
     const rl = createInterface({ input: processTail.stdout });
 
     rl.on("line", async (line) => {
@@ -33,11 +31,12 @@ export default function watchDnsmasq(logFilePath) {
 
         if (clientIP === "127.0.0.1") return; // skip localhost
 
+        if (!domain.startsWith("www.") && !whitelist.has(domain)) return;
+
         const key = `${clientIP}-${domain}`;
         const now = Date.now();
         const lastTime = recentAccesses.get(key) || 0;
 
-        // Debounce: skip if less than 5 seconds since last POST for same client/domain
         if (now - lastTime < 5000) return;
 
         recentAccesses.set(key, now);
@@ -57,7 +56,6 @@ export default function watchDnsmasq(logFilePath) {
                     }
                 }
             );
-            console.log(`Logged accessed link: ${clientIP} -> ${domain}`);
         } catch (err) {
             console.error("Error posting accessed link:", err.message);
         }

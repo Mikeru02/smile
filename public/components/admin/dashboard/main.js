@@ -62,6 +62,12 @@ export default function MainContent(root) {
                 </div>
             </div>
             
+            <div class="${styles["section"]}">
+                <h2 class="${styles["section-title"]}">Most Visited Sites</h2>
+                <div class="${styles["dashboard-grid"]}">
+                </div>
+            </div>
+
             <!-- Section 3: Waste Collection -->
             <div class="${styles["section"]}">
                 <h2 class="${styles["section-title"]}">Waste Collection</h2>
