@@ -34,7 +34,7 @@ export default function watchDnsmasq(logFilePath) {
 
                     if (clientIP !== "127.0.0.1") {
                         await axiosClient.post(
-                            `admin/accessed-links`,
+                            `admin/accessed-link`,
                             { clientIP, domain }
                         );
                     }
