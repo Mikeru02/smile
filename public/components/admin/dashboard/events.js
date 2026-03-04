@@ -1,5 +1,6 @@
 import axios from 'axios';
 import calculateUptime from '../../../utils/calculateUpTime.js';
+import styles from "./component.module.css";
 
 export default async function Events(){
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
@@ -50,5 +51,24 @@ export default async function Events(){
     generalSpan.textContent = `${dashboardData.general_waste} items`;
 
     const binCountSpan = document.getElementById('bin-count');
-    binCountSpan.textContent = `${dashboardData.bn_count}`;
+    binCountSpan.textContent = `${dashboardData.bin_count}`;
+
+    const topSites = dashboardData.top_sites || [];
+
+    const topElements = [
+        { domain: 'top-first', visits: 'top-first-visit' },
+        { domain: 'top-second', visits: 'top-second-visit' },
+        { domain: 'top-third', visits: 'top-third-visit' },
+    ];
+
+    topElements.forEach((el, index) => {
+        const site = topSites[index];
+        if (site) {
+            document.getElementById(el.domain).textContent = site.domain;
+            document.getElementById(el.visits).textContent = site.visits;
+        } else {
+            document.getElementById(el.domain).textContent = 'N/A';
+            document.getElementById(el.visits).textContent = '0';
+        }
+    });
 }

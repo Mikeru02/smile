@@ -64,7 +64,31 @@ export default function MainContent(root) {
             
             <div class="${styles["section"]}">
                 <h2 class="${styles["section-title"]}">Most Visited Sites</h2>
-                <div class="${styles["dashboard-grid"]}">
+                <div class="${styles["dashboard-grid"]}" id='dashboard-grid'>
+                    <div class="${styles["card"]}">
+                        <div class="${styles["card-header"]}">
+                            <h3>Top 1</h3>
+                            <div class="${styles["icon"]}">🥇</div>
+                        </div>
+                        <p class="${styles["stats"]}"><span id="top-first">Loading...</span>Items</p>
+                        <p class="${styles["sub-stats"]}">Total visits: <span id='top-first-visit'>Loading...</span></p>
+                    </div>
+                    <div class="${styles["card"]}">
+                        <div class="${styles["card-header"]}">
+                            <h3>Top 2</h3>
+                            <div class="${styles["icon"]}">🥈</div>
+                        </div>
+                        <p class="${styles["stats"]}"><span id="top-second">Loading...</span>Items</p>
+                        <p class="${styles["sub-stats"]}">Total visits: <span id='top-second-visit'>Loading...</span><</p>
+                    </div>
+                    <div class="${styles["card"]}">
+                        <div class="${styles["card-header"]}">
+                            <h3>Top 3</h3>
+                            <div class="${styles["icon"]}">🥉</div>
+                        </div>
+                        <p class="${styles["stats"]}"><span id="top-third">Loading...</span>Items</p>
+                        <p class="${styles["sub-stats"]}">Total visits: <span id='top-third-visit'>Loading...</span><</p>
+                    </div>
                 </div>
             </div>
 
