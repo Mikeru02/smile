@@ -21,7 +21,7 @@ class ClientController {
             }
 
             // Check client if it is existing in db
-            const existingClientData = await this.client.verfyClient(ipAddress, name, course, yearlevel);
+            const existingClientData = await this.client.getClientByIP(ipAddress);
             if (existingClientData) {
                 if (existingClientData.name !== name) {
                     return res.status(400).json({
