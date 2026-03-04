@@ -14,7 +14,7 @@ export default function watchDnsmasq(logFilePath) {
     const recentAccesses = new Map(); // key: `${clientIP}-${domain}`, value: timestamp
 
 
-    const processTail = spawn("tail", ["-F", logFilePath], {
+    const processTail = spawn("tail", ["-F", "--line-buffered", logFilePath], {
         stdio: ["ignore", "pipe", "pipe"]
     });
 
