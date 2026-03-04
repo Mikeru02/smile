@@ -70,7 +70,7 @@ export default function MainContent(root) {
                             <h3>Top 1</h3>
                             <div class="${styles["icon"]}">🥇</div>
                         </div>
-                        <p class="${styles["stats"]}"><span id="top-first">Loading...</span>Items</p>
+                        <p class="${styles["stats"]}"><span id="top-first">Loading...</span></p>
                         <p class="${styles["sub-stats"]}">Total visits: <span id='top-first-visit'>Loading...</span></p>
                     </div>
                     <div class="${styles["card"]}">
@@ -78,16 +78,16 @@ export default function MainContent(root) {
                             <h3>Top 2</h3>
                             <div class="${styles["icon"]}">🥈</div>
                         </div>
-                        <p class="${styles["stats"]}"><span id="top-second">Loading...</span>Items</p>
-                        <p class="${styles["sub-stats"]}">Total visits: <span id='top-second-visit'>Loading...</span><</p>
+                        <p class="${styles["stats"]}"><span id="top-second">Loading...</span></p>
+                        <p class="${styles["sub-stats"]}">Total visits: <span id='top-second-visit'>Loading...</span></p>
                     </div>
                     <div class="${styles["card"]}">
                         <div class="${styles["card-header"]}">
                             <h3>Top 3</h3>
                             <div class="${styles["icon"]}">🥉</div>
                         </div>
-                        <p class="${styles["stats"]}"><span id="top-third">Loading...</span>Items</p>
-                        <p class="${styles["sub-stats"]}">Total visits: <span id='top-third-visit'>Loading...</span><</p>
+                        <p class="${styles["stats"]}"><span id="top-third">Loading...</span></p>
+                        <p class="${styles["sub-stats"]}">Total visits: <span id='top-third-visit'>Loading...</span></p>
                     </div>
                 </div>
             </div>
