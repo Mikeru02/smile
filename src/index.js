@@ -36,7 +36,9 @@ const arduino = new Arduino(
         // Intialize workers
         startTimeDeductor();
         checkInternetWorker();
-        watchDnsmasq(process.env.DNSMASQ_LOG);
+        watchDnsmasq(process.env.DNSMASQ_LOG, (clientIp, domain) => {
+            console.log(`[INFO] Client ${clientIp} accessed ${domain}`)
+        });
     }
 );
 // const arduino = "";
