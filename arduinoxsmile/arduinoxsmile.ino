@@ -211,9 +211,7 @@
   }
 
   void runPlatform(String objectType) {
-    Serial.print("Received type: [");
-  Serial.print(objectType);
-  Serial.println("]");
+    controlMotor("enable");
     
     if (objectType.equalsIgnoreCase("Plastic Bottle")) {
       stepper.moveTo(convertRotationalPositionToSteps(0.15));
