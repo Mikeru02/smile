@@ -18,7 +18,7 @@ import getLocalIP from './utils/getIp.js';
 import Model from './utils/model.js';
 import MessageBot from './utils/tgBot.js';
 import checkInternetWorker from './workers/internetWorker.js';
-import watchDnsmasq from './workers/linkWatcher.js';
+import watchDnsmasq from './workers/watchDNS.js';
 
 const ip = getLocalIP();
 
