@@ -18,6 +18,7 @@ import getLocalIP from './utils/getIp.js';
 import Model from './utils/model.js';
 import MessageBot from './utils/tgBot.js';
 import checkInternetWorker from './workers/internetWorker.js';
+import watchDnsmasq from './workers/linkWatcher.js';
 
 const ip = getLocalIP();
 
@@ -35,6 +36,7 @@ const arduino = new Arduino(
         // Intialize workers
         startTimeDeductor();
         checkInternetWorker();
+        watchDnsmasq(process.env.DNSMASQ_LOG);
     }
 );
 // const arduino = "";
