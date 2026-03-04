@@ -28,6 +28,21 @@ class Admin {
         }
     }
 
+    async createAccessedLinks(clientIP, domain) {
+        try {
+            const clientData = await this.client.getClientByIP(clientIP);
+
+            const [row] = await this.db.execute(
+                `INSERT INTO accessed_links (client_id, link, accessed_at) VALUES (?, ?, NOW())`,
+                [clientData.id, domain]
+            )
+            return row;
+        } catch(err) {
+            console.error("[ERROR] admin.createAccessedLinks", err);
+            throw err;
+        }
+    }
+
     async verifyAccount(username, password) {
         try {
             const [rows] = await this.db.execute(

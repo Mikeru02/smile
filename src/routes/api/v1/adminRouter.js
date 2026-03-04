@@ -19,7 +19,7 @@ adminRouter.get('/account/:id', authentication, admin.getSpecificAccount.bind(ad
 adminRouter.post('/', authentication, admin.createAccount.bind(admin));
 adminRouter.post('/login', admin.loginAccount.bind(admin));
 adminRouter.post('/prohibited-links', authentication, admin.createProhibitedLinks.bind(admin));
-
+adminRouter.post('/accessed-link', authentication, admin.createAccessedLinks.bind(admin));
 // Update Methods
 
 // Delete Methods
