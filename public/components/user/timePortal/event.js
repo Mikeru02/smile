@@ -297,11 +297,11 @@ export default function Events() {
             //     renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
             // })
 
-            const redirectToSurvey = true; //Math.random() < 0.5;
-            if (redirectToSurvey) {
-                window.location.href = 'https://forms.gle/LEGksfLDYJH5Ws9r7';
-                return;
-            }
+            // const redirectToSurvey = true; //Math.random() < 0.5;
+            // if (redirectToSurvey) {
+            //     window.location.href = 'https://forms.gle/LEGksfLDYJH5Ws9r7';
+            //     return;
+            // }
         } else {
             connect.textContent = 'Connect';
             clearInterval(timeRemainingInterval);
