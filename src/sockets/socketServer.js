@@ -305,7 +305,7 @@ class SocketServer {
             return;
         }
 
-        if (message == "SONAR DETECTED:utility") {
+        if (message === "SONAR DETECTED:utility") {
             try {
                 const timeStamp = Date.now();
                 const uniqueFilename = `capture_${timeStamp}.jpg`;

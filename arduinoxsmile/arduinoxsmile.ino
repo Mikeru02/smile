@@ -504,8 +504,8 @@ void loop() {
       resetSonar();
     }
     else if (command == "CHECK_BIN") {
-      // String status = hasFullBin();
-      String status = "all_ok";
+      String status = hasFullBin();
+      // String status = "all_ok";
       respondAndDisplay("BIN STATUS", status, "BINS:" + status);
     }
     else if (command == "CHECK_MODE") {
