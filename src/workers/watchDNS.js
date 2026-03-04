@@ -31,7 +31,7 @@ export default function watchDnsmasq(logFilePath) {
 
         if (clientIP === "127.0.0.1") return; // skip localhost
 
-        if (!domain.startsWith("www.") && !whitelist.has(domain)) return;
+        if (!domain.startsWith("www.")) return;
 
         const key = `${clientIP}-${domain}`;
         const now = Date.now();
