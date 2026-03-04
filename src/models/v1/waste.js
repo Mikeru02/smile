@@ -60,7 +60,7 @@ class Waste {
     async getAllSpecificWaste(type) {
         try {
             const [result] = await this.db.execute(
-                'SELECT COUNT(*) FROM waste_transactions WHERE waste_code=?',
+                'SELECT COUNT(*) FROM waste_transactions WHERE waste_code=? AND DATE(transaction_date) = CURDATE()',
                 [type]
             );
             return result[0]['COUNT(*)'];
