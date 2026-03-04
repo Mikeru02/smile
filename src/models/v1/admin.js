@@ -72,6 +72,25 @@ class Admin {
         }
     }
 
+    async getTopVisitedSites() {
+        try {
+            const [rows] = await this.db.execute(`
+                SELECT 
+                    REPLACE(SUBSTRING_INDEX(link, '/', 1), 'www.', '') AS domain,
+                    COUNT(*) AS visits
+                FROM accessed_links
+                GROUP BY domain
+                ORDER BY visits DESC
+                LIMIT 3
+            `);
+
+            return rows; // rows will be [{domain: 'google.com', visits: 6}, ...]
+        } catch(err) {
+            console.error("[ERROR] admin.getTopVisitedSites", err);
+            throw err;
+        }
+    }
+
     async getAllAccounts() {
         try {
             const [rows] = await this.db.execute(
@@ -110,7 +129,8 @@ class Admin {
                 plastic_bottle: await this.waste.getAllSpecificWaste("PBTL"),
                 paper: await this.waste.getAllSpecificWaste("PPRS"),
                 general_waste: await this.waste.getAllSpecificWaste("GWST"),
-                bn_count: await this.getAllBinTransaction()
+                bin_count: await this.getAllBinTransaction(),
+                most_visited: await this.getTopVisitedSites();
             }
         } catch(err) {
             console.error("[ERROR] admin.dashboardInfo", err);
