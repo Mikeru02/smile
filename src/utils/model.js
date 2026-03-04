@@ -6,9 +6,9 @@ import FormData from "form-data";
 class Model {
     constructor() {
         this.timeMap = {
-            "general waste": parseInt(1),
-            "plastic bottle": parseInt(5),
-            "paper": parseInt(2)
+            "general waste": parseInt(2),
+            "plastic bottle": parseInt(8),
+            "paper": parseInt(5)
         }
         this.wasteCodeMap = {
             "general waste": "GWST",

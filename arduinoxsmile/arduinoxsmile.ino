@@ -543,8 +543,8 @@ void loop() {
     }
     else if (command == "DONE CAPTURE" || command == "IGNORE") {
       respondAndDisplay("", "", "DONE CAPTURE");
-      // isCapturing = false;
-      // resetSonar();
+      isCapturing = false;
+      resetSonar();
     }
     else {
       respondAndDisplay("UNKNOWN", command, "UNKNOWN COMMAND");

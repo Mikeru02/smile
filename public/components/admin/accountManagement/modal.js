@@ -14,58 +14,31 @@ export default function Modal() {
                 <div class="${styles['center-container']}">
                     <div id="client-details" class="${styles['details-grid']}">
                         <div class="${styles['form-group']}">
-                            <label for="client-name">Name</label>
-                            <input type="text" id="client-name" class="${styles['form-input']}" placeholder="Enter client name">
+                            <label for="admin-name">Username</label>
+                            <input type="text" id="admin-username" class="${styles['form-input']}" placeholder="Enter username">
                         </div>
 
                         <div class="${styles['form-group']}">
-                            <label for="client-course">Course</label>
-                            <select id="client-course" class="${styles['form-input']}">
-                                <option value="BSCS">BSCS</option>
-                                <option value="BEED">BEED</option>
-                                <option value="BSED">BSED</option>
-                                <option value="BSHM">BSHM</option>
-                                <option value="BSBA">BSBA</option>
-                                <option value="BSA">BSA</option>
-                                <option value="STEM">STEM</option>
-                                <option value="HUMSS">HUMSS</option>
-                                <option value="TVL">TVL</option>
-                                <option value="ABM">ABM</option>
+                            <label for="admin-name">Name</label>
+                            <input type="text" id="admin-name" class="${styles['form-input']}" placeholder="Enter name">
+                        </div>
+
+                        <div class="${styles['form-group']}">
+                            <label for="admin-role">Role</label>
+                            <select id="admin-role" class="${styles['form-input']}">
+                                <option value="staff">staff</option>
+                                <option value="admin">admin</option>
                             </select>
+                        </div>
+
+                        <div class="${styles['form-group']}">
+                            <label for="admin-password">Name</label>
+                            <input type="text" id="admin-password" class="${styles['form-input']}" placeholder="Enter password">
                         </div>
 
                         <div class="${styles['form-group']}">
                             <label for="client-name">Year / Grade Level</label>
                             <input type="text" id="client-yearlevel" class="${styles['form-input']}" placeholder="Enter client year / grade level">
-                        </div>
-
-                        <div class="${styles['form-group']}">
-                            <label for="client-status">Status</label>
-                            <select id="client-status" class="${styles['form-input']}">
-                                <option value="active">Active</option>
-                                <option value="paused">Paused</option>
-                                <option value="pending">Pending</option>
-                                <option value="dropping">Dropping</option>
-                                <option value="outOfTime">Out of Time</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-
-                        <div class="${styles['form-group']}">
-                            <label for="client-timeRemaining">Time Remaining (in Seconds)</label>
-                            <input type="text" id="client-timeRemaining" class="${styles['form-input']}" placeholder="Enter time remaining">
-                        </div>
-                        <div class="${styles['form-group']}">
-                            <label for="client-timeEarned">Time Earned (in Seconds)</label>
-                            <input type="text" id="client-timeEarned" class="${styles['form-input']}" placeholder="Enter time earned">
-                        </div>
-                        <div class="${styles['form-group']}">
-                            <label for="client-wasteCollected">Waste Collected</label>
-                            <input type="text" id="client-wasteCollected" class="${styles['form-input']}" readonly>
-                        </div>
-                        <div class="${styles['form-group']}">
-                            <label for="client-createdAt">Created At</label>
-                            <input type="text" id="client-createdAt" class="${styles['form-input']}" readonly>
                         </div>
                     </div>
                 </div>
