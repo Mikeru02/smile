@@ -23,13 +23,19 @@ class ClientController {
             // Check client if it is existing in db
             const existingClientData = await this.client.verfyClient(ipAddress, name, course, yearlevel);
             if (existingClientData) {
-                await this.log.create("Client Connect", `Client ${name} has logged in with IP of ${ipAddress}`, "INFO")
+                if (existingClientData.name !== name) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `IP ${ipAddress} is already aasociated with another user.`
+                    })
+                }
+
+                await this.log.create("Client Connect", `Client ${name} logged in with IP ${ipAddress}`, "INFO");
+
                 return res.status(200).json({
                     success: true,
                     data: {
-                        token: jwt.sign({ ip: ipAddress, name: existingClientData.name, role: 'user' }, process.env.API_SECRET_KEY, {
-                            expiresIn: '1d'
-                        })
+                        token: jwt.sign({ ip: ipAddress, name: name, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
                     }
                 });
             }

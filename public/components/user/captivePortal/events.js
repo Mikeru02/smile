@@ -58,23 +58,31 @@ export default async function Events() {
     
         if (submitBtn) {
             submitBtn.addEventListener("click", async function() {
-                const response = await axios.post(
-                    `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`, 
-                    {
-                        name: document.getElementById('name').value,
-                        course: courseSelect.value,
-                        yearlevel: yearSelect.value
-                    }, 
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            "apikey": import.meta.env.VITE_SRC_KEY
+                try {
+                    const response = await axios.post(
+                        `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`, 
+                        {
+                            name: document.getElementById('name').value,
+                            course: courseSelect.value,
+                            yearlevel: yearSelect.value
+                        }, 
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "apikey": import.meta.env.VITE_SRC_KEY
+                            }
                         }
+                    );
+                    localStorage.setItem('token', response.data.data.token);
+                    window.app.pushRoute("/portal");
+                } catch (err) {
+                    if (err.response && err.response.data && err.response.data.message) {
+                        alert(err.response.data.message); // Show the backend message to user
+                    } else {
+                        alert("An unexpected error occurred. Please try again.");
+                        console.error(err);
                     }
-                );
-
-                localStorage.setItem('token', response.data.data.token);
-                window.app.pushRoute("/portal");
+                }
             });
         }
     }
