@@ -2,7 +2,7 @@ import axios from "axios";
 import jwt from 'jsonwebtoken';
 
 export default async function removeAndMoveClients() {
-    const loopInterval = 60;
+    const loopInterval = 5;
     const removeAndMoveLoop = async () => {
         try {
             console.log('Remove and Move Worker starts')
@@ -19,6 +19,7 @@ export default async function removeAndMoveClients() {
             const outOfTimeClients = response.data.data;
 
             for (const client of outOfTimeClients) {
+                console.log("[DEBUG] Client", client);
                 const response = await axios.patch(
                     `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/move`,
                     {
@@ -33,7 +34,7 @@ export default async function removeAndMoveClients() {
                 )
             }
         }catch (err) {
-            console.error('Time Deductor Error: ', err);
+            console.error('Remove and Move Error: ', err);
         } finally {
             setTimeout(removeAndMoveLoop, loopInterval * 1000);
         }
