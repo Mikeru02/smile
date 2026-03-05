@@ -464,7 +464,8 @@ class ClientController {
 
     async removeAndMove(req, res) {
         try {
-            const result = await this.client.removeAndMove(res.locals.ip);
+            const { ip } = req.body || {};
+            const result = await this.client.removeAndMove(ip);
             return res.status(200).json({
                 success: true,
                 data: {

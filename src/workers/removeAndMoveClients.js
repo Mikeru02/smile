@@ -22,13 +22,11 @@ export default async function removeAndMoveClients() {
                 console.log('IP:', client.ip)
                 const response = await axios.patch(
                     `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/move`,
+                    { ip: client.ip },
                     {
                         headers: {
                             'Content-Type': 'application/json',
                             'apikey': process.env.SRC_KEY,
-                            'token': jwt.sign({ ip: client.ip }, process.env.API_SECRET_KEY, {
-                                    expiresIn: '1m'
-                                    })
                         }
                     }
                 )
