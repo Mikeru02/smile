@@ -345,15 +345,14 @@ class Client {
         try {
             const clientData = await this.getClientByIP(ip);
             console.log("CLIENT DATA:", clientData);
-            const [row] = await this.db.execute(
-                `DELETE FROM clients WHERE ip=? AND time_remaining <= 0 AND time_earned <= 0`,
-                [ip]
-            );
             const [result] = await this.db.execute(
                 `INSERT INTO all_time_clients (name, course, yearlevel, registered_at, removed_at) VALUES (?, ?, ?, ?, NOW())`,
                 [clientData.name, clientData.course, clientData.yearlevel, clientData.created_at]
             )
-
+            const [row] = await this.db.execute(
+                `DELETE FROM clients WHERE ip=? AND time_remaining <= 0 AND time_earned <= 0`,
+                [ip]
+            );
             return result;
         } catch(err) {
             console.error("[ERROR] client.removeAndMove", err);

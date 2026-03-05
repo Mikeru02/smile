@@ -17,22 +17,21 @@ export default async function removeAndMoveClients() {
             )
 
             const outOfTimeClients = response.data.data;
-            console.log(outOfTimeClients);
 
-            // for (const client of outOfTimeClients) {
-            //     const response = await axios.patch(
-            //         `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/move`,
-            //         {
-            //             headers: {
-            //                 'Content-Type': 'application/json',
-            //                 'apikey': process.env.SRC_KEY,
-            //                 'token': jwt.sign({ ip: client.ip }, process.env.API_SECRET_KEY, {
-            //                         expiresIn: '1m'
-            //                         })
-            //             }
-            //         }
-            //     )
-            // }
+            for (const client of outOfTimeClients) {
+                const response = await axios.patch(
+                    `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/move`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': process.env.SRC_KEY,
+                            'token': jwt.sign({ ip: client.ip }, process.env.API_SECRET_KEY, {
+                                    expiresIn: '1m'
+                                    })
+                        }
+                    }
+                )
+            }
         }catch (err) {
             console.error('Remove and Move Error: ', err);
         } finally {
