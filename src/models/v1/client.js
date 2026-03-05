@@ -163,7 +163,7 @@ class Client {
     async getAllOutofTimeClients() {
         try {
             const [result,] = await this.db.execute(
-                "SELECT * FROM clients WHERE time_remaining <= 0 AND time_earnead <= 0",
+                "SELECT * FROM clients WHERE time_remaining <= 0 AND time_earned <= 0",
                 []
             );
             return result?.[0];
