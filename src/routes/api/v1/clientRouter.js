@@ -33,7 +33,7 @@ clientRouter.patch('/', authentication, client.updateClientStatus.bind(client));
 clientRouter.patch('/id/:id', client.updateClientData.bind(client));
 clientRouter.patch('/all', client.updateAllClientsTime.bind(client));
 clientRouter.patch('/revoke', authentication, client.revoke.bind(client));
-clientRouter.patch('/move', authentication, client.removeAndMove.bind(client));
+clientRouter.patch('/move', client.removeAndMove.bind(client));
 
 // Delete Methods
 
