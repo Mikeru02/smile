@@ -17,7 +17,6 @@ export default async function removeAndMoveClients() {
             )
 
             const outOfTimeClients = response.data.data;
-            console.log(outOfTimeClients)
 
             for (const client of outOfTimeClients) {
                 console.log("[DEBUG] Client", client);

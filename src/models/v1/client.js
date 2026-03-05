@@ -344,6 +344,7 @@ class Client {
     async removeAndMove(ip) {
         try {
             const clientData = await this.getClientByIP(ip);
+            console.log("CLIENT DATA:", clientData);
             const [row] = await this.db.execute(
                 `DELETE FROM clients WHERE ip=? AND time_remaining <= 0 AND time_earned <= 0`,
                 [ip]
