@@ -1,4 +1,5 @@
 import { Server } from 'socket.io';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { checkInternet } from '../utils/dashboardInformation.js';
 import fs from 'fs/promises';
@@ -45,24 +46,27 @@ class SocketServer {
     registerSocketEvents() {
         this.io.on('connection', async (socket) => {
             socket.token = socket.handshake.auth.token;
+            const decoded = jwtDecode(socket.token);
             socket.syncInterval = null;
             console.log('[SOCKET] CLient connected', socket.id);
 
             try {
-                this.arduino.sendCommand('CHECK_BIN');
-                const response = await this.axiosClient.get(
-                    `client/`,
-                    {
-                        headers: {
-                            'token': socket.token
+                if (decoded.role === 'user') {
+                    this.arduino.sendCommand('CHECK_BIN');
+                    const response = await this.axiosClient.get(
+                        `client/`,
+                        {
+                            headers: {
+                                'token': socket.token
+                            }
                         }
-                    }
-                );
-                socket.clientData = response.data.data;
-                socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
-                socket.emit('CLIENT_STATUS', { status: socket.clientData.status });
-                socket.emit('INTERNET_STATUS', { online: checkInternet() });
-                socket.emit('BIN_STATUS', { status: this.currentBinStatus });
+                    );
+                    socket.clientData = response.data.data;
+                    socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
+                    socket.emit('CLIENT_STATUS', { status: socket.clientData.status });
+                    socket.emit('INTERNET_STATUS', { online: checkInternet() });
+                    socket.emit('BIN_STATUS', { status: this.currentBinStatus });
+                }
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
                 return;
