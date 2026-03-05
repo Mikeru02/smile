@@ -38,7 +38,7 @@ const arduino = new Arduino(
         startTimeDeductor();
         checkInternetWorker();
         watchDnsmasq(process.env.DNSMASQ_LOG);
-        removeAndMoveClients();
+        //removeAndMoveClients();
     }
 );
 // const arduino = "";
