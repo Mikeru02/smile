@@ -216,7 +216,7 @@ input:checked + .slider:before {
  transform: translateX(1.9em);
 }
 
-.slider {
+/* .slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -246,9 +246,9 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(26px);
-}
+} */
 
-.checkbox-group {
+/* .checkbox-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -266,7 +266,7 @@ input:checked + .slider:before {
 .checkbox-label input[type="checkbox"] {
     width: auto;
     margin: 0;
-}
+} */
 
 .settings-footer {
     display: flex;
