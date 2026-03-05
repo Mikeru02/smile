@@ -2,7 +2,7 @@ import axios from "axios";
 import jwt from 'jsonwebtoken';
 
 export default async function removeAndMoveClients() {
-    const loopInterval = 5;
+    const loopInterval = 60;
     const removeAndMoveLoop = async () => {
         try {
             console.log('Remove and Move Worker starts')
