@@ -17,7 +17,7 @@ export default async function removeAndMoveClients() {
             )
 
             const outOfTimeClients = response.data.data;
-            print(outOfTimeClients);
+            console.log(outOfTimeClients);
 
             // for (const client of outOfTimeClients) {
             //     const response = await axios.patch(
