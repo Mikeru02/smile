@@ -166,7 +166,7 @@ class Client {
                 "SELECT * FROM clients WHERE time_remaining <= 0 AND time_earned <= 0",
                 []
             );
-            return result?.[0];
+            return result;
         } catch (err) {
             console.error("[ERROR] client.getClientByStatus", err);
             throw err;
