@@ -5,6 +5,7 @@ export default async function removeAndMoveClients() {
     const loopInterval = 60;
     const removeAndMoveLoop = async () => {
         try {
+            console.log('Remove and Move Worker starts')
             const response = axios.get(
                 `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/outOfTime`,
                 {
