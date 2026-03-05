@@ -91,10 +91,10 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.settings-section:hover {
+/* .settings-section:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-}
+} */
 
 .section-title {
     color: #0C393C;
