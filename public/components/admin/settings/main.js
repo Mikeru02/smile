@@ -31,17 +31,17 @@ export default function MainContent(root) {
                     <div class="${styles["settings-group"]}">
                         <div class="${styles["setting-item"]}">
                             <label for="utility">Enable Utility Mode</label>
-                            <div class="${styles[""]}">
+                            <div class="${styles["switch"]}">
                                 <input type="checkbox" id="utility">
-                                <span class="${styles[""]}"></span>
+                                <span class="${styles["slider"]}"></span>
                             </div>
-                            <small>Enable ulity mode</small>
+                            <small>Enable utility mode</small>
                         </div>
 
                         <div class="${styles["setting-item"]}">
                             <label for="auto-backup">Enable Auto Backup</label>
-                            <div class="${styles["toggle-switch"]}">
-                                <input type="checkbox" id="auto-backup" checked>
+                            <div class="${styles["switch"]}">
+                                <input type="checkbox" id="auto-backup">
                                 <span class="${styles["slider"]}"></span>
                             </div>
                             <small>Automatically backup database</small>

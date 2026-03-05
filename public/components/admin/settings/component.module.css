@@ -448,10 +448,10 @@ input:checked + .slider:before {
     100% { background-position: 200% 0; }
 }
 
-.settings-section:hover {
+/* .settings-section:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-}
+} */
 
 .section-title {
     color: #0C393C;
