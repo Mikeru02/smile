@@ -23,7 +23,7 @@ class ClientController {
             // Check client if it is existing in db
             const existingClientData = await this.client.getClientByIP(ipAddress);
             if (existingClientData) {
-                if (existingClientData.name !== name || existingClientData.course !== course || existingClientData.yearlevel !== yearlevel) {
+                if (existingClientData.name !== name) {
                     return res.status(400).json({
                         success: false,
                         message: `IP ${ipAddress} is already aasociated with another user.`
