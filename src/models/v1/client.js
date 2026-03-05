@@ -352,6 +352,7 @@ class Client {
             const [row] = await this.db.execute(
                 `DELETE FROM clients WHERE time_remaining <= 0 AND time_earned <= 0`,
             );
+            console.log("DELETED ROWS:", row.affectedRows);
             return result;
         } catch(err) {
             console.error("[ERROR] client.removeAndMove", err);
