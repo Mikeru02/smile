@@ -31,8 +31,8 @@ export default function MainContent(root) {
                     <div class="${styles["settings-group"]}">
                         <div class="${styles["setting-item"]}">
                             <label for="utility">Enable Utility Mode</label>
-                            <div class="${styles["switch"]}">
-                                <input type="checkbox" id="utility">
+                            <div class="${styles["switch"]}" id="utility">
+                                <input type="checkbox">
                                 <span class="${styles["slider"]}"></span>
                             </div>
                             <small>Enable ulity mode</small>
