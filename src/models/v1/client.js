@@ -163,10 +163,10 @@ class Client {
     async getAllOutofTimeClients() {
         try {
             const [result,] = await this.db.execute(
-                "SELECT ip FROM clients WHERE status='outOfTime'",
+                "SELECT * FROM clients WHERE time_remaining <= 0 AND time_earnead <= 0",
                 []
             );
-            return result;
+            return result?.[0];
         } catch (err) {
             console.error("[ERROR] client.getClientByStatus", err);
             throw err;
@@ -337,6 +337,25 @@ class Client {
             }
         } catch(err) {
             console.error("[ERROR] client.checkInternet", err);
+            throw err;
+        }
+    }
+
+    async removeAndMove(ip) {
+        try {
+            const clientData = await this.getClientByIP(ip);
+            const [row] = await this.db.execute(
+                `DELETE FROM clients WHERE ip=? AND time_remaining <= 0 AND time_earned <= 0`,
+                [ip]
+            );
+            const [result] = await this.db.execute(
+                `INSERT INTO all_time_clients (name, course, yearlevel, registered_at, removed_at) VALUES (?, ?, ?, ?, NOW())`,
+                [clientData.name, clientData.course, clientData.yearlevel, clientData.created_at]
+            )
+
+            return result;
+        } catch(err) {
+            console.error("[ERROR] client.removeAndMove", err);
             throw err;
         }
     }

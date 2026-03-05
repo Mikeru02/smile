@@ -22,6 +22,7 @@ class SocketServer {
         this.io = null;
         this.activeClient = null;
         this.timeDeductionInterval = null;
+        this.utilityMode = false;
         this.currentBinStatus = "unknown";
         this.utilityMode = false;
         this.onArduinoData = this.onArduinoData.bind(this);
@@ -66,6 +67,8 @@ class SocketServer {
                     socket.emit('CLIENT_STATUS', { status: socket.clientData.status });
                     socket.emit('INTERNET_STATUS', { online: checkInternet() });
                     socket.emit('BIN_STATUS', { status: this.currentBinStatus });
+                } else {
+                    this.arduino.sendCommand('CHECK_MODE');
                 }
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
