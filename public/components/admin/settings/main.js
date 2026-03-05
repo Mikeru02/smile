@@ -35,7 +35,7 @@ export default function MainContent(root) {
                                 <input type="checkbox" id="utility">
                                 <span class="${styles["slider"]}"></span>
                             </div>
-                            <small>Enable utility mode</small>
+                            <small>Enable ulity mode</small>
                         </div>
 
                         <div class="${styles["setting-item"]}">
