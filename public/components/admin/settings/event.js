@@ -61,8 +61,9 @@ export default async function PageEvent() {
         window.app.pushRoute('/admin/settings');
     })
 
-    const utilityCheckBox = document.getElementById('utility');
-    utilityCheckBox.addEventListener('click', async function() {
+    const utility = document.getElementById('utility');
+    const utilityCheckBox = document.getElementById('utility-checkbox')
+    utility.addEventListener('click', async function() {
         const isChecked = utilityCheckBox.checked;
         window.alert(isChecked);
         socketClient.emit('UTILITY_MODE', ({ isChecked }));
