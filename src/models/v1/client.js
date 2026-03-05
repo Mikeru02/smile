@@ -350,8 +350,7 @@ class Client {
                 [clientData.name, clientData.course, clientData.yearlevel, clientData.created_at]
             )
             const [row] = await this.db.execute(
-                `DELETE FROM clients WHERE ip=? AND time_remaining <= 0 AND time_earned <= 0`,
-                [ip]
+                `DELETE FROM clients WHERE time_remaining <= 0 AND time_earned <= 0`,
             );
             return result;
         } catch(err) {
