@@ -510,6 +510,9 @@
         // String status = "all_ok";
         respondAndDisplay("BIN STATUS", status, "BINS:" + status);
       }
+      else if (command == "SET_UTILITY_MODE") {
+        isUtilityMode = value;
+      }
       else if (command == "CHECK_MODE") {
         if (isUtilityMode) {
           respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");

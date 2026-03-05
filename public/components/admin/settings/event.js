@@ -1,8 +1,12 @@
 import axios from "axios";
 import styles from './component.module.css';
+import SocketClient from '../../../sockets/socketClient';
 import populateDomainListContainer from "../../../utils/populateDomainList";
 
 export default async function PageEvent() {
+    const socketClient = new SocketClient();
+    socketClient.connect();
+
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
 
     const response = await axios.get(
@@ -55,5 +59,12 @@ export default async function PageEvent() {
             }
         );
         window.app.pushRoute('/admin/settings');
+    })
+
+    const utilityCheckBox = document.getElementById('utility');
+    utilityCheckBox.addEventListener('change', async function() {
+        const isChecked = utilityCheckBox.checked;
+
+        socketClient.emit('UTILITY_MODE', ({ isChecked }));
     })
 }

@@ -205,6 +205,10 @@ class SocketServer {
                 socket.clientData.time_remaining = data.timeRemaining;
             })
 
+            socket.on('UTILITY_MODE', (data) => {
+                console.log(data);
+            })
+
             socket.on('disconnect', async () => {
                 console.log('[SOCKET] disconnected:', socket.id);
 

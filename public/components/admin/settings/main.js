@@ -27,15 +27,24 @@ export default function MainContent(root) {
                 
                 <!-- Backup Settings -->
                 <div class="${styles["settings-section"]}">
-                    <h3 class="${styles["section-title"]}">💾 Backup Settings</h3>
+                    <h3 class="${styles["section-title"]}">💾 General Settings</h3>
                     <div class="${styles["settings-group"]}">
+                        <div class="${styles["setting-item"]}">
+                            <label for="utility">Enable Utility Mode</label>
+                            <div class="${styles["toggle-switch"]}">
+                                <input type="checkbox" id="utility" checked>
+                                <span class="${styles["slider"]}"></span>
+                            </div>
+                            <small>Enable ulity mode</small>
+                        </div>
+
                         <div class="${styles["setting-item"]}">
                             <label for="auto-backup">Enable Auto Backup</label>
                             <div class="${styles["toggle-switch"]}">
                                 <input type="checkbox" id="auto-backup" checked>
                                 <span class="${styles["slider"]}"></span>
                             </div>
-                            <small>Automatically backup system data</small>
+                            <small>Automatically backup database</small>
                         </div>
                         
                         <div class="${styles["setting-item"]}">
