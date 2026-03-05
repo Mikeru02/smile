@@ -38,4 +38,5 @@ export default async function removeAndMoveClients() {
             setTimeout(removeAndMoveLoop, loopInterval * 1000);
         }
     }
+    setTimeout(removeAndMoveLoop, loopInterval * 1000);
 }
