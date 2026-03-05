@@ -64,7 +64,7 @@ export default async function PageEvent() {
     const utilityCheckBox = document.getElementById('utility');
     utilityCheckBox.addEventListener('change', async function() {
         const isChecked = utilityCheckBox.checked;
-
+        window.alert(isChecked);
         socketClient.emit('UTILITY_MODE', ({ isChecked }));
     })
 }
