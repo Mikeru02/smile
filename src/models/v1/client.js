@@ -344,13 +344,13 @@ class Client {
     async removeAndMove(ip) {
         try {
             const clientData = await this.getClientByIP(ip);
-            console.log("CLIENT DATA:", clientData);
             const [result] = await this.db.execute(
                 `INSERT INTO all_time_clients (name, course, yearlevel, registered_at, removed_at) VALUES (?, ?, ?, ?, NOW())`,
                 [clientData.name, clientData.course, clientData.yearlevel, clientData.created_at]
             )
             const [row] = await this.db.execute(
-                `DELETE FROM clients WHERE time_remaining <= 0 AND time_earned <= 0`,
+                `DELETE FROM clients WHERE ip=?`,
+                [ip]
             );
             console.log("DELETED ROWS:", row.affectedRows);
             return result;
