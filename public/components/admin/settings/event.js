@@ -71,6 +71,6 @@ export default async function PageEvent() {
             utilityCheckBox.checked = true;
         }
         
-        socketClient.emit('UTILITY_MODE', ({ mode: isChecked }));
+        socketClient.emit('UTILITY_MODE', ({ mode: !isChecked }));
     })
 }
