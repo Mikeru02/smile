@@ -468,7 +468,7 @@ class ClientController {
             return res.status(200).json({
                 success: true,
                 data: {
-                    response
+                    result
                 }
             });
         } catch (err) {
