@@ -297,7 +297,7 @@
   void runPlatformSonars() {
     bool currentIRState = readIRStable(IRPin);
 
-    if (previousIRState == LOW && currentIRState == HIGH) {
+    if (previousIRState == LOW && currentIRState == HIGH && !alreadyDetectIR) {
       isScanning = true;
       alreadyDetectIR = true;
       scanningStartTime = millis();
