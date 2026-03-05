@@ -511,7 +511,7 @@
         respondAndDisplay("BIN STATUS", status, "BINS:" + status);
       }
       else if (command == "SET_UTILITY_MODE") {
-        isUtilityMode = value;
+        isUtilityMode = (value.equalsIgnoreCase("true"));
         if (isUtilityMode) {
           respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
           lcd.clear();
