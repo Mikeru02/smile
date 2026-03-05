@@ -512,6 +512,7 @@
       }
       else if (command == "SET_UTILITY_MODE") {
         isUtilityMode = value;
+        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
       }
       else if (command == "CHECK_MODE") {
         if (isUtilityMode) {

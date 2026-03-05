@@ -210,7 +210,10 @@ class SocketServer {
             })
 
             socket.on('UTILITY_MODE', (data) => {
-                console.log(data);
+                const mode = data.mode;
+                if (mode) {
+                    this.arduino.sendCommand(`SET_UTILITY_MODE:${mode}`)
+                }
             })
 
             socket.on('disconnect', async () => {
