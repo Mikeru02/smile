@@ -19,6 +19,7 @@ export default async function removeAndMoveClients() {
             const outOfTimeClients = response.data.data;
 
             for (const client of outOfTimeClients) {
+                console.log('IP:', client.ip)
                 const response = await axios.patch(
                     `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/move`,
                     {
