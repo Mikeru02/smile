@@ -108,7 +108,29 @@ class AccountController {
     // Delete Functions         *****************************************
     async deleteAccountData(req, res) {
         try {
+            const field = req.query.field;
+            const fieldValue = req.query.value;
 
+            if (!field || !fieldValue) {
+                return res.json(400).json({
+                    success: false,
+                    message: "Query fields are required"
+                })
+            }
+
+            const response = await this.client.deleteData(field, fieldValue);
+
+            if (!response) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Delete failed: ${response}`
+                })
+            }
+            
+            return res.status(200).json({
+                success: true,
+                data: response
+            })
         }
         catch (err) {
             return res.status(500).json({
