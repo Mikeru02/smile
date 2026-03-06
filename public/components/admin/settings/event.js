@@ -6,7 +6,7 @@ export default async function PageEvent() {
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
 
     const response = await axios.get(
-        `${baseUrl}/api/v1/admin/prohibited-links`,
+        `${baseUrl}/api/v1/link/prohibited/all`,
         {
             headers: {
                 'Content-Type': 'application/json',
