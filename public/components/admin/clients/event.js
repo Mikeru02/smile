@@ -14,6 +14,7 @@ export default async function Event() {
         });
 
         const clients = allClients.data.data;
+        console.log("CLIENTS:", clients);
         const table = document.getElementById("clients-table");
         const thead = table.querySelector("thead");
         const tbody = table.querySelector("tbody");
