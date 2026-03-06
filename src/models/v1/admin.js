@@ -26,9 +26,9 @@ class Admin {
                 total_clients: (await this.client.getAll()).length,
                 active_clients: (await this.client.getClientWithSpecificField("status", "active").length),
                 waste_transactions: await this.waste.getAllWasteTransaction(),
-                plastic_bottle: await this.waste.getAllSpecificWaste("PBTL"),
-                paper: await this.waste.getAllSpecificWaste("PPRS"),
-                general_waste: await this.waste.getAllSpecificWaste("GWST"),
+                bottle_transactions: await this.waste.getAllSpecificWaste("PBTL"),
+                paper_transactions: await this.waste.getAllSpecificWaste("PPRS"),
+                general_transactions: await this.waste.getAllSpecificWaste("GWST"),
                 bin_count: (await this.bin.getAllBinTransaction()).length,
                 top_sites: await this.link.getTopVisitedSites()
             }
