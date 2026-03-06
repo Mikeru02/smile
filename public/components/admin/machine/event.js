@@ -43,4 +43,5 @@ export default async function Events() {
             document.getElementById('system-uptime').textContent = machineData.system_info.uptime || 'Unknown';
             document.getElementById('architecture').textContent = machineData.system_info.architecture || 'Unknown';
         })}
+        isInitialized = true;
     }
