@@ -33,11 +33,11 @@ class Link {
         }
     }
 
-    async deleteProhibitedLink(domain) {
+    async deleteProhibitedLink(id) {
         try {
             const [row] = await this.db.execute(
-                `DELETE FROM prohibited_links WHERE link=?`,
-                [domain]
+                `DELETE FROM prohibited_links WHERE id=?`,
+                [id]
             );
             return row;
         }

@@ -21,6 +21,22 @@ class LinkController {
             });
         }
     }
+
+    async deleteProhibitedLink(req, res) {
+        try {
+            const response = await this.link.deleteProhibitedLink(req.params.id);
+            return res.status(200).json({
+                success: true,
+                data: response
+            })
+        }
+        catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
 }
 
 export default LinkController;

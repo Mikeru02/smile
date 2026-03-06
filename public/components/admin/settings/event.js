@@ -27,7 +27,7 @@ export default async function PageEvent() {
     removeButtons.forEach(button => {
         button.addEventListener('click', async function() {
             await axios.delete(
-                `${baseUrl}/api/v1/admin/prohibited-links/${button.dataset.id}`,
+                `${baseUrl}/api/v1/admin/prohibited/${button.dataset.id}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',

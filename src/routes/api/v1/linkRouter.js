@@ -16,5 +16,6 @@ linkRouter.get('/prohibited/all', authentication, link.getAllProhibitedLinks.bin
 // Patch Methods
 
 // Delete Methods
+linkRouter.delete('/prohibited/:id', authentication, link.deleteProhibitedLink.bind(link));
 
 export default linkRouter;
