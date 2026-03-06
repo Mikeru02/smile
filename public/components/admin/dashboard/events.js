@@ -8,6 +8,7 @@ export default async function Events(){
     socketClient.connect();
     socketClient.on('connect', () => {
         console.log('Socket connected');
+        socketClient.emit('GET_DASHBOARD_INFO')
     });
     socketClient.on('DASHBOARD_INFO', (data) => {
         dashboardData = data;
