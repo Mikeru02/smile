@@ -1,6 +1,5 @@
-import { connection } from '../../core/database.js';
-import { checkInternet } from '../../utils/dashboardInformation.js';
-import Waste from './waste.js';
+import { connection } from "../../core/database.js";
+import Waste from "./waste.js";
 
 class Client {
     constructor() {
@@ -8,357 +7,152 @@ class Client {
         this.waste = new Waste();
     }
 
-    // Create Account
-    async create(ip, name, course, yearlevel) {
+    // Create Functions     *****************************************
+    /**
+     * Creates a new client record in the database.
+     * 
+     * @param {String} ip - The IP address assigned to the client.
+     * @param {String} mac - The MAC address of the client's device.
+     * @param {String} host - The hostname of the client's device.
+     * @param {String} name - The client's name.
+     * @param {String} course - The client's course.
+     * @param {String} yearLevel - The client's year level
+     * 
+     * @returns {Promis<Object||null>} Returns the inserted client record if successful, or return null if failed.
+     * 
+     * @throws Will throw an error if the database insert fails.
+     */
+    async create(ip, mac, host, name, course, yearLevel) {
         try {
-            const [result, ] = await this.db.execute(
-                'INSERT INTO clients (ip, name, course, yearlevel, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())',
-                [ip, name, course, yearlevel, 'pending']
+            const [row] = await this.db.execute(
+                `INSERT INTO clients (ip, mac, host, name, course, year_level) VALUES (?, ?, ?, ?, ?, ?)`,
+                [ip, mac, host, name, course, yearLevel]
             );
-            return result;
-        } catch (err) {
+            return row?.[0] || null;
+        } 
+        catch (err) {
             console.error("[ERROR] client.create", err);
             throw err;
         }
     }
 
-    async verfyClient(ip, name, course, yearlevel) {
+    // Get Functions        *****************************************
+    /**
+     * Retrieves a client record from the database based on a specific field.
+     * 
+     * @param {String} field - The column to search by. Must be one of: "mac", "ip", "name", "course", "year_level".
+     * @param {String} value - The value to match in the specified field.
+     * 
+     * @returns {Promise<Object|null>} The first client record that matches the search criteria, or null if not found.
+     * 
+     * @throws Will throw an error if the database insert fails.
+     * 
+     * @example
+     * await client.getSpecificField("mac", "AA:BB:CC:DD:EE:FF");
+     */
+    async getSpecificField(field, value) {
+        const allowedFields = ["mac", "ip", "name", "course", "year_level"];
+
         try {
-            const [result, ] = await this.db.execute(
-                'SELECT * FROM clients WHERE ip=? AND name=? AND course=? AND yearlevel=?',
-                [ip, name, course, yearlevel]
-            );
-            return result?.[0];
-        } catch (err) {
-            console.error("[ERROR] client.verfyClient", err);
-            throw err;
-        }
-    }
-
-    async firstAuthenticate(ip) {
-        try {
-            const clientData = await this.getClientByIP(ip);
-            const timeRemaining = clientData.time_remaining + clientData.time_earned;
-            const [result, ] = await this.db.execute(
-                'UPDATE clients SET time_remaining=?, time_earned=?, status=?, connection_start_at=NOW(), updated_at=NOW() WHERE ip=?',
-                [timeRemaining, 0, 'active', ip]
-            );
-            return result;
-        } catch (err) {
-            console.error("[ERROR] client.authenticate", err);
-            throw err;
-        }
-    }
-
-    async addTime(ip) {
-        try {
-            const clientData = await this.getClientByIP(ip);
-            const timeRemaining = clientData.time_remaining + clientData.time_earned;
-            const [result, ]= await this.db.execute(
-                'UPDATE clients SET time_remaining=?, time_earned=?, status=?, updated_at=NOW() WHERE ip=?',
-                [timeRemaining, 0, 'pending', ip]
-            );
-            return result;
-        } catch (err) {
-            console.error("[ERROR] client.addTime", err);
-            throw err;
-        }
-    }
-
-    async authenticate(ip, name, expireAt) {
-        try {
-            const [result, ] = await this.db.execute(
-                'UPDATE clients SET status=?, expire_at=?, connection_start_at=NOW(), updated_at=NOW() WHERE ip=? AND name=?',
-                ['active', expireAt, ip, name]
-            );
-            return result;
-        } catch (err) {
-            console.error("[ERROR] client.authenticate", err);
-            throw err;
-        }
-    }
-
-    async deauthenticate(ip, name) {
-        try {
-            const newTimeRemaining = await this.updateClientTime(ip);
-            const [result, ] = await this.db.execute(
-                'UPDATE clients SET status=?, expire_at=?, connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=? and name=?',
-                ['paused', null, null, newTimeRemaining, ip, name]
-            );
-            return result;
-        } catch (err) {
-            console.error("[ERROR] client.deauthenticate", err);
-            throw err;
-        }
-    }
-
-    async revoke(ip) {
-        try {
-            const [result, ] = await this.db.execute(
-                'UPDATE clients SET status=?, time_remaining=?, connection_start_at=?, updated_at=NOW() WHERE ip=?',
-                ["pending", 0, null, ip]
-            )
-        } catch (err) {
-            console.error("[ERROR] client.revoke", err);
-            throw err;
-        }
-    }
-
-    async getClientTime(ip, type) {
-        try {
-            console.log("DEBUG API: ", type, ip)
-            const [result, ] = await this.db.execute(
-                `SELECT ${type} FROM clients WHERE ip=?`,
-                [ip]
-            );
-            return result?.[0];
-        } catch (err) {
-            console.error("[ERROR] client.getClientEarnedTime", err);
-            throw err;
-        }
-    }
-
-    async getClientByID(id) {
-        try {
-            const [result, ] = await this.db.execute(
-                'SELECT * FROM clients WHERE id=?',
-                [id]
-            );
-
-            const wasteCount = await this.waste.getTrashTransactionsByClient(id);
-            result[0].waste_collected = wasteCount[0].count;
-            return result?.[0];
-        } catch (err) {
-            console.error("[ERROR] client.getClientByID", err);
-            throw err;
-        }
-    }
-
-    async getClientByIP(ip) {
-        try {
-            const [result, ] = await this.db.execute(
-                'SELECT * FROM clients WHERE ip=?',
-                [ip]
-            );
-            return result?.[0];
-        } catch (err) {
-            console.error("[ERROR] client.getClientByIP", err);
-            throw err;
-        }
-    }
-
-    async getClientByStatus(status) {
-        try {
-            const [result, ] = await this.db.execute(
-                'SELECT * FROM clients WHERE status=?',
-                [status]
-            );
-            return result;
-        } catch (err) {
-            console.error("[ERROR] client.getClientByStatus", err);
-            throw err;
-        }
-    }
-
-    async getAllOutofTimeClients() {
-        try {
-            const [result,] = await this.db.execute(
-                "SELECT * FROM clients WHERE time_remaining <= 0 AND time_earned <= 0",
-                []
-            );
-            return result;
-        } catch (err) {
-            console.error("[ERROR] client.getClientByStatus", err);
-            throw err;
-        }
-    }
-
-    async updateClientStatus(ip, name, status) {
-        try {
-            const [result, ] = await this.db.execute(
-                'UPDATE clients SET status=?, updated_at=NOW() WHERE ip=? AND name=?',
-                [status, ip, name]
-            )
-            return result;
-        } catch (err) {
-            console.error("[ERROR] client.updateClientStatus", err);
-            throw err;
-        }
-    }
-
-    async earned(ip, wasteCode, timeEarned) {
-        try {
-            const clientData = await this.getClientByIP(ip);
-            const totalTime = clientData.time_earned + timeEarned;
-            const [result, ] = await this.db.execute(
-                'UPDATE clients SET time_earned=?, updated_at=NOW() WHERE ip=?',
-                [totalTime, ip]
-            );
-            await this.waste.createTrashTransaction(clientData.id, wasteCode, 1, timeEarned);
-            return result;
-        } catch (err) {
-            console.error("[ERROR] client.earned", err);
-            throw err;
-        }
-    }
-
-    async updateAllClientsTime() {
-        try {
-            
-            const [clients] = await this.db.execute(
-                "SELECT ip, time_remaining, connection_start_at FROM clients WHERE status='active' AND time_remaining > 0",
-                []
-            );
-
-            for (const client of clients) {
-                const newTimeRemaining = await this.updateClientTime(client.ip);
-                if (newTimeRemaining <= 0) {
-                    await this.updateClientStatus(client.ip, 'outOfTime');
-                    await this.db.execute(
-                        "UPDATE clients SET connection_start_at=?, time_remaining=?, updated_at=NOW() WHERE ip=?",
-                        [null, 0, client.ip]
-                    )
-                }
-                const [result, ] = await this.db.execute(
-                    'UPDATE clients SET connection_start_at=NOW(), time_remaining=?, updated_at=NOW() WHERE ip=?',
-                    [newTimeRemaining, client.ip]
-                );
-            }
-            
-            // return result;
-        } catch(err) {
-            console.error("[ERROR] client.updateAllClients", err);
-            throw err;
-        }
-    }
-
-    async updateClientData(id, name, course, year_level, status, time_remaining, time_earned, expire_at=null) {
-        try {
-            const [result] = await this.db.execute(
-                `UPDATE clients set name=?, course=?, yearlevel=?, status=?, time_remaining=?, time_earned=?, expire_at=? WHERE id=?`,
-                [name, course, year_level, status, time_remaining, time_earned, expire_at, id]
-            )
-            return result;
-        } catch(err) {
-            console.error("[ERROR] client.updateClientData", err);
-            throw err;
-        }
-    }
-
-    async getTimeRemainingAndConnectionStart(ip) {
-        try {
-            const [row] = await this.db.execute(
-                'SELECT time_remaining, connection_start_at FROM clients WHERE ip=?',
-                [ip]
-            );
-            if (!row.length) {
+            if (!allowedFields.includes(field)) {
+                console.error("[ERROR] client.getSpecificField: Invalid field!");
                 return null;
             }
-            return row?.[0];
-        } catch(err) {
-            console.error("[ERROR] client.getTimeRemainingAndConnectionStart", err);
-            throw err;
-        }
-    }
 
-    async updateClientTime(ip) {
-        try {
-            const client = await this.getTimeRemainingAndConnectionStart(ip);
-            let newTimeRemaining = client.time_remaining;
-
-            if (client.connection_start_at) {
-                const now = new Date();
-                const connectionStart = new Date(client.connection_start_at);
-
-                const consumedSeconds = Math.floor((now - connectionStart) / 1000);
-
-                newTimeRemaining = Math.max(client.time_remaining - consumedSeconds, 0);
-            }
-            return newTimeRemaining;
-        } catch(err) {
-            console.error("[ERROR] client.updateClientTime", err);
-            throw err;
-        }
-    }
-
-    async updateClientTimeRemaining(ip, name, timeRemaining) {
-        try {
-            const [result] = await this.db.execute(
-                'UPDATE clients SET time_remaining=? WHERE ip=? AND name=?',
-                [timeRemaining, ip, name]
-            )
-            return result;
-        } catch(err) {
-            console.error("[ERROR] client.updateClientTimeRemaining", err);
-            throw err;
-        }
-    }
-
-    async getAllClients() {
-        try {
-            const [rows ] = await this.db.execute(
-                `SELECT * FROM clients ORDER BY created_at DESC`,
-            );
-            return rows;
-        } catch(err) {
-            console.error("[ERROR] client.getAllClients", err);
-            throw err;
-        }
-    }
-
-    async getTotalClients() {
-        try {
-            const [result] = await this.db.execute(
-                'SELECT COUNT(*) FROM clients'
-            );
-            return result[0]['COUNT(*)'];
-        } catch(err) {
-            console.error("[ERROR] client.getTotalClients", err);
-            throw err;
-        }
-    }
-
-    async getActiveClients() {
-        try {
-            const [result] = await this.db.execute(
-                'SELECT COUNT(*) FROM clients WHERE status="active"'
-            );
-            return result[0]['COUNT(*)'];
-        } catch(err) {
-            console.error("[ERROR] client.getAtiveClients", err);
-            throw err;
-        }
-    }
-
-    async checkInternetConnection() {
-        try {
-            return {
-                internet: checkInternet()
-            }
-        } catch(err) {
-            console.error("[ERROR] client.checkInternet", err);
-            throw err;
-        }
-    }
-
-    async removeAndMove(ip) {
-        try {
-            const clientData = await this.getClientByIP(ip);
-            const [result] = await this.db.execute(
-                `INSERT INTO all_time_clients (name, course, yearlevel, registered_at, removed_at) VALUES (?, ?, ?, ?, NOW())`,
-                [clientData.name, clientData.course, clientData.yearlevel, clientData.created_at]
-            )
             const [row] = await this.db.execute(
-                `DELETE FROM clients WHERE ip=?`,
-                [ip]
+                `SELECT * FROM clients WHERE ${field}=?`,
+                [value]
             );
-            console.log("DELETED ROWS:", row.affectedRows);
-            return result;
-        } catch(err) {
-            console.error("[ERROR] client.removeAndMove", err);
+
+            return row?.[0] || null;
+        }
+        catch (err) {
+            console.error("[ERROR] client.getSpecificField", err);
             throw err;
         }
     }
+
+    /**
+     * Retrieves all client records from the database.
+     * 
+     * @returns {Promise<Array<Object>>} An array of client objects. Returns an empty array if no clients exist.
+     * 
+     * @throws Will throw an error if the database query fails.
+     * 
+     * @example
+     * await client.getAll();
+     */
+    async getAll() {
+        try {
+            const [row] = await this.db.execute(
+                `SELECT * FROM clients`
+            );
+
+            return row?.[0] || [];
+        }
+        catch (err) {
+            console.error("[ERROR] client.getAll", err);
+            throw err;
+        }
+    }
+
+    /**
+     * Updates specific fields of a client record in the database.
+     * 
+     * @param {string} field The column used in the WHERE clause (allowed: "id", "mac").
+     * @param {string|number} value The value used to identify the record in the WHERE clause.
+     * @param {Object} setFields An object containing the fields to update.
+     * @param {string} [setFields.ip] The new IP address of the client.
+     * @param {string} [setFields.name] The updated name of the client.
+     * @param {string} [setFields.course] The updated course of the client.
+     * @param {string|number} [setFields.year_level] The updated year level of the client.
+     * 
+     * @returns {Promise<Object|null>} The database response object, or null if validation fails.
+     * 
+     * @throws Will throw an error if the database query fails.
+     * 
+     * @example
+     * await client.update("mac", "AA:BB:CC:DD:EE:FF", { ip: "192.168.10.5" });
+     * 
+     * @example
+     * await client.update("id", 1, { name: "Michael", course: "BSIT", year_level: 3 });
+     */
+    // Update Functions     *****************************************
+    async update(field, value, setFields) {
+        const allowedFields = ["ip", "name", "course", "year_level"];
+        const allowedWhere = ["id", "mac"];
+
+        try {
+            if (!allowedWhere.includes(field)) {
+                console.error("[ERROR] client.update: Invalid where field!");
+                return null
+            }
+
+            const keys = Object.keys(setFields).filter(key => allowedFields.includes(key));
+
+            if (keys.length === 0) {
+                console.error("[ERROR] client.update: No fields to update!");
+                return null;
+            }
+
+            const setClause = keys.map(key => `${key}=?`).join(", ");
+            const clauseValues = keys.map(key => setFields[key]);
+
+            clauseValues.push(value);
+
+            const [row] = await this.db.execute(
+                `UPDATE clients SET ${setClause} WHERE ${field}=?`,
+                clauseValues
+            );
+
+            return row?.[0] || null;
+        } catch (err) {
+            console.error("[ERROR] client.update", err);
+            throw err;
+        }
+    }
+
+    // Delete Functions     *****************************************
 }
 
 export default Client;
