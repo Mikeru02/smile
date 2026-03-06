@@ -1,4 +1,3 @@
-import axios from 'axios';
 import SocketClient from "../../../sockets/socketClient.js";
 import calculateUptime from '../../../utils/calculateUpTime.js';
 import styles from "./component.module.css";
@@ -12,6 +11,7 @@ export default async function Events(){
     });
     socketClient.on('DASHBOARD_INFO', (data) => {
         dashboardData = data;
+        console.log("DASHBOARD: ", dashboardData);
         const uptime = calculateUptime(new Date(dashboardData.server_start_time));
         const daysSpan = document.getElementById('days');
         const hoursSpan = document.getElementById('hours-mins');
