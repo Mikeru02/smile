@@ -97,6 +97,30 @@ class ClientController {
         }
     }
 
+    async getAll(req, res) {
+        try {
+            const response = await this.client.getAll();
+
+            if (!response) {
+                return res.json(404).json({
+                    success: false,
+                    message: "No clients found"
+                })
+            }
+
+            return res.json(200).json({
+                success: true,
+                data: response
+            })
+            
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     // Update Functions         *****************************************
     async upateClientData(req, res) {
         try {

@@ -70,6 +70,30 @@ class AccountController {
         }
     }
 
+    async getAll(req, res) {
+        try {
+            const response = await this.account.getAll();
+
+            if (!response) {
+                return res.json(404).json({
+                    success: false,
+                    message: "No clients found"
+                })
+            }
+
+            return res.json(200).json({
+                success: true,
+                data: response
+            })
+            
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     // Update Functions         *****************************************
     async updateAccountData(req, res) {
         try {
