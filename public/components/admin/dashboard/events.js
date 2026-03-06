@@ -2,6 +2,19 @@ import calculateUptime from '../../../utils/calculateUpTime.js';
 import styles from "./component.module.css";
 
 export default async function Events(){
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+
+    const dashboardInfo = await axios.get(
+        `${baseUrl}/api/v1/admin/dashboard-info`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": import.meta.env.VITE_SRC_KEY
+            }
+        }
+    );
+
+    const dashboardData = dashboardInfo.data.data
     console.log("DASHBOARD: ", dashboardData);
     const uptime = calculateUptime(new Date(dashboardData.server_start_time));
     const daysSpan = document.getElementById('days');
