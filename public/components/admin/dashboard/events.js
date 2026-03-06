@@ -18,6 +18,7 @@ export default async function Events(){
     //     }
     // );
     const socketClient = new SocketClient();
+    socketClient.connect();
     socketClient.on('connect', () => {
         console.log('Socket connected');
     });
