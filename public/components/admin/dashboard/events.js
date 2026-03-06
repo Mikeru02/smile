@@ -18,7 +18,7 @@ export default async function Events(){
     //     }
     // );
     const socketClient = new SocketClient();
-    socketClient.on('connection', () => {
+    socketClient.on('connect', () => {
         console.log('Socket connected');
     });
     socketClient.on('DASHBOARD_INFO', (data) => {
