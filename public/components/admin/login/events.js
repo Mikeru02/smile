@@ -31,7 +31,7 @@ export default function Events(){
     loginBtn.addEventListener('click', async function() {
         try {
             const response = await axios.post(
-                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/admin/login`,
+                `${baseUrl}/api/v1/account/login`,
                 {
                     username: document.getElementById('username').value,
                     password: document.getElementById('password').value

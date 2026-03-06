@@ -14,6 +14,7 @@ accountRouter.get('/all', authentication, account.getAll.bind(account));
 
 // Post Methods
 accountRouter.post('/', authentication, account.create.bind(account));
+accountRouter.post('/login', account.login.bind(account));
 
 // Patch Methods
 accountRouter.patch('/', authentication, account.updateAccountData.bind(account));
