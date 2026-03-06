@@ -1,20 +1,26 @@
 import axios from 'axios';
+import SocketClient from "../../../sockets/socketClient.js";
 import calculateUptime from '../../../utils/calculateUpTime.js';
 import styles from "./component.module.css";
 
 export default async function Events(){
-    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+    // const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
 
     
-    const dashboardInfo = await axios.get(
-        `${baseUrl}/api/v1/admin/dashboard-info`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "apikey": import.meta.env.VITE_SRC_KEY
-            }
-        }
-    );
+    // const dashboardInfo = await axios.get(
+    //     `${baseUrl}/api/v1/admin/dashboard-info`,
+    //     {
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "apikey": import.meta.env.VITE_SRC_KEY
+    //         }
+    //     }
+    // );
+    const socketClient = new SocketClient();
+    socketClient.connect();
+    socketClient.on('DASHBOARD_INFO', (data) => {
+        console.log(data);
+    })
     
     const dashboardData = dashboardInfo.data.data;
     console.log(dashboardData)

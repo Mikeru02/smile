@@ -82,14 +82,12 @@ class SocketServer {
                     socket.emit('INTERNET_STATUS', { online: this.internetStatus });
                     socket.emit('BIN_STATUS', { status: this.currentBinStatus });
                 } else {
-                    const token = jwt.sign({ role: "admin" }, process.env.API_SECRET_KEY, { expiresIn: "1m" })
-
                     this.modelStatus = await checkModel();
                     this.totalClients = await this.axiosClient.get(
                         'client/all',
                         {
                             headers: {
-                                "token": token
+                                "token": socket.token
                             }
                         }
                     );
@@ -97,7 +95,7 @@ class SocketServer {
                         `client/?field=status&value=active`,
                         {
                             headers: {
-                                "token": token
+                                "token": socket.token
                             }
                         }
                     );
@@ -105,7 +103,7 @@ class SocketServer {
                         `waste/all`,
                         {
                             headers: {
-                                "token": token,
+                                "token": socket.token,
                             }
                         }
                     );
@@ -113,7 +111,7 @@ class SocketServer {
                         `waste/all/${PBTL}`,
                         {
                             headers: {
-                                "token": token
+                                "token": socket.token
                             }
                         }
                     );
@@ -121,7 +119,7 @@ class SocketServer {
                         `waste/all/${PPRS}`,
                         {
                             headers: {
-                                "token": token
+                                "token": socket.token
                             }
                         }
                     );
@@ -129,7 +127,7 @@ class SocketServer {
                         `waste/all/${GWST}`,
                         {
                             headers: {
-                                "token": token
+                                "token": socket.token
                             }
                         }
                     );
@@ -137,11 +135,23 @@ class SocketServer {
                         `bin/all-bin`,
                         {
                             headers: {
-                                "token": token
+                                "token": socket.token
                             }
                         }
                     )
                     this.arduino.sendCommand('CHECK_MODE');
+
+                    socket.emit('DASHBOARD_INFO', ({
+                        "internet": this.internetStatus,
+                        "model": this.modelStatus,
+                        "total_clients": this.totalClients,
+                        "active_clients": this.activeClient,
+                        "waste_transaction": this.wasteTransactions,
+                        "bottles_transaction": this.bottlesTransactions,
+                        "paper_transactions": this.paperTransactions,
+                        "general_transactions": this.generalTransactions,
+                        "bin_count": this.binCount,
+                    }))
                 }
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
