@@ -145,13 +145,13 @@ class SocketServer {
                         "server_start_time": this.serverStartTime,
                         "internet": this.internetStatus,
                         "model": this.modelStatus,
-                        "total_clients": this.totalClients.data.data,
-                        "active_clients": this.activeClient.data.data,
-                        "waste_transaction": this.wasteTransactions.data.data,
-                        "bottles_transaction": this.bottlesTransactions.data.data,
-                        "paper_transactions": this.paperTransactions.data.data,
-                        "general_transactions": this.generalTransactions.data.data,
-                        "bin_count": this.binCount.data.data,
+                        "total_clients": this.totalClients.data.data.length,
+                        "active_clients": this.activeClient.data.data.length,
+                        "waste_transaction": this.wasteTransactions.data.data.length,
+                        "bottles_transaction": this.bottlesTransactions.data.data.length,
+                        "paper_transactions": this.paperTransactions.data.data.length,
+                        "general_transactions": this.generalTransactions.data.data.length,
+                        "bin_count": this.binCount.data.data.length,
                     }))
                 }
             } catch (err) {
