@@ -139,19 +139,19 @@ class SocketServer {
                             }
                         }
                     );
-                    console.log("DEBUG", this.totalClients);
+                    console.log("DEBUG", this.totalClients.data.data);
                     this.arduino.sendCommand('CHECK_MODE');
 
                     socket.emit('DASHBOARD_INFO', ({
                         "internet": this.internetStatus,
                         "model": this.modelStatus,
-                        "total_clients": this.totalClients,
-                        "active_clients": this.activeClient,
-                        "waste_transaction": this.wasteTransactions,
-                        "bottles_transaction": this.bottlesTransactions,
-                        "paper_transactions": this.paperTransactions,
-                        "general_transactions": this.generalTransactions,
-                        "bin_count": this.binCount,
+                        "total_clients": this.totalClients.data.data,
+                        "active_clients": this.activeClient.data.data,
+                        "waste_transaction": this.wasteTransactions.data.data,
+                        "bottles_transaction": this.bottlesTransactions.data.data,
+                        "paper_transactions": this.paperTransactions.data.data,
+                        "general_transactions": this.generalTransactions.data.data,
+                        "bin_count": this.binCount.data.data,
                     }))
                 }
             } catch (err) {
