@@ -1,9 +1,7 @@
-import axios from 'axios';
-import SocketClient from '../../../sockets/socketClient.js';
+import socketClient from '../../../sockets/socketClient.js';
 
 export default async function Events(){
     let machineData;
-    const socketClient = new SocketClient();
     socketClient.connect();
     socketClient.on('connect', () => {
         console.log("Socket connected");

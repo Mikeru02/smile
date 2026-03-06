@@ -1,10 +1,9 @@
-import SocketClient from "../../../sockets/socketClient.js";
+import socketClient from "../../../sockets/socketClient.js";
 import calculateUptime from '../../../utils/calculateUpTime.js';
 import styles from "./component.module.css";
 
 export default async function Events(){
     let dashboardData;
-    const socketClient = new SocketClient();
     socketClient.connect();
     socketClient.on('connect', () => {
         console.log('Socket connected');
