@@ -139,7 +139,7 @@ class SocketServer {
                             }
                         }
                     );
-                    console.log(this.totalClients);
+                    console.log("DEBUG", this.totalClients);
                     this.arduino.sendCommand('CHECK_MODE');
 
                     socket.emit('DASHBOARD_INFO', ({
