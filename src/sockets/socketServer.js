@@ -22,28 +22,8 @@ class SocketServer {
                 'apikey': process.env.SRC_KEY,
             }
         });
-        
-        // Machine Info             ***********************************************
-        this.memoryInfo = memoryInfo();
-        this.CPUInfo = CPUInfo();
-        this.storageInfo = storageInfo();
-        this.networkInfo = networkInfo();
-        this.OSName = OSName();
 
-        // Dashboard Info           ***********************************************
-        this.serverStartTime = new Date(Date.now() - process.uptime() * 1000).toISOString();
         this.internetStatus = null;
-        this.modelStatus = null;
-        this.totalClients = null;
-        this.activeClients = null;
-        this.wasteTransactions = null;
-        this.bottlesTransactions = null;
-        this.paperTransactions = null;
-        this.generalTransactions = null;
-        this.binCount = null;
-        this.topSites = null;
-
-
         this.io = null;
         this.activeClient = null;
         this.timeDeductionInterval = null;
@@ -98,96 +78,6 @@ class SocketServer {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
                 return;
             }
-
-            socket.on('GET_DASHBOARD_INFO',async () => {
-                this.modelStatus = await checkModel();
-                this.totalClients = await this.axiosClient.get(
-                    'client/all',
-                    {
-                        headers: {
-                            "token": socket.token
-                        }
-                    }
-                );
-                this.activeClient = await this.axiosClient.get(
-                    `client/?field=status&value=active`,
-                    {
-                        headers: {
-                            "token": socket.token
-                        }
-                    }
-                );
-                this.wasteTransactions = await this.axiosClient.get(
-                    `waste/all`,
-                    {
-                        headers: {
-                            "token": socket.token,
-                        }
-                    }
-                );
-                this.bottlesTransactions = await this.axiosClient.get(
-                    `waste/all/${'PBTL'}`,
-                    {
-                        headers: {
-                            "token": socket.token
-                        }
-                    }
-                );
-                this.paperTransactions = await this.axiosClient.get(
-                    `waste/all/${'PPRS'}`,
-                    {
-                        headers: {
-                            "token": socket.token
-                        }
-                    }
-                );
-                this.generalTransactions = await this.axiosClient.get(
-                    `waste/all/${'GWST'}`,
-                    {
-                        headers: {
-                            "token": socket.token
-                        }
-                    }
-                );
-                this.binCount = await this.axiosClient.get(
-                    `bin/all-bin`,
-                    {
-                        headers: {
-                            "token": socket.token
-                        }
-                    }
-                );
-                console.log("DEBUG", this.totalClients.data.data);
-                this.arduino.sendCommand('CHECK_MODE');
-
-                socket.emit('DASHBOARD_INFO', {
-                    server_start_time: this.serverStartTime,
-                    internet: this.internetStatus,
-                    model: this.modelStatus,
-                    total_clients: this.totalClients?.data?.data?.length || 0,
-                    active_clients: this.activeClient?.data?.data?.length || 0,
-                    waste_transaction: this.wasteTransactions?.data?.data?.length || 0,
-                    bottles_transaction: this.bottlesTransactions?.data?.data?.length || 0,
-                    paper_transactions: this.paperTransactions?.data?.data?.length || 0,
-                    general_transactions: this.generalTransactions?.data?.data?.length || 0,
-                    bin_count: this.binCount?.data?.data?.length || 0
-                });
-            })
-
-            socket.on('GET_MACHINE_INFO', async () => {
-                socket.emit('MACHINE_INFO', ({
-                    cpu: CPUInfo(),
-                    memory: memoryInfo(),
-                    storage: storageInfo(),
-                    network: networkInfo(),
-                    system_info: {
-                    os_name: OSName(),
-                    uptime: runSpawnSync('uptime', ['-p']),
-                    kernel: runSpawnSync('uname', ['-r']),
-                    architecture: runSpawnSync('uname', ['-m'])
-                    }
-                }))
-            })
 
             socket.on('GET_BIN_STATUS', () => {
                 // this.arduino.sendCommand('CHECK_BIN');
