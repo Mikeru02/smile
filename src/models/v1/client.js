@@ -5,6 +5,9 @@ class Client {
     constructor() {
         this.db = connection;
         this.waste = new Waste();
+        this.allowedGetFields = ["ip", "mac", "name", "course", "year_level", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
+        this.allowedFields = ["ip", "name", "course", "year_level", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
+        this.allowedWhere = ["id", "mac"];
     }
 
     // Create Functions     *****************************************
@@ -18,17 +21,20 @@ class Client {
      * @param {String} course - The client's course.
      * @param {String} yearLevel - The client's year level
      * 
-     * @returns {Promis<Object||null>} Returns the inserted client record if successful, or return null if failed.
+     * @returns {Promise<Object||null>} Returns the inserted client record if successful, or return null if failed.
      * 
      * @throws Will throw an error if the database insert fails.
+     * 
+     * @example
+     * await client.create("ip", "mac", "host", "name", "course", "year_level")
      */
-    async create(ip, mac, host, name, course, yearLevel) {
+    async create(ip, mac, host, name, course, year_level) {
         try {
             const [row] = await this.db.execute(
                 `INSERT INTO clients (ip, mac, host, name, course, year_level) VALUES (?, ?, ?, ?, ?, ?)`,
-                [ip, mac, host, name, course, yearLevel]
+                [ip, mac, host, name, course, year_level]
             );
-            return row?.[0] || null;
+            return row || null;
         } 
         catch (err) {
             console.error("[ERROR] client.create", err);
@@ -50,11 +56,9 @@ class Client {
      * @example
      * await client.getSpecificField("mac", "AA:BB:CC:DD:EE:FF");
      */
-    async getSpecificField(field, value) {
-        const allowedFields = ["mac", "ip", "name", "course", "year_level"];
-
+    async getClientWithSpecificField(field, value) {
         try {
-            if (!allowedFields.includes(field)) {
+            if (!this.allowedGetFields.includes(field)) {
                 console.error("[ERROR] client.getSpecificField: Invalid field!");
                 return null;
             }
@@ -64,7 +68,7 @@ class Client {
                 [value]
             );
 
-            return row?.[0] || null;
+            return row || null;
         }
         catch (err) {
             console.error("[ERROR] client.getSpecificField", err);
@@ -88,7 +92,7 @@ class Client {
                 `SELECT * FROM clients`
             );
 
-            return row?.[0] || [];
+            return row || [];
         }
         catch (err) {
             console.error("[ERROR] client.getAll", err);
@@ -103,10 +107,6 @@ class Client {
      * @param {string} field The column used in the WHERE clause (allowed: "id", "mac").
      * @param {string|number} value The value used to identify the record in the WHERE clause.
      * @param {Object} setFields An object containing the fields to update.
-     * @param {string} [setFields.ip] The new IP address of the client.
-     * @param {string} [setFields.name] The updated name of the client.
-     * @param {string} [setFields.course] The updated course of the client.
-     * @param {string|number} [setFields.year_level] The updated year level of the client.
      * 
      * @returns {Promise<Object|null>} The database response object, or null if validation fails.
      * 
@@ -119,16 +119,13 @@ class Client {
      * await client.update("id", 1, { name: "Michael", course: "BSIT", year_level: 3 });
      */
     async update(field, value, setFields) {
-        const allowedFields = ["ip", "name", "course", "year_level"];
-        const allowedWhere = ["id", "mac"];
-
         try {
-            if (!allowedWhere.includes(field)) {
+            if (!this.allowedWhere.includes(field)) {
                 console.error("[ERROR] client.update: Invalid where field!");
                 return null
             }
 
-            const keys = Object.keys(setFields).filter(key => allowedFields.includes(key));
+            const keys = Object.keys(setFields).filter(key => this.allowedFields.includes(key));
 
             if (keys.length === 0) {
                 console.error("[ERROR] client.update: No fields to update!");
@@ -145,7 +142,7 @@ class Client {
                 clauseValues
             );
 
-            return row?.[0] || null;
+            return row || null;
         } catch (err) {
             console.error("[ERROR] client.update", err);
             throw err;
@@ -153,6 +150,38 @@ class Client {
     }
 
     // Delete Functions     *****************************************
+    /**
+     * Deletes a client record from the database based on a specific field and value.
+     * 
+     * @param {String} field - The database column to match (must be in allowedWhere).
+     * @param {String|Number} value - The value to match for deletion.
+     * 
+     * @returns {Promise<Object|null>} Returns the result of the delete operation if successful, or null if the field is invalid or no rows were affected.
+     * 
+     * @throws Will throw an error if the database query fails.
+     * 
+     * @example
+     * await client.deleteData("mac", "AA:BB:CC:DD:EE:FF");
+     */
+    async deleteData(field, value) {
+        try {
+            if (!this.allowedWhere.includes(field)) {
+                console.error("[ERROR] client.deleteData: Invalid where field!");
+                return null
+            }
+
+            const [row] = await this.db.execute(
+                `DELETE FROM clients WHERE ${field}=?`,
+                [value]
+            );
+
+            return row || null;
+        }
+        catch (err) {
+            console.error("[ERROR] client.deleteData", err);
+            throw err;
+        }
+    }
 }
 
 export default Client;
