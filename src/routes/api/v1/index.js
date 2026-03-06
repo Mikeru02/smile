@@ -4,6 +4,7 @@ import logRouter from './logsRouter.js';
 import accountRouter from './accountRouter.js';
 import wasteRouter from './wasteRouter.js';
 import adminRouter from './adminRouter.js';
+import linkRouter from './linkRouter.js';
 
 export default function v1(arduino, io) {
     const v1 = new Router();
@@ -13,5 +14,6 @@ export default function v1(arduino, io) {
     v1.use('/account', accountRouter);
     v1.use('/waste', wasteRouter);
     v1.use('/admin', adminRouter);
+    v1.use('/link', linkRouter);
     return v1;
 }
