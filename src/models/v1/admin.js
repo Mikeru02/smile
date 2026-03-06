@@ -7,7 +7,6 @@ import Log from './log.js';
 
 class Admin {
     constructor() {
-        this.db = connection;
         this.client = new Client();
         this.waste = new Waste();
         this.log = new Log();
