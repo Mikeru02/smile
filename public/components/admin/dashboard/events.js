@@ -115,4 +115,3 @@ export default async function Events(){
     //         document.getElementById(el.visits).textContent = '0';
     //     }
     // });
-}
