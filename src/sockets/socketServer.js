@@ -141,18 +141,18 @@ class SocketServer {
                     console.log("DEBUG", this.totalClients.data.data);
                     this.arduino.sendCommand('CHECK_MODE');
 
-                    socket.emit('DASHBOARD_INFO', ({
-                        "server_start_time": this.serverStartTime,
-                        "internet": this.internetStatus,
-                        "model": this.modelStatus,
-                        "total_clients": this.totalClients.data.data.length,
-                        "active_clients": this.activeClient.data.data.length,
-                        "waste_transaction": this.wasteTransactions.data.data.length,
-                        "bottles_transaction": this.bottlesTransactions.data.data.length,
-                        "paper_transactions": this.paperTransactions.data.data.length,
-                        "general_transactions": this.generalTransactions.data.data.length,
-                        "bin_count": this.binCount.data.data.length,
-                    }))
+                    socket.emit('DASHBOARD_INFO', {
+                        server_start_time: this.serverStartTime,
+                        internet: this.internetStatus,
+                        model: this.modelStatus,
+                        total_clients: this.totalClients?.data?.data?.length || 0,
+                        active_clients: this.activeClient?.data?.data?.length || 0,
+                        waste_transaction: this.wasteTransactions?.data?.data?.length || 0,
+                        bottles_transaction: this.bottlesTransactions?.data?.data?.length || 0,
+                        paper_transactions: this.paperTransactions?.data?.data?.length || 0,
+                        general_transactions: this.generalTransactions?.data?.data?.length || 0,
+                        bin_count: this.binCount?.data?.data?.length || 0
+                    });
                 }
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
