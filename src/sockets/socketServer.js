@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import jwt from "jsonwebtoken";
 import axios from 'axios';
 import { checkInternet, checkModel } from '../utils/dashboardInformation.js';
+import { memoryInfo,  CPUInfo, storageInfo, networkInfo, OSName } from '../utils/machineInformation.js';
 import fs from 'fs/promises';
 
 class SocketServer {
@@ -20,6 +21,15 @@ class SocketServer {
                 'apikey': process.env.SRC_KEY,
             }
         });
+        
+        // Machine Info             ***********************************************
+        this.memoryInfo = memoryInfo();
+        this.CPUInfo = CPUInfo();
+        this.storageInfo = storageInfo();
+        this.networkInfo = networkInfo();
+        this.OSName = OSName();
+
+        // Dashboard Info           ***********************************************
         this.serverStartTime = new Date(Date.now() - process.uptime() * 1000).toISOString();
         this.internetStatus = null;
         this.modelStatus = null;
@@ -31,6 +41,8 @@ class SocketServer {
         this.generalTransactions = null;
         this.binCount = null;
         this.topSites = null;
+
+
         this.io = null;
         this.activeClient = null;
         this.timeDeductionInterval = null;
@@ -159,6 +171,21 @@ class SocketServer {
                     general_transactions: this.generalTransactions?.data?.data?.length || 0,
                     bin_count: this.binCount?.data?.data?.length || 0
                 });
+            })
+
+            socket.on('GET_MACHINE_INFO', async () => {
+                socket.emit('MACHINE_INFO', ({
+                    cpu: CPUInfo(),
+                    memory: memoryInfo(),
+                    storage: storageInfo(),
+                    network: networkInfo(),
+                    system_info: {
+                    os_name: OSName(),
+                    uptime: runSpawnSync('uptime', ['-p']),
+                    kernel: runSpawnSync('uname', ['-r']),
+                    architecture: runSpawnSync('uname', ['-m'])
+                    }
+                }))
             })
 
             socket.on('GET_BIN_STATUS', () => {

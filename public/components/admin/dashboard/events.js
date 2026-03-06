@@ -5,10 +5,10 @@ import styles from "./component.module.css";
 export default async function Events(){
     let dashboardData;
     const socketClient = new SocketClient();
-    socketClient.connect();
+    // socketClient.connect();
     socketClient.on('connect', () => {
         console.log('Socket connected');
-        socketClient.emit('GET_DASHBOARD_INFO')
+        socketClient.emit('GET_DASHBOARD_INFO');
     });
     socketClient.on('DASHBOARD_INFO', (data) => {
         dashboardData = data;
