@@ -15,6 +15,7 @@ export default async function PageEvent() {
             }
         }
     );
+    console.log(response);
 
     const prohibitedLinks = response.data.data;
     console.log(prohibitedLinks);
