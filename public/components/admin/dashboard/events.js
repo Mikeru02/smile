@@ -1,5 +1,6 @@
 import calculateUptime from '../../../utils/calculateUpTime.js';
 import styles from "./component.module.css";
+import axios from 'axios';
 
 export default async function Events(){
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
