@@ -1,4 +1,5 @@
 import axios from 'axios';
+import runSpawnSync from '../../../../src/utils/runSpawnSync.js';
 import SocketClient from '../../../sockets/socketClient.js';
 
 export default async function Events(){
