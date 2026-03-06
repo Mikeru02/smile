@@ -10,6 +10,7 @@ export default async function Events(){
     })
     socketClient.on('MACHINE_INFO', (data) => {
         machineData = data;
+        console.log("MACHINE DATA: ", machineData);
         // Populate CPU Information
         document.getElementById('processor-model').textContent = machineData.cpu.model || 'Unknown';
         document.getElementById('number-of-cores').textContent = machineData.cpu.cores || 'Unknown';
