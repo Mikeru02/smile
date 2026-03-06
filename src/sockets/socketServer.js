@@ -108,7 +108,7 @@ class SocketServer {
                         }
                     );
                     this.bottlesTransactions = await this.axiosClient.get(
-                        `waste/all/${PBTL}`,
+                        `waste/all/${'PBTL'}`,
                         {
                             headers: {
                                 "token": socket.token
@@ -116,7 +116,7 @@ class SocketServer {
                         }
                     );
                     this.paperTransactions = await this.axiosClient.get(
-                        `waste/all/${PPRS}`,
+                        `waste/all/${'PPRS'}`,
                         {
                             headers: {
                                 "token": socket.token
@@ -124,7 +124,7 @@ class SocketServer {
                         }
                     );
                     this.generalTransactions = await this.axiosClient.get(
-                        `waste/all/${GWST}`,
+                        `waste/all/${'GWST'}`,
                         {
                             headers: {
                                 "token": socket.token
