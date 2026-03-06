@@ -2,9 +2,11 @@ import socketClient from "../../../sockets/socketClient.js";
 import calculateUptime from '../../../utils/calculateUpTime.js';
 import styles from "./component.module.css";
 
+let isInitialized = false;
+
 export default async function Events(){
+    if (!isInitialized) {
     let dashboardData;
-    socketClient.connect();
     socketClient.on('connect', () => {
         console.log('Socket connected');
         socketClient.emit('GET_DASHBOARD_INFO');
@@ -67,6 +69,7 @@ export default async function Events(){
             }
         });
     })
+}
     
     // const dashboardData = dashboardInfo.data.data;
     // console.log(dashboardData)
