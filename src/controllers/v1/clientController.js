@@ -69,7 +69,7 @@ class ClientController {
             const fieldValue = req.query.value;
 
             if (!field || !fieldValue) {
-                return res.json(400).json({
+                return res.status(400).json({
                     success: false,
                     message: "Query fields are required"
                 })
@@ -78,13 +78,13 @@ class ClientController {
             const response = await this.client.getClientWithSpecificField(field, fieldValue);
 
             if (!response) {
-                return res.json(404).json({
+                return res.status(404).json({
                     success: false,
                     message: "Client not found"
                 })
             }
 
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
@@ -102,17 +102,17 @@ class ClientController {
             const response = await this.client.getAll();
 
             if (!response) {
-                return res.json(404).json({
+                return res.status(404).json({
                     success: false,
                     message: "No clients found"
                 })
             }
 
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
-            
+
         } catch (err) {
             return res.status(500).json({
                 success: false,
@@ -128,7 +128,7 @@ class ClientController {
             const fieldValue = req.query.value;
 
             if (!field || !fieldValue) {
-                return res.json(400).json({
+                return res.status(400).json({
                     success: false,
                     message: "Query fields are required"
                 })
@@ -163,7 +163,7 @@ class ClientController {
             const fieldValue = req.query.value;
 
             if (!field || !fieldValue) {
-                return res.json(400).json({
+                return res.status(400).json({
                     success: false,
                     message: "Query fields are required"
                 })
