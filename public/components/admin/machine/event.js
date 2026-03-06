@@ -4,6 +4,7 @@ import SocketClient from '../../../sockets/socketClient.js';
 export default async function Events(){
     let machineData;
     const socketClient = new SocketClient();
+    socketClient.connect();
     socketClient.on('connect', () => {
         console.log("Socket connected");
         socketClient.emit('GET_MACHINE_INFO');
