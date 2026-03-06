@@ -9,7 +9,7 @@ const link = new LinkController();
 linkRouter.use(authorization);
 
 // Get Methods
-linkRouter.get('/probited/all', authentication, link.getAllProhibitedLinks.bind(link));
+linkRouter.get('/prohibited/all', authentication, link.getAllProhibitedLinks.bind(link));
 
 // Post Methods
 
