@@ -17,7 +17,8 @@ class Account {
      * @param {String} name - The account's name
      * @param {String} role - The account's role for the system.
      * @param {String} password - The account's password needed to hash.
-     * @returns {Promise<Object||null>} Returns the inserted client record if successful, or return null if failed
+     * 
+     * @returns {Promise<Object|null>} Returns the inserted client record if successful, or return null if failed
      * 
      * @throws Will throw an error if the database insert fails
      * 
@@ -45,7 +46,7 @@ class Account {
      * @param {*} field - The column to search by. Must be in (allowedGetFields).
      * @param {*} value - The value to match int the specified field.
      * 
-     * @returns {Promise<Object||null>} The first account record that matches the search criteria, or null if not found.
+     * @returns {Promise<Object|null>} The first account record that matches the search criteria, or null if not found.
      * 
      * @throws Will throw an error if the database get fails.
      * 
@@ -63,11 +64,11 @@ class Account {
             }
             
             const [row] = await this.db.execute(
-                `SELECT * FROM clients WHERE ${field}=?`,
+                `SELECT * FROM accounts WHERE ${field}=?`,
                 [value]
             );
 
-            return row || null;
+            return row?.[0] || null;
         }
         catch (err) {
             console.error("[ERROR] account.getSpecificField", err);
@@ -99,6 +100,37 @@ class Account {
         }
     }
 
+    /**
+     * Verifies a user's credentials by username and password.
+     * 
+     * @param {String} username - The username of the account to verify.
+     * @param {String} password - The password to verify against the stored hashed password.
+     * 
+     * @returns {Promise<Object|null>} Returns the account object if credentials are correct, or null the username does not exist or the password is incorrect.
+     * 
+     * @throws Will throw an error if the database query fails.
+     * 
+     * @example
+     * await account.verify("johndoe123", "doejohn")
+     */
+    async verify(username, password) {
+        try {
+            const user = await this.getAccountWithSpecificField("username", username)
+
+            if (!user) return null;
+
+            if (user.password !== encryptPassword(password)) return null;
+
+            await this.update("id", user.id, { last_login: new Date() });
+
+            return user;
+        }
+        catch(err) {
+            console.error("[ERROR] account.verify", err);
+            throw err;
+        }
+    }
+
     // Update Functions     *****************************************
     /**
      * Update specific fields of an account record in the database
@@ -107,7 +139,7 @@ class Account {
      * @param {String} value -The value used to identify the record in the WHERE clause.
      * @param {Object} setFields - An object containing the fields to update.
      * 
-     * @returns {Promise<Object||null>} The database response object, or null if validation fails.
+     * @returns {Promise<Object|null>} The database response object, or null if validation fails.
      * 
      * @throws Will throw an error if the database query fails.
      * 
@@ -153,7 +185,7 @@ class Account {
      * @param {String} field - The database column to match (must be in allowedUpdateWhere).
      * @param {String} value - The value to match for deletion.
      * 
-     * @returns {Promise<Object||null>} Returns the result of the delete operation if successful, or null if the field is invalid or no rows affected.
+     * @returns {Promise<Object|null>} Returns the result of the delete operation if successful, or null if the field is invalid or no rows affected.
      * 
      * @throws Will throw an error if the database query fails.
      * 

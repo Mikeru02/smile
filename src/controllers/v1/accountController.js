@@ -94,6 +94,43 @@ class AccountController {
         }
     }
 
+    async login(req, res) {
+        try {
+            const { username, password }= req.body || {};
+
+            if (!username || !password) {
+                return res.json(400).json({
+                    success: false,
+                    message: "Query fields are required"
+                })
+            }
+
+            const response = await this.account.verify(username, password);
+
+            if (!response) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid username or password"
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                data: {
+                    token: jwt.sign({ username: response.username, role: response.role }, process.env.API_SECRET_KEY, { 
+                        expiresIn: "1d"
+                    })
+                }
+            })
+        }
+        catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     // Update Functions         *****************************************
     async updateAccountData(req, res) {
         try {
