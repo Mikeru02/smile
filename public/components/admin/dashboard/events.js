@@ -34,16 +34,16 @@ export default async function Events(){
         activeClientsSpan.textContent = `${dashboardData.active_clients}`;
 
         const wasteItemsSpan = document.getElementById('waste-items');
-        wasteItemsSpan.textContent = `${dashboardData.waste_transactions}`;
+        wasteItemsSpan.textContent = `${dashboardData.waste_transaction}`;
 
         const paperSpan = document.getElementById('paper');
-        paperSpan.textContent = `${dashboardData.paper} items`;
+        paperSpan.textContent = `${dashboardData.paper_transactions} items`;
         
         const plasticBottleSpan = document.getElementById('plastic-bottle');
-        plasticBottleSpan.textContent = `${dashboardData.plastic_bottle} items`;
+        plasticBottleSpan.textContent = `${dashboardData.bottles_transaction} items`;
 
         const generalSpan = document.getElementById('general');
-        generalSpan.textContent = `${dashboardData.general_waste} items`;
+        generalSpan.textContent = `${dashboardData.general_transactions} items`;
 
         const binCountSpan = document.getElementById('bin-count');
         binCountSpan.textContent = `${dashboardData.bin_count}`;
