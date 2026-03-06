@@ -5,7 +5,7 @@ class LinkController {
         this.link = new Link();
     }
 
-    async getAllProhibitedLinks() {
+    async getAllProhibitedLinks(req, res) {
         try {
             console.log("DEBUG HIT*****************************************88")
             const response = await this.link.getAllProhibitedLinks();
