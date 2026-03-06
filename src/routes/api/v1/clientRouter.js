@@ -16,7 +16,7 @@ clientRouter.get('/all', authentication, client.getAll.bind(client));
 clientRouter.post('/', client.create.bind(client));
 
 // Patch Methods
-clientRouter.patch('/', authentication, client.upateClientData.bind(client));
+clientRouter.patch('/', authentication, client.updateClientData.bind(client));
 
 // Delete Methods
 clientRouter.delete('/', authentication, client.deleteClientData.bind(client));

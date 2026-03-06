@@ -50,7 +50,7 @@ class ClientController {
                 success: true,
                 data: {
                     response: response,
-                    token: jwt.sign({ ip: ipAddress, name: name, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
+                    token: jwt.sign({ ip: ip, name: name, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
                 },
             })
         }
@@ -122,7 +122,7 @@ class ClientController {
     }
 
     // Update Functions         *****************************************
-    async upateClientData(req, res) {
+    async updateClientData(req, res) {
         try {
             const field = req.query.field;
             const fieldValue = req.query.value;
