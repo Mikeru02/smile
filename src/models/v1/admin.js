@@ -4,12 +4,14 @@ import { checkInternet, checkModel } from '../../utils/dashboardInformation.js';
 import Client from './client.js';
 import Waste from './waste.js';
 import Log from './log.js';
+import Bin from './bin.js';
 
 class Admin {
     constructor() {
         this.client = new Client();
         this.waste = new Waste();
         this.log = new Log();
+        this.bin = new Bin();
     }
 
     async getDashboardInfo() {
@@ -25,7 +27,7 @@ class Admin {
                 plastic_bottle: await this.waste.getAllSpecificWaste("PBTL"),
                 paper: await this.waste.getAllSpecificWaste("PPRS"),
                 general_waste: await this.waste.getAllSpecificWaste("GWST"),
-                bin_count: await this.getAllBinTransaction(),
+                bin_count: (await this.bin.getAllBinTransaction()).length,
                 top_sites: await this.getTopVisitedSites()
             }
         } catch(err) {
