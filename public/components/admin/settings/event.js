@@ -17,6 +17,7 @@ export default async function PageEvent() {
     );
 
     const prohibitedLinks = response.data.data;
+    console.log(prohibitedLinks);
     const domainListContainer = document.getElementById('domain-list');
 
     domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
