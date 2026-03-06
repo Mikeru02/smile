@@ -1,4 +1,16 @@
 export default async function Events() {
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+
+    const machineInformation = await axios.get(
+        `${baseUrl}/api/v1/admin/machine-info`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": import.meta.env.VITE_SRC_KEY
+            }
+        }
+    );
+    const machineData = machineInformation.data.data;
     console.log("MACHINE DATA: ", machineData);
     // Populate CPU Information
     document.getElementById('processor-model').textContent = machineData.cpu.model || 'Unknown';

@@ -6,7 +6,7 @@ export default async function Event() {
 
     try {
         const allClients = await axios.get(
-            `${baseUrl}/api/v1/client/all-clients`, {
+            `${baseUrl}/api/v1/client/all`, {
             headers: {
                 "Content-Type": "application/json",
                 "apikey": import.meta.env.VITE_SRC_KEY
