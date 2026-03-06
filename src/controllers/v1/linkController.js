@@ -7,6 +7,7 @@ class LinkController {
 
     async getAllProhibitedLinks() {
         try {
+            console.log("DEBUG HIT*****************************************88")
             const response = await this.link.getAllProhibitedLinks();
             return res.status(200).json({
                 success: true,
