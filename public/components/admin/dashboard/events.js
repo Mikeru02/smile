@@ -15,7 +15,8 @@ export default async function Events(){
         }
     );
 
-    const dashboardData = dashboardInfo.data.data
+    const dashboardData = dashboardInfo.data.data;
+    console.log(dashboardData);
     console.log("DASHBOARD: ", dashboardData);
     const uptime = calculateUptime(new Date(dashboardData.server_start_time));
     const daysSpan = document.getElementById('days');
