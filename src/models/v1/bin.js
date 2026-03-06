@@ -62,6 +62,25 @@ class Bin {
         }
     }
 
+    async getTopVisitedSites() {
+        try {
+            const [rows] = await this.db.execute(`
+                SELECT 
+                    REPLACE(SUBSTRING_INDEX(link, '/', 1), 'www.', '') AS domain,
+                    COUNT(*) AS visits
+                FROM accessed_links
+                GROUP BY domain
+                ORDER BY visits DESC
+                LIMIT 3
+            `);
+
+            return rows; // rows will be [{domain: 'google.com', visits: 6}, ...]
+        } catch(err) {
+            console.error("[ERROR] admin.getTopVisitedSites", err);
+            throw err;
+        }
+    }
+
     // Update Functions     *****************************************
     // Delete Functions     *****************************************
 }

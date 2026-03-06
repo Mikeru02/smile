@@ -5,6 +5,7 @@ import Client from './client.js';
 import Waste from './waste.js';
 import Log from './log.js';
 import Bin from './bin.js';
+import Link from './link.js';
 
 class Admin {
     constructor() {
@@ -12,6 +13,7 @@ class Admin {
         this.waste = new Waste();
         this.log = new Log();
         this.bin = new Bin();
+        this.link = new Link();
     }
 
     async getDashboardInfo() {
@@ -28,7 +30,7 @@ class Admin {
                 paper: await this.waste.getAllSpecificWaste("PPRS"),
                 general_waste: await this.waste.getAllSpecificWaste("GWST"),
                 bin_count: (await this.bin.getAllBinTransaction()).length,
-                top_sites: await this.getTopVisitedSites()
+                top_sites: await this.link.getTopVisitedSites()
             }
         } catch(err) {
             console.error("[ERROR] admin.dashboardInfo", err);
