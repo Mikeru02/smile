@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import { jwtDecode } from 'jwt-decode';
+import runSpawnSync from '../utils/runSpawnSync.js';
 import jwt from "jsonwebtoken";
 import axios from 'axios';
 import { checkInternet, checkModel } from '../utils/dashboardInformation.js';
