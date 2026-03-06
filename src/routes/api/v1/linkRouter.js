@@ -12,6 +12,7 @@ linkRouter.use(authorization);
 linkRouter.get('/prohibited/all', authentication, link.getAllProhibitedLinks.bind(link));
 
 // Post Methods
+linkRouter.post('/prohibited', authentication, link.createProhibitedLink.bind(link));
 
 // Patch Methods
 

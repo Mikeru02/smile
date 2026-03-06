@@ -46,7 +46,7 @@ export default async function PageEvent() {
 
     addDomainBtn.addEventListener('click', async function() {
         await axios.post(
-            `${baseUrl}/api/v1/admin/prohibited-links`,
+            `${baseUrl}/api/v1/link/prohibited`,
             { link: domainInput.value },
             {
                 headers: {
