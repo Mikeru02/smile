@@ -10,6 +10,9 @@ export default function AdminEvents(){
     }
 
     socketClient.connect();
+    socketClient.on('connect', () => {
+        console.log('[SOCKET] Socket connected at', socketClient.id);
+    })
 
     // Add refresh button functionality
     const refreshBtn = document.getElementById('refresh-btn');

@@ -5,7 +5,6 @@ let isInitialized = false;
 export default async function Events() {
     if (!isInitialized) {
         let machineData;
-        socketClient.connect();
         socketClient.on('connect', () => {
             console.log("Socket connected");
             socketClient.emit('GET_MACHINE_INFO');
