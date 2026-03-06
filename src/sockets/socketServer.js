@@ -51,7 +51,6 @@ class SocketServer {
         });
 
         this.internetStatus = checkInternet();
-    
         this.registerSocketEvents();
         this.registerArduinoEvents();
 
@@ -143,6 +142,7 @@ class SocketServer {
                     this.arduino.sendCommand('CHECK_MODE');
 
                     socket.emit('DASHBOARD_INFO', ({
+                        "server_start_time": this.serverStartTime,
                         "internet": this.internetStatus,
                         "model": this.modelStatus,
                         "total_clients": this.totalClients.data.data,
