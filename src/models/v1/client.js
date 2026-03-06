@@ -96,6 +96,7 @@ class Client {
         }
     }
 
+    // Update Functions     *****************************************
     /**
      * Updates specific fields of a client record in the database.
      * 
@@ -117,7 +118,6 @@ class Client {
      * @example
      * await client.update("id", 1, { name: "Michael", course: "BSIT", year_level: 3 });
      */
-    // Update Functions     *****************************************
     async update(field, value, setFields) {
         const allowedFields = ["ip", "name", "course", "year_level"];
         const allowedWhere = ["id", "mac"];
