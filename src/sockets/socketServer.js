@@ -138,7 +138,8 @@ class SocketServer {
                                 "token": socket.token
                             }
                         }
-                    )
+                    );
+                    console.log(this.totalClients);
                     this.arduino.sendCommand('CHECK_MODE');
 
                     socket.emit('DASHBOARD_INFO', ({
