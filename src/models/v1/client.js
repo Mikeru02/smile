@@ -5,7 +5,7 @@ class Client {
     constructor() {
         this.db = connection;
         this.waste = new Waste();
-        this.allowedGetFields = ["ip", "mac", "name", "course", "year_level", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
+        this.allowedGetFields = ["id", "ip", "mac", "name", "course", "year_level", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
         this.allowedFields = ["ip", "name", "course", "year_level", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
         this.allowedWhere = ["id", "mac"];
     }
@@ -51,7 +51,7 @@ class Client {
      * 
      * @returns {Promise<Object|null>} The first client record that matches the search criteria, or null if not found.
      * 
-     * @throws Will throw an error if the database insert fails.
+     * @throws Will throw an error if the database get fails.
      * 
      * @example
      * await client.getSpecificField("mac", "AA:BB:CC:DD:EE:FF");
@@ -59,7 +59,7 @@ class Client {
     async getClientWithSpecificField(field, value) {
         try {
             if (!this.allowedGetFields.includes(field)) {
-                console.error("[ERROR] client.getSpecificField: Invalid field!");
+                console.error("[ERROR] client.getClientWithSpecificField: Invalid field!");
                 return null;
             }
 
@@ -71,7 +71,7 @@ class Client {
             return row || null;
         }
         catch (err) {
-            console.error("[ERROR] client.getSpecificField", err);
+            console.error("[ERROR] client.getClientWithSpecificField", err);
             throw err;
         }
     }
@@ -104,9 +104,9 @@ class Client {
     /**
      * Updates specific fields of a client record in the database.
      * 
-     * @param {string} field The column used in the WHERE clause (allowed: "id", "mac").
-     * @param {string|number} value The value used to identify the record in the WHERE clause.
-     * @param {Object} setFields An object containing the fields to update.
+     * @param {string} field - The column used in the WHERE clause (allowed: "id", "mac").
+     * @param {string|number} value - The value used to identify the record in the WHERE clause.
+     * @param {Object} setFields - An object containing the fields to update.
      * 
      * @returns {Promise<Object|null>} The database response object, or null if validation fails.
      * 
@@ -143,7 +143,8 @@ class Client {
             );
 
             return row || null;
-        } catch (err) {
+        } 
+        catch (err) {
             console.error("[ERROR] client.update", err);
             throw err;
         }

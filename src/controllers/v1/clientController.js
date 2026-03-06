@@ -38,6 +38,13 @@ class ClientController {
             } else {
                 response = await this.client.create(ip, mac, hostname, name, course, year_level);
             }
+
+            if (!response) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Insert failed: ${response}`
+                })
+            }
             
             return res.status(200).json({
                 success: true,
@@ -108,9 +115,14 @@ class ClientController {
             if (!response) {
                 return res.status(400).json({
                     success: false,
-                    message: "Update failed: Invalid field or no updatable data"
+                    message: `Update failed: ${response}`
                 })
             }
+
+            return res.status(200).json({
+                success: true,
+                data: response
+            })
         }
         catch (err) {
             return res.status(500).json({
@@ -133,7 +145,7 @@ class ClientController {
                 })
             }
 
-            const response = await this.client.deleteData(field, fieldValue);
+            const response = await this.account.deleteData(field, fieldValue);
 
             if (!response) {
                 return res.status(400).json({
@@ -141,6 +153,11 @@ class ClientController {
                     message: `Delete failed: ${response}`
                 })
             }
+            
+            return res.status(200).json({
+                success: true,
+                data: response
+            })
         }
         catch (err) {
             return res.status(500).json({
