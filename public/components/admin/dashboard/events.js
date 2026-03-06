@@ -5,6 +5,7 @@ import styles from "./component.module.css";
 export default async function Events(){
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
 
+    
     const dashboardInfo = await axios.get(
         `${baseUrl}/api/v1/admin/dashboard-info`,
         {

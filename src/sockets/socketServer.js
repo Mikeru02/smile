@@ -1,7 +1,8 @@
 import { Server } from 'socket.io';
 import { jwtDecode } from 'jwt-decode';
+import jwt from "jsonwebtoken";
 import axios from 'axios';
-import { checkInternet } from '../utils/dashboardInformation.js';
+import { checkInternet, checkModel } from '../utils/dashboardInformation.js';
 import fs from 'fs/promises';
 
 class SocketServer {
@@ -19,6 +20,17 @@ class SocketServer {
                 'apikey': process.env.SRC_KEY,
             }
         });
+        this.serverStartTime = new Date(Date.now() - process.uptime() * 1000).toISOString();
+        this.internetStatus = null;
+        this.modelStatus = null;
+        this.totalClients = null;
+        this.activeClients = null;
+        this.wasteTransactions = null;
+        this.bottlesTransactions = null;
+        this.paperTransactions = null;
+        this.generalTransactions = null;
+        this.binCount = null;
+        this.topSites = null;
         this.io = null;
         this.activeClient = null;
         this.timeDeductionInterval = null;
@@ -28,7 +40,7 @@ class SocketServer {
         this.onArduinoData = this.onArduinoData.bind(this);
     }
 
-    init() {
+    async init() {
         if (this.io) return this.io;
 
         this.io = new Server(this.server, {
@@ -38,6 +50,8 @@ class SocketServer {
             },
         });
 
+        this.internetStatus = checkInternet();
+    
         this.registerSocketEvents();
         this.registerArduinoEvents();
 
@@ -65,9 +79,68 @@ class SocketServer {
                     socket.clientData = response.data.data;
                     socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
                     socket.emit('CLIENT_STATUS', { status: socket.clientData.status });
-                    socket.emit('INTERNET_STATUS', { online: checkInternet() });
+                    socket.emit('INTERNET_STATUS', { online: this.internetStatus });
                     socket.emit('BIN_STATUS', { status: this.currentBinStatus });
                 } else {
+                    const token = jwt.sign({ role: "admin" }, process.env.API_SECRET_KEY, { expiresIn: "1m" })
+
+                    this.modelStatus = await checkModel();
+                    this.totalClients = await this.axiosClient.get(
+                        'client/all',
+                        {
+                            headers: {
+                                "token": token
+                            }
+                        }
+                    );
+                    this.activeClient = await this.axiosClient.get(
+                        `client/?field=status&value=active`,
+                        {
+                            headers: {
+                                "token": token
+                            }
+                        }
+                    );
+                    this.wasteTransactions = await this.axiosClient.get(
+                        `waste/all`,
+                        {
+                            headers: {
+                                "token": token,
+                            }
+                        }
+                    );
+                    this.bottlesTransactions = await this.axiosClient.get(
+                        `waste/all/${PBTL}`,
+                        {
+                            headers: {
+                                "token": token
+                            }
+                        }
+                    );
+                    this.paperTransactions = await this.axiosClient.get(
+                        `waste/all/${PPRS}`,
+                        {
+                            headers: {
+                                "token": token
+                            }
+                        }
+                    );
+                    this.generalTransactions = await this.axiosClient.get(
+                        `waste/all/${GWST}`,
+                        {
+                            headers: {
+                                "token": token
+                            }
+                        }
+                    );
+                    this.binCount = await this.axiosClient.get(
+                        `bin/all-bin`,
+                        {
+                            headers: {
+                                "token": token
+                            }
+                        }
+                    )
                     this.arduino.sendCommand('CHECK_MODE');
                 }
             } catch (err) {

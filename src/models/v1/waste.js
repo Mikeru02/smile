@@ -7,12 +7,11 @@ class Waste {
 
     async createTrashTransaction(client_id, waste_code, quantity, earned_time) {
         try {
-            console.log("WASTE DEBUG: ", client_id, waste_code, quantity, earned_time);
-            const [result] = await this.db.execute(
+            const [row] = await this.db.execute(
                 'INSERT INTO waste_transactions (client_id, waste_code, quantity, earned_time, transaction_date) VALUES (?, ?, ?, ?, NOW())',
                 [client_id, waste_code, quantity, earned_time]
             );
-            return result;
+            return row;
         } catch(err) {
             console.error("[ERROR] waste.createTrashTransaction", err);
             throw err;
@@ -52,7 +51,7 @@ class Waste {
             );
             return result[0]['COUNT(*)'];
         } catch(err) {
-            console.error("[ERROR] admin.getAllWasteTransaction", err);
+            console.error("[ERROR] waste.getAllWasteTransaction", err);
             throw err;
         }
     }
@@ -65,12 +64,23 @@ class Waste {
             );
             return result[0]['COUNT(*)'];
         } catch(err) {
-            console.error("[ERROR] admin.getAllSpecificWaste", err);
+            console.error("[ERROR] waste.getAllSpecificWaste", err);
             throw err;
         }
     }
 
+    async getAllBinCount() {
+        try {
+            const [row] = await this.db.execute(
+                `SELECT COUNT(*) FROM bin_logs WHERE DATE(created_at) = CURDATE()`
+            );
+            return row[0]['COUNT(*)'];
+        }
+        catch (err) {
+            
+        }
 
+    }
 }
 
 export default Waste;

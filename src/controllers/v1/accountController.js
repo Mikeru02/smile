@@ -26,6 +26,11 @@ class AccountController {
                     message: `Insert failed: ${response}`
                 })
             }
+            
+            return res.json(200).json({
+                success: true,
+                data: response
+            })
         }
         catch (err) {
             return res.status(500).json({
