@@ -27,7 +27,7 @@ class AccountController {
                 })
             }
             
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
@@ -47,7 +47,7 @@ class AccountController {
             const fieldValue = req.query.value;
 
             if (!field || !fieldValue) {
-                return res.json(400).json({
+                return res.status(400).json({
                     success: false,
                     message: "Query fields are required"
                 })
@@ -56,13 +56,13 @@ class AccountController {
             const response = await this.account.getAccountWithSpecificField(field, fieldValue);
 
             if (!response) {
-                return res.json(404).json({
+                return res.status(404).json({
                     success: false,
                     message: "Client not found"
                 })
             }
 
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
@@ -80,13 +80,13 @@ class AccountController {
             const response = await this.account.getAll();
 
             if (!response) {
-                return res.json(404).json({
+                return res.status(404).json({
                     success: false,
                     message: "No clients found"
                 })
             }
 
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
@@ -104,7 +104,7 @@ class AccountController {
             const { username, password }= req.body || {};
 
             if (!username || !password) {
-                return res.json(400).json({
+                return res.status(400).json({
                     success: false,
                     message: "Query fields are required"
                 })
@@ -143,7 +143,7 @@ class AccountController {
             const fieldValue = req.query.value;
 
             if (!field || !fieldValue) {
-                return res.json(400).json({
+                return res.status(400).json({
                     success: false,
                     message: "Query fields are required"
                 })
@@ -178,7 +178,7 @@ class AccountController {
             const fieldValue = req.query.value;
 
             if (!field || !fieldValue) {
-                return res.json(400).json({
+                return res.status(400).json({
                     success: false,
                     message: "Query fields are required"
                 })

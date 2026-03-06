@@ -10,7 +10,7 @@ class WasteController {
         try {
             const { waste_code, quantity, earned_time } = req.body || {};
             const response = this.waste.createTrashTransaction(res.locals.id, waste_code, quantity, earned_time);
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
@@ -39,7 +39,7 @@ class WasteController {
     async getAllWasteTransactionCount(req, res) {
         try {
             const response = this.waste.getAllWasteTransaction();
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
@@ -57,7 +57,7 @@ class WasteController {
             const type = req.query.params;
 
             const response = this.waste.getAllWasteTransaction(type);
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })

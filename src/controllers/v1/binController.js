@@ -9,7 +9,7 @@ class BinController {
         try {
             const { code, name } = req.body || {};
             const response = await this.bin.createBin(code, name);
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
@@ -26,7 +26,7 @@ class BinController {
         try {
             const { code } = req.body || {};
             const response = await this.bin.createBinTransaction(code);
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             }) 
@@ -42,7 +42,7 @@ class BinController {
     async getAllBinTransaction(req, res) {
         try {
             const response = await this.bin.getAllBinTransaction();
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
@@ -58,7 +58,7 @@ class BinController {
     async getSpecificBinTransaction(req, res) {
         try {
             const response = await this.bin.getAllSpecificBinTransaction(req.params.bin);
-            return res.json(200).json({
+            return res.status(200).json({
                 success: true,
                 data: response
             })
