@@ -1,4 +1,3 @@
-import socketClient from "../../sockets/socketClient.js";
 import { getRole } from "../../utils/getRole";
 
 export default function AdminEvents(){
@@ -8,11 +7,6 @@ export default function AdminEvents(){
         window.app.pushRoute('/lost');
         return true;
     }
-
-    socketClient.connect();
-    socketClient.on('connect', () => {
-        console.log('[SOCKET] Socket connected at', socketClient.id);
-    })
 
     // Add refresh button functionality
     const refreshBtn = document.getElementById('refresh-btn');
