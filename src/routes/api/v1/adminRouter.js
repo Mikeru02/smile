@@ -17,7 +17,5 @@ adminRouter.get('/machine-info', admin.getMachineInfo.bind(admin));
 // Update Methods
 
 // Delete Methods
-adminRouter.delete('/prohibited-links/:id', authentication, admin.deleteProhibitedLink.bind(admin));
-
 
 export default adminRouter;
