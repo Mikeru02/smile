@@ -66,6 +66,7 @@ class SocketServer {
                         }
                     );
                     socket.clientData = response.data.data;
+                    console.log("CLIENT DATA",socket.clientData);
                     socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
                     socket.emit('CLIENT_STATUS', { status: socket.clientData.status });
                     socket.emit('INTERNET_STATUS', { online: this.internetStatus });
