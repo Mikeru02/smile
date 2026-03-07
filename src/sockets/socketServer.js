@@ -196,7 +196,7 @@ class SocketServer {
             })
 
             socket.on('ADD_TIME', async() => {
-                await this.axiosClient.post(
+                await this.axiosClient.patch(
                     `client/add-time?field=mac&value=${socket.decoded.mac}`,
                     {},
                     {
