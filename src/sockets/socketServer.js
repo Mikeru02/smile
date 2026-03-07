@@ -157,44 +157,7 @@ class SocketServer {
             })
 
             socket.on('DEAUTH_CLIENT', async () => {
-                try {
-                    console.log('[DEAUTH_CLIENT] triggered for', socket.decoded?.mac);
-
-                    await this.axiosClient.patch(
-                        `client/deauth?field=mac&value=${socket.decoded.mac}`,
-                        {},
-                        { headers: { 'token': socket.token } }
-                    );
-
-                    // GET request, safely handle empty response
-                    let clientData = null;
-                    try {
-                        const response = await this.axiosClient.get(
-                            `client/?field=mac&value=${socket.decoded.mac}`,
-                            { headers: { 'token': socket.token } }
-                        );
-
-                        if (!response.data || !response.data.data || response.data.data.length === 0) {
-                            console.warn('[DEAUTH_CLIENT GET RESPONSE EMPTY]', response.data);
-                        } else {
-                            console.log('[DEAUTH_CLIENT GET RESPONSE]', response.data);
-                        }
-
-                        clientData = response.data.data?.[0] || null;
-                    } catch (getErr) {
-                        console.error('[DEAUTH_CLIENT GET ERROR]', getErr.message);
-                    }
-
-                    socket.clientData = clientData;
-                    console.log("NEW CLIENT DATA AFTER DEAUTH", socket.clientData);
-
-                    socket.emit('TIME_REMAINING', {
-                        timeRemaining: socket.clientData?.time_remaining || 0
-                    });
-
-                } catch (err) {
-                    console.error('[DEAUTH_CLIENT ERROR]', err.message);
-                }
+                console.log("HIT**********88")
             });
 
             socket.on('DROP_COMPLETE', async () => {
