@@ -49,6 +49,7 @@ export default function Events() {
 
     socketClient.on('TIME_EARNED', (data) => {
         timeEarnedSeconds = data.timeEarned;
+        startDropTimeout();
         renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
         updateProceedButtonState();
     })
