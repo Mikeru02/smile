@@ -40,6 +40,8 @@ class ClientController {
                 response = await this.client.create(ip, mac, hostname, name, course, year_level);
             }
 
+            console.log('RESPONSE: ', response);
+
             if (!response) {
                 return res.status(400).json({
                     success: false,
