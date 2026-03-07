@@ -232,7 +232,7 @@ class ClientController {
             const clientData = client[0];
 
             const timeRemaining = clientData.time_remaining + clientData.time_earned;
-            await this.client.update(field, fieldValue, { time_remaining: timeRemaining, updated_at: new Date() });
+            await this.client.update(field, fieldValue, { time_remaining: timeRemaining, time_earned: 0, updated_at: new Date() });
         }
         catch (err) {
             return res.status(500).json({
