@@ -149,6 +149,7 @@ export default function Events() {
 
     socketClient.on('TIME_REMAINING', (data) => {
         timeRemainingSeconds = data.timeRemaining;
+        console.log("DEbUG", timeRemainingSeconds)
         updateConnectButtonState();
         renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.timeRemaining);
     });
