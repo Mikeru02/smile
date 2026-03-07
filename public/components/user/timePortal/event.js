@@ -60,14 +60,7 @@ export default function Events() {
 
     socketClient.on('DROP_FINISHED', () => {
         modal.style.display = 'none';
-        if (dropTimeout) {
-            clearTimeout(dropTimeout);
-            dropTimeout = null;
-        }
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
-            countdownInterval = null;
-        }
+        clearDropTimeouts();
         updateTimeRemaining();
     })
 
@@ -253,6 +246,17 @@ export default function Events() {
         }
     };
 
+    function clearDropTimeouts() {
+        if (dropTimeout) {
+            clearTimeout(dropTimeout);
+            dropTimeout = null;
+        }
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+    }
+
     const startTime = () => {
         if (timeRemainingInterval) return;
         timeRemainingInterval = setInterval(async () => {
@@ -307,14 +311,14 @@ export default function Events() {
     exit.addEventListener('click', async function() {
         socketClient.emit('DROP_COMPLETE');
         modal.style.display = 'none';
-        clearInterval(earnInterval);
+        clearDropTimeouts();
     });
 
     const proceedBtn = document.getElementById('proceed');
     proceedBtn.addEventListener('click', async function() {
         socketClient.emit('DROP_COMPLETE');
         modal.style.display = 'none';
-        clearInterval(earnInterval);
+        clearDropTimeouts();
         socketClient.emit('ADD_TIME');
         window.app.pushRoute("/portal");
     });
