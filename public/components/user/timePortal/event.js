@@ -144,34 +144,6 @@ export default function Events() {
     const modal = document.getElementById('modal');
     const droppingModal = document.getElementById('dropping-modal');
 
-    // const handleSonar = (data) => {
-    //     console.log("SONAR DETECTED", data);
-    //     startDropTimeout();
-    // }
-
-    // const handleEarn = ({ earnedTime, wasteCode }) => {
-    //     earn(earnedTime, wasteCode);
-    // }
-
-    // const handleDropFinished = () => {
-    //     modal.style.display = 'none';
-    //     clearInterval(earnInterval);
-    //     stopDropListeners();
-    //     updateTimeRemaining();
-    // }
-
-    // const startDropListeners = () => {
-    //     socketClient.on('ARDUINO:SONAR', handleSonar);
-    //     socketClient.on('EARN', handleEarn);
-    //     socketClient.on('DROP_FINISHED', handleDropFinished);
-    // }
-
-    // const stopDropListeners = () => {
-    //     socketClient.off('ARDUINO:SONAR', handleSonar);
-    //     socketClient.off('EARN', handleEarn);
-    //     socketClient.off('DROP_FINISHED', handleDropFinished);
-    // }
-
     const startDropTimeout = () => {
         if (dropTimeout) clearTimeout(dropTimeout);
         if (countdownInterval) clearInterval(countdownInterval);
@@ -217,6 +189,10 @@ export default function Events() {
             );
             updateTimeRemaining();
             }, dropTimeoutSec * 1000)
+    }
+
+    const updateTimeRemaining = () => {
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
     }
 
     const updateDropButtonState = (data) => {
