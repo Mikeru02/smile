@@ -19,7 +19,6 @@ import Model from './utils/model.js';
 import MessageBot from './utils/tgBot.js';
 import checkInternetWorker from './workers/internetWorker.js';
 import watchDnsmasq from './workers/watchDNS.js';
-import removeAndMoveClients from './workers/removeAndMoveClients.js';
 import checkClients from './workers/checkClient.js';
 
 const ip = getLocalIP();
