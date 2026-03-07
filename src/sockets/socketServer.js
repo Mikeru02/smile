@@ -168,7 +168,7 @@ class SocketServer {
                 );
 
                 const response = await this.axiosClient.get(
-                    `client/`,
+                    `client/?field=mac&value=${socket.decoded.mac}`,
                     {
                         headers: {
                             'token': socket.token
