@@ -368,7 +368,7 @@ class SocketServer {
                     client.clientData.time_earned += response.earnedTime;
                     await this.axiosClient.post(
                         `client/earn`,
-                        { earned_time: response.earnedTime, waste_code: response.wasteCode },
+                        { time_earned: response.earnedTime, waste_code: response.wasteCode },
                         {
                             headers: {
                                 'token': client.token

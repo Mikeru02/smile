@@ -1,10 +1,14 @@
 import jwt from "jsonwebtoken";
 import getLeaseInfo from "../../utils/getLeaseInfo.js";
 import Client from "../../models/v1/client.js";
+import Waste from "../../models/v1/waste.js";
+import Log from "../../models/v1/log.js";
 
 class ClientController {
     constructor() {
         this.client = new Client();
+        this.waste = new Waste();
+        this.log = new Log();
     }
 
     // Create Functions         *****************************************
@@ -150,6 +154,49 @@ class ClientController {
                 success: true,
                 data: response
             })
+        }
+        catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async earned(req, res) {
+        try {
+            const { time_earned, waste_code } = req.body || {};
+            const client = await this.client.getClientWithSpecificField("mac", res.locals.mac);
+
+            if (!client && client.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Client not found"
+                });
+            }
+            
+            const clientData = client[0];
+            
+            const convertedTime = Number(time_earned);
+            if (isNaN(convertedTime) || convertedTime <= 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid time value"
+                })
+            }
+
+            const currentTimeEarned = Number(clientData.time_earned) || 0;
+            const totalTime = currentTimeEarned + convertedTime;
+
+            await this.client.update("mac", res.locals.mac, { time_earned: totalTime, updated_at: new Date()})
+            await this.waste.createTrashTransaction(clientData.id, waste_code, 1, convertedTime);
+            await this.log.create("Earned Time", `Client ${clientData.name} earned ${convertedTime}`, "INFO");
+
+            return res.status(200).json({
+                success: true,
+                message: "Time earned added"
+            })
+            
         }
         catch (err) {
             return res.status(500).json({
