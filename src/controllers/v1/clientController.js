@@ -34,7 +34,7 @@ class ClientController {
 
             const existingClient = await this.client.getClientWithSpecificField("mac", mac);
 
-            if (existingClient) {
+            if (existingClient && existingClient.length > 0) {
                 response = await this.client.update("mac", mac, { ip: ip });
             } else {
                 response = await this.client.create(ip, mac, hostname, name, course, year_level);
