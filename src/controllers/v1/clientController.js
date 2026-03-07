@@ -53,7 +53,7 @@ class ClientController {
                 success: true,
                 data: {
                     response: response,
-                    token: jwt.sign({ ip: ip, name: name, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
+                    token: jwt.sign({ mac: mac, name: name, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
                 },
             })
         }

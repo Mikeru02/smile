@@ -1,10 +1,7 @@
 import { Server } from 'socket.io';
 import { jwtDecode } from 'jwt-decode';
-import runSpawnSync from '../utils/runSpawnSync.js';
-import jwt from "jsonwebtoken";
 import axios from 'axios';
 import { checkInternet, checkModel } from '../utils/dashboardInformation.js';
-import { memoryInfo,  CPUInfo, storageInfo, networkInfo, OSName } from '../utils/machineInformation.js';
 import fs from 'fs/promises';
 
 class SocketServer {
@@ -61,7 +58,7 @@ class SocketServer {
                 if (decoded.role === 'user') {
                     this.arduino.sendCommand('CHECK_BIN');
                     const response = await this.axiosClient.get(
-                        `client/`,
+                        `client/?field="mac"&value=${decoded.mac}`,
                         {
                             headers: {
                                 'token': socket.token
