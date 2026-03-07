@@ -157,7 +157,6 @@ class SocketServer {
             })
 
             socket.on('DEAUTH_CLIENT', async () => {
-                console.log("HIT**********88");
                 await this.axiosClient.patch(
                     `client/deauth?field=mac&value=${socket.decoded.mac}`,
                     {},
@@ -166,7 +165,18 @@ class SocketServer {
                             'token': socket.token
                         }
                     }
+                );
+
+                const response = await this.axiosClient.get(
+                    `client/`,
+                    {
+                        headers: {
+                            'token': socket.token
+                        }
+                    }
                 )
+                socket.clientData = response.data.data[0];
+                socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
             });
 
             socket.on('DROP_COMPLETE', async () => {
