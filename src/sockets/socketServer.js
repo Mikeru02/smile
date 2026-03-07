@@ -21,6 +21,7 @@ class SocketServer {
         });
 
         this.internetStatus = null;
+        this.decoded = null;
         this.io = null;
         this.activeClient = null;
         this.timeDeductionInterval = null;
@@ -50,7 +51,7 @@ class SocketServer {
     registerSocketEvents() {
         this.io.on('connection', async (socket) => {
             socket.token = socket.handshake.auth.token;
-            const decoded = jwtDecode(socket.token);
+            this.decoded = jwtDecode(socket.token);
             socket.syncInterval = null;
             console.log('[SOCKET] CLient connected', socket.id);
 
@@ -58,7 +59,7 @@ class SocketServer {
                 if (decoded.role === 'user') {
                     this.arduino.sendCommand('CHECK_BIN');
                     const response = await this.axiosClient.get(
-                        `client/?field=mac&value=${decoded.mac}`,
+                        `client/?field=mac&value=${this.decoded.mac}`,
                         {
                             headers: {
                                 'token': socket.token
@@ -106,7 +107,7 @@ class SocketServer {
                 this.activeClient = socket;
                 this.arduino.sendCommand('DROPPING');
                 await this.axiosClient.patch(
-                    `client/?field=mac&value=${decoded.mac}`,
+                    `client/?field=mac&value=${this.decoded.mac}`,
                     { status: "dropping"},
                     {
                         headers: {
@@ -183,7 +184,7 @@ class SocketServer {
                     this.activeClient = null;
                     this.arduino.sendCommand("DONE DROP")
                     await this.axiosClient.patch(
-                        `client/?field=mac&value=${decoded.mac}`,
+                        `client/?field=mac&value=${this.decoded.mac}`,
                         { status: "pending"},
                         {
                             headers: {
@@ -197,7 +198,7 @@ class SocketServer {
 
             socket.on('ADD_TIME', async() => {
                 await this.axiosClient.post(
-                    `client/add-time`,
+                    `client/add-time?field=mac&value=${this.decoded.mac}`,
                     {},
                     {
                         headers: {
@@ -207,7 +208,7 @@ class SocketServer {
                 )
 
                 const response = await this.axiosClient.get(
-                    `client/`,
+                    `client/?field=mac&value=${this.decoded.mac}`,
                     {
                         headers: {
                             'token': socket.token
@@ -235,7 +236,7 @@ class SocketServer {
                     this.activeClient = null;
                     this.arduino.sendCommand("DONE DROP")
                     await this.axiosClient.patch(
-                        `client/?field=mac&value=${decoded.mac}`,
+                        `client/?field=mac&value=${this.decoded.mac}`,
                         { status: "pending"},
                         {
                             headers: {
@@ -376,7 +377,7 @@ class SocketServer {
                     
                     client.clientData.time_earned += response.earnedTime;
                     await this.axiosClient.post(
-                        `client/earn`,
+                        `client/earn?field=mac&value=${this.this.decoded.mac}`,
                         { time_earned: response.earnedTime, waste_code: response.wasteCode },
                         {
                             headers: {

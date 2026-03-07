@@ -165,8 +165,18 @@ class ClientController {
 
     async earned(req, res) {
         try {
+            const field = req.query.field;
+            const fieldValue = req.query.value;
+
+            if (!field || !fieldValue) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Query fields are required"
+                })
+            }
+
             const { time_earned, waste_code } = req.body || {};
-            const client = await this.client.getClientWithSpecificField("mac", res.locals.mac);
+            const client = await this.client.getClientWithSpecificField(field, fieldValue);
 
             if (!client && client.length === 0) {
                 return res.status(404).json({
@@ -197,6 +207,32 @@ class ClientController {
                 message: "Time earned added"
             })
             
+        }
+        catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async addTime(req, res) {
+        try {
+            const field = req.query.field;
+            const fieldValue = req.query.value;
+
+            if (!field || !fieldValue) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Query fields are required"
+                })
+            }
+
+            const client = await this.client.getClientWithSpecificField(field, fieldValue);
+            const clientData = client[0];
+
+            const timeRemaining = clientData.time_remaining + clientData.time_earned;
+            await this.client.update(field, fieldValue, { time_remaining: timeRemaining, updated_at: new Date() });
         }
         catch (err) {
             return res.status(500).json({

@@ -309,7 +309,6 @@ export default function Events() {
     const exit = document.getElementById('exit');
     exit.addEventListener('click', async function() {
         socketClient.emit('DROP_COMPLETE');
-        stopDropListeners();
         modal.style.display = 'none';
         clearInterval(earnInterval);
     });
@@ -317,7 +316,6 @@ export default function Events() {
     const proceedBtn = document.getElementById('proceed');
     proceedBtn.addEventListener('click', async function() {
         socketClient.emit('DROP_COMPLETE');
-        stopDropListeners();
         modal.style.display = 'none';
         clearInterval(earnInterval);
         socketClient.emit('ADD_TIME');
