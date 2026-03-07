@@ -19,7 +19,8 @@ CREATE TABLE `accounts`(
 
 CREATE TABLE `clients`(
     `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `ip` VARCHAR(15) NOT NULL,
+    `mac` VARCHAR(50) NOT NULL,
+    `ip` VARCHAR(15) NULL,
     `name` VARCHAR(100) NOT NULL,
     `course` VARCHAR(10) NOT NULL,
     `yearlevel` INT NOT NULL,
@@ -48,7 +49,7 @@ CREATE TABLE `waste`(
 
 CREATE TABLE `waste_transactions`(
     `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `client_id` INT NOT NULL,
+    `client_id` INT NULL,
     `waste_code` VARCHAR(5) NOT NULL,
     `quantity` INT NOT NULL,
     `earned_time` INT NOT NULL,
@@ -99,9 +100,9 @@ VALUES
 
 INSERT INTO `waste` (`code`, `name`, `time`)
 VALUES
-    ('PBTL', 'Plastic Bottle', 5),
-    ('PPRS', 'Paper', 2),
-    ('GWST', 'General Waste', 1);
+    ('PBTL', 'Plastic Bottle', 8),
+    ('PPRS', 'Paper', 5),
+    ('GWST', 'General Waste', 2);
 
 INSERT INTO `bins` (`bin_code`, `name`, `created_at`, `updated_at`)
 VALUES
