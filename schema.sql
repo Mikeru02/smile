@@ -21,6 +21,7 @@ CREATE TABLE `clients`(
     `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `mac` VARCHAR(50) NOT NULL,
     `ip` VARCHAR(15) NULL,
+    `hostname` VARCHAR(100) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
     `course` VARCHAR(10) NOT NULL,
     `yearlevel` INT NOT NULL,
