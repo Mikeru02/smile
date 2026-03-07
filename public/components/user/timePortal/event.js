@@ -20,6 +20,7 @@ export default function Events() {
     let timeRemainingSeconds = 0;
     let timeEarnedSeconds = 0;
     let timeRemainingInterval = null;
+    let isInternetUp;
 
     let isConnected = false;
 
@@ -33,118 +34,37 @@ export default function Events() {
         return;
     }
 
+    // Socket Events            ************************************************************
     const socketClient = new SocketClient();
     socketClient.connect();
     socketClient.on('connect', () => {
         console.log('[SOCKET] connected, waiting for commands.');
-
         socketClient.emit('GET_BIN_STATUS');
     });
 
-    // Time containers
-    const hoursSpan = document.getElementById('earn-hours-span');
-    const minSpan = document.getElementById('earn-min-span');
-    const secSpan = document.getElementById('earn-sec-span');
-    const TRhoursSpan = document.getElementById('hours-span');
-    const TRminSpan = document.getElementById('min-span');
-    const TRsecSpan = document.getElementById('sec-span');
-
-    const annoucementContainer = document.getElementById('announcement-container')
-
-    // Modals
-    const modal = document.getElementById('modal');
-    const droppingModal = document.getElementById('dropping-modal');
-
-    const handleSonar = (data) => {
-        console.log("SONAR DETECTED", data);
+    socketClient.once('DROP:allowed', () => {
+        modal.style.display = 'block';
         startDropTimeout();
-    }
+    });
 
-    const handleEarn = ({ earnedTime, wasteCode }) => {
-        earn(earnedTime, wasteCode);
-    }
+    socketClient.on('TIME_EARNED', (data) => {
+        timeEarnedSeconds = data.timeEarned;
+        renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
+        updateProceedButtonState();
+    })
 
-    const handleDropFinished = () => {
+    socketClient.on('DROP:busy', () => {
+        droppingModal.style.display = 'block';
+    });
+
+    socketClient.on('DROP_FINISHED', () => {
         modal.style.display = 'none';
         clearInterval(earnInterval);
-        stopDropListeners();
         updateTimeRemaining();
-    }
+    })
 
-    const startDropListeners = () => {
-        socketClient.on('ARDUINO:SONAR', handleSonar);
-        socketClient.on('EARN', handleEarn);
-        socketClient.on('DROP_FINISHED', handleDropFinished);
-    }
+    socketClient.on('ARDUINO:SONAR', () => {
 
-    const stopDropListeners = () => {
-        socketClient.off('ARDUINO:SONAR', handleSonar);
-        socketClient.off('EARN', handleEarn);
-        socketClient.off('DROP_FINISHED', handleDropFinished);
-    }
-
-    const startDropTimeout = () => {
-        if (dropTimeout) clearTimeout(dropTimeout);
-        if (countdownInterval) clearInterval(countdownInterval);
-
-        // Reset visual timer
-        const timerElement = document.getElementById('countdown-timer');
-        if (timerElement) {
-            timerElement.textContent = dropTimeoutSec;
-        }
-
-        // Start visual countdown
-        let timeLeft = dropTimeoutSec;
-        countdownInterval = setInterval(() => {
-            timeLeft--;
-            if (timerElement) {
-                timerElement.textContent = timeLeft;
-            }
-            
-            if (timeLeft <= 0) {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
-            }
-        }, 1000);
-
-        dropTimeout = setTimeout(async () => {
-            console.log("TIMEOUT TRIGGERED");
-            modal.style.display = 'none';
-            socketClient.emit('DROP_COMPLETE');
-            stopDropListeners();
-            clearInterval(earnInterval);
-            if (countdownInterval) clearInterval(countdownInterval);
-            dropTimeout = null;
-            countdownInterval = null;
-            await axios.patch(
-                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
-                { status: 'pending' },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_SRC_KEY,
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
-            updateTimeRemaining();
-            }, dropTimeoutSec * 1000)
-    }
-
-    let isInternetUp;
-    socketClient.on('INTERNET_STATUS', (data) => {
-        console.log("DEBUG: ", data);
-        isInternetUp = data.online;
-
-        if (!isInternetUp){
-            annoucementContainer.innerHTML = '';
-            annoucementContainer.innerHTML = `
-                <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
-                <p>No Internet. Please wait</p>
-            `
-            annoucementContainer.style.display = 'flex';
-        }
-        updateConnectButtonState();
     });
 
     socketClient.on('TIME_REMAINING', (data) => {
@@ -192,6 +112,112 @@ export default function Events() {
             annoucementContainer.innerHTML = '';
         }
     });
+
+    socketClient.on('INTERNET_STATUS', (data) => {
+        console.log("DEBUG: ", data);
+        isInternetUp = data.online;
+
+        if (!isInternetUp){
+            annoucementContainer.innerHTML = '';
+            annoucementContainer.innerHTML = `
+                <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
+                <p>No Internet. Please wait</p>
+            `
+            annoucementContainer.style.display = 'flex';
+        }
+        updateConnectButtonState();
+    });
+
+
+
+    // Time containers
+    const hoursSpan = document.getElementById('earn-hours-span');
+    const minSpan = document.getElementById('earn-min-span');
+    const secSpan = document.getElementById('earn-sec-span');
+    const TRhoursSpan = document.getElementById('hours-span');
+    const TRminSpan = document.getElementById('min-span');
+    const TRsecSpan = document.getElementById('sec-span');
+
+    const annoucementContainer = document.getElementById('announcement-container')
+
+    // Modals
+    const modal = document.getElementById('modal');
+    const droppingModal = document.getElementById('dropping-modal');
+
+    // const handleSonar = (data) => {
+    //     console.log("SONAR DETECTED", data);
+    //     startDropTimeout();
+    // }
+
+    // const handleEarn = ({ earnedTime, wasteCode }) => {
+    //     earn(earnedTime, wasteCode);
+    // }
+
+    // const handleDropFinished = () => {
+    //     modal.style.display = 'none';
+    //     clearInterval(earnInterval);
+    //     stopDropListeners();
+    //     updateTimeRemaining();
+    // }
+
+    // const startDropListeners = () => {
+    //     socketClient.on('ARDUINO:SONAR', handleSonar);
+    //     socketClient.on('EARN', handleEarn);
+    //     socketClient.on('DROP_FINISHED', handleDropFinished);
+    // }
+
+    // const stopDropListeners = () => {
+    //     socketClient.off('ARDUINO:SONAR', handleSonar);
+    //     socketClient.off('EARN', handleEarn);
+    //     socketClient.off('DROP_FINISHED', handleDropFinished);
+    // }
+
+    const startDropTimeout = () => {
+        if (dropTimeout) clearTimeout(dropTimeout);
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        // Reset visual timer
+        const timerElement = document.getElementById('countdown-timer');
+        if (timerElement) {
+            timerElement.textContent = dropTimeoutSec;
+        }
+
+        // Start visual countdown
+        let timeLeft = dropTimeoutSec;
+        countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (timerElement) {
+                timerElement.textContent = timeLeft;
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }, 1000);
+
+        dropTimeout = setTimeout(async () => {
+            console.log("TIMEOUT TRIGGERED");
+            modal.style.display = 'none';
+            socketClient.emit('DROP_COMPLETE');
+            clearInterval(earnInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+            dropTimeout = null;
+            countdownInterval = null;
+            await axios.patch(
+                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
+                { status: 'pending' },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': import.meta.env.VITE_SRC_KEY,
+                        'token': localStorage.getItem('token')
+                    }
+                }
+            );
+            updateTimeRemaining();
+            }, dropTimeoutSec * 1000)
+    }
 
     const updateDropButtonState = (data) => {
         const status = data.status; // can me undefined
@@ -262,17 +288,6 @@ export default function Events() {
             if (timeRemainingSeconds <= 0) {
                 clearInterval(timeRemainingInterval);
                 timeRemainingInterval = null;
-                // await axios.patch(
-                //     `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
-                //     {},
-                //     {
-                //         headers: {
-                //             'Content-Type': 'application/json',
-                //             'apikey': import.meta.env.VITE_SRC_KEY,
-                //             'token': localStorage.getItem('token')
-                //         }
-                //     }
-                // );
                 socketClient.emit('DEAUTH_CLIENT');
                 connect.textContent = 'Connect';
                 isConnected = false;
@@ -294,25 +309,12 @@ export default function Events() {
             isConnected = true;
             startTime();
             socketClient.emit('AUTH_CLIENT');
-            // socketClient.on('TIME_REMAINING', (data) => {
-            //     renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
-            // })
-
-            // const redirectToSurvey = true; //Math.random() < 0.5;
-            // if (redirectToSurvey) {
-            //     window.location.href = 'https://forms.gle/LEGksfLDYJH5Ws9r7';
-            //     return;
-            // }
         } else {
             connect.textContent = 'Connect';
             clearInterval(timeRemainingInterval);
             isConnected = false;
             timeRemainingInterval = null;
             socketClient.emit('DEAUTH_CLIENT')
-            // updateTimeRemaining();
-            // socketClient.on('TIME_REMAINING', (data) => {
-            //     renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
-            // })
         }
     });
 
@@ -320,22 +322,6 @@ export default function Events() {
     const dropBtn = document.getElementById('start-drop');
     dropBtn.addEventListener('click', async function() {
         console.log("DROP BTN TRIGGER");
-    
-        socketClient.once('DROP:busy', () => {
-            droppingModal.style.display = 'block';
-        });
-
-        socketClient.once('DROP:allowed', () => {
-            modal.style.display = 'block';
-            startDropTimeout();
-            socketClient.on('TIME_EARNED', (data) => {
-                timeEarnedSeconds = data.timeEarned;
-                renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
-                updateProceedButtonState();
-            })
-            startDropListeners();
-        });
-
         socketClient.emit('DROPPING');
     });
 
