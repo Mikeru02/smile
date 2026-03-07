@@ -105,7 +105,7 @@ class SocketServer {
                 console.log('[DROP] started by: ', socket.id);
                 this.activeClient = socket;
                 this.arduino.sendCommand('DROPPING');
-                await this.axiosClient.get(
+                await this.axiosClient.patch(
                     `client/?field=mac&value=${decoded.mac}`,
                     { status: "dropping"},
                     {
