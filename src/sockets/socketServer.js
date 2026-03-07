@@ -175,6 +175,7 @@ class SocketServer {
                     }
                 )
                 socket.clientData = response.data.data[0];
+                console.log("NEW CLIENT DATA AFTER DEAUTH", socket.clientData);
                 socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
             })
 
