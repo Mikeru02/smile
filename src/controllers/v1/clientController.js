@@ -175,7 +175,7 @@ class ClientController {
             const expireAt = new Date(now.getTime() + (timeRemaining * 1000));
             const fomattedExpireAt = expireAt.toLocaleString('sv-SE').replace('T', ' ');
 
-            await this.client.update(field, fieldValue, { status: 'active', expire_at: fomattedExpireAt });
+            await this.client.update(field, fieldValue, { status: 'active', expire_at: fomattedExpireAt, connection_start_at: new Date(), updated_at: new Date() });
             try {
                 ClientManagement.allowClient(clientData.ip);
             } catch (err) {
@@ -191,6 +191,65 @@ class ClientController {
                 sucess: true,
                 message: 'Client authenticated'
             });
+
+        }
+        catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async deauthenticate(req, res) {
+        try {
+            let client;
+            let field;
+            let fieldValue;
+
+            if (res.locals.role === "admin") {
+                const { clientId } = req.body || {};
+                client = await this.client.getClientWithSpecificField('id', clientId);
+            }
+            else {
+                field = req.query.field;
+                fieldValue = req.query.value;
+
+                if (!field || !fieldValue) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Query fields are required"
+                    })
+                }
+                client = await this.client.getClientWithSpecificField(field, fieldValue);
+            }
+
+            if (!client && client.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Client not found"
+                });
+            }
+
+            const clientData = client[0];
+
+            const now = new Date();
+            const consumedTime = Math.floor(
+                (now - new Date(clientData.connection_start_at)) / 1000
+            );
+
+            let updatedTimeRemaining = clientData.time_remaining - consumedTime;
+
+            await this.client.update(field, fieldValue, { status: 'pending', expire_at: null, connection_start_at: null, updated_at: new Date()})
+            try {
+                ClientManagement.revokeClient(clientData.ip);
+            } catch (err) {
+                console.error("Failed to allow client:", err);
+                return res.status(500).json({ // TODO: Change this status code to 500 after development
+                    success: false,
+                    message: "Failed to allow client: " + err.message
+                });
+            }
 
         }
         catch (err) {
