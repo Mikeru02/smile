@@ -63,10 +63,18 @@ class Client {
                 return null;
             }
 
-            const [row] = await this.db.execute(
-                `SELECT * FROM clients WHERE ${field}=?`,
-                [value]
-            );
+            let query;
+            let params = [];
+
+            if (value === "not_null") {
+                query = `SELECT * FROM clients WHERE ${field} IS NOT NULL`
+            }
+            else {
+                query = `SELECT * FROM clients WHERE ${field} = ?`;
+                params = [value];
+            }
+
+            const [row] = await this.db.execute(query, params);
 
             return row || null;
         }
