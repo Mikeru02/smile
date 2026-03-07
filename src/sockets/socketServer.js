@@ -157,26 +157,26 @@ class SocketServer {
             })
 
             socket.on('DEAUTH_CLIENT', async () => {
-                await this.axiosClient.patch(
-                    `client/deauth?field=mac&value=${socket.decoded.mac}`,
-                    {},
-                    {
-                        headers: {
-                            'token': socket.token
-                        }
-                    }
-                )
-                const response = await this.axiosClient.get(
-                    `client/?field=mac&value=${socket.decoded.mac}`,
-                    {
-                        headers: {
-                            'token': socket.token
-                        }
-                    }
-                )
-                socket.clientData = response.data.data[0];
-                console.log("NEW CLIENT DATA AFTER DEAUTH", socket.clientData);
-                socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
+                try {
+                    console.log('[DEAUTH_CLIENT] triggered for', socket.decoded?.mac);
+
+                    await this.axiosClient.patch(
+                        `client/deauth?field=mac&value=${socket.decoded.mac}`,
+                        {},
+                        { headers: { 'token': socket.token } }
+                    );
+
+                    const response = await this.axiosClient.get(
+                        `client/?field=mac&value=${socket.decoded.mac}`,
+                        { headers: { 'token': socket.token } }
+                    );
+
+                    socket.clientData = response.data.data[0];
+                    console.log("NEW CLIENT DATA AFTER DEAUTH", socket.clientData);
+                    socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
+                } catch (err) {
+                    console.error('[DEAUTH_CLIENT ERROR]', err.message);
+                }
             })
 
             socket.on('DROP_COMPLETE', async () => {
