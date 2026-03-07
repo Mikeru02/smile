@@ -250,6 +250,10 @@ class ClientController {
                     message: "Failed to allow client: " + err.message
                 });
             }
+            return res.status(200).json({
+                sucess: true,
+                message: 'Client deauthenticated'
+            });
 
         }
         catch (err) {
