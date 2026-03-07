@@ -88,7 +88,7 @@ CREATE TABLE `prohibited_links`(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- DUMP DATA
-INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `expire_at`, `connection_start_at`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost', 'BSCS', 4, 'pending', 0, 0, NULL, NULL, NOW(), NOW());
+-- INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `expire_at`, `connection_start_at`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost', 'BSCS', 4, 'pending', 0, 0, NULL, NULL, NOW(), NOW());
 
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`)
 VALUES 
