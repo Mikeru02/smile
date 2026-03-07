@@ -35,7 +35,7 @@ const arduino = new Arduino(
         });
 
         // Intialize workers
-        // startTimeDeductor();
+        startTimeDeductor();
         // checkInternetWorker();
         // watchDnsmasq(process.env.DNSMASQ_LOG);
         //removeAndMoveClients();

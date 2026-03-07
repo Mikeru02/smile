@@ -1,4 +1,5 @@
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 import ClientManagement from '../utils/clientManagement.js';
 
 export default function startTimeDeductor() {
@@ -7,14 +8,18 @@ export default function startTimeDeductor() {
         try {
             console.log('Time Deductor Worker starts')
             const activeClientsResponse = await axios.get(
-                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/status/active`,
+                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?field=status&value=active`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'apikey': process.env.SRC_KEY
+                        'apikey': process.env.SRC_KEY,
+                        'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
+                            expiresIn: "1m"
+                        })
                     }
                 }
             )
+            console.log("ACTIVE CLIENTS",activeClientsResponse);
             const activeClients = activeClientsResponse.data.data;
             
             for (const client of activeClients) {
