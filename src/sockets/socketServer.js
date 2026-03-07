@@ -170,6 +170,7 @@ class SocketServer {
                         `client/?field=mac&value=${socket.decoded.mac}`,
                         { headers: { 'token': socket.token } }
                     );
+                    console.log("[DEAUTH_CLIENT GET RESPONSE]", response.data);
 
                     socket.clientData = response.data.data[0];
                     console.log("NEW CLIENT DATA AFTER DEAUTH", socket.clientData);
