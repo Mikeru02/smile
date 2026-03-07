@@ -60,7 +60,14 @@ export default function Events() {
 
     socketClient.on('DROP_FINISHED', () => {
         modal.style.display = 'none';
-        clearInterval(earnInterval);
+        if (dropTimeout) {
+            clearTimeout(dropTimeout);
+            dropTimeout = null;
+        }
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
         updateTimeRemaining();
     })
 
