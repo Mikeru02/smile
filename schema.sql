@@ -24,7 +24,7 @@ CREATE TABLE `clients`(
     `hostname` VARCHAR(100) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
     `course` VARCHAR(10) NOT NULL,
-    `yearlevel` INT NOT NULL,
+    `year_level` INT NOT NULL,
     `status` ENUM('pending', 'active', 'dropping', 'paused', 'outOfTime'),
     `time_remaining` BIGINT DEFAULT 0,
     `time_earned` BIGINT DEFAULT 0,
