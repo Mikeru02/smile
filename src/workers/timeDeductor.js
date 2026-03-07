@@ -19,7 +19,6 @@ export default function startTimeDeductor() {
                     }
                 }
             )
-            console.log("ACTIVE CLIENTS",activeClientsResponse);
             const activeClients = activeClientsResponse.data.data;
             
             for (const client of activeClients) {
