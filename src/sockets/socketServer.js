@@ -160,20 +160,27 @@ class SocketServer {
                 try {
                     console.log('[DEAUTH_CLIENT] triggered for', socket.decoded?.mac);
 
+                    // PATCH deauth
                     await this.axiosClient.patch(
                         `client/deauth?field=mac&value=${socket.decoded.mac}`,
                         {},
                         { headers: { 'token': socket.token } }
                     );
 
-                    const response = await this.axiosClient.get(
-                        `client/?field=mac&value=${socket.decoded.mac}`,
-                        { headers: { 'token': socket.token } }
-                    );
+                    // Separate GET try/catch
+                    let clientData = null;
+                    try {
+                        const response = await this.axiosClient.get(
+                            `client/?field=mac&value=${socket.decoded.mac}`,
+                            { headers: { 'token': socket.token } }
+                        );
+                        console.log('[DEAUTH_CLIENT GET RESPONSE]', response.data);
+                        clientData = response.data.data?.[0] || null;
+                    } catch (getErr) {
+                        console.error('[DEAUTH_CLIENT GET ERROR]', getErr.message);
+                    }
 
-                    console.log('[DEAUTH_CLIENT GET RESPONSE]', response.data);
-
-                    socket.clientData = response.data.data?.[0] || null;
+                    socket.clientData = clientData;
                     console.log("NEW CLIENT DATA AFTER DEAUTH", socket.clientData);
 
                     socket.emit('TIME_REMAINING', {
