@@ -44,23 +44,5 @@ export default async function checkClients() {
             setTimeout(checkClientsLoop, loopInterval * 1000);
         }
     }
-
-    // const clients = await db.query(
-    //     "SELECT mac, ip FROM clients WHERE ip IS NOT NULL"
-    // );
-
-    // const checks = clients.map(async (client) => {
-    //     const reachable = await pingClient(client.ip);
-
-    //     if (!reachable) {
-    //         await db.query(
-    //             "UPDATE clients SET ip = NULL WHERE mac = ?",
-    //             [client.mac]
-    //         );
-
-    //         console.log(`${client.mac} disconnected`);
-    //     }
-    // });
-
-    // await Promise.all(checks);
+    setTimeout(checkClientsLoop, loopInterval * 1000);
 }
