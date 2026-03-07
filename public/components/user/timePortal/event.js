@@ -42,7 +42,7 @@ export default function Events() {
         socketClient.emit('GET_BIN_STATUS');
     });
 
-    socketClient.once('DROP:allowed', () => {
+    socketClient.on('DROP:allowed', () => {
         modal.style.display = 'block';
         startDropTimeout();
     });
