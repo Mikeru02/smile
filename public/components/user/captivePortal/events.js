@@ -60,11 +60,11 @@ export default async function Events() {
             submitBtn.addEventListener("click", async function() {
                 try {
                     const response = await axios.post(
-                        `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`, 
+                        `${baseUrl}/api/v1/client/`, 
                         {
                             name: document.getElementById('name').value,
                             course: courseSelect.value,
-                            yearlevel: yearSelect.value
+                            year_level: yearSelect.value
                         }, 
                         {
                             headers: {
