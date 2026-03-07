@@ -18,7 +18,7 @@ export default function getLeaseInfo(ip, leaseFile = "/var/lib/misc/dnsmasq.leas
         for (const line of lines) {
             if (!line.trim()) continue;
 
-            const parts = line.split(" ");
+            const parts = line.split(/\s+/);
             const [leaseTime, mac, leaseIp, hostname] = parts;
 
             if (leaseIp === normalizedIP) {

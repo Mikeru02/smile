@@ -29,6 +29,7 @@ class ClientController {
             }
 
             const { mac, hostname } = leaseInfo;
+            console.log('DATA: ', {name, course, year_level, mac, hostname, ip})
             let response;
 
             const existingClient = await this.client.getClientWithSpecificField("mac", mac);
