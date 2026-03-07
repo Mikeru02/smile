@@ -85,7 +85,7 @@ class SocketServer {
                 })
             })
 
-            socket.on('DROPPING', () => {
+            socket.on('DROPPING', async () => {
                 if (this.currentBinStatus !== 'all_ok') {
                     socket.emit('DROP:blocked', {
                         message: this.currentBinStatus
@@ -99,6 +99,16 @@ class SocketServer {
                     });
                     return;
                 }
+
+                await this.axiosClient.get(
+                    `client/?field=mac&value=${decoded.mac}`,
+                    { status: "dropping"},
+                    {
+                        headers: {
+                            'token': socket.token
+                        }
+                    }
+                )
 
                 socket.emit('DROP:allowed');
                 socket.emit('TIME_EARNED', { timeEarned: socket.clientData.time_earned });
@@ -174,7 +184,7 @@ class SocketServer {
                     this.activeClient = null;
                     this.arduino.sendCommand("DONE DROP")
                     await this.axiosClient.patch(
-                        `client/`,
+                        `client/?field=mac&value=${decoded.mac}`,
                         { status: "pending"},
                         {
                             headers: {
@@ -226,7 +236,7 @@ class SocketServer {
                     this.activeClient = null;
                     this.arduino.sendCommand("DONE DROP")
                     await this.axiosClient.patch(
-                        `client/`,
+                        `client/?field=mac&value=${decoded.mac}`,
                         { status: "pending"},
                         {
                             headers: {
