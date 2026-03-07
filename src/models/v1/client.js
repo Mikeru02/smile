@@ -31,8 +31,8 @@ class Client {
     async create(ip, mac, host, name, course, year_level) {
         try {
             const [row] = await this.db.execute(
-                `INSERT INTO clients (ip, mac, hostname, name, course, year_level, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-                [ip, mac, host, name, course, year_level]
+                `INSERT INTO clients (ip, mac, hostname, name, course, year_level, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+                [ip, mac, host, name, course, year_level, "pending"]
             );
             return row || null;
         } 
