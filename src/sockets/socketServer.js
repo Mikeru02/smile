@@ -160,21 +160,26 @@ class SocketServer {
                 try {
                     console.log('[DEAUTH_CLIENT] triggered for', socket.decoded?.mac);
 
-                    // PATCH deauth
                     await this.axiosClient.patch(
                         `client/deauth?field=mac&value=${socket.decoded.mac}`,
                         {},
                         { headers: { 'token': socket.token } }
                     );
 
-                    // Separate GET try/catch
+                    // GET request, safely handle empty response
                     let clientData = null;
                     try {
                         const response = await this.axiosClient.get(
                             `client/?field=mac&value=${socket.decoded.mac}`,
                             { headers: { 'token': socket.token } }
                         );
-                        console.log('[DEAUTH_CLIENT GET RESPONSE]', response.data);
+
+                        if (!response.data || !response.data.data || response.data.data.length === 0) {
+                            console.warn('[DEAUTH_CLIENT GET RESPONSE EMPTY]', response.data);
+                        } else {
+                            console.log('[DEAUTH_CLIENT GET RESPONSE]', response.data);
+                        }
+
                         clientData = response.data.data?.[0] || null;
                     } catch (getErr) {
                         console.error('[DEAUTH_CLIENT GET ERROR]', getErr.message);
@@ -186,10 +191,11 @@ class SocketServer {
                     socket.emit('TIME_REMAINING', {
                         timeRemaining: socket.clientData?.time_remaining || 0
                     });
+
                 } catch (err) {
                     console.error('[DEAUTH_CLIENT ERROR]', err.message);
                 }
-            })
+            });
 
             socket.on('DROP_COMPLETE', async () => {
                 if (this.activeClient === socket) {
