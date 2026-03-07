@@ -170,11 +170,15 @@ class SocketServer {
                         `client/?field=mac&value=${socket.decoded.mac}`,
                         { headers: { 'token': socket.token } }
                     );
-                    console.log("[DEAUTH_CLIENT GET RESPONSE]", response.data);
 
-                    socket.clientData = response.data.data[0];
+                    console.log('[DEAUTH_CLIENT GET RESPONSE]', response.data);
+
+                    socket.clientData = response.data.data?.[0] || null;
                     console.log("NEW CLIENT DATA AFTER DEAUTH", socket.clientData);
-                    socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
+
+                    socket.emit('TIME_REMAINING', {
+                        timeRemaining: socket.clientData?.time_remaining || 0
+                    });
                 } catch (err) {
                     console.error('[DEAUTH_CLIENT ERROR]', err.message);
                 }
