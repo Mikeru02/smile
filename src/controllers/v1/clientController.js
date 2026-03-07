@@ -31,7 +31,7 @@ class ClientController {
             const { mac, hostname } = leaseInfo;
             let response;
 
-            const existingClient = await this.client.getSpecificField("mac", mac);
+            const existingClient = await this.client.getClientWithSpecificField("mac", mac);
 
             if (existingClient) {
                 response = await this.client.update("mac", mac, { ip: ip });
