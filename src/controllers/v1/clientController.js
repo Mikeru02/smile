@@ -240,7 +240,7 @@ class ClientController {
 
             let updatedTimeRemaining = clientData.time_remaining - consumedTime;
 
-            await this.client.update(field, fieldValue, { status: 'pending', expire_at: null, connection_start_at: null, updated_at: new Date()})
+            await this.client.update(field, fieldValue, { status: 'pending', expire_at: null, time_remaining: updatedTimeRemaining, connection_start_at: null, updated_at: new Date()})
             try {
                 ClientManagement.revokeClient(clientData.ip);
             } catch (err) {
