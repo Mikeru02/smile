@@ -157,7 +157,7 @@ class SocketServer {
             })
 
             socket.on('DEAUTH_CLIENT', async () => {
-                await this.axiosClient.post(
+                await this.axiosClient.patch(
                     `client/deauth?field=mac&value=${socket.decoded.mac}`,
                     {},
                     {
@@ -167,7 +167,7 @@ class SocketServer {
                     }
                 )
                 const response = await this.axiosClient.get(
-                    `client/`,
+                    `client/?field=mac&value=${socket.decoded.mac}`,
                     {
                         headers: {
                             'token': socket.token
