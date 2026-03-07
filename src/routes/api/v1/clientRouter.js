@@ -19,6 +19,7 @@ clientRouter.post('/earn', authentication, client.earned.bind(client));
 // Patch Methods
 clientRouter.patch('/', authentication, client.updateClientData.bind(client));
 clientRouter.patch('/add-time', authentication, client.addTime.bind(client));
+clientRouter.patch('auth', authentication, client.authenticate.bind(client));
 
 // Delete Methods
 clientRouter.delete('/', authentication, client.deleteClientData.bind(client));

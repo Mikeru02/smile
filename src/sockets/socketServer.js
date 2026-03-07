@@ -145,7 +145,7 @@ class SocketServer {
 
             socket.on('AUTH_CLIENT', async () => {
                 await this.axiosClient.post(
-                    `client/auth`,
+                    `client/auth?field=mac&value=${socket.decoded.mac}`,
                     {},
                     {
                         headers: {
@@ -158,7 +158,7 @@ class SocketServer {
 
             socket.on('DEAUTH_CLIENT', async () => {
                 await this.axiosClient.post(
-                    `client/deauth`,
+                    `client/deauth?field=mac&value=${socket.decoded.mac}`,
                     {},
                     {
                         headers: {

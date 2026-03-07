@@ -3,6 +3,7 @@ import getLeaseInfo from "../../utils/getLeaseInfo.js";
 import Client from "../../models/v1/client.js";
 import Waste from "../../models/v1/waste.js";
 import Log from "../../models/v1/log.js";
+import ClientManagement from "../../utils/clientManagement.js";
 
 class ClientController {
     constructor() {
@@ -120,7 +121,8 @@ class ClientController {
                 data: response
             })
 
-        } catch (err) {
+        } 
+        catch (err) {
             return res.status(500).json({
                 success: false,
                 message: err.toString()
@@ -129,6 +131,74 @@ class ClientController {
     }
 
     // Update Functions         *****************************************
+    async authenticate(req, res) {
+        try {
+            let client;
+
+            if (res.locals.role === "admin") {
+                const { clientId } = req.body || {};
+                client = await this.client.getClientWithSpecificField('id', clientId);
+            }
+            else {
+                const field = req.query.field;
+                const fieldValue = req.query.value;
+
+                if (!field || !fieldValue) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Query fields are required"
+                    })
+                }
+                client = await this.client.getClientWithSpecificField(field, fieldValue);
+            }
+
+            if (!client && client.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Client not found"
+                });
+            }
+
+            const clientData = client[0];
+
+            const timeRemaining = clientData.time_remaining;
+            if (timeRemaining <= 0 && clientData.status != 'paused') {
+                return res.status(400).json({
+                    success: true,
+                    message: 'No time or status is incorrect'
+                });
+            }
+
+            const now = new Date();
+            const expireAt = new Date(now.getTime() + (timeRemaining * 1000));
+            const fomattedExpireAt = expireAt.toLocaleString('sv-SE').replace('T', ' ');
+
+            await this.client.update(field, fieldValue, { status: 'active', expire_at: fomattedExpireAt });
+            try {
+                ClientManagement.allowClient(clientData.ip);
+            } catch (err) {
+                console.error("Failed to allow client:", err);
+                return res.status(500).json({ // TODO: Change this status code to 500 after development
+                    success: false,
+                    message: "Failed to allow client: " + err.message
+                });
+            }
+            await this.log.create("Client Connected", `Client ${clientData.name} is connected and will expire on ${fomattedExpireAt}`, "INFO");
+
+            return res.status(200).json({
+                sucess: true,
+                message: 'Client authenticated'
+            });
+
+        }
+        catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     async updateClientData(req, res) {
         try {
             const field = req.query.field;
@@ -229,6 +299,14 @@ class ClientController {
             }
 
             const client = await this.client.getClientWithSpecificField(field, fieldValue);
+
+            if (!client && client.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Client not found"
+                });
+            }
+
             const clientData = client[0];
 
             const timeRemaining = clientData.time_remaining + clientData.time_earned;
