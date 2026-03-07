@@ -144,7 +144,7 @@ class SocketServer {
             })
 
             socket.on('AUTH_CLIENT', async () => {
-                await this.axiosClient.post(
+                await this.axiosClient.patch(
                     `client/auth?field=mac&value=${socket.decoded.mac}`,
                     {},
                     {
