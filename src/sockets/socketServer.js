@@ -376,7 +376,7 @@ class SocketServer {
                     
                     client.clientData.time_earned += response.earnedTime;
                     await this.axiosClient.post(
-                        `client/earn?field=mac&value=${socket.decoded.mac}`,
+                        `client/earn?field=mac&value=${client.decoded.mac}`,
                         { time_earned: response.earnedTime, waste_code: response.wasteCode },
                         {
                             headers: {
