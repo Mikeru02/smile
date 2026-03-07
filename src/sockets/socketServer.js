@@ -58,7 +58,7 @@ class SocketServer {
                 if (decoded.role === 'user') {
                     this.arduino.sendCommand('CHECK_BIN');
                     const response = await this.axiosClient.get(
-                        `client/?field="mac"&value=${decoded.mac}`,
+                        `client/?field=mac&value=${decoded.mac}`,
                         {
                             headers: {
                                 'token': socket.token
