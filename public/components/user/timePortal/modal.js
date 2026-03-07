@@ -15,6 +15,9 @@ export default function Modal() {
                     <h1>Earned Time</p>
                     <p class="${styles['time-container']}"><span id="earn-hours-span" class="${styles['indiv-time']}">00</span> Hrs <span id="earn-min-span" class="${styles['indiv-time']}">00</span> Min <span id="earn-sec-span" class="${styles['indiv-time']}">00</span> Sec</p>
                 </div>
+                <div>
+                    <p>Timeout: <span id="countdown-timer">00</span>s</p>
+                </div>
                 <div class="${styles['button-container']}">
                     <button id="exit" class="${styles["action-button"]}">Exit</button>
                     <button id="proceed" class="${styles["action-button"]}">Proceed</button>

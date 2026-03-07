@@ -85,6 +85,19 @@ class SocketServer {
                 })
             })
 
+            socket.on('DROP_TIMEOUT', async () => {
+                const response = await this.axiosClient.patch(
+                    `client/?field=mac&value=${socket.decoded.mac}`,
+                    { status: "pending" },
+                    {
+                        headers: {
+                            "token": socket.token
+                        }
+                    }
+                );
+                socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
+            })
+
             socket.on('DROPPING', async () => {
                 if (this.currentBinStatus !== 'all_ok') {
                     socket.emit('DROP:blocked', {

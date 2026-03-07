@@ -176,19 +176,8 @@ export default function Events() {
             if (countdownInterval) clearInterval(countdownInterval);
             dropTimeout = null;
             countdownInterval = null;
-            await axios.patch(
-                `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
-                { status: 'pending' },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_SRC_KEY,
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
-            updateTimeRemaining();
-            }, dropTimeoutSec * 1000)
+            socketClient.emit("DROP_TIMEOUT");
+        }, dropTimeoutSec * 1000)
     }
 
     const updateTimeRemaining = () => {
