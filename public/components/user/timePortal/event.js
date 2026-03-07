@@ -290,7 +290,8 @@ export default function Events() {
             clearInterval(timeRemainingInterval);
             isConnected = false;
             timeRemainingInterval = null;
-            socketClient.emit('DEAUTH_CLIENT')
+            socketClient.emit('DEAUTH_CLIENT');
+            updateTimeRemaining();
         }
     });
 
