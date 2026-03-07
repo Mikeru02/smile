@@ -134,14 +134,16 @@ class ClientController {
     async authenticate(req, res) {
         try {
             let client;
+            let field;
+            let fieldValue;
 
             if (res.locals.role === "admin") {
                 const { clientId } = req.body || {};
                 client = await this.client.getClientWithSpecificField('id', clientId);
             }
             else {
-                const field = req.query.field;
-                const fieldValue = req.query.value;
+                field = req.query.field;
+                fieldValue = req.query.value;
 
                 if (!field || !fieldValue) {
                     return res.status(400).json({
