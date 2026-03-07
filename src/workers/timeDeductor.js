@@ -33,22 +33,39 @@ export default function startTimeDeductor() {
 
                 if (newStatus === 'pending') {
                     ClientManagement.revokeClient(client.ip);
+                    await axios.patch(
+                        `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?field=id&value=${client.id}`,
+                        {
+                            status: newStatus,
+                            time_remaining: newTimeRemaining,
+                            expire_at: null,
+                            connection_start_at: null,
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'apikey': process.env.SRC_KEY,
+                                'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
+                                    expiresIn: "1m"
+                                })
+                            }
+                        }
+                    )
+                    return;
                 }
 
                 await axios.patch(
-                    `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/id/${client.id}`,
+                    `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?field=id&value=${client.id}`,
                     {
-                        name: client.name,
-                        course: client.course,
-                        year_level: client.yearlevel,
                         status: newStatus,
                         time_remaining: newTimeRemaining,
-                        time_earned: client.time_earned,
                         expire_at: formattedExpireAt
                     }, {
                         headers: {
                             'Content-Type': 'application/json',
                             'apikey': process.env.SRC_KEY,
+                            'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
+                                expiresIn: "1m"
+                            })
                         }
                     }
                 )
