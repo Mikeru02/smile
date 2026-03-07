@@ -100,6 +100,11 @@ class SocketServer {
                     return;
                 }
 
+                socket.emit('DROP:allowed');
+                socket.emit('TIME_EARNED', { timeEarned: socket.clientData.time_earned });
+                console.log('[DROP] started by: ', socket.id);
+                this.activeClient = socket;
+                this.arduino.sendCommand('DROPPING');
                 await this.axiosClient.get(
                     `client/?field=mac&value=${decoded.mac}`,
                     { status: "dropping"},
@@ -109,12 +114,6 @@ class SocketServer {
                         }
                     }
                 )
-
-                socket.emit('DROP:allowed');
-                socket.emit('TIME_EARNED', { timeEarned: socket.clientData.time_earned });
-                console.log('[DROP] started by: ', socket.id);
-                this.activeClient = socket;
-                this.arduino.sendCommand('DROPPING');
             });
 
             socket.on('GET_ACCOUNTS', async () => {
