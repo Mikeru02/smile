@@ -204,7 +204,7 @@ class Account {
             }
 
             const [row] = await this.db.execute(
-                `DELEte FROM accounts WHERE ${field}=?`,
+                `DELETE FROM accounts WHERE ${field}=?`,
                 [value]
             );
 
