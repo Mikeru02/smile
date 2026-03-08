@@ -22,6 +22,7 @@ export default async function Events() {
     let timeRemainingInterval = null;
     let isInternetUp;
     const disableTimeSeconds = 5;
+    let connectLock = false;
 
     let isConnected = false;
 
@@ -238,6 +239,7 @@ export default async function Events() {
     }
 
     const updateConnectButtonState = () => {
+        if (connectLock) return;
         const isTimeZero = timeRemainingSeconds <= 0;
 
         if (isTimeZero || !isInternetUp) {
@@ -298,14 +300,16 @@ export default async function Events() {
             timeRemainingInterval = null;
             socketClient.emit('DEAUTH_CLIENT');
         }
+
+        connectLock = true;
+
         connectBtn.disabled = true;
         connectBtn.style.opacity = '0.5';
         connectBtn.style.cursor = 'not-allowed';
         
         setTimeout(() => {
-            connectBtn.disabled = false;
-            connectBtn.style.opacity = '1';
-            connectBtn.style.cursor = 'pointer';
+            connectLock = false;
+            updateConnectButtonState();
         }, disableTimeSeconds * 1000);
     });
 
