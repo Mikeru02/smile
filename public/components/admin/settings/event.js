@@ -108,6 +108,10 @@ export default async function PageEvent() {
         window.app.pushRoute('/admin/settings');
     })
 
+    autoBackupToggle.addEventListener('change', () => {
+        toggleBackupInputs(autoBackupToggle.checked);
+    });
+    
     const utility = document.getElementById('utility');
     const utilityCheckBox = document.getElementById('utility-checkbox')
     utility.addEventListener('click', async function() {
