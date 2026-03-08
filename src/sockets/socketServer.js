@@ -229,6 +229,7 @@ class SocketServer {
                     }
                 )
                 socket.clientData = response.data.data[0];
+                console.log("DEBUG: ", socket.clientData);
                 socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
 
             });
