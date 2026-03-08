@@ -610,7 +610,6 @@ select.form-input:hover {
 /* Responsive Design */
 @media (max-width: 768px) {
   .modal-content {
-    margin: 1rem;
     max-width: calc(100% - 2rem);
     max-height: 95vh;
     border-radius: 1rem;
@@ -656,7 +655,6 @@ select.form-input:hover {
 
 @media (max-width: 1024px) and (max-height: 768px) {
   .modal-content {
-    margin: 1rem;
     max-height: 90vh;
   }
   
