@@ -40,8 +40,8 @@ export default async function Event() {
             if (!clientId) return;
 
             try {
-                await axios.delete(
-
+                await axiosClient.delete(
+                    `client/?field=id&value=${clientId}`
                 )
             }
             catch (err) {
@@ -127,6 +127,7 @@ export default async function Event() {
                     if (createdAtElement) createdAtElement.value = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
 
                     saveBtn.dataset.clientId = button.dataset.id;
+                    deleteBtn.dataset.clientId = button.dataset.id;
 
                     modal.style.display = 'block';
                 } catch (err) {
