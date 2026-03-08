@@ -55,14 +55,14 @@ export default async function PageEvent() {
         )
         const settingData = settingResponse.data.data[0];
         console.log("DEBUG", settingData);
+        frequency.value = settingData.backup_freq;
+        compression.value = settingData.compression;
+        location.value = settingData.location;
+        retention.value = settingData.retention;
 
         if (settingData.auto_backup) {
             backupCheckbox.checked = true;
             toggleBackupInputs(backupCheckbox.checked);
-            frequency.value = settingData.backup_freq;
-            compression.value = settingData.compression;
-            location.value = settingData.location;
-            retention.value = settingData.retention;
         }
         else {
             backupCheckbox.checked = false;
