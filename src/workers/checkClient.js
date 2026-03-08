@@ -24,6 +24,8 @@ export default async function checkClients() {
                 `client/?field=ip&value=not_null`,
             )
 
+            console.log("RESPONSE: ", response);
+
             const clients = response.data.data;
             console.log("CLIENTS", clients);
 
@@ -35,7 +37,7 @@ export default async function checkClients() {
                         (new Date() - new Date(client.connection_start_at)) / 1000
                     )
 
-                    const updatedTimeRemaining = client.time_remaining - consumedTime;
+                    const updatedTimeRemaining = Math.max(0, client.time_remaining - consumedTime);
 
                     ClientManagement.revokeClient(client.ip);
 
