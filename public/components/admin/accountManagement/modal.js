@@ -32,13 +32,17 @@ export default function Modal() {
                         </div>
 
                         <div class="${styles['form-group']}">
-                            <label for="admin-password">Name</label>
+                            <label for="admin-password">Password</label>
                             <input type="text" id="admin-password" class="${styles['form-input']}" placeholder="Enter password">
                         </div>
 
                         <div class="${styles['form-group']}">
-                            <label for="client-name">Year / Grade Level</label>
-                            <input type="text" id="client-yearlevel" class="${styles['form-input']}" placeholder="Enter client year / grade level">
+                            <label for="admin-created_at">Created At</label>
+                            <input type="text" id="admin-created_at" class="${styles['form-input']}" placeholder="Enter client year / grade level">
+                        </div>
+
+                        <div class="${styles['form-group']}">
+                            <button id="delete" class="${styles["action-button"]} ${styles["btn-delete"]}">Delete</button>
                         </div>
                     </div>
                 </div>

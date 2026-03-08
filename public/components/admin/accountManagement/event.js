@@ -21,6 +21,7 @@ export default async function PageEvents() {
     );
 
     const modal = document.getElementById('modal');
+    const createModal = document.getElementById('create-modal')
     
     const accounts = response.data.data;
     console.log(accounts);
