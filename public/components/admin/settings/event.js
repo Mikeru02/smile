@@ -19,10 +19,29 @@ export default async function PageEvent() {
     const retention = document.getElementById('backup-retention');
 
     function toggleBackupInputs(enabled) {
-        frequency.disabled = !enabled;       // select → disabled
-        compression.disabled = !enabled;     // select → disabled
-        location.readOnly = !enabled;        // input → readOnly
-        retention.readOnly = !enabled;       // input → readOnly
+        // Select elements
+        const inputs = [
+            { el: frequency, isSelect: true },
+            { el: compression, isSelect: true },
+            { el: location, isSelect: false },
+            { el: retention, isSelect: false }
+        ];
+
+        inputs.forEach(({ el, isSelect }) => {
+            if (enabled) {
+                if (isSelect) el.disabled = false;
+                else el.readOnly = false;
+
+                el.style.cursor = 'auto';
+                el.style.opacity = '1';
+            } else {
+                if (isSelect) el.disabled = true;
+                else el.readOnly = true;
+
+                el.style.cursor = 'not-allowed';
+                el.style.opacity = '0.6';
+            }
+        });
     }
 
     try {
