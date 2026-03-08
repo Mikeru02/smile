@@ -39,12 +39,15 @@ export default async function checkClients() {
                         .slice(0, 19)
                         .replace("T", " ");
 
-                    const consumedTime = Math.floor(
-                        (new Date() - new Date(client.connection_start_at)) / 1000
-                    )
+                    let updatedTimeRemaining = client.time_remaining;
 
-                    const updatedTimeRemaining = Math.max(0, client.time_remaining - consumedTime);
+                    if (client.connection_start_at) {
+                        const consumedTime = Math.floor(
+                            (new Date() - new Date(client.connection_start_at)) / 1000
+                        )
 
+                        updatedTimeRemaining = Math.max(0, client.time_remaining - consumedTime);
+                    }
                     ClientManagement.revokeClient(client.ip);
 
                     await axiosClient.patch(
