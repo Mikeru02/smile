@@ -1,3 +1,5 @@
+import { exec } from "child_process";
+
 export function pingClient(ip) {
     return new Promise((resolve) => {
         exec(`ping -c 1 -W 1 ${ip}`, (pingErr) => {
