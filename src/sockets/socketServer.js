@@ -228,7 +228,7 @@ class SocketServer {
                         }
                     }
                 )
-                socket.clientData = response.data.data;
+                socket.clientData = response.data.data[0];
                 socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
 
             });
