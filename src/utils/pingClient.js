@@ -2,24 +2,26 @@ import { exec } from "child_process";
 
 export function pingClient(ip) {
     return new Promise((resolve) => {
-        // First, try ping
-        exec(`ping -c 1 -W 1 ${ip}`, (err) => {
-            if (!err) {
-                return resolve(true); // reachable via ping
-            }
+        // Try ping first
+        exec(`ping -c 1 -W 1 ${ip}`, (pingErr) => {
+            if (!pingErr) return resolve(true); // reachable via ping
 
-            // If ping fails, check ARP table
-            exec(`arp -n ${ip}`, (arpErr, stdout) => {
-                if (arpErr) {
-                    return resolve(false);
-                }
+            // Fallback to 'ip neigh' state
+            exec(`ip neigh show ${ip}`, (neighErr, neighStdout) => {
+                if (neighErr || !neighStdout) return resolve(false);
 
-                // If ARP entry exists, the client is still online
-                if (stdout.includes(ip)) {
+                // Consider REACHABLE or STALE as online
+                if (neighStdout.includes("REACHABLE") || neighStdout.includes("STALE")) {
                     return resolve(true);
                 }
 
-                return resolve(false); // unreachable
+                // FAILED or DELAY means unreachable
+                if (neighStdout.includes("FAILED") || neighStdout.includes("DELAY")) {
+                    return resolve(false);
+                }
+
+                // Fallback in case state is unknown
+                resolve(false);
             });
         });
     });
