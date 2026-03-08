@@ -20,6 +20,7 @@ export default async function PageEvent() {
                 }
             }
         )
+        console.log(prohibitedResponse);
         const prohibitedLinks = prohibitedResponse.data.data;
         console.log(prohibitedLinks);
         const domainListContainer = document.getElementById('domain-list');
