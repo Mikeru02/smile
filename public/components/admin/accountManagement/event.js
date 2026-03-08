@@ -61,7 +61,7 @@ export default async function PageEvents() {
             CSVExporter.download(accounts.data.data, "accounts.csv");
         }
         catch (err) {
-
+            
         }
     })
 
