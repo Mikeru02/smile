@@ -39,7 +39,8 @@ export default async function PageEvent() {
                 }
             }
         )
-        const settingData = settingResponse.data.data
+        const settingData = settingResponse.data.data;
+        console.log("DEBUG", settingData);
     }
     catch (err) {
         console.error("[ERROR]: ", settingResponse.data);
