@@ -1,18 +1,19 @@
 import axios from "axios";
-import { populateHeaders, populateTable } from "../../../utils/populateTable";
+import { populateHeaders, populateTable } from "../../../utils/populateTable.js";
+import CSVExporter from "../../../utils/csvExporter.js";
 
 export default async function PageEvents() {
-    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
-
-    const response = await axios.get(
-        `${baseUrl}/api/v1/logs/`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "apikey": import.meta.env.VITE_SRC_KEY,
-                "token": localStorage.getItem('token')
-            }
+    const axiosClient = axios.create({
+        baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": import.meta.env.VITE_SRC_KEY,
+            "token": localStorage.getItem("token")
         }
+    });
+
+    const response = await axiosClient.get(
+        `logs/`,
     )
 
     const logs = response.data.data;
@@ -23,4 +24,17 @@ export default async function PageEvents() {
 
     let headers = populateHeaders(thead, "logs");
     populateTable(tbody, logs, headers);
+
+    const exportBtn = document.getElementById('export-logs');
+    exportBtn.addEventListener('click', async function() {
+        try {
+            const logs = await axiosClient.get(
+                `logs/`
+            )
+            CSVExporter.download(logs.data.data, "logs.csv");
+        }
+        catch (err) {
+
+        }
+    })
 }
