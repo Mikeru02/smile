@@ -10,9 +10,6 @@ export default async function checkClients() {
         headers: {
             'Content-Type': 'application/json',
             'apikey': process.env.SRC_KEY,
-            'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
-                expiresIn: "1m"
-            })
         }
     })
 
@@ -24,10 +21,7 @@ export default async function checkClients() {
                 `client/?field=ip&value=not_null`,
             )
 
-            console.log("RESPONSE: ", response);
-
             const clients = response.data.data;
-            console.log("CLIENTS", clients);
 
             const checks = clients.map(async (client) => {
                 const reachable = await pingClient(client.ip);
@@ -51,6 +45,13 @@ export default async function checkClients() {
                             connection_start_at: null,
                             updated_at: new Date()
                         },
+                        {
+                            headers: {
+                                'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
+                                    expiresIn: "1m"
+                                })
+                            }
+                        }
                     )
                 }
             })
