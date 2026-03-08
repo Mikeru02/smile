@@ -11,10 +11,6 @@ export default async function PageEvents() {
         }
     });
 
-    const addAccountBtn = document.getElementById('add-account');
-        addAccountBtn.addEventListener('click', function() {
-    })
-
     const response = await axiosClient.get(
         `account/all`,
         {
@@ -61,8 +57,12 @@ export default async function PageEvents() {
             CSVExporter.download(accounts.data.data, "accounts.csv");
         }
         catch (err) {
-            
+
         }
     })
 
+    const addAccountBtn = document.getElementById('add-account');
+    addAccountBtn.addEventListener('click', function() {
+        modal.style.display = "flex"
+    })
 }
