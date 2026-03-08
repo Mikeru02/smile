@@ -63,6 +63,6 @@ export default async function PageEvents() {
 
     const addAccountBtn = document.getElementById('add-account');
     addAccountBtn.addEventListener('click', function() {
-        modal.style.display = "flex"
+        modal.style.display = "block";
     })
 }
