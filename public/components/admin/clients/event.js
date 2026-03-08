@@ -99,7 +99,7 @@ export default async function Event() {
             button.addEventListener('click', async () => {
                 try {
                     const clientData = await axios.get(
-                        `${baseUrl}/api/v1/client/client/${button.dataset.id}`,
+                        `${baseUrl}/api/v1/client/?field=id&value=${button.dataset.id}`,
                         {
                             headers: {
                                 "Content-Type": "application/json",
