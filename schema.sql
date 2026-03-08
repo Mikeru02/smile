@@ -90,8 +90,8 @@ CREATE TABLE `prohibited_links`(
 
 CREATE TABLE `settings`(
     `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `utility_mode` BOOLEAN
-    `auto_backup` BOOLEAN
+    `utility_mode` BOOLEAN,
+    `auto_backup` BOOLEAN,
     `backup_freq` ENUM('hourly', 'daily', 'weekly', 'monthly') DEFAULT 'daily',
     `compression` ENUM('none', 'gzip', 'zip') DEFAULT 'zip',
     `location` VARCHAR(100),
@@ -126,4 +126,4 @@ VALUES
 
 INSERT INTO `settings` (`utility_mode`, `auto_backup`, `backup_freq`, `compression`, `location`, `retention`) 
 VALUES
-    (FALSE, TRUE, 'daily', 'zip', '/root/backup/smile', 30)
+    (FALSE, TRUE, 'daily', 'zip', '/root/backup/smile', 30);
