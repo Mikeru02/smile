@@ -88,6 +88,17 @@ CREATE TABLE `prohibited_links`(
     `created_at` DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `settings`(
+    `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `utility_mode` BOOLEAN
+    `auto_backup` BOOLEAN
+    `backup_freq` ENUM('hourly', 'daily', 'weekly', 'monthly') DEFAULT 'daily',
+    `compression` ENUM('none', 'gzip', 'zip') DEFAULT 'zip',
+    `location` VARCHAR(100);
+    `retention` INT DEFAULT 30,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- DUMP DATA
 -- INSERT INTO `clients` (`ip`, `name`, `course`, `yearlevel`, `status`, `time_remaining`, `time_earned`, `expire_at`, `connection_start_at`, `created_at`, `updated_at`) VALUES ('127.0.0.1', 'localhost', 'BSCS', 4, 'pending', 0, 0, NULL, NULL, NOW(), NOW());
 
