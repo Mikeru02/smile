@@ -36,7 +36,7 @@ export default async function PageEvents() {
     seeMoreBtns.forEach(button => {
         button.addEventListener('click', async function() {
             const accountData = await axiosClient.get(
-                `admin/account/${button.dataset.id}`,
+                `account/?field=id&value=${button.dataset.id}`,
                 {
                     headers: {
                         'token': localStorage.getItem('token')
