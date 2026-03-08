@@ -11,6 +11,7 @@ export default async function PageEvent() {
         }
     })
 
+    const backupCheckbox = document.getElementById('backup-checkbox');
     const autoBackupToggle = document.getElementById('auto-backup');
     const frequency = document.getElementById('backup-frequency');
     const compression = document.getElementById('backup-compression');
@@ -56,16 +57,16 @@ export default async function PageEvent() {
         console.log("DEBUG", settingData);
 
         if (settingData.auto_backup) {
-            autoBackupToggle.checked = true;
-            toggleBackupInputs(autoBackupToggle.checked);
+            backupCheckbox.checked = true;
+            toggleBackupInputs(backupCheckbox.checked);
             frequency.value = settingData.backup_freq;
             compression.value = settingData.compression;
             location.value = settingData.location;
             retention.value = settingData.retention;
         }
         else {
-            autoBackupToggle.checked = false;
-            toggleBackupInputs(autoBackupToggle.checked);
+            backupCheckbox.checked = false;
+            toggleBackupInputs(backupCheckbox.checked);
         }
     }
     catch (err) {
@@ -108,7 +109,6 @@ export default async function PageEvent() {
         window.app.pushRoute('/admin/settings');
     })
 
-    const backupCheckbox = document.getElementById('backup-checkbox');
     backupCheckbox.addEventListener('change', () => {
         toggleBackupInputs(autoBackupToggle.checked);
     });
