@@ -109,7 +109,7 @@ export default async function PageEvent() {
     })
 
     const backupCheckbox = document.getElementById('backup-checkbox');
-    autoBackupToggle.addEventListener('change', () => {
+    autoBackupToggle.addEventListener('click', () => {
         const isChecked = backupCheckbox.checked;
         toggleBackupInputs(autoBackupToggle.checked);
     });
