@@ -33,12 +33,13 @@ export default async function checkToken(token) {
 
             console.log("RESPONSE", response)
 
-            // const clientData = response.data.data[0];
+            const clientData = response.data.data[0];
 
-            // if (clientData) {
-            //     // No client found
-            //     return true;
-            // }
+            if (!clientData && clientData.length === 0) {
+                // No client found
+                localStorage.removeItem('token');
+                return false;
+            }
 
             return true;
         } catch (error) {
