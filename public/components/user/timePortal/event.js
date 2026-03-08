@@ -21,7 +21,7 @@ export default async function Events() {
     let timeEarnedSeconds = 0;
     let timeRemainingInterval = null;
     let isInternetUp;
-    const disableTimeSeconds = 5;
+    const disableTimeSeconds = 3;
     let connectLock = false;
 
     let isConnected = false;
