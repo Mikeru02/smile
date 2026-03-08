@@ -3,6 +3,12 @@ import styles from './component.module.css';
 import populateDomainListContainer from "../../../utils/populateDomainList";
 
 export default async function PageEvent() {
+    const autoBackupToggle = document.getElementById('auto-backup');
+    const frequency = document.getElementById('backup-frequency');
+    const compression = document.getElementById('backup-compression');
+    const location = document.getElementById('backup-location');
+    const retention = document.getElementById('backup-retention');
+    
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
         headers: {
@@ -65,12 +71,6 @@ export default async function PageEvent() {
         location.readOnly = !enabled;        // input → readOnly
         retention.readOnly = !enabled;       // input → readOnly
     }
-
-    const autoBackupToggle = document.getElementById('auto-backup');
-    const frequency = document.getElementById('backup-frequency');
-    const compression = document.getElementById('backup-compression');
-    const location = document.getElementById('backup-location');
-    const retention = document.getElementById('backup-retention');
 
     const removeButtons = document.querySelectorAll(".remove-btn")
     removeButtons.forEach(button => {
