@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { populateHeaders, populateTable } from '../../../utils/populateTable.js';
+import CSVExporter from '../../../utils/csvExporter.js';
 
 export default async function Event() {
     const axiosClient = axios.create({
@@ -45,7 +46,11 @@ export default async function Event() {
                 )
             }
             catch (err) {
-
+                console.error('Error saving client:', err.response?.data || err.message);
+            }
+            finally {
+                modal.style.display = 'none';
+                window.app.pushRoute('/admin/clients');
             }
         })
 
@@ -139,4 +144,17 @@ export default async function Event() {
     } catch (err) {
         console.error('Error fetching all clients:', err);
     }
+
+    const exportBtn = document.getElementById('export-btn');
+    exportBtn.addEventListener('click', async function() {
+        try {
+            const clients = await axiosClient.get(
+                `client/all`
+            )
+            CSVExporter.save("clients.csv", clients);
+        }
+        catch (err) {
+
+        }
+    })
 }
