@@ -32,7 +32,7 @@ class Setting {
             const clauseValues = keys.map(key => setFields[key]);
 
             const [row] = await this.db.execute(
-                `UPDATE setting SET ${setClause}`,
+                `UPDATE settings SET ${setClause}`,
                 clauseValues
             )
             return row || null;
