@@ -340,10 +340,10 @@ export default async function Events() {
 
     const proceedBtn = document.getElementById('proceed');
     proceedBtn.addEventListener('click', async function() {
+        socketClient.emit('ADD_TIME');
         socketClient.emit('DROP_COMPLETE');
         modal.style.display = 'none';
         clearDropTimeouts();
-        socketClient.emit('ADD_TIME');
 
         dropBtn.disabled = true;
         dropBtn.style.opacity = '0.5';

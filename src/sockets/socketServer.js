@@ -205,6 +205,17 @@ class SocketServer {
                             }
                         }
                     )
+                    const response = await this.axiosClient.get(
+                        `client/?field=mac&value=${socket.decoded.mac}`,
+                        {
+                            headers: {
+                                'token': socket.token
+                            }
+                        }
+                    )
+                    socket.clientData = response.data.data[0];
+                    console.log("DEBUG: ", socket.clientData);
+                    socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
                     socket.emit('DROP_FINISHED');
                 }
             })
