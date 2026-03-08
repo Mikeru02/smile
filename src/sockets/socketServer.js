@@ -210,6 +210,7 @@ class SocketServer {
             })
 
             socket.on('ADD_TIME', async() => {
+                try {
                 await this.axiosClient.patch(
                     `client/add-time?field=mac&value=${socket.decoded.mac}`,
                     {},
@@ -231,7 +232,10 @@ class SocketServer {
                 socket.clientData = response.data.data[0];
                 console.log("DEBUG: ", socket.clientData);
                 socket.emit('TIME_REMAINING', { timeRemaining: socket.clientData.time_remaining });
-
+                }
+                catch (err) {
+                    console.error('ADD_TIME error:', err.message);
+                }
             });
 
             socket.on('DEDUCT_TIME', (data) => {
