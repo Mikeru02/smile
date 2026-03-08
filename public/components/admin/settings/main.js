@@ -40,8 +40,8 @@ export default function MainContent(root) {
 
                         <div class="${styles["setting-item"]}">
                             <label for="auto-backup">Enable Auto Backup</label>
-                            <div class="${styles["switch"]}">
-                                <input type="checkbox" id="auto-backup">
+                            <div class="${styles["switch"]}" id="auto-backup">
+                                <input type="checkbox">
                                 <span class="${styles["slider"]}"></span>
                             </div>
                             <small>Automatically backup database</small>
