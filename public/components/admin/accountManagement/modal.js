@@ -7,7 +7,7 @@ export function Modal() {
             <div class="${styles['modal-content']}">
                 <div class="${styles['top-container']}">
                     <div class="${styles['top-container-text']}">
-                        <h1>Account Details Details</h1>
+                        <h1>Account Details</h1>
                         <p>Manage and View Client Information</p>
                     </div>
                 </div>
@@ -63,8 +63,8 @@ export function CreateModal() {
             <div class="${styles['modal-content']}">
                 <div class="${styles['top-container']}">
                     <div class="${styles['top-container-text']}">
-                        <h1>Account Details Details</h1>
-                        <p>Manage and View Client Information</p>
+                        <h1>Create Account</h1>
+                        <p>Create another account.</p>
                     </div>
                 </div>
                 <div class="${styles['center-container']}">
