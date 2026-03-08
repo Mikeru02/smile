@@ -5,9 +5,9 @@ import { getRole } from '../../../utils/getRole.js';
 import ILLUSTRATION2 from '/icons/warning.svg';
 import styles from './component.module.css';
 
-export default function Events() {
+export default async function Events() {
     const token = localStorage.getItem('token');
-    const validToken = checkToken(token);
+    const validToken = await checkToken(token);
     const role = getRole(token);
 
     // Intervals

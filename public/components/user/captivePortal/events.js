@@ -6,7 +6,7 @@ import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
 export default async function Events() {
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
-    const validToken = checkToken(localStorage.getItem('token'));
+    const validToken = await checkToken(localStorage.getItem('token'));
 
     if (validToken) {
         window.app.pushRoute('/portal');
