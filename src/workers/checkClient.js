@@ -19,6 +19,13 @@ export default async function checkClients() {
 
             const response = await axiosClient.get(
                 `client/?field=ip&value=not_null`,
+                {
+                    headers: {
+                        'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
+                            expiresIn: "1m"
+                        })
+                    }
+                }
             )
 
             console.log("RESPONSE: ", response);
