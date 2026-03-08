@@ -6,7 +6,7 @@ const TABLE_CONFIG = {
         { label: "Device Name", key: "hostname" },
         { label: "Name", key: "name" },
         { label: "Course", key: "course" },
-        { label: "Year Level", key: "yearlevel" },
+        { label: "Year Level", key: "year_level" },
         { label: "Status", key: "status" },
         { label: "Time Remaining", key: "time_remaining" },
         { label: "Details", key: "details" },
