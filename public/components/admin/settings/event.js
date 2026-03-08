@@ -137,6 +137,16 @@ export default async function PageEvent() {
             backupCheckbox.checked = true;
         }
         toggleBackupInputs(backupCheckbox.checked);
+
+        await axiosClient.patch(
+            `setting/`,
+            { auto_backup: backupCheckbox.checked },
+            {
+                headers: {
+                    "token": localStorage.getItem("token")
+                }
+            }
+        )
     });
 
     const utility = document.getElementById('utility');
