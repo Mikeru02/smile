@@ -13,7 +13,7 @@ export default async function PageEvents() {
     });
 
     const response = await axiosClient.get(
-        `logs/`,
+        `logs/?limit=100`,
     )
 
     const logs = response.data.data;

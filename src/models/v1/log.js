@@ -19,11 +19,17 @@ class Log {
         }
     }
 
-    async getLogs() {
+    async getLogs(limit = null) {
         try {
-            const [rows] = await this.db.execute(
-                `SELECT * FROM logs ORDER BY id DESC`,
-            );
+            let query = `SELECT * FROM logs ORDER BY timestamp DESC`;
+            let params = [];
+
+            if (limit !== null) {
+                query += ` LIMIT ?`;
+                params.push(limit);
+            }
+
+            const [rows] = await this.db.execute(query, params);
             return rows;
         } catch (err) {
             console.error("[ERROR] log.getLogs", err);

@@ -24,7 +24,8 @@ class LogController {
 
     async get(req, res) {
         try {
-            const result = await this.log.getLogs();
+            const limit = req.query.limit ? Number(req.query.limit) : null;
+            const result = await this.log.getLogs(limit);
             return res.status(200).json({
                 success: true,
                 data: result
