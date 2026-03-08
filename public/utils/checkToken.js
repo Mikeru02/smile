@@ -6,7 +6,7 @@ export default async function checkToken(token) {
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
         headers: {
             'Content-Type': 'application/json',
-            'apikey': process.env.SRC_KEY,
+            'apikey': import.meta.env.VITE_SRC_KEY,
         }
     })
 
