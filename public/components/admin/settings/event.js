@@ -110,7 +110,7 @@ export default async function PageEvent() {
     })
 
     backupCheckbox.addEventListener('change', () => {
-        toggleBackupInputs(autoBackupToggle.checked);
+        toggleBackupInputs(backupCheckbox.checked);
     });
 
     autoBackupToggle.addEventListener('click', () => {
