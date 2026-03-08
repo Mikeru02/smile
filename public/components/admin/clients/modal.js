@@ -67,6 +67,10 @@ export default function Modal() {
                             <label for="client-createdAt">Created At</label>
                             <input type="text" id="client-createdAt" class="${styles['form-input']}" readonly>
                         </div>
+
+                        <div class="${styles['form-group']}">
+                            <button id="delete" class="${styles["action-button"]} ${styles["btn-delete"]}">Delete</button>
+                        </div>
                     </div>
                 </div>
                 <div class="${styles['button-container']}">

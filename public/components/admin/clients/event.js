@@ -4,15 +4,18 @@ import { populateHeaders, populateTable } from '../../../utils/populateTable.js'
 export default async function Event() {
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
 
+    const axiosClient = axios.create({
+        baseUrl: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": import.meta.env.VITE_SRC_KEY,
+            "token": localStorage.getItem("token")
+        }
+    })
     try {
-        const allClients = await axios.get(
-            `${baseUrl}/api/v1/client/all`, {
-            headers: {
-                "Content-Type": "application/json",
-                "apikey": import.meta.env.VITE_SRC_KEY,
-                "token": localStorage.getItem("token")
-            }
-        });
+        const allClients = await axiosClient.get(
+            `client/all`
+        );
 
         const clients = allClients.data.data;
         console.log("CLIENTS:", clients);
@@ -26,12 +29,27 @@ export default async function Event() {
         populateTable(tbody, clients, headers);
 
         const modal = document.getElementById('modal');
+        const deleteBtn = document.getElementById('delete');
         const saveBtn = document.getElementById('save');
         const exitBtn = document.getElementById('exit');
 
         exitBtn.addEventListener('click', () => {
             modal.style.display = 'none';
         });
+
+        deleteBtn.addEventListener('click', async () => {
+            const clientId = deleteBtn.dataset.clientId;
+            if (!clientId) return;
+
+            try {
+                await axios.delete(
+
+                )
+            }
+            catch (err) {
+
+            }
+        })
 
         saveBtn.addEventListener('click', async () => {
             const clientId = saveBtn.dataset.clientId;
@@ -42,33 +60,20 @@ export default async function Event() {
             try {
                 // Handle auth/deauth first
                 if (clientStatus === 'active') {
-                    await axios.post(
-                        `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
+                    await axiosClient.post(
+                        `client/auth`,
                         { clientId },
-                        { headers: {
-                            'Content-Type': 'application/json',
-                            'apikey': import.meta.env.VITE_SRC_KEY,
-                            'token': localStorage.getItem('token')
-                        }}
                     );
                 } else if (clientStatus === 'paused') {
-                    const deauthResponse = await axios.post(
-                        `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
+                    const deauthResponse = await axiosClient.post(
+                        `client/deauth`,
                         { clientId },
-                        {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'apikey': import.meta.env.VITE_SRC_KEY,
-                                'token': localStorage.getItem('token')
-                            }
-                        }
                     );
-                    console.log("Deauth Response:", deauthResponse);
                 }
 
                 // Then update client info
-                const patchResponse = await axios.patch(
-                    `${baseUrl}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/id/${clientId}`,
+                const patchResponse = await axiosClient.patch(
+                    `client/?field=id&value=${clientId}`,
                     {
                         name: document.getElementById('client-name').value,
                         course: document.getElementById('client-course').value,
@@ -76,13 +81,6 @@ export default async function Event() {
                         status: clientStatus,
                         time_remaining: Number(document.getElementById('client-timeRemaining').value),
                         time_earned: Number(document.getElementById('client-timeEarned').value)
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            "apikey": import.meta.env.VITE_SRC_KEY,
-                            "token": localStorage.getItem('token')
-                        }
                     }
                 );
 
@@ -98,8 +96,8 @@ export default async function Event() {
         seeMore.forEach(button => {
             button.addEventListener('click', async () => {
                 try {
-                    const clientData = await axios.get(
-                        `${baseUrl}/api/v1/client/?field=id&value=${button.dataset.id}`,
+                    const clientData = await axiosClient.get(
+                        `client/?field=id&value=${button.dataset.id}`,
                         {
                             headers: {
                                 "Content-Type": "application/json",
