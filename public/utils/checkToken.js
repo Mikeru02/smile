@@ -1,6 +1,15 @@
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
-export default function checkToken(token) {
+export default async function checkToken(token) {
+    const axiosClient = axios.create({
+        baseURL: `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/`,
+        headers: {
+            'Content-Type': 'application/json',
+            'apikey': process.env.SRC_KEY,
+        }
+    })
+
     if (!token) {
         return false;
     } else {
@@ -11,9 +20,25 @@ export default function checkToken(token) {
             if (decoded.exp < currentTime) {
                 localStorage.removeItem('token');
                 return false;
-            } else {
-                return true;
             }
+
+            const response = await axiosClient.get(
+                `client/?field=mac&value=${decoded.mac}`,
+                {
+                    headers: {
+                        "token": token
+                    }
+                }
+            )
+
+            const clientData = response.data.data[0];
+
+            if (!clientData.ip) {
+                localStorage.removeItem('token');
+                return false;
+            }
+
+            return true;
         } catch (error) {
             localStorage.removeItem('token');
             return false;
