@@ -286,16 +286,6 @@ export default async function Events() {
 
     const connectBtn = document.getElementById('connect');
     connectBtn.addEventListener('click', async function() {
-        connectBtn.disabled = true;
-        connectBtn.style.opacity = '0.5';
-        connectBtn.style.cursor = 'not-allowed';
-        
-        setTimeout(() => {
-            connectBtn.disabled = false;
-            connectBtn.style.opacity = '1';
-            connectBtn.style.cursor = 'pointer';
-        }, disableTimeSeconds * 1000);
-
         if (!isConnected) { 
             connect.textContent = 'Pause';
             isConnected = true;
@@ -308,6 +298,15 @@ export default async function Events() {
             timeRemainingInterval = null;
             socketClient.emit('DEAUTH_CLIENT');
         }
+        connectBtn.disabled = true;
+        connectBtn.style.opacity = '0.5';
+        connectBtn.style.cursor = 'not-allowed';
+        
+        setTimeout(() => {
+            connectBtn.disabled = false;
+            connectBtn.style.opacity = '1';
+            connectBtn.style.cursor = 'pointer';
+        }, disableTimeSeconds * 1000);
     });
 
 
