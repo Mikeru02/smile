@@ -151,7 +151,7 @@ export default async function Event() {
             const clients = await axiosClient.get(
                 `client/all`
             )
-            CSVExporter.save("clients.csv", clients);
+            CSVExporter.download(clients, "clients.csv");
         }
         catch (err) {
 

@@ -1,42 +1,42 @@
-import fs from 'fs';
-
 export default class CSVExporter {
-    static convert(data) {
-        if (!Array.isArray(data)) {
-            throw new Error('Data must be an array of objects');
-        }
 
-        if (data.length === 0) {
+    static convert(data) {
+        if (!Array.isArray(data) || data.length === 0) {
             return "";
         }
 
         const headers = Object.keys(data[0]);
+
         const escapeValue = (value) => {
-            if (value === null || value === undefined) {
-                return "";
-            }
-
-            const stringValue = String(value);
-
-            return `"${stringValue.replace(/"/g, '""')}"`;
+            if (value === null || value === undefined) return "";
+            return `"${String(value).replace(/"/g, '""')}"`;
         };
 
-        const rows = data.map(row => {
-            return headers.map(header => {
-                return escapeValue(row[header]);
-            }).join(",");
-        });
+        const rows = data.map(row =>
+            headers.map(header => escapeValue(row[header])).join(",")
+        );
 
-        const csv = [
+        return [
             headers.join(","),
             ...rows
         ].join("\n");
-
-        return csv;
     }
 
-    static save(filePath, data) {
+    static download(data, filename = "export.csv") {
         const csv = this.convert(data);
-        fs.writeFileSync(filePath, csv, "utf8");
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     }
+
 }
