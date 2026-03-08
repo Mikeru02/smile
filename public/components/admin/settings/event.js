@@ -113,11 +113,12 @@ export default async function PageEvent() {
         const isChecked = backupCheckbox.checked;
         if (isChecked) {
             backupCheckbox.checked = false;
+            toggleBackupInputs(autoBackupToggle.checked);
         }
         else {
             backupCheckbox.checked = true;
+            toggleBackupInputs(autoBackupToggle.checked);
         }
-        toggleBackupInputs(autoBackupToggle.checked);
     });
 
     const utility = document.getElementById('utility');
