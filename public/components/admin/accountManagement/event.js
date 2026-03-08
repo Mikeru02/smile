@@ -44,7 +44,7 @@ export default async function PageEvents() {
                 }
             );
 
-            console.log("DEBUG", account.data.data)
+            console.log("DEBUG", accountData.data.data)
 
             const account = accountData.data.data[0];
             console.log(account);
