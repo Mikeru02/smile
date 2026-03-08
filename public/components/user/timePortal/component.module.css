@@ -239,3 +239,19 @@
 .center-container h1 {
     margin-top: 2rem;
 }
+
+.progress-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 10px;
+    height: 12px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 100%; /* Start full and shrink */
+    background-color: #4caf50;
+    transition: width 1s linear;
+}

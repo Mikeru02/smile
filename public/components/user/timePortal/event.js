@@ -151,9 +151,10 @@ export default async function Events() {
 
         // Reset visual timer
         const timerElement = document.getElementById('countdown-timer');
-        if (timerElement) {
-            timerElement.textContent = dropTimeoutSec;
-        }
+        const progressBar = document.getElementById("progress-bar");
+
+        if (timerElement) timerElement.textContent = dropTimeoutSec;
+        if (progressBar) progressBar.style.width = '100%';
 
         // Start visual countdown
         let timeLeft = dropTimeoutSec;
@@ -161,6 +162,9 @@ export default async function Events() {
             timeLeft--;
             if (timerElement) {
                 timerElement.textContent = timeLeft;
+            }
+            if (progressBar) {
+                progressBar.style.width = `${(timeLeft / dropTimeoutSec) * 100}%`;
             }
             
             if (timeLeft <= 0) {
