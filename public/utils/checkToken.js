@@ -42,6 +42,7 @@ export default async function checkToken(token) {
 
             return true;
         } catch (error) {
+            console.error("ERROR: ", error)
             localStorage.removeItem('token');
             return false;
         }
