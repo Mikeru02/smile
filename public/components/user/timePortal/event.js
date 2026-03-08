@@ -285,6 +285,16 @@ export default async function Events() {
 
     const connectBtn = document.getElementById('connect');
     connectBtn.addEventListener('click', async function() {
+        connectBtn.disabled = true;
+        connectBtn.style.opacity = '0.5';
+        connectBtn.style.cursor = 'not-allowed';
+        
+        setTimeout(() => {
+            connectBtn.disabled = false;
+            connectBtn.style.opacity = '1';
+            connectBtn.style.cursor = 'pointer';
+        }, 3000);
+
         if (!isConnected) { 
             connect.textContent = 'Pause';
             isConnected = true;
@@ -316,6 +326,16 @@ export default async function Events() {
         socketClient.emit('DROP_COMPLETE');
         modal.style.display = 'none';
         clearDropTimeouts();
+
+        dropBtn.disabled = true;
+        dropBtn.style.opacity = '0.5';
+        dropBtn.style.cursor = 'not-allowed';
+        
+        setTimeout(() => {
+            dropBtn.disabled = false;
+            dropBtn.style.opacity = '1';
+            dropBtn.style.cursor = 'pointer';
+        }, 3000);
     });
 
     const proceedBtn = document.getElementById('proceed');
@@ -324,6 +344,17 @@ export default async function Events() {
         modal.style.display = 'none';
         clearDropTimeouts();
         socketClient.emit('ADD_TIME');
-        window.app.pushRoute("/portal");
+
+        dropBtn.disabled = true;
+        dropBtn.style.opacity = '0.5';
+        dropBtn.style.cursor = 'not-allowed';
+        
+        setTimeout(() => {
+            dropBtn.disabled = false;
+            dropBtn.style.opacity = '1';
+            dropBtn.style.cursor = 'pointer';
+        }, 3000);
+
+        // window.app.pushRoute("/portal");
     });
 }
