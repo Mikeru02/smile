@@ -1,7 +1,9 @@
 const TABLE_CONFIG = {
     "all-client": [
         { label: "ID", key: "id" },
+        { label: "MAC", key: "mac"},
         { label: "IP", key: "ip" },
+        { label: "Device Name", key: "hostname" },
         { label: "Name", key: "name" },
         { label: "Course", key: "course" },
         { label: "Year Level", key: "yearlevel" },
