@@ -28,12 +28,17 @@ export default async function checkClients() {
                 }
             )
 
-            const clients = response.data.data;
+            const clients = response.data.data || [];
 
             const checks = clients.map(async (client) => {
                 const reachable = await pingClient(client.ip);
 
                 if (!reachable) {
+                    const now = new Date()
+                        .toISOString()
+                        .slice(0, 19)
+                        .replace("T", " ");
+
                     const consumedTime = Math.floor(
                         (new Date() - new Date(client.connection_start_at)) / 1000
                     )
@@ -50,7 +55,7 @@ export default async function checkClients() {
                             expire_at: null,
                             time_remaining: updatedTimeRemaining,
                             connection_start_at: null,
-                            updated_at: new Date()
+                            updated_at: now
                         },
                         {
                             headers: {
