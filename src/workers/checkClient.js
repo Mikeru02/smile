@@ -25,6 +25,7 @@ export default async function checkClients() {
             )
 
             const clients = response.data.data;
+            console.log("CLIENTS", clients);
 
             const checks = clients.map(async (client) => {
                 const reachable = await pingClient(client.ip);
@@ -54,7 +55,7 @@ export default async function checkClients() {
             await Promise.all(checks);
         }
         catch (err) {
-            console.error('Check Internet Worker Error: ', err);
+            console.error('Check Client Worker Error: ', err);
         } 
         finally {
             setTimeout(checkClientsLoop, loopInterval * 1000);
