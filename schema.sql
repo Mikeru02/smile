@@ -94,7 +94,7 @@ CREATE TABLE `settings`(
     `auto_backup` BOOLEAN
     `backup_freq` ENUM('hourly', 'daily', 'weekly', 'monthly') DEFAULT 'daily',
     `compression` ENUM('none', 'gzip', 'zip') DEFAULT 'zip',
-    `location` VARCHAR(100);
+    `location` VARCHAR(100),
     `retention` INT DEFAULT 30,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -127,3 +127,7 @@ VALUES
     ('pornhub.com', NOW()),
     ('nhentai.net', NOW()),
     ('onlyfans.com', NOW());
+
+INSERT INTO `settings` (`utility_mode`, `auto_backup`, `backup_freq`, `compression`, `location`, `retention`) 
+VALUES
+    (FALSE, TRUE, 'daily', 'zip', '/root/backup/smile', 30)
