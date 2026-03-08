@@ -109,17 +109,15 @@ export default async function PageEvent() {
         window.app.pushRoute('/admin/settings');
     })
 
-    backupCheckbox.addEventListener('change', () => {
-        toggleBackupInputs(backupCheckbox.checked);
-    });
-
     autoBackupToggle.addEventListener('click', () => {
         const isChecked = backupCheckbox.checked;
         if (isChecked) {
             backupCheckbox.checked = false;
+            toggleBackupInputs(backupCheckbox.checked);
         }
         else {
             backupCheckbox.checked = true;
+            toggleBackupInputs(backupCheckbox.checked);
         }
     });
 
