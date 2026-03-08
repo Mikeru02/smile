@@ -184,7 +184,7 @@ class AccountController {
                 })
             }
 
-            const response = await this.client.deleteData(field, fieldValue);
+            const response = await this.account.deleteData(field, fieldValue);
 
             if (!response) {
                 return res.status(400).json({
