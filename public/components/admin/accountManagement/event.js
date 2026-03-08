@@ -50,4 +50,18 @@ export default async function PageEvents() {
             modal.style.display = 'block';
         })
     })
+
+    const exportBtn = document.getElementById('export-btn');
+    exportBtn.addEventListener('click', async function() {
+        try {
+            const accounts = await axiosClient.get(
+                `account/all`
+            )
+            CSVExporter.download(accounts.data.data, "accounts.csv");
+        }
+        catch (err) {
+
+        }
+    })
+
 }

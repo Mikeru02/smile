@@ -9,6 +9,9 @@ export default function MainContent(root) {
                     <button class="${styles["btn-primary"]}" id="add-account">
                         <span>➕</span> Add Account
                     </button>
+                    <button class="${styles["btn-secondary"]}" id="export-btn">
+                        <span>📥</span> Export Data
+                    </button>
                 </div>
             </div>
             
