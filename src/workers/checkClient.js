@@ -1,5 +1,6 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
+import ClientManagement from "../utils/clientManagement.js";
 import { pingClient } from "../utils/pingClient.js";
 
 export default async function checkClients() {
@@ -29,9 +30,24 @@ export default async function checkClients() {
                 const reachable = await pingClient(client.ip);
 
                 if (!reachable) {
+                    const consumedTime = Math.floor(
+                        (new Date() - new Date(client.connection_start_at)) / 1000
+                    )
+
+                    const updatedTimeRemaining = client.time_remaining - consumedTime;
+
+                    ClientManagement.revokeClient(client.ip);
+
                     await axiosClient.patch(
                         `client/?field=mac&value=${client.mac}`,
-                        { ip: null },
+                        { 
+                            ip: null,
+                            status: "pending",
+                            expire_at: null,
+                            time_remaining: updatedTimeRemaining,
+                            connection_start_at: null,
+                            updated_at: new Date()
+                        },
                     )
                 }
             })
