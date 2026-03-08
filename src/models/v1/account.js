@@ -160,6 +160,10 @@ class Account {
                 return null;
             }
 
+            if (keys.includes("password")) {
+                setFields.password = encryptPassword(setFields.password);
+            }
+
             const setClause = keys.map(key => `${key}=?`).join(", ");
             const clauseValues = keys.map(key => setFields[key]);
             

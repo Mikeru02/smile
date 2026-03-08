@@ -56,6 +56,9 @@ export default async function PageEvents() {
             if (roleElement) roleElement.value = account.role;
             if (createdElement) createdElement.value = account.created_at;
 
+            saveViewModal.dataset.clientId = button.dataset.id;
+            deleteViewModal.dataset.clientId = button.dataset.id;
+
             modal.style.display = 'block';
         })
     })
@@ -116,8 +119,51 @@ export default async function PageEvents() {
 
     const exitViewModal = document.getElementById('exit');
     const saveViewModal = document.getElementById('save');
+    const deleteViewModal = document.getElementById('delete');
 
     exitViewModal.addEventListener('click', function() {
         modal.style.display = "none";
+    });
+
+    saveViewModal.addEventListener('click', async function() {
+        const clientId = saveBtn.dataset.clientId;
+        if (!clientId) return;
+
+        try {
+            const response = await axiosClient.patch(
+                `account/?field=id&value=${clientId}`,
+                {
+                    username: document.getElementById('create-username').value,
+                    name: document.getElementById('create-name').value,
+                    role: document.getElementById('create-role').value,
+                    password: document.getElementById('create-password').value, 
+                },
+                {
+                    headers: {
+                        "token": localStorage.getItem('token')
+                    }
+                }
+            )
+        }
+        catch (err) {
+            console.error('ERROR', err.message);
+        }
+    })
+
+    deleteViewModal.addEventListener('click', async function() {
+        const clientId = deleteBtn.dataset.clientId;
+        if (!clientId) return;
+        try {
+            await axiosClient.delete(
+                `account/?field=id&value=${clientId}`
+            )
+        }
+        catch (err) {
+            console.error('Error saving account:', err.response?.data || err.message);
+        }
+        finally {
+            modal.style.display = 'none';
+            window.app.pushRoute('/admin/account-management');
+        }
     })
 }
