@@ -15,7 +15,7 @@ export default async function PageEvents() {
     })
 
     const response = await axiosClient.get(
-        `admin/accounts`,
+        `account/all`,
         {
             headers: {
                 'token': localStorage.getItem('token')
