@@ -28,7 +28,7 @@ class Account {
     async create(username, name, role, password) {
         try {
             const [row] = await this.db.execute(
-                `INSERT INTO accounts (username, name, role, password, last_login, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())`,
+                `INSERT INTO accounts (username, name, role, password, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())`,
                 [username, name, role, encryptPassword(password)]
             )
             return row || null;

@@ -44,7 +44,15 @@ export default async function PageEvents() {
                 }
             );
 
-            const account = accountData.data.data;
+            const account = accountData.data.data[0];
+
+            const usernameElement = document.getElementById('admin-username');
+            const nameElement = document.getElementById('admin-name');
+            const roleElement = document.getElementById('adminRole');
+            const createdElement = document.getElementById('admin-created_at');
+
+            if (usernameElement) usernameElement.value = account.username;
+
             modal.style.display = 'block';
         })
     })
@@ -66,7 +74,6 @@ export default async function PageEvents() {
     addAccountBtn.addEventListener('click', function() {
         createModal.style.display = "block";
     })
-
 
     const exitCreateBtn = document.getElementById('exit-createModal');
     const saveCreateBtn = document.getElementById('save-createModal');
@@ -94,9 +101,20 @@ export default async function PageEvents() {
                     }
                 }
             )
+            createModal.style.display = "none";
+            document.getElementById('create-username').value = "";
+            document.getElementById('create-name').value = "";
+            document.getElementById('create-password').value = "";
         }
         catch (err) {
             console.error('[ERROR]', response.data);
         }
+    })
+
+    const exitViewModal = document.getElementById('exit');
+    const saveViewModal = document.getElementById('save');
+
+    exitViewModal.addEventListener('click', function() {
+        modal.style.display = "none";
     })
 }

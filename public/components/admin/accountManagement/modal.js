@@ -85,7 +85,7 @@ export function CreateModal() {
                                 <option value="admin">admin</option>
                                 <option value="staff">staff</option>
                             </select>
-                        </div>
+                        </div>  
 
                         <div class="${styles['form-group']}">
                             <label for="create-password">Password</label>
