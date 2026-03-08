@@ -52,6 +52,9 @@ export default async function PageEvents() {
             const createdElement = document.getElementById('admin-created_at');
 
             if (usernameElement) usernameElement.value = account.username;
+            if (nameElement) nameElement.value = account.name;
+            if (roleElement) roleElement.value = account.role;
+            if (createdElement) createdElement.value = account.created_at;
 
             modal.style.display = 'block';
         })
