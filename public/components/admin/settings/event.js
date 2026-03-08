@@ -27,7 +27,7 @@ export default async function PageEvent() {
         domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
     }
     catch (err) {
-        console.error("[ERROR]: ", prohibitedResponse.data);
+        console.error("[ERROR]: ", err);
     }
 
     try {
@@ -43,7 +43,7 @@ export default async function PageEvent() {
         console.log("DEBUG", settingData);
     }
     catch (err) {
-        console.error("[ERROR]: ", settingResponse.data);
+        console.error("[ERROR]: ", err);
     }
 
     const removeButtons = document.querySelectorAll(".remove-btn")
