@@ -1,5 +1,6 @@
 import axios from "axios";
 import { populateHeaders, populateTable } from "../../../utils/populateTable.js";
+import CSVExporter from "../../../utils/csvExporter.js";
 
 export default async function PageEvents() {
     const axiosClient = axios.create({
