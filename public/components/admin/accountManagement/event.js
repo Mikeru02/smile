@@ -45,6 +45,7 @@ export default async function PageEvents() {
             );
 
             const account = accountData.data.data[0];
+            console.log(account);
 
             const usernameElement = document.getElementById('admin-username');
             const nameElement = document.getElementById('admin-name');
