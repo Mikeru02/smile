@@ -72,6 +72,7 @@ export default async function PageEvents() {
     const saveCreateBtn = document.getElementById('save-createModal');
 
     exitCreateBtn.addEventListener('click', function() {
+        createModal.style.display = "none";
         document.getElementById('admin-username').value = "";
         document.getElementById('admin-name').value = "";
         document.getElementById('admin-password').value = "";
