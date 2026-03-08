@@ -31,14 +31,14 @@ export default async function checkToken(token) {
                 }
             )
 
-            const clientData = response.data.data[0];
+            console.log("RESPONSE", response)
 
-            console.log("cHECK TOKEN CLIENT DATA: ", clientData);
+            // const clientData = response.data.data[0];
 
-            if (clientData) {
-                // No client found
-                return true;
-            }
+            // if (clientData) {
+            //     // No client found
+            //     return true;
+            // }
 
             return true;
         } catch (error) {
