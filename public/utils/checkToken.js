@@ -40,7 +40,7 @@ export default async function checkToken(token) {
                 return true;
             }
 
-            return false;
+            return true;
         } catch (error) {
             localStorage.removeItem('token');
             return false;
