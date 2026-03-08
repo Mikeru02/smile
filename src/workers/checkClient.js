@@ -28,10 +28,7 @@ export default async function checkClients() {
                 }
             )
 
-            console.log("RESPONSE: ", response);
-
             const clients = response.data.data;
-            console.log("CLIENTS", clients);
 
             const checks = clients.map(async (client) => {
                 const reachable = await pingClient(client.ip);
