@@ -20,7 +20,6 @@ export default async function PageEvent() {
                 }
             }
         )
-        console.log(prohibitedResponse);
         const prohibitedLinks = prohibitedResponse.data.data;
         console.log(prohibitedLinks);
         const domainListContainer = document.getElementById('domain-list');
@@ -40,8 +39,16 @@ export default async function PageEvent() {
                 }
             }
         )
-        const settingData = settingResponse.data.data;
+        const settingData = settingResponse.data.data[0];
         console.log("DEBUG", settingData);
+
+        if (settingData.auto_backup) {
+            document.getElementById('auto-backup').checked = true;
+            document.getElementById('backup-frequency').value = settingData.backup_freq;
+            document.getElementById('backup-compression').value = settingData.compression;
+            document.getElementById('backup-location').value = settingData.location;
+            document.getElementById('backup-retention').value = settingData.retention;
+        }
     }
     catch (err) {
         console.error("[ERROR]: ", err);
