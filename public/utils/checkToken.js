@@ -35,7 +35,7 @@ export default async function checkToken(token) {
 
             const clientData = response.data.data[0];
 
-            if (!clientData && clientData.length === 0) {
+            if (!clientData.ip) {
                 // No client found
                 localStorage.removeItem('token');
                 return false;
