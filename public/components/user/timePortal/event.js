@@ -21,6 +21,7 @@ export default async function Events() {
     let timeEarnedSeconds = 0;
     let timeRemainingInterval = null;
     let isInternetUp;
+    const disableTimeSeconds = 5;
 
     let isConnected = false;
 
@@ -293,7 +294,7 @@ export default async function Events() {
             connectBtn.disabled = false;
             connectBtn.style.opacity = '1';
             connectBtn.style.cursor = 'pointer';
-        }, 3000);
+        }, disableTimeSeconds * 1000);
 
         if (!isConnected) { 
             connect.textContent = 'Pause';
@@ -335,7 +336,7 @@ export default async function Events() {
             dropBtn.disabled = false;
             dropBtn.style.opacity = '1';
             dropBtn.style.cursor = 'pointer';
-        }, 3000);
+        }, disableTimeSeconds * 1000);
     });
 
     const proceedBtn = document.getElementById('proceed');
@@ -353,7 +354,7 @@ export default async function Events() {
             dropBtn.disabled = false;
             dropBtn.style.opacity = '1';
             dropBtn.style.cursor = 'pointer';
-        }, 3000);
+        }, disableTimeSeconds * 1000);
 
         // window.app.pushRoute("/portal");
     });
