@@ -11,7 +11,7 @@ export function populateTable(tbody, data, headers) {
         const trow = document.createElement("tr");    
         headers.forEach(head => {
             const tdata = document.createElement('td');
-            let value = row[head.key] ?? "";
+            let value = row[head.key] ?? "None";
 
             if (head.key === 'time_remaining') {
                 value = formatSeconds(value);
