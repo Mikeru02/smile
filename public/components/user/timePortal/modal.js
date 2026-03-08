@@ -14,9 +14,9 @@ export default function Modal() {
                     <img src="${ILLUSTRATION1}" class="${styles['illustration']}">
                     <div>
                         <p>Drop trash before the timeout runs out</p>
-                        <p><span id="countdown-timer">00</span>seconds</p>
                         <div class="${styles['progress-container']}">
                             <div class="${styles['progress-bar']}" id="progress-bar"></div>
+                            <p><span id="countdown-timer">00</span> seconds</p>
                         </div>
                     </div>
                     <h1>Earned Time</p>
