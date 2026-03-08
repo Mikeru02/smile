@@ -3,25 +3,47 @@ import styles from './component.module.css';
 import populateDomainListContainer from "../../../utils/populateDomainList";
 
 export default async function PageEvent() {
-    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
-
-    const response = await axios.get(
-        `${baseUrl}/api/v1/link/prohibited/all`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_SRC_KEY,
-                'token': localStorage.getItem('token')
-            }
+    const axiosClient = axios.create({
+        baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`,
+        headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SRC_KEY,
         }
-    );
-    console.log(response);
+    })
 
-    const prohibitedLinks = response.data.data;
-    console.log(prohibitedLinks);
-    const domainListContainer = document.getElementById('domain-list');
+    try {
+        const prohibitedResponse = await axiosClient.get(
+            `link/prohibited/all`,
+            {
+                headers: {
+                    "token": localStorage.getItem("token")
+                }
+            }
+        )
+        const prohibitedLinks = prohibitedResponse.data.data;
+        console.log(prohibitedLinks);
+        const domainListContainer = document.getElementById('domain-list');
 
-    domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
+        domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
+    }
+    catch (err) {
+        console.error("[ERROR]: ", prohibitedResponse.data);
+    }
+
+    try {
+        const settingResponse = await axiosClient.get(
+            `setting/`,
+            {
+                headers: {
+                    "token": localStorage.getItem('token')
+                }
+            }
+        )
+        const settingData = settingResponse.data.data
+    }
+    catch (err) {
+        console.error("[ERROR]: ", settingResponse.data);
+    }
 
     const removeButtons = document.querySelectorAll(".remove-btn")
     removeButtons.forEach(button => {

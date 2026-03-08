@@ -24,7 +24,6 @@ class Link {
             const [row] = await this.db.execute(
                 `SELECT * FROM prohibited_links ORDER BY created_at DESC`,
             )
-            console.log("DEBUG", row);
             return row;
         }
         catch (err) {
