@@ -109,7 +109,7 @@ export default async function Event() {
                         }
                     );
 
-                    const client = clientData.data.data;
+                    const client = clientData.data.data[0];
                     console.log(client);
 
                     const nameElement = document.getElementById('client-name');
