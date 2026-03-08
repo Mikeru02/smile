@@ -76,5 +76,27 @@ export default async function PageEvents() {
         document.getElementById('create-username').value = "";
         document.getElementById('create-name').value = "";
         document.getElementById('create-password').value = "";
+    });
+
+    saveCreateBtn.addEventListener('click', async function() {
+        try {
+            const response = await axiosClient.post(
+                `account/`,
+                {
+                    username: document.getElementById('create-username').value,
+                    name: document.getElementById('create-name').value,
+                    role: document.getElementById('create-role').value,
+                    password: document.getElementById('create-password').value,
+                },
+                {
+                    headers: {
+                        "token": localStorage.getItem('token')
+                    }
+                }
+            )
+        }
+        catch (err) {
+            console.error('[ERROR]', response.data);
+        }
     })
 }
