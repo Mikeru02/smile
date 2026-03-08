@@ -2,10 +2,8 @@ import axios from 'axios';
 import { populateHeaders, populateTable } from '../../../utils/populateTable.js';
 
 export default async function Event() {
-    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
-
     const axiosClient = axios.create({
-        baseUrl: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
+        baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
         headers: {
             "Content-Type": "application/json",
             "apikey": import.meta.env.VITE_SRC_KEY,
