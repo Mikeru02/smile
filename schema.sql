@@ -104,7 +104,7 @@ CREATE TABLE `settings`(
 
 INSERT INTO `accounts` (`username`, `name`, `role`, `password`, `created_at`, `updated_at`)
 VALUES
-    ('local', 'local', 'admin', 'd88207f8bfaacc49b53e53f89569628b170a1c551f8bbbec49c8556f294677bd', NOW(), NOW())
+    ('local', 'local', 'admin', 'd88207f8bfaacc49b53e53f89569628b170a1c551f8bbbec49c8556f294677bd', NOW(), NOW());
 
 INSERT INTO `waste` (`code`, `name`, `time`)
 VALUES
