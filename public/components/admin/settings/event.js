@@ -44,6 +44,7 @@ export default async function PageEvent() {
 
         if (settingData.auto_backup) {
             autoBackupToggle.checked = true;
+            toggleBackupInputs(autoBackupToggle);
             frequency.value = settingData.backup_freq;
             compression.value = settingData.compression;
             location.value = settingData.location;
@@ -51,14 +52,18 @@ export default async function PageEvent() {
         }
         else {
             autoBackupToggle.checked = false;
-            frequency.disable = true;
-            compression.disable = true;
-            location.disable = true;
-            retention.disable = true;
+            toggleBackupInputs(autoBackupToggle);
         }
     }
     catch (err) {
         console.error("[ERROR]: ", err);
+    }
+
+    function toggleBackupInputs(enabled) {
+        frequency.disabled = !enabled;       // select → disabled
+        compression.disabled = !enabled;     // select → disabled
+        location.readOnly = !enabled;        // input → readOnly
+        retention.readOnly = !enabled;       // input → readOnly
     }
 
     const autoBackupToggle = document.getElementById('auto-backup');
