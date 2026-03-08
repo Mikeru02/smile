@@ -124,7 +124,7 @@ export default async function Event() {
 
                     if (nameElement) nameElement.value = client.name || '';
                     if (courseElement) courseElement.value = client.course || '';
-                    if (yearlvlElement) yearlvlElement.value = client.yearlevel || '';
+                    if (yearlvlElement) yearlvlElement.value = client.year_level || '';
                     if (statusElement) statusElement.value = client.status || 'active';
                     if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
                     if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;

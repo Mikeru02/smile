@@ -48,13 +48,13 @@ export default async function PageEvents() {
 
             const usernameElement = document.getElementById('admin-username');
             const nameElement = document.getElementById('admin-name');
-            const roleElement = document.getElementById('adminRole');
+            const roleElement = document.getElementById('admin-role');
             const createdElement = document.getElementById('admin-created_at');
 
             if (usernameElement) usernameElement.value = account.username;
             if (nameElement) nameElement.value = account.name;
             if (roleElement) roleElement.value = account.role;
-            if (createdElement) createdElement.value = account.created_at;
+            if (createdElement) createdElement.value = account.created_at ? new Date(account.created_at).toLocaleDateString() : 'N/A';;
 
             saveViewModal.dataset.clientId = button.dataset.id;
             deleteViewModal.dataset.clientId = button.dataset.id;
