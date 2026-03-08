@@ -108,10 +108,12 @@ export default async function PageEvent() {
         window.app.pushRoute('/admin/settings');
     })
 
+    const backupCheckbox = document.getElementById('backup-checkbox');
     autoBackupToggle.addEventListener('change', () => {
+        const isChecked = backupCheckbox.checked;
         toggleBackupInputs(autoBackupToggle.checked);
     });
-    
+
     const utility = document.getElementById('utility');
     const utilityCheckBox = document.getElementById('utility-checkbox')
     utility.addEventListener('click', async function() {
