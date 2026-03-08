@@ -11,6 +11,19 @@ export default async function PageEvent() {
         }
     })
 
+    const autoBackupToggle = document.getElementById('auto-backup');
+    const frequency = document.getElementById('backup-frequency');
+    const compression = document.getElementById('backup-compression');
+    const location = document.getElementById('backup-location');
+    const retention = document.getElementById('backup-retention');
+
+    function toggleBackupInputs(enabled) {
+        frequency.disabled = !enabled;       // select → disabled
+        compression.disabled = !enabled;     // select → disabled
+        location.readOnly = !enabled;        // input → readOnly
+        retention.readOnly = !enabled;       // input → readOnly
+    }
+
     try {
         const prohibitedResponse = await axiosClient.get(
             `link/prohibited/all`,
@@ -57,19 +70,6 @@ export default async function PageEvent() {
     }
     catch (err) {
         console.error("[ERROR]: ", err);
-    }
-
-    const autoBackupToggle = document.getElementById('auto-backup');
-    const frequency = document.getElementById('backup-frequency');
-    const compression = document.getElementById('backup-compression');
-    const location = document.getElementById('backup-location');
-    const retention = document.getElementById('backup-retention');
-
-    function toggleBackupInputs(enabled) {
-        frequency.disabled = !enabled;       // select → disabled
-        compression.disabled = !enabled;     // select → disabled
-        location.readOnly = !enabled;        // input → readOnly
-        retention.readOnly = !enabled;       // input → readOnly
     }
 
     const removeButtons = document.querySelectorAll(".remove-btn")
