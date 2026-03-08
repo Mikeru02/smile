@@ -50,7 +50,7 @@ export default async function checkClients() {
                         },
                         {
                             headers: {
-                                'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
+                                "token": jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
                                     expiresIn: "1m"
                                 })
                             }
