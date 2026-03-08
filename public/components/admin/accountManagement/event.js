@@ -154,9 +154,10 @@ export default async function PageEvents() {
         const clientId = deleteViewModal.dataset.clientId;
         if (!clientId) return;
         try {
-            await axiosClient.delete(
+            const response= await axiosClient.delete(
                 `account/?field=id&value=${clientId}`
             )
+            console.log(response.data)
         }
         catch (err) {
             console.error('Error saving account:', err.response?.data || err.message);
