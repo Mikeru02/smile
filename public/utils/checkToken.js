@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default async function checkToken(token) {
     const axiosClient = axios.create({
-        baseURL: `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/`,
+        baseURL: `http://${process.env.VITE_SRC_HOST}:${process.env.VITE_SRC_PORT}/api/v1/`,
         headers: {
             'Content-Type': 'application/json',
             'apikey': process.env.SRC_KEY,
