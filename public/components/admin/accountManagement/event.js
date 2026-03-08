@@ -155,7 +155,12 @@ export default async function PageEvents() {
         if (!clientId) return;
         try {
             const response= await axiosClient.delete(
-                `account/?field=id&value=${clientId}`
+                `account/?field=id&value=${clientId}`,
+                {
+                    headers: {
+                        "token": localStorage.getItem("token")
+                    }
+                }
             )
             console.log(response.data)
         }
