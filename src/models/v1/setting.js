@@ -28,7 +28,7 @@ class Setting {
                 return null;
             }
 
-            const setClause = keys.map(key => `$${key}=?`).join(", ");
+            const setClause = keys.map(key => `${key}=?`).join(", ");
             const clauseValues = keys.map(key => setFields[key]);
 
             const [row] = await this.db.execute(
