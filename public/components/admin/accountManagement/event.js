@@ -126,7 +126,7 @@ export default async function PageEvents() {
     });
 
     saveViewModal.addEventListener('click', async function() {
-        const clientId = saveBtn.dataset.clientId;
+        const clientId = saveViewModal.dataset.clientId;
         if (!clientId) return;
 
         try {
@@ -151,7 +151,7 @@ export default async function PageEvents() {
     })
 
     deleteViewModal.addEventListener('click', async function() {
-        const clientId = deleteBtn.dataset.clientId;
+        const clientId = deleteViewModal.dataset.clientId;
         if (!clientId) return;
         try {
             await axiosClient.delete(
