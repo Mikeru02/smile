@@ -46,6 +46,7 @@
 .illustration {
     width: 20rem;
     margin-top: 1rem;
+    margin-bottom: 1rem;
     animation: bounce 2s ease-in-out infinite;
 }
 
