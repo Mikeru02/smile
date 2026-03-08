@@ -64,7 +64,7 @@ export function CreateModal() {
                 <div class="${styles['top-container']}">
                     <div class="${styles['top-container-text']}">
                         <h1>Create Account</h1>
-                        <p>Create another account.</p>
+                        <p>Create another account</p>
                     </div>
                 </div>
                 <div class="${styles['center-container']}">
@@ -82,8 +82,8 @@ export function CreateModal() {
                         <div class="${styles['form-group']}">
                             <label for="admin-role">Role</label>
                             <select id="admin-role" class="${styles['form-input']}">
-                                <option value="staff">staff</option>
                                 <option value="admin">admin</option>
+                                <option value="staff">staff</option>
                             </select>
                         </div>
 
@@ -94,8 +94,8 @@ export function CreateModal() {
                     </div>
                 </div>
                 <div class="${styles['button-container']}">
-                    <button id="exit" class="${styles["action-button"]} ${styles["btn-cancel"]}">Cancel</button>
-                    <button id="save" class="${styles["action-button"]} ${styles["btn-save"]}">Save Changes</button>
+                    <button id="exit-createModal" class="${styles["action-button"]} ${styles["btn-cancel"]}">Cancel</button>
+                    <button id="save-createModal" class="${styles["action-button"]} ${styles["btn-save"]}">Save Changes</button>
                 </div>
             </div>
         </div>

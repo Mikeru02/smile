@@ -66,4 +66,14 @@ export default async function PageEvents() {
     addAccountBtn.addEventListener('click', function() {
         createModal.style.display = "block";
     })
+
+
+    const exitCreateBtn = document.getElementById('exit-createModal');
+    const saveCreateBtn = document.getElementById('save-createModal');
+
+    exitCreateBtn.addEventListener('click', function() {
+        document.getElementById('admin-username').value = "";
+        document.getElementById('admin-name').value = "";
+        document.getElementById('admin-password').value = "";
+    })
 }
