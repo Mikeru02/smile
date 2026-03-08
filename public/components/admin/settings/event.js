@@ -43,16 +43,29 @@ export default async function PageEvent() {
         console.log("DEBUG", settingData);
 
         if (settingData.auto_backup) {
-            document.getElementById('auto-backup').checked = true;
-            document.getElementById('backup-frequency').value = settingData.backup_freq;
-            document.getElementById('backup-compression').value = settingData.compression;
-            document.getElementById('backup-location').value = settingData.location;
-            document.getElementById('backup-retention').value = settingData.retention;
+            autoBackupToggle.checked = true;
+            frequency.value = settingData.backup_freq;
+            compression.value = settingData.compression;
+            location.value = settingData.location;
+            retention.value = settingData.retention;
+        }
+        else {
+            autoBackupToggle.checked = false;
+            frequency.disable = true;
+            compression.disable = true;
+            location.disable = true;
+            retention.disable = true;
         }
     }
     catch (err) {
         console.error("[ERROR]: ", err);
     }
+
+    const autoBackupToggle = document.getElementById('auto-backup');
+    const frequency = document.getElementById('backup-frequency');
+    const compression = document.getElementById('backup-compression');
+    const location = document.getElementById('backup-location');
+    const retention = document.getElementById('backup-retention');
 
     const removeButtons = document.querySelectorAll(".remove-btn")
     removeButtons.forEach(button => {
