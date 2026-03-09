@@ -36,6 +36,7 @@ export default async function PageEvent() {
     socketClient.off("PROHIBITED");
     socketClient.on("PROHIBITED", (data) => {
         const prohibitedLinks = data.links;
+        console.log(prohibitedLinks);
         const domainListContainer = document.getElementById('domain-list');
         domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
     })
