@@ -14,6 +14,7 @@ export default async function PageEvent() {
 
     socketClient.off("GET_UTILITY_MODE");
     socketClient.on('GET_UTILITY_MODE', (data) => {
+        console.log("RECEIVED Event")
         const mode = data.utilityMode;
         console.log("DEBUG", mode)
 
