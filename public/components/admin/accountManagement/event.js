@@ -26,7 +26,15 @@ export default async function PageEvents() {
     socketClient.off("ACCOUNTS");
     socketClient.on("ACCOUNTS", (data) => {
         console.log("ACCOUNTS:", data);
-        accounts = data.accounts
+        accounts = data.accounts;
+
+        console.log(accounts);
+        const table =  document.getElementById("accounts-table");
+        const thead = table.querySelector("thead");
+        const tbody = table.querySelector("tbody");
+
+        let headers = populateHeaders(thead, "account-management");
+        populateTable(tbody, accounts, headers);
     })
 
     
@@ -36,13 +44,13 @@ export default async function PageEvents() {
     const createModal = document.getElementById('create-modal')
     
     // const accounts = response.data.data;
-    console.log(accounts);
-    const table =  document.getElementById("accounts-table");
-    const thead = table.querySelector("thead");
-    const tbody = table.querySelector("tbody");
+    // console.log(accounts);
+    // const table =  document.getElementById("accounts-table");
+    // const thead = table.querySelector("thead");
+    // const tbody = table.querySelector("tbody");
 
-    let headers = populateHeaders(thead, "account-management");
-    populateTable(tbody, accounts, headers);
+    // let headers = populateHeaders(thead, "account-management");
+    // populateTable(tbody, accounts, headers);
 
     const seeMoreBtns = document.querySelectorAll('.see-more');
     seeMoreBtns.forEach(button => {
