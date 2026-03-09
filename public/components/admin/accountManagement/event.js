@@ -13,6 +13,9 @@ export default async function PageEvents() {
     });
 
     let accounts;
+    const table =  document.getElementById("accounts-table");
+    const thead = table.querySelector("thead");
+    const tbody = table.querySelector("tbody");
 
     // const response = await axiosClient.get(
     //     `account/all`,
@@ -31,48 +34,45 @@ export default async function PageEvents() {
         accounts = data.accounts;
 
         console.log(accounts);
-        const table =  document.getElementById("accounts-table");
-        const thead = table.querySelector("thead");
-        const tbody = table.querySelector("tbody");
 
         let headers = populateHeaders(thead, "account-management");
         populateTable(tbody, accounts, headers);
-
-        const seeMoreBtns = document.querySelectorAll('.see-more');
-        seeMoreBtns.forEach(button => {
-            button.addEventListener('click', async function() {
-                const accountData = await axiosClient.get(
-                    `account/?field=id&value=${button.dataset.id}`,
-                    {
-                        headers: {
-                            'token': localStorage.getItem('token')
-                        }
-                    }
-                );
-
-                const account = accountData.data.data;
-
-                const usernameElement = document.getElementById('admin-username');
-                const nameElement = document.getElementById('admin-name');
-                const roleElement = document.getElementById('admin-role');
-                const createdElement = document.getElementById('admin-created_at');
-
-                if (usernameElement) usernameElement.value = account.username;
-                if (nameElement) nameElement.value = account.name;
-                if (roleElement) roleElement.value = account.role;
-                if (createdElement) createdElement.value = account.created_at ? new Date(account.created_at).toLocaleDateString() : 'N/A';;
-
-                saveViewModal.dataset.clientId = button.dataset.id;
-                deleteViewModal.dataset.clientId = button.dataset.id;
-
-                modal.style.display = 'block';
-            })
-        })
     })
 
     const modal = document.getElementById('modal');
     const createModal = document.getElementById('create-modal')
     
+    tbody.addEventListener('click', async (e) => {
+        if (e.target && e.target.classList.contains('see-more')) {
+            const button = e.target;
+            const accountData = await axiosClient.get(
+                `account/?field=id&value=${button.dataset.id}`,
+                {
+                    headers: {
+                        'token': localStorage.getItem('token')
+                    }
+                }
+            );
+
+            const account = accountData.data.data;
+
+            const usernameElement = document.getElementById('admin-username');
+            const nameElement = document.getElementById('admin-name');
+            const roleElement = document.getElementById('admin-role');
+            const createdElement = document.getElementById('admin-created_at');
+
+            if (usernameElement) usernameElement.value = account.username;
+            if (nameElement) nameElement.value = account.name;
+            if (roleElement) roleElement.value = account.role;
+            if (createdElement) createdElement.value = account.created_at ? new Date(account.created_at).toLocaleDateString() : 'N/A';;
+
+            saveViewModal.dataset.clientId = button.dataset.id;
+            deleteViewModal.dataset.clientId = button.dataset.id;
+
+            modal.style.display = 'block';
+        }
+    })
+
     // const accounts = response.data.data;
     // console.log(accounts);
     // const table =  document.getElementById("accounts-table");
