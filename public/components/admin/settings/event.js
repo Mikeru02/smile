@@ -12,8 +12,8 @@ export default async function PageEvent() {
         }
     })
 
-    socketClient.off("UTILITY_MODE");
-    socketClient.on('UTILITY_MODE', (data) => {
+    socketClient.off("GET_UTILITY_MODE");
+    socketClient.on('GET_UTILITY_MODE', (data) => {
         
     });
 

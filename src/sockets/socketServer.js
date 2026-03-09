@@ -73,7 +73,7 @@ class SocketServer {
                     socket.emit('BIN_STATUS', { status: this.currentBinStatus });
                 }
                 else {
-                    socket.emit('UTILITY_MODE', { utilityMode: this.utilityMode})
+                    socket.emit('GET_UTILITY_MODE', { utilityMode: this.utilityMode})
                 }
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
@@ -258,6 +258,7 @@ class SocketServer {
 
             socket.on('UTILITY_MODE', (data) => {
                 const mode = data.mode;
+                this.utilityMode = mode;
                 this.arduino.sendCommand(`SET_UTILITY_MODE:${mode}`)
             })
 
