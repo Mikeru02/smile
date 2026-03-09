@@ -24,10 +24,6 @@ export default async function PageEvent() {
     socketClient.off("SET_UTILITY_MODE");
     socketClient.on("SET_UTILITY_MODE", (data) => {
         const mode = data.mode;
-
-        console.log("RECEIVED EVENT");
-        console.log(mode);
-        console.log(typeof(mode))
         if (mode) {
             utilityCheckBox.checked = true;
         }
@@ -97,6 +93,15 @@ export default async function PageEvent() {
         compression.value = settingData.compression;
         location.value = settingData.location;
         retention.value = settingData.retention;
+
+        if (settingData.utility_mode) {
+            utilityCheckBox.checked = true;
+            socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
+        }
+        else {
+            utilityCheckBox.checked = false;
+            socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
+        }
 
         if (settingData.auto_backup) {
             backupCheckbox.checked = true;
@@ -170,12 +175,15 @@ export default async function PageEvent() {
 
     utility.addEventListener('click', async function() {
         const isChecked = utilityCheckBox.checked;
-        // if (isChecked) {
-        //     utilityCheckBox.checked = false;
-        // } else {
-        //     utilityCheckBox.checked = true;
-        // }
-        
+        await axiosClient.patch(
+            `setting/`,
+            { utility_mode: utilityCheckBox.checked },
+            {
+                headers: {
+                    "token": localStorage.getItem("token")
+                }
+            }
+        )
         socketClient.emit('UTILITY_MODE', ({ mode: !isChecked }));
     })
 }
