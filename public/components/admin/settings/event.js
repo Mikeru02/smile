@@ -136,7 +136,7 @@ export default async function PageEvent() {
     const domainInput = document.getElementById('new-domain');
 
     addDomainBtn.addEventListener('click', async function() {
-        await axios.post(
+        await axiosClient.post(
             `link/prohibited`,
             { link: domainInput.value },
             {
