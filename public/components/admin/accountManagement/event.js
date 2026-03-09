@@ -31,8 +31,6 @@ export default async function PageEvents() {
     //         }
     //     }
     // );
-
-    socketClient.emit("GET_ACCOUNTS");
     
     socketClient.off("ACCOUNTS");
     socketClient.on("ACCOUNTS", (data) => {
@@ -44,6 +42,9 @@ export default async function PageEvents() {
         let headers = populateHeaders(thead, "account-management");
         populateTable(tbody, accounts, headers);
     })
+
+    socketClient.emit("GET_ACCOUNTS");
+
 
     const modal = document.getElementById('modal');
     const createModal = document.getElementById('create-modal')
