@@ -9,6 +9,10 @@ class SocketClient {
         if (this.socket) return;
 
         const token = localStorage.getItem('token');
+        if (!token) {
+            console.error("[SOCKET] No token found. Connection skipped.");
+            return;
+        }
         
         this.socket = io(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`,

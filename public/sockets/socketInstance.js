@@ -2,9 +2,10 @@ import SocketClient from "./socketClient.js";
 import checkToken from "../utils/checkToken.js";
 
 const token = localStorage.getItem('token');
-const socketClient = new SocketClient();
+let socketClient;
 
 if (checkToken(token)) {
+    socketClient = new SocketClient();
     socketClient.connect();
 }
 
