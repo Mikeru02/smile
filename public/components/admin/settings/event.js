@@ -14,7 +14,8 @@ export default async function PageEvent() {
 
     socketClient.off("GET_UTILITY_MODE");
     socketClient.on('GET_UTILITY_MODE', (data) => {
-        
+        const mode = data.utilityMode;
+        console.log("DEBUG", mode)
     });
 
     const backupCheckbox = document.getElementById('backup-checkbox');
