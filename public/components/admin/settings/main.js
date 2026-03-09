@@ -79,6 +79,11 @@ export default function MainContent(root) {
                             </select>
                             <small>Compression format for backups</small>
                         </div>
+
+                        <div class="${styles["setting-item"]}">
+                            <button>Back Up Now</button>
+                            <small>Back up the data now</small>
+                        </div>
                     </div>
                 </div>
             
