@@ -84,6 +84,16 @@ class SocketServer {
                             }
                         }
                     )
+
+                    const account = await this.axiosClient.get(
+                        `account/all`,
+                        {
+                            headers: {
+                                'token': localStorage.getItem('token')
+                            }
+                        }
+                    )
+                    socket.emit("ACCOUNTS", ({ accounts: account.data.data}))
                     socket.emit("PROHIBITED", ({links: prohibited.data.data}))
                 }
             } catch (err) {
@@ -345,6 +355,18 @@ class SocketServer {
                     console.error("ERROR", err);
                 }
             });
+
+            socket.on("GET_ACCOUNTS", async () => {
+                const account = await this.axiosClient.get(
+                    `account/all`,
+                    {
+                        headers: {
+                            'token': localStorage.getItem('token')
+                        }
+                    }
+                )
+                socket.emit("ACCOUNTS", ({ accounts: account.data.data}))
+            })
 
             socket.on("BACKUP_NOW", (data) => {
                 const backupWorker = new BackupWorker();

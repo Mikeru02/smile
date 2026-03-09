@@ -1,6 +1,7 @@
 import axios from "axios";
 import { populateHeaders, populateTable } from "../../../utils/populateTable.js";
 import CSVExporter from "../../../utils/csvExporter.js";
+import socketClient from "../../../sockets/socketInstance.js";
 
 export default async function PageEvents() {
     const axiosClient = axios.create({
@@ -11,19 +12,28 @@ export default async function PageEvents() {
         }
     });
 
-    const response = await axiosClient.get(
-        `account/all`,
-        {
-            headers: {
-                'token': localStorage.getItem('token')
-            }
-        }
-    );
+    let accounts;
+
+    // const response = await axiosClient.get(
+    //     `account/all`,
+    //     {
+    //         headers: {
+    //             'token': localStorage.getItem('token')
+    //         }
+    //     }
+    // );
+
+    socketClient.emit("GET_ACCOUNTS");
+
+    socketClient.off("ACCOUNTS");
+    socketClient.on("ACCOUNTS", (data) => {
+        accounts = data.accounts
+    })
 
     const modal = document.getElementById('modal');
     const createModal = document.getElementById('create-modal')
     
-    const accounts = response.data.data;
+    // const accounts = response.data.data;
     console.log(accounts);
     const table =  document.getElementById("accounts-table");
     const thead = table.querySelector("thead");
