@@ -312,7 +312,7 @@ String hasFullBin() {
 void runPlatformSonars() {
   bool currentIRState = readIRStable(IRPin);
 
-  if (previousIRState == LOW && currentIRState == HIGH && !alreadyDetectIR && !isScanning) {
+  if (previousIRState == LOW && currentIRState == HIGH && !alreadyDetectIR && !isCapturing) {
     isScanning = true;
     alreadyDetectIR = true;
     scanningStartTime = millis();
