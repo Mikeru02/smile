@@ -164,6 +164,8 @@ class Account {
                 setFields.password = encryptPassword(setFields.password);
             }
 
+            console.log("DEBUG:", { keys })
+
             const setClause = keys.map(key => `${key}=?`).join(", ");
             const clauseValues = keys.map(key => setFields[key]);
             
