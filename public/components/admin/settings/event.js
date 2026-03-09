@@ -22,6 +22,8 @@ export default async function PageEvent() {
         }
     })
 
+    socketClient.emit("GET_SETTINGS")
+
     socketClient.off("SET_UTILITY_MODE");
     socketClient.on("SET_UTILITY_MODE", (data) => {
         const mode = data.mode;
@@ -66,25 +68,6 @@ export default async function PageEvent() {
             }
         });
     }
-
-    // try {
-    //     const prohibitedResponse = await axiosClient.get(
-    //         `link/prohibited/all`,
-    //         {
-    //             headers: {
-    //                 "token": localStorage.getItem("token")
-    //             }
-    //         }
-    //     )
-    //     const prohibitedLinks = prohibitedResponse.data.data;
-    //     console.log(prohibitedLinks);
-    //     const domainListContainer = document.getElementById('domain-list');
-
-    //     domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
-    // }
-    // catch (err) {
-    //     console.error("[ERROR]: ", err);
-    // }
 
     try {
         const settingResponse = await axiosClient.get(
@@ -132,24 +115,6 @@ export default async function PageEvent() {
             socketClient.emit("REMOVE_PROHIBITED", { id });
         }
     });
-
-    // const removeButtons = document.querySelectorAll(".remove-btn")
-    // removeButtons.forEach(button => {
-    //     button.addEventListener('click', async function() {
-    //         console.log("BUTTON HIT")
-    //         socketClient.emit("REMOVE_PROHIBITED", ({ id: button.dataset.id }))
-    //         // await axiosClient.delete(
-    //         //     `link/prohibited/${button.dataset.id}`,
-    //         //     {
-    //         //         headers: {
-    //         //             'token': localStorage.getItem('token')
-    //         //         }
-    //         //     }
-    //         // );
-
-    //         // window.app.pushRoute('/admin/settings');
-    //     })
-    // });
 
     const addDomainBtn = document.getElementById('add-domain-btn');
     const domainInput = document.getElementById('new-domain');

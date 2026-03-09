@@ -72,19 +72,6 @@ class SocketServer {
                     socket.emit('INTERNET_STATUS', { online: this.internetStatus });
                     socket.emit('BIN_STATUS', { status: this.currentBinStatus });
                 }
-                else {
-                    socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode});
-
-                    const prohibited = await this.axiosClient.get(
-                        `link/prohibited/all`,
-                        {
-                            headers: {
-                                "token": socket.token
-                            }
-                        }
-                    )
-                    socket.emit("PROHIBITED", ({links: prohibited.data.data}))
-                }
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
                 return;
@@ -96,6 +83,20 @@ class SocketServer {
                 socket.emit('BIN_STATUS', {
                     status: this.currentBinStatus
                 })
+            })
+
+            socket.on("GET_SETTINGS", async () => {
+                socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode});
+
+                    const prohibited = await this.axiosClient.get(
+                        `link/prohibited/all`,
+                        {
+                            headers: {
+                                "token": socket.token
+                            }
+                        }
+                    )
+                    socket.emit("PROHIBITED", ({links: prohibited.data.data}))
             })
 
             socket.on('DROP_TIMEOUT', async () => {
