@@ -33,6 +33,11 @@ export default async function PageEvent() {
 
     });
 
+    socketClient.off("PROHIBITED");
+    socketClient.on("PROHIBITED", (data) => {
+        console.log(data);
+    })
+
     function toggleBackupInputs(enabled) {
         // Select elements
         const inputs = [
@@ -59,24 +64,24 @@ export default async function PageEvent() {
         });
     }
 
-    try {
-        const prohibitedResponse = await axiosClient.get(
-            `link/prohibited/all`,
-            {
-                headers: {
-                    "token": localStorage.getItem("token")
-                }
-            }
-        )
-        const prohibitedLinks = prohibitedResponse.data.data;
-        console.log(prohibitedLinks);
-        const domainListContainer = document.getElementById('domain-list');
+    // try {
+    //     const prohibitedResponse = await axiosClient.get(
+    //         `link/prohibited/all`,
+    //         {
+    //             headers: {
+    //                 "token": localStorage.getItem("token")
+    //             }
+    //         }
+    //     )
+    //     const prohibitedLinks = prohibitedResponse.data.data;
+    //     console.log(prohibitedLinks);
+    //     const domainListContainer = document.getElementById('domain-list');
 
-        domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
-    }
-    catch (err) {
-        console.error("[ERROR]: ", err);
-    }
+    //     domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
+    // }
+    // catch (err) {
+    //     console.error("[ERROR]: ", err);
+    // }
 
     try {
         const settingResponse = await axiosClient.get(
@@ -136,18 +141,19 @@ export default async function PageEvent() {
     const domainInput = document.getElementById('new-domain');
 
     addDomainBtn.addEventListener('click', async function() {
-        await axiosClient.post(
-            `link/prohibited`,
-            { domain: domainInput.value },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
-        window.app.pushRoute('/admin/settings');
+        socketClient.emit('SET_PROHIBITED', ({ domain: domainInput.value }));
+        // await axiosClient.post(
+        //     `link/prohibited`,
+        //     { domain: domainInput.value },
+        //     {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'apikey': import.meta.env.VITE_SRC_KEY,
+        //             'token': localStorage.getItem('token')
+        //         }
+        //     }
+        // );
+        // window.app.pushRoute('/admin/settings');
     })
 
     autoBackupToggle.addEventListener('click', async () => {

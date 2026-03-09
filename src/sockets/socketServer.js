@@ -73,7 +73,17 @@ class SocketServer {
                     socket.emit('BIN_STATUS', { status: this.currentBinStatus });
                 }
                 else {
-                    socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode})
+                    socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode});
+
+                    const prohibited = await this.axiosClient.get(
+                        `link/prohibited/all`,
+                        {
+                            headers: {
+                                "token": socket.token
+                            }
+                        }
+                    )
+                    socket.emit("PROHIBITED", ({links: prohibited.data.data}))
                 }
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
@@ -261,6 +271,35 @@ class SocketServer {
                 this.utilityMode = mode;
                 this.arduino.sendCommand(`SET_UTILITY_MODE:${mode}`);
                 socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode})
+            })
+
+            socket.on("SET_PROHIBITED", async (data) => {
+                try {
+                    await this.axiosClient.post(
+                        `link/prohibited`,
+                        { domain: data.domain},
+                        {
+                            headers: {
+                                "token": socket.token
+                            }
+                        }
+                    )
+
+                    const prohibited = await this.axiosClient.get(
+                        `link/prohibited/all`,
+                        {
+                            headers: {
+                                "token": socket.token
+                            }
+                        }
+                    )
+
+                    const links = prohibited.data.data[0];
+                    socket.emit('PROHIBITED', ({ links: links }))
+                }
+                catch (err){
+                    console.error("ERROR", err);
+                }
             })
 
             socket.on('disconnect', async () => {
