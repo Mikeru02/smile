@@ -365,7 +365,7 @@ class SocketServer {
                         }
                     }
                 )
-                socket.emit("ACCOUNTS", ({ accounts: account.data.data}))
+                socket.emit("ACCOUNTS", ({ accounts: account.data.data, response: account.data }))
             })
 
             socket.on("BACKUP_NOW", (data) => {

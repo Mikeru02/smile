@@ -25,7 +25,7 @@ export default async function PageEvents() {
 
     socketClient.off("ACCOUNTS");
     socketClient.on("ACCOUNTS", (data) => {
-        console.log(data.accounts);
+        console.log("ACCOUNTS:", data);
         accounts = data.accounts
     })
 
