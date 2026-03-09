@@ -6,7 +6,7 @@ import { exec } from "child_process";
 
 export default class BackupWorker {
     constructor() {
-        this.loopInterval = 60; // check every 60 seconds
+        this.loopInterval = 30; // check every 60 seconds
         this.axiosClient = axios.create({
             baseURL: `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/`,
             headers: { 'Content-Type': 'application/json', 'apikey': process.env.SRC_KEY }

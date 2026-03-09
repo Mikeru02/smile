@@ -4,7 +4,7 @@ import ClientManagement from "../utils/clientManagement.js";
 import { pingClient } from "../utils/pingClient.js";
 
 export default async function checkClients() {
-    const loopInterval = 5;
+    const loopInterval = 30;
     const axiosClient = axios.create({
         baseURL: `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/`,
         headers: {
