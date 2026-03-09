@@ -82,7 +82,6 @@ export default function MainContent(root) {
 
                         <div class="${styles["setting-item"]}">
                             <button class="${styles['backup-now']}" id="backup-now">Back Up Now</button>
-                            <small>Back up the data now</small>
                         </div>
                     </div>
                 </div>
