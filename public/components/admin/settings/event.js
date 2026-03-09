@@ -127,16 +127,17 @@ export default async function PageEvent() {
     const removeButtons = document.querySelectorAll(".remove-btn")
     removeButtons.forEach(button => {
         button.addEventListener('click', async function() {
-            await axiosClient.delete(
-                `link/prohibited/${button.dataset.id}`,
-                {
-                    headers: {
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
+            socketClient.emit("REMOVE_PROHIBITED", ({ id: button.dataset.id }))
+            // await axiosClient.delete(
+            //     `link/prohibited/${button.dataset.id}`,
+            //     {
+            //         headers: {
+            //             'token': localStorage.getItem('token')
+            //         }
+            //     }
+            // );
 
-            window.app.pushRoute('/admin/settings');
+            // window.app.pushRoute('/admin/settings');
         })
     });
 
@@ -144,19 +145,13 @@ export default async function PageEvent() {
     const domainInput = document.getElementById('new-domain');
 
     addDomainBtn.addEventListener('click', async function() {
-        socketClient.emit('SET_PROHIBITED', ({ domain: domainInput.value }));
-        // await axiosClient.post(
-        //     `link/prohibited`,
-        //     { domain: domainInput.value },
-        //     {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'apikey': import.meta.env.VITE_SRC_KEY,
-        //             'token': localStorage.getItem('token')
-        //         }
-        //     }
-        // );
-        // window.app.pushRoute('/admin/settings');
+        const domain = domainInput.value.trim();
+        if (!domain) {
+            alert("Please enter a domain"); // optional feedback
+            return;
+        }
+        socketClient.emit('SET_PROHIBITED', ({ domain: domain }));
+        domainInput.value = "";
     })
 
     autoBackupToggle.addEventListener('click', async () => {

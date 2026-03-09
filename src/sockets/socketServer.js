@@ -302,6 +302,35 @@ class SocketServer {
                 }
             })
 
+            socket.on("REMOVE_PROHIBITED", async (data) => {
+                try {
+                    await this.axiosClient.delete(
+                        `link/prohibited/${data.id}`,
+                        {
+                            headers: {
+                                "token": socket.token
+                            }
+                        }
+                    )
+
+                    const prohibited = await this.axiosClient.get(
+                        `link/prohibited/all`,
+                        {
+                            headers: {
+                                "token": socket.token
+                            }
+                        }
+                    )
+
+                    const links = prohibited.data.data;
+                    socket.emit('PROHIBITED', ({ links: links }))
+
+                }
+                catch (err){
+                    console.error("ERROR", err);
+                }
+            })
+
             socket.on('disconnect', async () => {
                 console.log('[SOCKET] disconnected:', socket.id);
 
