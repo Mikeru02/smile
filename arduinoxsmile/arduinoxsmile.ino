@@ -226,6 +226,7 @@ void runPlatform(String objectType) {
   controlMotor("enable");
   
   if (objectType.equalsIgnoreCase("Plastic Bottle")) {
+    beep(2, 100, 100);
     stepper.moveTo(convertRotationalPositionToSteps(0.15));
     while (stepper.distanceToGo() != 0) {
       stepper.run();
@@ -238,6 +239,7 @@ void runPlatform(String objectType) {
     delay(2000);
   }
   else if (objectType.equalsIgnoreCase("Paper")) {
+    beep(3, 100, 100);
     stepper.moveTo(convertRotationalPositionToSteps(-0.15));
     while (stepper.distanceToGo() != 0) {
       stepper.run();
@@ -250,6 +252,7 @@ void runPlatform(String objectType) {
     delay(2000);
   }
   else if (objectType.equalsIgnoreCase("General Waste")) {
+    beep(1, 500, 100);
     openGate(servoLeft, servoRight);
     delay(2000);
     closeGate(servoLeft, servoRight);
@@ -575,6 +578,7 @@ void loop() {
       respondAndDisplay("DROPPING", value, "DROPPING STATUS DISPLAYED");
       isUserDropping = true;
       controlMotor("enable");
+      beep(1, 100, 100);
     }
     else if (command == "DONE DROP") {
       respondAndDisplay("DONE DROP", value, "DONE DROP");
@@ -584,6 +588,7 @@ void loop() {
       closeGate(servoLeft, servoRight);
       delay(2000);
       controlMotor("disable");
+      beep(1, 100, 100)
     }
     else if (command == "DONE CAPTURE" || command == "IGNORE") {
       respondAndDisplay("", "", "DONE CAPTURE");
