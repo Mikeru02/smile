@@ -4,6 +4,15 @@ import populateDomainListContainer from "../../../utils/populateDomainList";
 import socketClient from "../../../sockets/socketInstance";
 
 export default async function PageEvent() {
+    const backupCheckbox = document.getElementById('backup-checkbox');
+    const autoBackupToggle = document.getElementById('auto-backup');
+    const frequency = document.getElementById('backup-frequency');
+    const compression = document.getElementById('backup-compression');
+    const location = document.getElementById('backup-location');
+    const retention = document.getElementById('backup-retention');
+    const utility = document.getElementById('utility');
+    const utilityCheckBox = document.getElementById('utility-checkbox');
+    
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
         headers: {
@@ -12,27 +21,17 @@ export default async function PageEvent() {
         }
     })
 
-    socketClient.off("GET_UTILITY_MODE");
-    socketClient.on('GET_UTILITY_MODE', (data) => {
-        console.log("RECEIVED Event")
-        const mode = data.utilityMode;
-        console.log("DEBUG", mode)
-
+    socketClient.off("SET_UTILITY_MODE");
+    socketClient.on("SET_UTILITY_MODE", (data) => {
+        const mode = data.mode;
         if (mode) {
             utilityCheckBox.checked = true;
         }
         else {
             utilityCheckBox.checked = false;
         }
-        
-    });
 
-    const backupCheckbox = document.getElementById('backup-checkbox');
-    const autoBackupToggle = document.getElementById('auto-backup');
-    const frequency = document.getElementById('backup-frequency');
-    const compression = document.getElementById('backup-compression');
-    const location = document.getElementById('backup-location');
-    const retention = document.getElementById('backup-retention');
+    });
 
     function toggleBackupInputs(enabled) {
         // Select elements
@@ -165,8 +164,6 @@ export default async function PageEvent() {
         )
     });
 
-    const utility = document.getElementById('utility');
-    const utilityCheckBox = document.getElementById('utility-checkbox')
     utility.addEventListener('click', async function() {
         const isChecked = utilityCheckBox.checked;
         // if (isChecked) {

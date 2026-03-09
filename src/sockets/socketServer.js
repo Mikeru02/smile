@@ -260,7 +260,7 @@ class SocketServer {
                 const mode = data.mode;
                 this.utilityMode = mode;
                 this.arduino.sendCommand(`SET_UTILITY_MODE:${mode}`);
-                socket.emit('GET_UTILITY_MODE', { utilityMode: this.utilityMode})
+                socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode})
             })
 
             socket.on('disconnect', async () => {
@@ -349,7 +349,7 @@ class SocketServer {
             else {
                 console.error("Invalid mode");
             }
-            this.io.emit('UTILITY_MODE', { mode: utilityMode });
+            this.io.emit('SET_UTILITY_MODE', { mode: utilityMode });
         }
 
         if (message.startsWith("BINS:")) {
