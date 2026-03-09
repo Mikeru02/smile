@@ -313,7 +313,7 @@ input:checked + .slider:before {
 }
 
 .domain-list {
-    height: 35rem;
+    height: 48rem;
     overflow-y: auto;
     border: 2px solid #e8f4f5;
     border-radius: 0.8rem;
