@@ -12,6 +12,7 @@ export default async function PageEvent() {
     const retention = document.getElementById('backup-retention');
     const utility = document.getElementById('utility');
     const utilityCheckBox = document.getElementById('utility-checkbox');
+    const domainListContainer = document.getElementById('domain-list');
 
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
@@ -37,7 +38,6 @@ export default async function PageEvent() {
     socketClient.on("PROHIBITED", (data) => {
         const prohibitedLinks = data.links;
         console.log(prohibitedLinks);
-        const domainListContainer = document.getElementById('domain-list');
         domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
     })
 
@@ -124,23 +124,32 @@ export default async function PageEvent() {
         console.error("[ERROR]: ", err);
     }
 
-    const removeButtons = document.querySelectorAll(".remove-btn")
-    removeButtons.forEach(button => {
-        button.addEventListener('click', async function() {
-            console.log("BUTTON HIT")
-            socketClient.emit("REMOVE_PROHIBITED", ({ id: button.dataset.id }))
-            // await axiosClient.delete(
-            //     `link/prohibited/${button.dataset.id}`,
-            //     {
-            //         headers: {
-            //             'token': localStorage.getItem('token')
-            //         }
-            //     }
-            // );
-
-            // window.app.pushRoute('/admin/settings');
-        })
+    domainListContainer.addEventListener('click', function(e) {
+        // check if the clicked element has class remove-btn
+        if (e.target && e.target.classList.contains('remove-btn')) {
+            console.log("BUTTON HIT");
+            const id = e.target.dataset.id;
+            socketClient.emit("REMOVE_PROHIBITED", { id });
+        }
     });
+
+    // const removeButtons = document.querySelectorAll(".remove-btn")
+    // removeButtons.forEach(button => {
+    //     button.addEventListener('click', async function() {
+    //         console.log("BUTTON HIT")
+    //         socketClient.emit("REMOVE_PROHIBITED", ({ id: button.dataset.id }))
+    //         // await axiosClient.delete(
+    //         //     `link/prohibited/${button.dataset.id}`,
+    //         //     {
+    //         //         headers: {
+    //         //             'token': localStorage.getItem('token')
+    //         //         }
+    //         //     }
+    //         // );
+
+    //         // window.app.pushRoute('/admin/settings');
+    //     })
+    // });
 
     const addDomainBtn = document.getElementById('add-domain-btn');
     const domainInput = document.getElementById('new-domain');
