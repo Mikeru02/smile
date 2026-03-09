@@ -361,7 +361,7 @@ class SocketServer {
                     `account/all`,
                     {
                         headers: {
-                            'token': localStorage.getItem('token')
+                            'token': socket.token
                         }
                     }
                 )
