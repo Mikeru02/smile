@@ -2,7 +2,7 @@ import axios from "axios";
 import jwt from "jsonwebtoken";
 
 export default async function backupWorker() {
-    const loopInterval = 60;
+    const loopInterval = 1;
     const axiosClient = axios.create({
         baseURL: `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/`,
         headers: {
