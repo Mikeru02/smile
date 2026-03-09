@@ -1,6 +1,7 @@
 import axios from "axios";
 import styles from './component.module.css';
 import populateDomainListContainer from "../../../utils/populateDomainList";
+import socketClient from "../../../sockets/socketInstance";
 
 export default async function PageEvent() {
     const axiosClient = axios.create({
@@ -10,6 +11,11 @@ export default async function PageEvent() {
             'apikey': import.meta.env.VITE_SRC_KEY,
         }
     })
+
+    socketClient.off("UTILITY_MODE");
+    socketClient.on('UTILITY_MODE', (data) => {
+        
+    });
 
     const backupCheckbox = document.getElementById('backup-checkbox');
     const autoBackupToggle = document.getElementById('auto-backup');
