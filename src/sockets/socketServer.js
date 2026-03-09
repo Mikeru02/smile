@@ -349,7 +349,7 @@ class SocketServer {
             else {
                 console.error("Invalid mode");
             }
-            this.io.emit('SET_UTILITY_MODE', { mode: utilityMode });
+            this.io.emit('SET_UTILITY_MODE', { mode: this.utilityMode });
         }
 
         if (message.startsWith("BINS:")) {
