@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { checkInternet, checkModel } from '../utils/dashboardInformation.js';
 import fs from 'fs/promises';
+import BackupWorker from '../workers/backupWorker.js';
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi, messageBot }) {
@@ -330,6 +331,11 @@ class SocketServer {
                 catch (err){
                     console.error("ERROR", err);
                 }
+            });
+
+            socket.on("BACKUP_NOW", (data) => {
+                const backupWorker = new BackupWorker();
+                backupWorker.backupNow();
             })
 
             socket.on('disconnect', async () => {

@@ -20,7 +20,7 @@ import MessageBot from './utils/tgBot.js';
 import checkInternetWorker from './workers/internetWorker.js';
 import watchDnsmasq from './workers/watchDNS.js';
 import checkClients from './workers/checkClient.js';
-import backupWorker from './workers/backupWorker.js';
+import BackupWorker from './workers/backupWorker.js';
 
 const ip = getLocalIP();
 
@@ -39,7 +39,8 @@ const arduino = new Arduino(
         startTimeDeductor();
         // checkInternetWorker();
         // watchDnsmasq(process.env.DNSMASQ_LOG);
-        backupWorker();
+        const backupWorker = new BackupWorker();
+        backupWorker.start();
         checkClients();
     }
 );

@@ -13,6 +13,7 @@ export default async function PageEvent() {
     const utility = document.getElementById('utility');
     const utilityCheckBox = document.getElementById('utility-checkbox');
     const domainListContainer = document.getElementById('domain-list');
+    const backUpBtn = document.getElementById('backup-now');
 
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
@@ -162,5 +163,9 @@ export default async function PageEvent() {
             }
         )
         socketClient.emit('UTILITY_MODE', ({ mode: !isChecked }));
+    })
+
+    backUpBtn.addEventListener('click', function() {
+        socketClient.emit("BACKUP_NOW");
     })
 }
