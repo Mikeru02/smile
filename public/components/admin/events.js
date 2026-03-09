@@ -1,4 +1,5 @@
 import { getRole } from "../../utils/getRole";
+import socketClient from "../../sockets/socketInstance.js";
 
 export default function AdminEvents(){
     const role = getRole(localStorage.getItem('token'));
@@ -22,6 +23,7 @@ export default function AdminEvents(){
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem('token');
             document.title = "S.M.I.L.E - Portal";
+            socketClient.disconnect();
             window.app.pushRoute('/')
         })
     }

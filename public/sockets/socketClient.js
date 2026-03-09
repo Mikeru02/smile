@@ -6,7 +6,7 @@ class SocketClient {
     }
 
     connect() {
-        if (this.socket) return;
+        if (this.socket?.connected) return;
 
         const token = localStorage.getItem('token');
         if (!token) {

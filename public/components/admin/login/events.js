@@ -1,6 +1,7 @@
 import axios from 'axios';
 import OpenEye from '/icons/open-eye.svg';
 import CloseEye from '/icons/close-eye.svg';
+import socketClient from '../../../sockets/socketInstance.js';
 
 export default function Events(){
     const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
@@ -46,6 +47,7 @@ export default function Events(){
 
             localStorage.setItem('token', response.data.data.token);
             window.app.pushRoute('/admin/dashboard');
+            socketClient.connect();
 
         } catch (err) {
             modal.style.display = 'block';
