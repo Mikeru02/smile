@@ -119,12 +119,10 @@ export default async function PageEvent() {
     const removeButtons = document.querySelectorAll(".remove-btn")
     removeButtons.forEach(button => {
         button.addEventListener('click', async function() {
-            await axios.delete(
-                `${baseUrl}/api/v1/link/prohibited/${button.dataset.id}`,
+            await axiosClient.delete(
+                `link/prohibited/${button.dataset.id}`,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_SRC_KEY,
                         'token': localStorage.getItem('token')
                     }
                 }
@@ -139,7 +137,7 @@ export default async function PageEvent() {
 
     addDomainBtn.addEventListener('click', async function() {
         await axios.post(
-            `${baseUrl}/api/v1/link/prohibited`,
+            `link/prohibited`,
             { link: domainInput.value },
             {
                 headers: {
