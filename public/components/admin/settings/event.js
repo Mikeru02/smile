@@ -12,7 +12,7 @@ export default async function PageEvent() {
     const retention = document.getElementById('backup-retention');
     const utility = document.getElementById('utility');
     const utilityCheckBox = document.getElementById('utility-checkbox');
-    
+
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
         headers: {
@@ -24,6 +24,10 @@ export default async function PageEvent() {
     socketClient.off("SET_UTILITY_MODE");
     socketClient.on("SET_UTILITY_MODE", (data) => {
         const mode = data.mode;
+
+        console.log("RECEIVED EVENT");
+        console.log(mode);
+        console.log(typeof(mode))
         if (mode) {
             utilityCheckBox.checked = true;
         }
