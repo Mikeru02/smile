@@ -171,6 +171,8 @@ class Account {
             
             clauseValues.push(value);
 
+            console.log("DEBUG: ", { clauseValues });
+
             const [row] = await this.db.execute(
                 `UPDATE accounts SET ${setClause} WHERE ${field}=?`,
                 clauseValues
