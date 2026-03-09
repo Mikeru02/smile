@@ -588,7 +588,7 @@ void loop() {
       closeGate(servoLeft, servoRight);
       delay(2000);
       controlMotor("disable");
-      beep(1, 100, 100)
+      beep(1, 100, 100);
     }
     else if (command == "DONE CAPTURE" || command == "IGNORE") {
       respondAndDisplay("", "", "DONE CAPTURE");
