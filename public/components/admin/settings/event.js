@@ -127,6 +127,7 @@ export default async function PageEvent() {
     const removeButtons = document.querySelectorAll(".remove-btn")
     removeButtons.forEach(button => {
         button.addEventListener('click', async function() {
+            console.log("BUTTON HIT")
             socketClient.emit("REMOVE_PROHIBITED", ({ id: button.dataset.id }))
             // await axiosClient.delete(
             //     `link/prohibited/${button.dataset.id}`,
