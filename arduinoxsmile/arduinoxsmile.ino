@@ -320,7 +320,7 @@ void runPlatformSonars() {
 
   previousIRState = currentIRState;
 
-  if (currentIRState == HIGH) {
+  if (currentIRState == LOW) {
     if (!isIRBeeping) {
       // Start the timer if not already started
       if (IRDetectStartTime == 0) {
