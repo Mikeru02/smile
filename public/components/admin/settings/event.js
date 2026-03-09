@@ -138,7 +138,7 @@ export default async function PageEvent() {
     addDomainBtn.addEventListener('click', async function() {
         await axiosClient.post(
             `link/prohibited`,
-            { link: domainInput.value },
+            { domain: domainInput.value },
             {
                 headers: {
                     'Content-Type': 'application/json',
