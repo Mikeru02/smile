@@ -23,13 +23,14 @@ export default async function PageEvents() {
     //     }
     // );
 
-    socketClient.emit("GET_ACCOUNTS");
-
     socketClient.off("ACCOUNTS");
     socketClient.on("ACCOUNTS", (data) => {
         console.log(data.accounts);
         accounts = data.accounts
     })
+
+    
+    socketClient.emit("GET_ACCOUNTS");
 
     const modal = document.getElementById('modal');
     const createModal = document.getElementById('create-modal')
