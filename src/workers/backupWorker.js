@@ -59,7 +59,7 @@ export default async function backupWorker() {
             const timestamp = now.toISOString().replace(/[:.]/g, "-");
             const dumpFile = path.join(settings.location, `backup-${timestamp}.sql`);
             await new Promise((resolve, reject) => {
-                const command = `mysqldump -u root -p${process.env.DB_PASSWORD} ${process.env.DB_NAME} > ${dumpFile}`;
+                const command = `mysqldump -u root -p${process.env.DB_PASS} ${process.env.DB_NAME} > ${dumpFile}`;
                 exec(command, (err) => err ? reject(err) : resolve());
             });
 
