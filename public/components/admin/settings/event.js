@@ -16,6 +16,14 @@ export default async function PageEvent() {
     socketClient.on('GET_UTILITY_MODE', (data) => {
         const mode = data.utilityMode;
         console.log("DEBUG", mode)
+
+        if (mode) {
+            utilityCheckBox.checked = true;
+        }
+        else {
+            utilityCheckBox.checked = false;
+        }
+        
     });
 
     const backupCheckbox = document.getElementById('backup-checkbox');
@@ -160,11 +168,11 @@ export default async function PageEvent() {
     const utilityCheckBox = document.getElementById('utility-checkbox')
     utility.addEventListener('click', async function() {
         const isChecked = utilityCheckBox.checked;
-        if (isChecked) {
-            utilityCheckBox.checked = false;
-        } else {
-            utilityCheckBox.checked = true;
-        }
+        // if (isChecked) {
+        //     utilityCheckBox.checked = false;
+        // } else {
+        //     utilityCheckBox.checked = true;
+        // }
         
         socketClient.emit('UTILITY_MODE', ({ mode: !isChecked }));
     })
