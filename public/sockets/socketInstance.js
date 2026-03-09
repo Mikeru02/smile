@@ -1,11 +1,11 @@
 import SocketClient from "./socketClient.js";
 import checkToken from "../utils/checkToken.js";
 
-const token = localStorage.getItem('token');
-let socketClient;
+const token = localStorage.getItem("token");
 
-if (checkToken(token)) {
-    socketClient = new SocketClient();
+const socketClient = new SocketClient();
+
+if (token && checkToken(token)) {
     socketClient.connect();
 }
 
