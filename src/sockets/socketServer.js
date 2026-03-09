@@ -294,7 +294,7 @@ class SocketServer {
                         }
                     )
 
-                    const links = prohibited.data.data[0];
+                    const links = prohibited.data.data;
                     socket.emit('PROHIBITED', ({ links: links }))
                 }
                 catch (err){
