@@ -35,7 +35,9 @@ export default async function PageEvent() {
 
     socketClient.off("PROHIBITED");
     socketClient.on("PROHIBITED", (data) => {
-        console.log(data);
+        const prohibitedLinks = data.links;
+        const domainListContainer = document.getElementById('domain-list');
+        domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
     })
 
     function toggleBackupInputs(enabled) {
