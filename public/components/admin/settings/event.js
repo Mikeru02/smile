@@ -177,7 +177,7 @@ export default async function PageEvent() {
         const isChecked = utilityCheckBox.checked;
         await axiosClient.patch(
             `setting/`,
-            { utility_mode: utilityCheckBox.checked },
+            { utility_mode: !isChecked },
             {
                 headers: {
                     "token": localStorage.getItem("token")
