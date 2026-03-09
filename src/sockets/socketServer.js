@@ -73,7 +73,7 @@ class SocketServer {
                     socket.emit('BIN_STATUS', { status: this.currentBinStatus });
                 }
                 else {
-                    socket.emit('SET_UTILITY_MODE', { utilityMode: this.utilityMode})
+                    socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode})
                 }
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
