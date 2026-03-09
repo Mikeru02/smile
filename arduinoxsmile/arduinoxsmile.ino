@@ -283,7 +283,7 @@ void controlMotor(String state) {
   }
 }
 
-bool readIRStable(int pin, int stableTime = 100) {
+bool readIRStable(int pin, int stableTime = 150) {
   bool firstRead = digitalRead(pin);
   delay(stableTime);
   bool secondRead = digitalRead(pin);
@@ -312,7 +312,7 @@ String hasFullBin() {
 void runPlatformSonars() {
   bool currentIRState = readIRStable(IRPin);
 
-  if (previousIRState == LOW && currentIRState == HIGH && !alreadyDetectIR) {
+  if (previousIRState == LOW && currentIRState == HIGH && !alreadyDetectIR && !isScanning) {
     isScanning = true;
     alreadyDetectIR = true;
     scanningStartTime = millis();
