@@ -42,6 +42,8 @@ bool previousButtonState;
 bool alreadyPressButton = false;
 bool isScanning = false;
 bool isUtilityMode = false;
+bool isIRBeeping = false;
+unsigned long IRDetectStartTime = 0;
 
 // Varibles for Sonars
 const int sonarDistanceTreshold = 20;
@@ -317,6 +319,28 @@ void runPlatformSonars() {
   }
 
   previousIRState = currentIRState;
+
+  if (currentIRState == HIGH) {
+    if (!isIRBeeping) {
+      // Start the timer if not already started
+      if (IRDetectStartTime == 0) {
+        IRDetectStartTime = millis();
+      } 
+      // If IR HIGH for 1 second, start beeping
+      else if (millis() - IRDetectStartTime >= 1000) {
+        isIRBeeping = true;
+      }
+    }
+    // Beep continuously if IR is HIGH and stable
+    if (isIRBeeping) {
+      beep(1, 100, 200); // single beep every 300ms
+    }
+  } else {
+    // Reset flags when IR goes LOW
+    isIRBeeping = false;
+    IRDetectStartTime = 0;
+  }
+
   if (isScanning && alreadyDetectIR) {
     long frontDistance = readSonarDistance(sonarTrigPin, frontEchoPin);
     delay(70);
