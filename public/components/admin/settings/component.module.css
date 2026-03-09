@@ -551,7 +551,6 @@ input:checked + .slider:before {
 .backup-now {
     height: 4.8rem;
     border-radius: 3.4rem;
-    margin-top: 2.5rem;
     font-size: 1.6rem;
     font-weight: 600;
     background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
