@@ -72,6 +72,9 @@ class SocketServer {
                     socket.emit('INTERNET_STATUS', { online: this.internetStatus });
                     socket.emit('BIN_STATUS', { status: this.currentBinStatus });
                 }
+                else {
+                    socket.emit('UTILITY_MODE', { utilityMode: this.utilityMode})
+                }
             } catch (err) {
                 console.error('[ERROR] Failed to fetch client data:', err.message);
                 return;
