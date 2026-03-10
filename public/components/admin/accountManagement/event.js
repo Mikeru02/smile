@@ -23,15 +23,13 @@ export default async function PageEvents() {
     const roleElement = document.getElementById('admin-role');
     const createdElement = document.getElementById('admin-created_at');
     const passwordElement = document.getElementById('admin-password');
-    // const response = await axiosClient.get(
-    //     `account/all`,
-    //     {
-    //         headers: {
-    //             'token': localStorage.getItem('token')
-    //         }
-    //     }
-    // );
-    
+
+    // Create Modal
+    const username = document.getElementById('create-username');
+    const name = document.getElementById('create-name');
+    const role = document.getElementById('create-role');
+    const password = document.getElementById('create-password');
+
     socketClient.off("ACCOUNTS");
     socketClient.on("ACCOUNTS", (data) => {
         console.log("ACCOUNTS:", data);
@@ -98,35 +96,23 @@ export default async function PageEvents() {
 
     exitCreateBtn.addEventListener('click', function() {
         createModal.style.display = "none";
-        document.getElementById('create-username').value = "";
-        document.getElementById('create-name').value = "";
-        document.getElementById('create-password').value = "";
+        username.value = "";
+        name.value = "";
+        password.value = "";
     });
 
     saveCreateBtn.addEventListener('click', async function() {
-        try {
-            const response = await axiosClient.post(
-                `account/`,
-                {
-                    username: document.getElementById('create-username').value,
-                    name: document.getElementById('create-name').value,
-                    role: document.getElementById('create-role').value,
-                    password: document.getElementById('create-password').value,
-                },
-                {
-                    headers: {
-                        "token": localStorage.getItem('token')
-                    }
-                }
-            )
-            createModal.style.display = "none";
-            document.getElementById('create-username').value = "";
-            document.getElementById('create-name').value = "";
-            document.getElementById('create-password').value = "";
-        }
-        catch (err) {
-            console.error('[ERROR]', response.data);
-        }
+        socketClient.emit('CREATE_ACCOUNT', ({
+            username: username.value,
+            name: name.value,
+            role: role.value,
+            password: password.value,
+        }));
+
+        createModal.style.display = "none";
+        username.value = "";
+        name.value = "";
+        password.value = "";
     })
 
     const exitViewModal = document.getElementById('exit');
@@ -141,50 +127,25 @@ export default async function PageEvents() {
         const clientId = saveViewModal.dataset.clientId;
         if (!clientId) return;
 
-        try {
-            const response = await axiosClient.patch(
-                `account/?field=id&value=${clientId}`,
-                {
-                    username: usernameElement.value,
-                    name: nameElement.value,
-                    role: roleElement.value,
-                    password: passwordElement.value, 
-                },
-                {
-                    headers: {
-                        "token": localStorage.getItem('token')
-                    }
-                }
-            )
+        socketClient.emit('UPDATE_ACCOUNT', ({ 
+            accountId: clientId, 
+            accountData: {
+                username: usernameElement.value,
+                name: nameElement.value,
+                role: roleElement.value,
+                password: passwordElement.value, 
+            }})
+        )
 
-            alert("Successfully Updated!")
-            modal.style.display = "none";
-        }
-        catch (err) {
-            console.error('ERROR', err.message);
-        }
+        alert("Successfully Updated!")
+        modal.style.display = "none";
     })
 
     deleteViewModal.addEventListener('click', async function() {
         const clientId = deleteViewModal.dataset.clientId;
         if (!clientId) return;
-        try {
-            const response= await axiosClient.delete(
-                `account/?field=id&value=${clientId}`,
-                {
-                    headers: {
-                        "token": localStorage.getItem("token")
-                    }
-                }
-            )
-            console.log(response.data)
-        }
-        catch (err) {
-            console.error('Error saving account:', err.response?.data || err.message);
-        }
-        finally {
-            modal.style.display = 'none';
-            window.app.pushRoute('/admin/account-management');
-        }
+
+        socketClient.emit('DELETE_ACCOUNT', ({ accountId: clientId }));
+        modal.style.display = "none";
     })
 }

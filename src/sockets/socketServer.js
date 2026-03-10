@@ -5,6 +5,7 @@ import { checkInternet, checkModel } from '../utils/dashboardInformation.js';
 import fs from 'fs/promises';
 import ClientsSocketEvents from './admin/clients.js';
 import SettingsSocketEvents from './admin/settings.js';
+import AccountsSocketEvents from './admin/accounts.js';
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi, messageBot }) {
@@ -125,6 +126,7 @@ class SocketServer {
 
             ClientsSocketEvents(socket, this);
             SettingsSocketEvents(socket, this);
+            AccountsSocketEvents(socket, this);
 
             socket.on('GET_BIN_STATUS', () => {
                 // this.arduino.sendCommand('CHECK_BIN');
@@ -176,21 +178,6 @@ class SocketServer {
                         }
                     }
                 )
-            });
-
-            socket.on('GET_ACCOUNTS', async () => {
-                const response = await this.axiosClient.get(
-                    `account/all`,
-                    {
-                        headers: {
-                            token: socket.token
-                        }
-                    }
-                );
-
-                
-
-                socket.emit('ALL_ACCOUNTS', { accounts: response.data.data })
             });
 
             socket.on('DROPPING_CLIENT', async () => {
@@ -300,18 +287,6 @@ class SocketServer {
 
             socket.on('DEDUCT_TIME', (data) => {
                 socket.clientData.time_remaining = data.timeRemaining;
-            })
-
-            socket.on("GET_ACCOUNTS", async () => {
-                const account = await this.axiosClient.get(
-                    `account/all`,
-                    {
-                        headers: {
-                            'token': socket.token
-                        }
-                    }
-                )
-                socket.emit("ACCOUNTS", ({ accounts: account.data.data }))
             })
 
             socket.on('disconnect', async () => {
