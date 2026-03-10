@@ -24,6 +24,7 @@ export default async function PageEvents() {
     socketClient.off('LOGS');
     socketClient.on('LOGS', (data) => {
         const logs = data.logs;
+        console.log(logs);
         populateTable(tbody, logs, headers);
     })
 
