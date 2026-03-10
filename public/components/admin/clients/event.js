@@ -80,6 +80,14 @@ export default async function Event() {
         }
     })
 
+    exitBtn.addEventListener('click', function() {
+        modal.style.display = "none";
+    })
+
+    deleteBtn.addEventListener('click', function() {
+        socketClient.emit('DELETE_CLIENT', ({ clientId: deleteBtn.dataset.clientId }));
+    })
+
     // try {
     //     const allClients = await axiosClient.get(
     //         `client/all`
