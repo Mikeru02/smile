@@ -102,44 +102,6 @@ export default async function PageEvent() {
         });
     }
 
-    // try {
-    //     const settingResponse = await axiosClient.get(
-    //         `setting/`,
-    //         {
-    //             headers: {
-    //                 "token": localStorage.getItem('token')
-    //             }
-    //         }
-    //     )
-    //     const settingData = settingResponse.data.data[0];
-    //     console.log("DEBUG", settingData);
-    //     frequency.value = settingData.backup_freq;
-    //     compression.value = settingData.compression;
-    //     location.value = settingData.location;
-    //     retention.value = settingData.retention;
-
-    //     if (settingData.utility_mode) {
-    //         utilityCheckBox.checked = true;
-    //         socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
-    //     }
-    //     else {
-    //         utilityCheckBox.checked = false;
-    //         socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
-    //     }
-
-    //     if (settingData.auto_backup) {
-    //         backupCheckbox.checked = true;
-    //         toggleBackupInputs(backupCheckbox.checked);
-    //     }
-    //     else {
-    //         backupCheckbox.checked = false;
-    //         toggleBackupInputs(backupCheckbox.checked);
-    //     }
-    // }
-    // catch (err) {
-    //     console.error("[ERROR]: ", err);
-    // }
-
     domainListContainer.addEventListener('click', function(e) {
         // check if the clicked element has class remove-btn
         if (e.target && e.target.classList.contains('remove-btn')) {

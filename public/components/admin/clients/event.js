@@ -14,6 +14,15 @@ export default async function Event() {
     const exitBtn = document.getElementById('exit');
     const headers = populateHeaders(thead, "all-client");
 
+    const nameElement = document.getElementById('client-name');
+    const courseElement = document.getElementById('client-course');
+    const yearlvlElement = document.getElementById('client-yearlevel');
+    const statusElement = document.getElementById('client-status');
+    const timeEarnedElement = document.getElementById('client-timeEarned');
+    const timeRemainingElement = document.getElementById('client-timeRemaining');
+    const wasteCollectedElement = document.getElementById('client-wasteCollected');
+    const createdAtElement = document.getElementById('client-createdAt');
+
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
         headers: {
@@ -33,51 +42,32 @@ export default async function Event() {
 
     });
 
+    socketClient.off('SPECIFIC_CLIENT');
+    socketClient.on('SPECIFIC_CLIENT', (data) => {
+        const client = data.clientData;
+        console.log(client);
+
+        if (nameElement) nameElement.value = client.name || '';
+        if (courseElement) courseElement.value = client.course || '';
+        if (yearlvlElement) yearlvlElement.value = client.year_level || '';
+        if (statusElement) statusElement.value = client.status || 'active';
+        if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
+        if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;
+        if (wasteCollectedElement) wasteCollectedElement.value = client.waste_collected || 0;
+        if (createdAtElement) createdAtElement.value = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
+
+        saveBtn.dataset.clientId = button.dataset.id;
+        deleteBtn.dataset.clientId = button.dataset.id;
+
+        modal.style.display = 'block';
+    })
+
     socketClient.emit('GET_CLIENTS');
 
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
             const button = e.target;
-            try {
-                const clientData = await axiosClient.get(
-                    `client/?field=id&value=${button.dataset.id}`,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            "apikey": import.meta.env.VITE_SRC_KEY,
-                            "token": localStorage.getItem('token')
-                        }
-                    }
-                );
-
-                const client = clientData.data.data[0];
-                console.log(client);
-
-                const nameElement = document.getElementById('client-name');
-                const courseElement = document.getElementById('client-course');
-                const yearlvlElement = document.getElementById('client-yearlevel');
-                const statusElement = document.getElementById('client-status');
-                const timeEarnedElement = document.getElementById('client-timeEarned');
-                const timeRemainingElement = document.getElementById('client-timeRemaining');
-                const wasteCollectedElement = document.getElementById('client-wasteCollected');
-                const createdAtElement = document.getElementById('client-createdAt');
-
-                if (nameElement) nameElement.value = client.name || '';
-                if (courseElement) courseElement.value = client.course || '';
-                if (yearlvlElement) yearlvlElement.value = client.year_level || '';
-                if (statusElement) statusElement.value = client.status || 'active';
-                if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
-                if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;
-                if (wasteCollectedElement) wasteCollectedElement.value = client.waste_collected || 0;
-                if (createdAtElement) createdAtElement.value = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
-
-                saveBtn.dataset.clientId = button.dataset.id;
-                deleteBtn.dataset.clientId = button.dataset.id;
-
-                modal.style.display = 'block';
-            } catch (err) {
-                console.error('Error fetching client details:', err);
-            }
+            socketClient.emit('GET_SPECIFIC_CLIENT', ({ clientId: button.dataset.id }));
         }
     })
 

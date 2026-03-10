@@ -13,7 +13,7 @@ export default function ClientsSocketEvents(socket, server) {
             socket.emit('CLIENTS', ({ clients: clients.data.data }));
         }
         catch (err) {
-            console.error('ERROR', err.message);
+            console.error('[ERROR] ClientsSocketEvents.GET_CLIENTS', err.message);
         }
     })
 
@@ -40,7 +40,27 @@ export default function ClientsSocketEvents(socket, server) {
             socket.emit('CLIENTS', ({ clients: clients.data.data }));
         }
         catch (err) {
-            console.error('ERROR',err.message);
+            console.error('[ERROR] ClientsSocketEvents.DELETE_CLIENT', err.message);
+        }
+    })
+
+    socket.on('GET_SPECIFIC_CLIENT', async (data) => {
+        try {
+            const clientData = await server.axiosClient.get(
+                `client/?field=id&value=${data.clientid}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": import.meta.env.VITE_SRC_KEY,
+                        "token": localStorage.getItem('token')
+                    }
+                }
+            )
+
+            socket.emit('SPECIFIC_CLIENT', ({ clientData: clientData.data.data }))
+        }
+        catch (err) {
+            console.error('[ERROR] ClientsSocketEvents.GET_SPECIFIC_CLIENT', err.message);
         }
     })
 }
