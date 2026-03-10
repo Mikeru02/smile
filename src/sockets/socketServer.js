@@ -4,6 +4,7 @@ import axios from 'axios';
 import { checkInternet, checkModel } from '../utils/dashboardInformation.js';
 import fs from 'fs/promises';
 import BackupWorker from '../workers/backupWorker.js';
+import ClientsSocketEvents from './admin/clients.js';
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi, messageBot }) {
@@ -122,6 +123,8 @@ class SocketServer {
                 return;
             }
 
+            ClientsSocketEvents(socket);
+
             socket.on('GET_BIN_STATUS', () => {
                 // this.arduino.sendCommand('CHECK_BIN');
                 console.log('[DEBUG] Bin Status: ', this.currentBinStatus);
@@ -210,32 +213,50 @@ class SocketServer {
                 }
             });
 
-            socket.on('DELETE_CLIENT', async (data) => {
-                try {
-                    await this.axiosClient.delete(
-                        `client/?field=id&value=${data.clientId}`,
-                        {
-                            headers: {
-                                'token': socket.token
-                            }
-                        }
-                    )
+            // socket.on('GET_CLIENTS', async () => {
+            //     try {
+            //         const clients = await this.axiosClient.get(
+            //             `client/all`,
+            //             {
+            //                 headers: {
+            //                     "token": socket.token
+            //                 }
+            //             }
+            //         )
 
-                    const clients = await this.axiosClient.get(
-                        `client/all`,
-                        {
-                            headers: {
-                                "token": socket.token
-                            }
-                        }
-                    )
+            //         socket.emit('CLIENTS', ({ clients: clients.data.data }));
+            //     }
+            //     catch (err) {
+            //         console.error('ERROR', err.message);
+            //     }
+            // })
 
-                    socket.emit('CLIENTS', ({ clients: clients.data.data }));
-                }
-                catch (err) {
-                    console.error('ERROR',err.message);
-                }
-            })
+            // socket.on('DELETE_CLIENT', async (data) => {
+            //     try {
+            //         await this.axiosClient.delete(
+            //             `client/?field=id&value=${data.clientId}`,
+            //             {
+            //                 headers: {
+            //                     'token': socket.token
+            //                 }
+            //             }
+            //         )
+
+            //         const clients = await this.axiosClient.get(
+            //             `client/all`,
+            //             {
+            //                 headers: {
+            //                     "token": socket.token
+            //                 }
+            //             }
+            //         )
+
+            //         socket.emit('CLIENTS', ({ clients: clients.data.data }));
+            //     }
+            //     catch (err) {
+            //         console.error('ERROR',err.message);
+            //     }
+            // })
 
             socket.on('DROP_TIMEOUT', async () => {
                 const response = await this.axiosClient.patch(

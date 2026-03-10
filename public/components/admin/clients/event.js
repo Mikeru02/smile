@@ -32,7 +32,9 @@ export default async function Event() {
         const headers = populateHeaders(thead, "all-client");
         populateTable(tbody, clients, headers);
 
-    })
+    });
+
+    socketClient.emit('GET_CLIENTS');
 
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
