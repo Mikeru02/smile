@@ -9,7 +9,7 @@ export default function Main(root){
             <p class="${styles["desc"]}">Input Credentials</p>
             <div class="${styles["input-fields"]}">
                 <label for="student-id">Student ID</label>
-                <input type="number" name="student-id" id="student-id" placeholder=" Enter Student ID (ex: 22-1234)" autocomplete="off">
+                <input type="text" name="student-id" id="student-id" placeholder=" Enter Student ID (ex: 22-1234)" autocomplete="off">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" placeholder="Enter Name" autocomplete="off">
                 <label for="course">Course / Strand</label>
