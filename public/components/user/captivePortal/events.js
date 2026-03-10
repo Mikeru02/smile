@@ -58,11 +58,54 @@ export default async function Events() {
     
         if (submitBtn) {
             submitBtn.addEventListener("click", async function() {
+                const studentIdInput = document.getElementById('student-id');
+                const nameInput = document.getElementById('name');
+                const consentCheckbox = document.getElementById('consent');
+
+                // Trimmed values
+                const studentIdVal = studentIdInput.value.trim();
+                const nameVal = nameInput.value.trim();
+                const consentChecked = consentCheckbox.checked;
+
+                // Simple input validation before sending
+                if (!studentIdVal) {
+                    alert("Student ID is required.");
+                    studentIdInput.focus();
+                    return;
+                }
+
+                if (!nameVal) {
+                    alert("Name is required.");
+                    nameInput.focus();
+                    return;
+                }
+
+                if (!consentChecked) {
+                    alert("You must agree to the consent.");
+                    consentCheckbox.focus();
+                    return;
+                }
+
+                // Optional: validate course/year
+                if (!courseSelect.value) {
+                    alert("Please select a course.");
+                    courseSelect.focus();
+                    return;
+                }
+
+                if (!yearSelect.value) {
+                    alert("Please select a year level.");
+                    yearSelect.focus();
+                    return;
+                }
+
+                // All validations passed, proceed with Axios request
                 try {
                     const response = await axios.post(
                         `${baseUrl}/api/v1/client/`, 
                         {
-                            name: document.getElementById('name').value,
+                            student_id: studentIdVal,
+                            name: nameVal,
                             course: courseSelect.value,
                             year_level: yearSelect.value
                         }, 
@@ -77,7 +120,7 @@ export default async function Events() {
                     window.app.pushRoute("/portal");
                 } catch (err) {
                     if (err.response && err.response.data && err.response.data.message) {
-                        alert(err.response.data.message); // Show the backend message to user
+                        alert(err.response.data.message);
                     } else {
                         alert("An unexpected error occurred. Please try again.");
                         console.error(err);
