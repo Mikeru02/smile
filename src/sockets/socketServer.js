@@ -93,6 +93,16 @@ class SocketServer {
                             }
                         }
                     )
+
+                    const setting = await this.axiosClient.get(
+                        `setting/`,
+                        {
+                            headers: {
+                                'token': socket.token
+                            }
+                        }
+                    )
+                    socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
                     socket.emit("ACCOUNTS", ({ accounts: account.data.data}))
                     socket.emit("PROHIBITED", ({links: prohibited.data.data}))
                 }
@@ -112,15 +122,53 @@ class SocketServer {
             socket.on("GET_SETTINGS", async () => {
                 socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode});
 
-                    const prohibited = await this.axiosClient.get(
-                        `link/prohibited/all`,
+                const prohibited = await this.axiosClient.get(
+                    `link/prohibited/all`,
+                    {
+                        headers: {
+                            "token": socket.token
+                        }
+                    }
+                )
+                const setting = await this.axiosClient.get(
+                    `setting/`,
+                    {
+                        headers: {
+                            'token': socket.token
+                        }
+                    }
+                )
+
+                socket.emit("PROHIBITED", ({ links: prohibited.data.data }))
+                socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
+            })
+
+            socket.on('RESTORE', async () => {
+                try {
+                    await this.axiosClient.patch(
+                        `setting/restore`,
+                        {},
                         {
                             headers: {
-                                "token": socket.token
+                                'token': socket.token
                             }
                         }
                     )
-                    socket.emit("PROHIBITED", ({links: prohibited.data.data}))
+
+                    const setting = await this.axiosClient.get(
+                        `setting/`,
+                        {
+                            headers: {
+                                'token': socket.token
+                            }
+                        }
+                    )
+
+                    socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
+                }
+                catch (err) {
+                    console.error('ERROR',err.message);
+                }
             })
 
             socket.on('DROP_TIMEOUT', async () => {

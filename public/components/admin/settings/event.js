@@ -15,6 +15,8 @@ export default async function PageEvent() {
     const utilityCheckBox = document.getElementById('utility-checkbox');
     const domainListContainer = document.getElementById('domain-list');
     const backUpBtn = document.getElementById('backup-now');
+    const restoreBtn = document.getElementById('restore-now');
+    const saveBtn = document.getElementById('save-now');
 
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
@@ -41,6 +43,34 @@ export default async function PageEvent() {
         const prohibitedLinks = data.links;
         console.log(prohibitedLinks);
         domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
+    })
+
+    socketClient.off('SETTINGS');
+    socketClient.on('SETTINGS', (data) => {
+        const settingData = data.settings;
+        console.log("DEBUG", settingData);
+        frequency.value = settingData.backup_freq;
+        compression.value = settingData.compression;
+        location.value = settingData.location;
+        retention.value = settingData.retention;
+
+        if (settingData.utility_mode) {
+            utilityCheckBox.checked = true;
+            socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
+        }
+        else {
+            utilityCheckBox.checked = false;
+            socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
+        }
+
+        if (settingData.auto_backup) {
+            backupCheckbox.checked = true;
+            toggleBackupInputs(backupCheckbox.checked);
+        }
+        else {
+            backupCheckbox.checked = false;
+            toggleBackupInputs(backupCheckbox.checked);
+        }
     })
 
     socketClient.emit("GET_SETTINGS")
@@ -72,43 +102,43 @@ export default async function PageEvent() {
         });
     }
 
-    try {
-        const settingResponse = await axiosClient.get(
-            `setting/`,
-            {
-                headers: {
-                    "token": localStorage.getItem('token')
-                }
-            }
-        )
-        const settingData = settingResponse.data.data[0];
-        console.log("DEBUG", settingData);
-        frequency.value = settingData.backup_freq;
-        compression.value = settingData.compression;
-        location.value = settingData.location;
-        retention.value = settingData.retention;
+    // try {
+    //     const settingResponse = await axiosClient.get(
+    //         `setting/`,
+    //         {
+    //             headers: {
+    //                 "token": localStorage.getItem('token')
+    //             }
+    //         }
+    //     )
+    //     const settingData = settingResponse.data.data[0];
+    //     console.log("DEBUG", settingData);
+    //     frequency.value = settingData.backup_freq;
+    //     compression.value = settingData.compression;
+    //     location.value = settingData.location;
+    //     retention.value = settingData.retention;
 
-        if (settingData.utility_mode) {
-            utilityCheckBox.checked = true;
-            socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
-        }
-        else {
-            utilityCheckBox.checked = false;
-            socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
-        }
+    //     if (settingData.utility_mode) {
+    //         utilityCheckBox.checked = true;
+    //         socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
+    //     }
+    //     else {
+    //         utilityCheckBox.checked = false;
+    //         socketClient.emit('UTILITY_MODE', ({ mode: utilityCheckBox.checked }));
+    //     }
 
-        if (settingData.auto_backup) {
-            backupCheckbox.checked = true;
-            toggleBackupInputs(backupCheckbox.checked);
-        }
-        else {
-            backupCheckbox.checked = false;
-            toggleBackupInputs(backupCheckbox.checked);
-        }
-    }
-    catch (err) {
-        console.error("[ERROR]: ", err);
-    }
+    //     if (settingData.auto_backup) {
+    //         backupCheckbox.checked = true;
+    //         toggleBackupInputs(backupCheckbox.checked);
+    //     }
+    //     else {
+    //         backupCheckbox.checked = false;
+    //         toggleBackupInputs(backupCheckbox.checked);
+    //     }
+    // }
+    // catch (err) {
+    //     console.error("[ERROR]: ", err);
+    // }
 
     domainListContainer.addEventListener('click', function(e) {
         // check if the clicked element has class remove-btn
@@ -169,5 +199,9 @@ export default async function PageEvent() {
 
     backUpBtn.addEventListener('click', function() {
         socketClient.emit("BACKUP_NOW");
+    })
+
+    restoreBtn.addEventListener('click', function() {
+        socketClient.emit('RESTORE');
     })
 }
