@@ -67,6 +67,7 @@ export default async function Event() {
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
             const button = e.target;
+            console.log(button.dataset.clientId)
             socketClient.emit('GET_SPECIFIC_CLIENT', ({ clientId: button.dataset.id }));
         }
     })
