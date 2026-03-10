@@ -1,4 +1,6 @@
 import styles from "./component.module.css";
+import SaveSVG from "../../../icons/save.svg";
+import RestoreSVG from "../../../icons/restore.svg";
 
 export default function MainContent(root) {
     root.innerHTML = `
@@ -82,8 +84,12 @@ export default function MainContent(root) {
 
                         <div class="${styles["setting-item"]}">
                             <div>
-                                <button class="${styles['save']} ${styles['restore']}" id="restore-now">Restore Defaults</button>
-                                <button class="${styles['save']}" id="save-now">Save Settings</button>
+                                <button class="${styles['save']} ${styles['restore']}" id="restore-now">
+                                    <img src="${RestoreSVG}" >
+                                </button>
+                                <button class="${styles['save']}" id="save-now">
+                                    <img src="${SaveSVG}" >
+                                </button>
                             </div>
                         </div>
 
