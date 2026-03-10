@@ -67,7 +67,6 @@ export default async function Event() {
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
             const button = e.target;
-            console.log(button.dataset.id)
             socketClient.emit('GET_SPECIFIC_CLIENT', ({ clientId: button.dataset.id }));
         }
     })
@@ -82,7 +81,7 @@ export default async function Event() {
 
     saveBtn.addEventListener('click', function() {
         socketClient.emit('UPDATE_CLIENT', ({ 
-            clientId: saveBtn.dataset.id,
+            clientId: saveBtn.dataset.clientId,
             clientData: {
                 name: nameElement.value,
                 course: courseElement.value,
