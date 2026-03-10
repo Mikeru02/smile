@@ -585,6 +585,22 @@ input:checked + .slider:before {
     box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
 }
 
+.save-default {
+    width: 5rem;
+    height: 4.8rem;
+    border-radius: 1rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
     .settings-grid {
