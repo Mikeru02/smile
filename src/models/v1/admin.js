@@ -24,7 +24,7 @@ class Admin {
                 internet: checkInternet(),  
                 model: await checkModel(),
                 total_clients: (await this.client.getAll()).length,
-                active_clients: (await this.client.getClientWithSpecificField("status", "active").length),
+                active_clients: (await this.client.getClientWithSpecificField("status", "active")).length,
                 waste_transactions: await this.waste.getAllWasteTransaction(),
                 bottle_transactions: await this.waste.getAllSpecificWaste("PBTL"),
                 paper_transactions: await this.waste.getAllSpecificWaste("PPRS"),
