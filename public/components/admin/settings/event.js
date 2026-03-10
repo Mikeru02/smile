@@ -4,6 +4,7 @@ import populateDomainListContainer from "../../../utils/populateDomainList";
 import socketClient from "../../../sockets/socketInstance";
 
 export default async function PageEvent() {
+    socketClient.connect();
     const backupCheckbox = document.getElementById('backup-checkbox');
     const autoBackupToggle = document.getElementById('auto-backup');
     const frequency = document.getElementById('backup-frequency');
