@@ -42,6 +42,21 @@ export default async function PageEvents() {
         populateTable(tbody, accounts, headers);
     })
 
+    socketClient.off('SPECIFIC_ACCOUNT');
+    socketClient.on('SPECIFIC_ACCOUNT', (data) => {
+        const account = data.accountData;
+
+        if (usernameElement) usernameElement.value = account.username;
+        if (nameElement) nameElement.value = account.name;
+        if (roleElement) roleElement.value = account.role;
+        if (createdElement) createdElement.value = account.created_at ? new Date(account.created_at).toLocaleDateString() : 'N/A';;
+
+        saveViewModal.dataset.clientId = button.dataset.id;
+        deleteViewModal.dataset.clientId = button.dataset.id;
+
+        modal.style.display = 'block';
+    })
+
     socketClient.emit("GET_ACCOUNTS");
 
 
@@ -51,26 +66,7 @@ export default async function PageEvents() {
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
             const button = e.target;
-            const accountData = await axiosClient.get(
-                `account/?field=id&value=${button.dataset.id}`,
-                {
-                    headers: {
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
-
-            const account = accountData.data.data;
-
-            if (usernameElement) usernameElement.value = account.username;
-            if (nameElement) nameElement.value = account.name;
-            if (roleElement) roleElement.value = account.role;
-            if (createdElement) createdElement.value = account.created_at ? new Date(account.created_at).toLocaleDateString() : 'N/A';;
-
-            saveViewModal.dataset.clientId = button.dataset.id;
-            deleteViewModal.dataset.clientId = button.dataset.id;
-
-            modal.style.display = 'block';
+            socketClient.emit('GET_SPECIFIC_ACCOUNT', ({ accountId: button.dataset.id }));
         }
     })
 
@@ -112,7 +108,7 @@ export default async function PageEvents() {
             alert("All fields are required!");
             return;
         }
-        
+
         socketClient.emit('CREATE_ACCOUNT', ({
             username: userVal,
             name: nameVal,

@@ -92,4 +92,21 @@ export default function AccountsSocketEvents(socket, server) {
             console.error('[ERROR] AccountsSocketEvents.CREATE_ACCOUNT', err.message);
         }
     })
+
+    socket.on('GET_SPECIFIC_ACCOUNT', async (data) => {
+        try {
+            const accountData = await server.axiosClient.get(
+                `account/?field=id&value=${data.accountId}`,
+                {
+                    headers: {
+                        'token': socket.token
+                    }
+                }
+            )
+            socket.emit('SPECIFIC_ACCOUNT', { accountData: accountData.data.data });
+        }
+        catch (err) {
+            console.error('[ERROR] AccountsSocketEvents.GET_SPECIFIC_ACCOUNT', err.message);
+        }
+    })
 }
