@@ -70,43 +70,47 @@ export default function ClientsSocketEvents(socket, server) {
             );
 
             const specificClient = clientResponse.data.data[0];
-            let shouldUpdateDB = false;
 
-            if ('status' in data.clientData) {
-                // Status exists → handle active/paused/pending
-                if (data.clientData.status === 'active' && specificClient?.ip) {
+            // Separate status from other fields
+            const { status, ...otherFields } = data.clientData;
+
+            let statusUpdated = false;
+
+            // Handle auth/deauth only if IP exists
+            if (specificClient?.ip) {
+                if (status === 'active') {
                     await server.axiosClient.patch(
                         `client/auth`,
                         { clientId: specificClient.id },
                         { headers: { token: socket.token } }
                     );
-                    shouldUpdateDB = true;
-                } else if (
-                    (data.clientData.status === 'paused' || data.clientData.status === 'pending') 
-                    && specificClient?.ip
-                ) {
+                    statusUpdated = true;
+                } else if (status === 'paused' || status === 'pending') {
                     await server.axiosClient.patch(
                         `client/deauth`,
                         { clientId: specificClient.id },
                         { headers: { token: socket.token } }
                     );
-                    shouldUpdateDB = true;
+                    statusUpdated = true;
                 } else {
-                    console.log(`[UPDATE_CLIENT] Status '${data.clientData.status}' skipped. No auth/deauth performed.`);
+                    console.log(`[UPDATE_CLIENT] Status '${status}' skipped. No auth/deauth performed.`);
                 }
             } else {
-                // Status not included → always update DB
-                shouldUpdateDB = true;
+                console.log(`[UPDATE_CLIENT] No IP for client ${specificClient?.id}. Skipping auth/deauth.`);
             }
 
-            // Update DB only if flagged
-            if (shouldUpdateDB) {
-                await server.axiosClient.patch(
-                    `client/?field=id&value=${data.clientId}`,
-                    data.clientData,
-                    { headers: { token: socket.token } }
-                );
-            }
+            // Update DB
+            // - If statusUpdated → include status in the DB update
+            // - If not → only update other fields (without overwriting status)
+            const dbPayload = statusUpdated
+                ? data.clientData
+                : otherFields; // omit status if we didn’t authenticate/deauthenticate
+
+            await server.axiosClient.patch(
+                `client/?field=id&value=${data.clientId}`,
+                dbPayload,
+                { headers: { token: socket.token } }
+            );
 
             // Fetch and emit updated client list
             const clients = await server.axiosClient.get(
