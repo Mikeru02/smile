@@ -91,6 +91,9 @@ export default async function Event() {
                 time_remaining: timeRemainingElement.value,
             }
         }))
+
+        alert("Update successfully");
+        modal.style.display = "none";
     })
 
     const exportBtn = document.getElementById('export-btn');
