@@ -4,7 +4,7 @@ export default function LogsSocketEvents(socket, server) {
             const response = await server.axiosClient.get(
                 `logs/?limit=100`,
                 {
-                    header: {
+                    headers: {
                         'token': socket.token
                     }
                 }
