@@ -37,7 +37,46 @@ export default async function Event() {
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
             const button = e.target;
-            alert(button.dataset.id);
+            try {
+                const clientData = await axiosClient.get(
+                    `client/?field=id&value=${button.dataset.id}`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "apikey": import.meta.env.VITE_SRC_KEY,
+                            "token": localStorage.getItem('token')
+                        }
+                    }
+                );
+
+                const client = clientData.data.data[0];
+                console.log(client);
+
+                const nameElement = document.getElementById('client-name');
+                const courseElement = document.getElementById('client-course');
+                const yearlvlElement = document.getElementById('client-yearlevel');
+                const statusElement = document.getElementById('client-status');
+                const timeEarnedElement = document.getElementById('client-timeEarned');
+                const timeRemainingElement = document.getElementById('client-timeRemaining');
+                const wasteCollectedElement = document.getElementById('client-wasteCollected');
+                const createdAtElement = document.getElementById('client-createdAt');
+
+                if (nameElement) nameElement.value = client.name || '';
+                if (courseElement) courseElement.value = client.course || '';
+                if (yearlvlElement) yearlvlElement.value = client.year_level || '';
+                if (statusElement) statusElement.value = client.status || 'active';
+                if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
+                if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;
+                if (wasteCollectedElement) wasteCollectedElement.value = client.waste_collected || 0;
+                if (createdAtElement) createdAtElement.value = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
+
+                saveBtn.dataset.clientId = button.dataset.id;
+                deleteBtn.dataset.clientId = button.dataset.id;
+
+                modal.style.display = 'block';
+            } catch (err) {
+                console.error('Error fetching client details:', err);
+            }
         }
     })
 
