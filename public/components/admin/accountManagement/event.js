@@ -5,6 +5,9 @@ import socketClient from "../../../sockets/socketInstance.js";
 
 export default async function PageEvents() {
     socketClient.connect();
+    socketClient.on('connect', () => {
+        socketClient.emit("GET_ACCOUNTS");
+    })
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
         headers: {
@@ -56,9 +59,6 @@ export default async function PageEvents() {
 
         modal.style.display = 'block';
     })
-
-    socketClient.emit("GET_ACCOUNTS");
-
 
     const modal = document.getElementById('modal');
     const createModal = document.getElementById('create-modal')

@@ -27,7 +27,7 @@ export default async function PageEvents() {
         console.log(logs);
         populateTable(tbody, logs, headers);
     })
-
+    
     socketClient.emit('GET_LOGS');
 
     const exportBtn = document.getElementById('export-logs');
