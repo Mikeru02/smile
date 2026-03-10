@@ -71,7 +71,8 @@ export default async function Event() {
                     }
 
                     seconds--;
-                    timeCell.textContent = secondsToTime(seconds);
+                    const { hrs, mins, secs } = secondsToTime(seconds);
+                    timeCell.textContent = `${hrs}:${mins}:${secs}`
 
                 }, 1000);
 
