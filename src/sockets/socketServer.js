@@ -221,7 +221,7 @@ class SocketServer {
                         }
                     )
 
-                    const clients = await this.activeClient.get(
+                    const clients = await this.axiosClient.get(
                         `client/all`,
                         {
                             headers: {
