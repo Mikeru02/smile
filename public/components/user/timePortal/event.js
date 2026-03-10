@@ -210,7 +210,7 @@ export default async function Events() {
         }
 
         if (mode) {
-            if (mode === "on"){
+            if (mode === true){
                 dropBtn.disabled = true;
                 dropBtn.style.opacity = '0.5';
                 dropBtn.style.cursor = 'not-allowed';
