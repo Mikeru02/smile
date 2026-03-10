@@ -1,4 +1,4 @@
-import BackupWorker from '../workers/backupWorker.js';
+import BackupWorker from "../../workers/backupWorker.js";
 
 export default function SettingsSocketEvents(socket, server) {
     socket.on("GET_SETTINGS", async () => {
