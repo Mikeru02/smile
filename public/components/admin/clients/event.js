@@ -54,7 +54,7 @@ export default async function Event() {
             const client = clients[index];
             if (!client) return;
 
-            const timeCell = row.querySelector('[data-key="time_remaining"]');
+            const timeCell = row.querySelector('.time');
             if (!timeCell) return;
 
             if (client.status === "active") {
