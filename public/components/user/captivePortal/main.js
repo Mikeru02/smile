@@ -7,9 +7,18 @@ export default function Main(root){
             <img src="${Logo}" class="${styles["logo"]}" id="logo">
             <h1 class="${styles["title"]}">S.M.I.L.E</h1>
             <p class="${styles["desc"]}">Input Credentials</p>
+            <!-- From Uiverse.io by Yaya12085 --> 
+            <div class="${styles['radio-inputs']}">
+                <label class="${styles['radio']}">
+                    <input type="radio" name="radio" value="student" checked="">
+                    <span class="${styles['name']}">Student</span>
+                </label>
+                <label class="${styles['radio']}">
+                    <input type="radio" name="radio" value="guest">
+                    <span class="${styles['name']}">Guest</span>
+                </label>
+            </div>
             <div class="${styles["input-fields"]}">
-                <label for="student-id">Student ID</label>
-                <input type="text" name="student-id" id="student-id" placeholder=" Enter Student ID (ex: 22-1234)" autocomplete="off">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" placeholder="Enter Name" autocomplete="off">
                 <label for="course">Course / Strand</label>

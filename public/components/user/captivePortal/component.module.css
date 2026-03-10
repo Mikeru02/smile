@@ -205,7 +205,47 @@
   color: white;
 }
 
-@media (min-width: 600px) and (max-width: 1024px) {
+/* From Uiverse.io by Yaya12085 */ 
+.radio-inputs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 0.5rem;
+  background-color: rgba(64, 82, 86, 0.5);
+  box-sizing: border-box;
+  box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+  width: 60%;
+  font-size: 1.5rem;
+}
+
+.radio-inputs .radio {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.radio-inputs .radio input {
+  display: none;
+}
+
+.radio-inputs .radio .name {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: none;
+  padding: 1rem 1rem;
+  color: white;
+  transition: all .15s ease-in-out;
+}
+
+.radio-inputs .radio input:checked + .name {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  font-weight: 600;
+}
+
+@media (min-width: 600px) and (max-width: 1023px) {
     .card {
         padding: 4rem 3rem;
         max-width: 50rem;
