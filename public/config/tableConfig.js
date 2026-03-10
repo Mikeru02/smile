@@ -14,6 +14,7 @@ const TABLE_CONFIG = {
     "account-management": [
         { label: "ID", key: "id" },
         { label: "Username", key: "username" },
+        { label: "Name", key: "name" },
         { label: "Role", key: "role" },
         { label: "Last Login", key: "last_login" },
         { label: "Created At", key: "created_at" },
