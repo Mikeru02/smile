@@ -13,5 +13,6 @@ settingRouter.get('/', authentication, setting.get.bind(setting));
 
 // Patch Methods
 settingRouter.patch('/', authentication, setting.update.bind(setting));
+settingRouter.patch('/restore', authentication, setting.restore.bind(setting));
 
 export default settingRouter;

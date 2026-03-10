@@ -42,6 +42,21 @@ class Setting {
             throw err;
         }
     }
+
+    async restore() {
+        try {
+            const [row] = await this.db.execute(
+                `UPDATE settings SET auto_backup = ?, backup_freq = ?, compression = ?, location = ?, retention = ?`,
+                [true, 'hourly', 'zip', '/root/backup/smile', 30]
+            )
+
+            return row || null;
+        }
+        catch (err) {
+            console.error("[ERROR] setting.restore", err);
+            throw err;
+        }
+    }
 }
 
 export default Setting;
