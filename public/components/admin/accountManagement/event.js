@@ -44,7 +44,7 @@ export default async function PageEvents() {
 
     socketClient.off('SPECIFIC_ACCOUNT');
     socketClient.on('SPECIFIC_ACCOUNT', (data) => {
-        const account = data.accountData;
+        const account = data.accountData[0];
 
         if (usernameElement) usernameElement.value = account.username;
         if (nameElement) nameElement.value = account.name;
