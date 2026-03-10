@@ -27,6 +27,8 @@ export default async function PageEvents() {
         populateTable(tbody, logs, headers);
     })
 
+    socketClient.emit('GET_LOGS');
+
     const exportBtn = document.getElementById('export-logs');
     exportBtn.addEventListener('click', async function() {
         try {
