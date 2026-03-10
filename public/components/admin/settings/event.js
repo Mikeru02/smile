@@ -203,14 +203,44 @@ export default async function PageEvent() {
 
     restoreBtn.addEventListener('click', function() {
         socketClient.emit('RESTORE');
+        alert('Restored Successful')
     })
 
-    saveBtn.addEventListener('click', function() {
-        socketClient.emit('SAVE', ({
-            backup_freq: frequency.value,
-            compression: compression.value,
-            location: location.value,
-            retention: retention.value
-        }));
-    })
+    saveBtn.addEventListener('click', function () {
+        const backupFreq = frequency.value;
+        const compressionVal = compression.value;
+        const locationVal = location.value.trim();
+        const retentionVal = retention.value;
+
+        // Validation
+        if (!backupFreq) {
+            alert("Please select a backup frequency.");
+            return;
+        }
+
+        if (!compressionVal) {
+            alert("Please select a compression type.");
+            return;
+        }
+
+        if (!locationVal) {
+            alert("Backup location cannot be empty.");
+            return;
+        }
+
+        if (!retentionVal || isNaN(retentionVal) || Number(retentionVal) <= 0) {
+            alert("Retention must be a valid number greater than 0.");
+            return;
+        }
+
+        // Emit only if all values are valid
+        socketClient.emit('SAVE', {
+            backup_freq: backupFreq,
+            compression: compressionVal,
+            location: locationVal,
+            retention: Number(retentionVal)
+        });
+
+        alert('Saved Successfully');
+    });
 }
