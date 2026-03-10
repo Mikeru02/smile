@@ -18,12 +18,14 @@ export default function Main(root){
                     <span class="${styles['name']}">Guest</span>
                 </label>
             </div>
-            <div class="${styles["input-fields"]}">
-                <label for="name">Name</label>
+            <div class="${styles["input-fields"]}" id="input-fields">
+                <label for="student-id" id='studentIdLabel'>Student ID</label>
+                <input type="text" name="student-id" id="student-id" placeholder=" Enter Student ID (ex: 22-1234)" autocomplete="off">
+                <label for="name" id='name-label'>Name</label>
                 <input type="text" name="name" id="name" placeholder="Enter Name" autocomplete="off">
-                <label for="course">Course / Strand</label>
+                <label for="course" id="course-label">Course / Strand</label>
                 <select id="course" data-value="course" class="${styles['courses']}"></select>
-                <label for="yearlvl">Year Level</label>
+                <label for="yearlvl" id="yearlevel-label">Year Level</label>
                 <select id="yearlvl" data-value="yearlvl" class="${styles['courses']}"></select>
             </div>
             <div class="${styles["consent-container"]}">
