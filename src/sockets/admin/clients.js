@@ -47,7 +47,7 @@ export default function ClientsSocketEvents(socket, server) {
     socket.on('GET_SPECIFIC_CLIENT', async (data) => {
         try {
             const clientData = await server.axiosClient.get(
-                `client/?field=id&value=${data.clientid}`,
+                `client/?field=id&value=${data.clientId}`,
                 {
                     headers: {
                         "token": socket.token
