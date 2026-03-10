@@ -102,6 +102,17 @@ class SocketServer {
                             }
                         }
                     )
+
+                    const clients = await this.axiosClient.get(
+                        `client/all`,
+                        {
+                            headers: {
+                                "token": socket.token
+                            }
+                        }
+                    )
+
+                    socket.emit('CLIENTS', ({ clients: clients.data.data }));
                     socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
                     socket.emit("ACCOUNTS", ({ accounts: account.data.data}))
                     socket.emit("PROHIBITED", ({links: prohibited.data.data}))
