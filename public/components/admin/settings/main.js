@@ -11,6 +11,10 @@ export default function MainContent(root) {
                     <h3 class="${styles["section-title"]}">🚫 Content Filtering</h3>
                     <div class="${styles["settings-group"]}">
                         <div class="${styles["setting-item"]}">
+                            <div class="${styles["add-domain-container"]}">
+                                <input type="text" id="new-domain" placeholder="Enter domain to block" class="${styles["setting-input"]}">
+                                <button class="${styles["add-btn"]}" id="add-domain-btn">Add Domain</button>
+                            </div>
                             <label>Prohibited Domains</label>
                             <div class="${styles["domain-list"]}" id="domain-list">
                                 <div class="${styles["domain-item"]}">
@@ -18,10 +22,6 @@ export default function MainContent(root) {
                                     <button class="${styles["remove-btn"]}" onclick="#">×</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="${styles["add-domain-container"]}">
-                            <input type="text" id="new-domain" placeholder="Enter domain to block" class="${styles["setting-input"]}">
-                            <button class="${styles["add-btn"]}" id="add-domain-btn">Add Domain</button>
                         </div>
                         <small>Manage blocked domains and links</small>
                     </div>
