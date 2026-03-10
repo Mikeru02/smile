@@ -602,7 +602,7 @@ input:checked + .slider:before {
 }
 
 .restore {
-    background-color: linear-gradient(135deg, #af4c4c 0%, #a04545 100%) !important;
+    background: linear-gradient(135deg, #af4c4c 0%, #a04545 100%) !important;
 }
 
 /* Responsive Design */
