@@ -54,7 +54,6 @@ export default async function checkClients() {
                         `client/?field=mac&value=${client.mac}`,
                         { 
                             ip: null,
-                            status: "pending",
                             expire_at: null,
                             time_remaining: updatedTimeRemaining,
                             connection_start_at: null,
