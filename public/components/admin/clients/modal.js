@@ -45,9 +45,6 @@ export default function Modal() {
                                 <option value="active">Active</option>
                                 <option value="paused">Paused</option>
                                 <option value="pending">Pending</option>
-                                <option value="dropping">Dropping</option>
-                                <option value="outOfTime">Out of Time</option>
-                                <option value="inactive">Inactive</option>
                             </select>
                         </div>
 
