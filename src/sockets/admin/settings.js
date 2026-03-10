@@ -148,6 +148,6 @@ export default function SettingsSocketEvents(socket, server) {
         const mode = data.mode;
         server.utilityMode = mode;
         server.arduino.sendCommand(`SET_UTILITY_MODE:${mode}`);
-        socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode})
+        socket.emit('SET_UTILITY_MODE', { mode: server.utilityMode})
     })
 }
