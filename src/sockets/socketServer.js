@@ -143,6 +143,34 @@ class SocketServer {
                 socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
             })
 
+            socket.on('SAVE', async (data) => {
+                try {
+                    await this.axiosClient.patch(
+                        `setting/`,
+                        data,
+                        {
+                            headers: {
+                                'token': socket.token
+                            }
+                        }
+                    )
+
+                    const setting = await this.axiosClient.get(
+                        `setting/`,
+                        {
+                            headers: {
+                                'token': socket.token
+                            }
+                        }
+                    )
+
+                    socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
+                }
+                catch (err) {
+                    console.error('ERROR', err.message)
+                }
+            })
+
             socket.on('RESTORE', async () => {
                 try {
                     await this.axiosClient.patch(

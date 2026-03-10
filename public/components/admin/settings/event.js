@@ -204,4 +204,13 @@ export default async function PageEvent() {
     restoreBtn.addEventListener('click', function() {
         socketClient.emit('RESTORE');
     })
+
+    saveBtn.addEventListener('click', function() {
+        socketClient.emit('SAVE', ({
+            backup_freq: frequency.value,
+            compression: compression.value,
+            location: location.value,
+            retention: retention.value
+        }));
+    })
 }
