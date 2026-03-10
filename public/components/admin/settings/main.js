@@ -82,8 +82,8 @@ export default function MainContent(root) {
 
                         <div class="${styles["setting-item"]}">
                             <div>
-                                <button class="${styles['save-default']}" id="restore-now">Restore Defaults</button>
-                                <button class="${styles['save-default']}" id="save-now">Save Settings</button>
+                                <button class="${styles['save']} ${styles['restore']}" id="restore-now">Restore Defaults</button>
+                                <button class="${styles['save']}" id="save-now">Save Settings</button>
                             </div>
                         </div>
 
