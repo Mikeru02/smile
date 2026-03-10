@@ -518,7 +518,7 @@ void setup() {
   previousButtonState = digitalRead(buttonPin);
   controlMotor("disable");
   Serial.println("READY");
-  beep(2, 150, 100);
+  // beep(2, 150, 100);
 }
 
 void loop() {
@@ -569,9 +569,10 @@ void loop() {
     } 
     else if (command == "STATUS") {
       respondAndDisplay("STATUS", "IDLE", "STATUS DISPLAYED");
+      beep(2, 100, 100);
     }
     else if (command == "IP") {
-      respondAndDisplay("IP", value, "IP DISPLAYED");
+      // respondAndDisplay("IP", value, "IP DISPLAYED");
       ip = value;
     }
     else if (command == "DROPPING") {

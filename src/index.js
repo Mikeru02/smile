@@ -34,6 +34,7 @@ const arduino = new Arduino(
         server.listen(port, host, () => {
             console.log(`Server is running at http://${host}:${port}`);
         });
+        arduino.sendCommand("STATUS");
 
         // Intialize workers
         startTimeDeductor();
