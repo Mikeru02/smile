@@ -16,7 +16,7 @@ class ClientController {
     async create(req, res) {
         try {
             const ip = req.ip || req.socket.remoteAddress;
-            const { name, course, year_level } = req.body || {};
+            const { student_id, name, course, year_level } = req.body || {};
             const leaseInfo = getLeaseInfo(ip);
 
             if (!leaseInfo) {
@@ -42,7 +42,7 @@ class ClientController {
             if (existingClient && existingClient.length > 0) {
                 response = await this.client.update("mac", mac, { ip: ip });
             } else {
-                response = await this.client.create(ip, mac, hostname, name, course, year_level);
+                response = await this.client.create(ip, mac, hostname, student_id, name, course, year_level);
             }
 
             console.log('RESPONSE: ', response);

@@ -64,6 +64,7 @@ export default async function Events() {
                     const response = await axios.post(
                         `${baseUrl}/api/v1/client/`, 
                         {
+                            student_id: document.getElementById('student-id').value,
                             name: document.getElementById('name').value,
                             course: courseSelect.value,
                             year_level: yearSelect.value
