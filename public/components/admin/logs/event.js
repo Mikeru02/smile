@@ -1,8 +1,10 @@
 import axios from "axios";
 import { populateHeaders, populateTable } from "../../../utils/populateTable.js";
 import CSVExporter from "../../../utils/csvExporter.js";
+import socketClient from "../../../sockets/socketInstance.js";
 
 export default async function PageEvents() {
+    socketClient.connect();
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
         headers: {
@@ -12,18 +14,18 @@ export default async function PageEvents() {
         }
     });
 
-    const response = await axiosClient.get(
-        `logs/?limit=100`,
-    )
-
-    const logs = response.data.data;
-    console.log(logs);
     const table =  document.getElementById("logs-table");
     const thead = table.querySelector("thead");
     const tbody = table.querySelector("tbody");
 
     let headers = populateHeaders(thead, "logs");
-    populateTable(tbody, logs, headers);
+
+
+    socketClient.off('LOGS');
+    socketClient.on('LOGS', (data) => {
+        const logs = data.logs;
+        populateTable(tbody, logs, headers);
+    })
 
     const exportBtn = document.getElementById('export-logs');
     exportBtn.addEventListener('click', async function() {

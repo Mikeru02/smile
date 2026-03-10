@@ -6,6 +6,7 @@ import fs from 'fs/promises';
 import ClientsSocketEvents from './admin/clients.js';
 import SettingsSocketEvents from './admin/settings.js';
 import AccountsSocketEvents from './admin/accounts.js';
+import LogsSocketEvents from './admin/logs.js';
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi, messageBot }) {
@@ -114,6 +115,16 @@ class SocketServer {
                         }
                     )
 
+                    const logs = await this.axiosClient.get(
+                        `logs/?limit=100`,
+                        {
+                            headers: {
+                                'token': socket.token
+                            }
+                        }
+                    )
+
+                    socket.emit('LOGS', ({ logs: logs.data.data }))
                     socket.emit('CLIENTS', ({ clients: clients.data.data }));
                     socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
                     socket.emit("ACCOUNTS", ({ accounts: account.data.data}))
@@ -127,6 +138,7 @@ class SocketServer {
             ClientsSocketEvents(socket, this);
             SettingsSocketEvents(socket, this);
             AccountsSocketEvents(socket, this);
+            LogsSocketEvents(socket, this);
 
             socket.on('GET_BIN_STATUS', () => {
                 // this.arduino.sendCommand('CHECK_BIN');
