@@ -1,5 +1,3 @@
-import ClientManagement from "../../utils/clientManagement";
-
 export default function ClientsSocketEvents(socket, server) {
     socket.on('GET_CLIENTS', async () => {
         try {
