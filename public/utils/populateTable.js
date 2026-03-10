@@ -15,7 +15,7 @@ export function populateTable(tbody, data, headers) {
 
             if (head.key === 'time_remaining') {
                 value = formatSeconds(value);
-                tdata.class = "time";
+                tdata.classList.add("time");
                 tdata.textContent = value;
             } 
             else if (head.key === 'details') {
