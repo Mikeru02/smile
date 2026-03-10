@@ -12,6 +12,7 @@ export default async function Event() {
     const deleteBtn = document.getElementById('delete');
     const saveBtn = document.getElementById('save');
     const exitBtn = document.getElementById('exit');
+    const headers = populateHeaders(thead, "all-client");
 
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
@@ -28,8 +29,6 @@ export default async function Event() {
         console.log("CLIENTS:", clients);
 
         tbody.innerHTML = '';
-
-        const headers = populateHeaders(thead, "all-client");
         populateTable(tbody, clients, headers);
 
     });

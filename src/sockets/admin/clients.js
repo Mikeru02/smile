@@ -1,4 +1,4 @@
-export default function ClientsSocketEvents(socket) {
+export default function ClientsSocketEvents(socket, axiosClient) {
     socket.on('GET_CLIENTS', async () => {
         try {
             const clients = await this.axiosClient.get(

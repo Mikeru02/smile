@@ -123,7 +123,7 @@ class SocketServer {
                 return;
             }
 
-            ClientsSocketEvents(socket);
+            ClientsSocketEvents(socket, this.axiosClient);
 
             socket.on('GET_BIN_STATUS', () => {
                 // this.arduino.sendCommand('CHECK_BIN');
