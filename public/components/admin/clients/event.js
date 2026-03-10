@@ -2,6 +2,8 @@ import axios from 'axios';
 import { populateHeaders, populateTable } from '../../../utils/populateTable.js';
 import CSVExporter from '../../../utils/csvExporter.js';
 import socketClient from '../../../sockets/socketInstance.js';
+import secondsToTime from '../../../utils/secondsToTime.js';
+import timeToSeconds from '../../../utils/timeToSeconds.js';
 
 export default async function Event() {
     socketClient.connect();
@@ -23,6 +25,8 @@ export default async function Event() {
     const wasteCollectedElement = document.getElementById('client-wasteCollected');
     const createdAtElement = document.getElementById('client-createdAt');
 
+    const activeTimers = new Map();
+
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
         headers: {
@@ -37,8 +41,44 @@ export default async function Event() {
         const clients = data.clients;
         console.log("CLIENTS:", clients);
 
+        // Clear existing timers (important in SPA)
+        activeTimers.forEach(interval => clearInterval(interval));
+        activeTimers.clear();
+
         tbody.innerHTML = '';
         populateTable(tbody, clients, headers);
+
+        const rows = tbody.querySelectorAll("tr");
+
+        rows.forEach((row, index) => {
+            const client = clients[index];
+            if (!client) return;
+
+            const timeCell = row.querySelector('[data-key="time_remaining"]');
+            if (!timeCell) return;
+
+            if (client.status === "active") {
+
+                let seconds = timeToSeconds(client.time_remaining);
+
+                const interval = setInterval(() => {
+
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        activeTimers.delete(client.id);
+                        timeCell.textContent = "00:00:00";
+                        return;
+                    }
+
+                    seconds--;
+                    timeCell.textContent = secondsToTime(seconds);
+
+                }, 1000);
+
+                activeTimers.set(client.id, interval);
+            }
+        });
+
 
     });
 
