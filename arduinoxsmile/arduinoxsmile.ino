@@ -606,14 +606,15 @@ void loop() {
     delay(50);
 
     if (digitalRead(buttonPin) == LOW) {
-      beep(1, 100, 100);
       isUtilityMode = !isUtilityMode;
       lcd.clear();
       if (isUtilityMode) {
+        beep(1, 100, 100);
         lcd.setCursor(0,0);
         respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
         resetSonar();
       } else {
+        beep(1, 100, 100);
         lcd.setCursor(0,0);
         respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");
         resetSonar();
