@@ -336,7 +336,7 @@ void runPlatformSonars() {
     }
     // Beep continuously if IR is HIGH and stable
     if (isIRBeeping) {
-      beep(1, 100, 200); // single beep every 300ms
+      beep(1, 100, 100); // single beep every 300ms
     }
   } else {
     // Reset flags when IR goes LOW
@@ -606,6 +606,7 @@ void loop() {
     delay(50);
 
     if (digitalRead(buttonPin) == LOW) {
+      beep(1, 100, 100);
       isUtilityMode = !isUtilityMode;
       lcd.clear();
       if (isUtilityMode) {
