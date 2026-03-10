@@ -23,8 +23,6 @@ export default async function PageEvent() {
         }
     })
 
-    socketClient.emit("GET_SETTINGS")
-
     socketClient.off("SET_UTILITY_MODE");
     socketClient.on("SET_UTILITY_MODE", (data) => {
         const mode = data.mode;
@@ -43,6 +41,9 @@ export default async function PageEvent() {
         console.log(prohibitedLinks);
         domainListContainer.innerHTML = populateDomainListContainer(styles["domain-item"], styles["remove-btn"], prohibitedLinks)
     })
+
+    socketClient.emit("GET_SETTINGS")
+
 
     function toggleBackupInputs(enabled) {
         // Select elements
