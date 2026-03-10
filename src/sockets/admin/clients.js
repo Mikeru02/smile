@@ -1,7 +1,7 @@
-export default function ClientsSocketEvents(socket, axiosClient) {
+export default function ClientsSocketEvents(socket, server) {
     socket.on('GET_CLIENTS', async () => {
         try {
-            const clients = await axiosClient.get(
+            const clients = await server.axiosClient.get(
                 `client/all`,
                 {
                     headers: {
@@ -19,7 +19,7 @@ export default function ClientsSocketEvents(socket, axiosClient) {
 
     socket.on('DELETE_CLIENT', async (data) => {
         try {
-            await axiosClient.delete(
+            await server.axiosClient.delete(
                 `client/?field=id&value=${data.clientId}`,
                 {
                     headers: {
@@ -28,7 +28,7 @@ export default function ClientsSocketEvents(socket, axiosClient) {
                 }
             )
 
-            const clients = await axiosClient.get(
+            const clients = await server.axiosClient.get(
                 `client/all`,
                 {
                     headers: {

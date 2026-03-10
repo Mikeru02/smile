@@ -3,8 +3,8 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { checkInternet, checkModel } from '../utils/dashboardInformation.js';
 import fs from 'fs/promises';
-import BackupWorker from '../workers/backupWorker.js';
 import ClientsSocketEvents from './admin/clients.js';
+import SettingsSocketEvents from './admin/settings.js';
 
 class SocketServer {
     constructor({ server, arduino, webcam, modelApi, messageBot }) {
@@ -123,7 +123,8 @@ class SocketServer {
                 return;
             }
 
-            ClientsSocketEvents(socket, this.axiosClient);
+            ClientsSocketEvents(socket, this);
+            SettingsSocketEvents(socket, this);
 
             socket.on('GET_BIN_STATUS', () => {
                 // this.arduino.sendCommand('CHECK_BIN');
@@ -132,131 +133,6 @@ class SocketServer {
                     status: this.currentBinStatus
                 })
             })
-
-            socket.on("GET_SETTINGS", async () => {
-                socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode});
-
-                const prohibited = await this.axiosClient.get(
-                    `link/prohibited/all`,
-                    {
-                        headers: {
-                            "token": socket.token
-                        }
-                    }
-                )
-                const setting = await this.axiosClient.get(
-                    `setting/`,
-                    {
-                        headers: {
-                            'token': socket.token
-                        }
-                    }
-                )
-
-                socket.emit("PROHIBITED", ({ links: prohibited.data.data }))
-                socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
-            })
-
-            socket.on('SAVE', async (data) => {
-                try {
-                    await this.axiosClient.patch(
-                        `setting/`,
-                        data,
-                        {
-                            headers: {
-                                'token': socket.token
-                            }
-                        }
-                    )
-
-                    const setting = await this.axiosClient.get(
-                        `setting/`,
-                        {
-                            headers: {
-                                'token': socket.token
-                            }
-                        }
-                    )
-
-                    socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
-                }
-                catch (err) {
-                    console.error('ERROR', err.message)
-                }
-            })
-
-            socket.on('RESTORE', async () => {
-                try {
-                    await this.axiosClient.patch(
-                        `setting/restore`,
-                        {},
-                        {
-                            headers: {
-                                'token': socket.token
-                            }
-                        }
-                    )
-
-                    const setting = await this.axiosClient.get(
-                        `setting/`,
-                        {
-                            headers: {
-                                'token': socket.token
-                            }
-                        }
-                    )
-
-                    socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
-                }
-                catch (err) {
-                    console.error('ERROR',err.message);
-                }
-            });
-
-            // socket.on('GET_CLIENTS', async () => {
-            //     try {
-            //         const clients = await this.axiosClient.get(
-            //             `client/all`,
-            //             {
-            //                 headers: {
-            //                     "token": socket.token
-            //                 }
-            //             }
-            //         )
-
-            //         socket.emit('CLIENTS', ({ clients: clients.data.data }));
-            //     }
-            //     catch (err) {
-            //         console.error('ERROR', err.message);
-            //     }
-            // })
-
-            // socket.on('DELETE_CLIENT', async (data) => {
-            //     try {
-            //         await this.axiosClient.delete(
-            //             `client/?field=id&value=${data.clientId}`,
-            //             {
-            //                 headers: {
-            //                     'token': socket.token
-            //                 }
-            //             }
-            //         )
-
-            //         const clients = await this.axiosClient.get(
-            //             `client/all`,
-            //             {
-            //                 headers: {
-            //                     "token": socket.token
-            //                 }
-            //             }
-            //         )
-
-            //         socket.emit('CLIENTS', ({ clients: clients.data.data }));
-            //     }
-            //     catch (err) {
-            //         console.error('ERROR',err.message);
-            //     }
-            // })
 
             socket.on('DROP_TIMEOUT', async () => {
                 const response = await this.axiosClient.patch(
@@ -426,71 +302,6 @@ class SocketServer {
                 socket.clientData.time_remaining = data.timeRemaining;
             })
 
-            socket.on('UTILITY_MODE', (data) => {
-                const mode = data.mode;
-                this.utilityMode = mode;
-                this.arduino.sendCommand(`SET_UTILITY_MODE:${mode}`);
-                socket.emit('SET_UTILITY_MODE', { mode: this.utilityMode})
-            })
-
-            socket.on("SET_PROHIBITED", async (data) => {
-                try {
-                    await this.axiosClient.post(
-                        `link/prohibited`,
-                        { domain: data.domain},
-                        {
-                            headers: {
-                                "token": socket.token
-                            }
-                        }
-                    )
-
-                    const prohibited = await this.axiosClient.get(
-                        `link/prohibited/all`,
-                        {
-                            headers: {
-                                "token": socket.token
-                            }
-                        }
-                    )
-
-                    const links = prohibited.data.data;
-                    socket.emit('PROHIBITED', ({ links: links }))
-                }
-                catch (err){
-                    console.error("ERROR", err);
-                }
-            })
-
-            socket.on("REMOVE_PROHIBITED", async (data) => {
-                try {
-                    await this.axiosClient.delete(
-                        `link/prohibited/${data.id}`,
-                        {
-                            headers: {
-                                "token": socket.token
-                            }
-                        }
-                    )
-
-                    const prohibited = await this.axiosClient.get(
-                        `link/prohibited/all`,
-                        {
-                            headers: {
-                                "token": socket.token
-                            }
-                        }
-                    )
-
-                    const links = prohibited.data.data;
-                    socket.emit('PROHIBITED', ({ links: links }))
-
-                }
-                catch (err){
-                    console.error("ERROR", err);
-                }
-            });
-
             socket.on("GET_ACCOUNTS", async () => {
                 const account = await this.axiosClient.get(
                     `account/all`,
@@ -501,11 +312,6 @@ class SocketServer {
                     }
                 )
                 socket.emit("ACCOUNTS", ({ accounts: account.data.data }))
-            })
-
-            socket.on("BACKUP_NOW", (data) => {
-                const backupWorker = new BackupWorker();
-                backupWorker.backupNow();
             })
 
             socket.on('disconnect', async () => {
