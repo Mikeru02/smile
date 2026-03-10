@@ -50,9 +50,7 @@ export default function ClientsSocketEvents(socket, server) {
                 `client/?field=id&value=${data.clientid}`,
                 {
                     headers: {
-                        "Content-Type": "application/json",
-                        "apikey": import.meta.env.VITE_SRC_KEY,
-                        "token": localStorage.getItem('token')
+                        "token": socket.token
                     }
                 }
             )
@@ -61,6 +59,33 @@ export default function ClientsSocketEvents(socket, server) {
         }
         catch (err) {
             console.error('[ERROR] ClientsSocketEvents.GET_SPECIFIC_CLIENT', err.message);
+        }
+    })
+
+    socket.on('UPDATE_CLIENT', async (data) => {
+        try {
+            await server.axiosClient.patch(
+                `client/?field=id&value=${data.clientId}`,
+                data.clientData,
+                {
+                    headers: {
+                        "token": socket.token
+                    }
+                }
+            )
+            const clients = await server.axiosClient.get(
+                `client/all`,
+                {
+                    headers: {
+                        "token": socket.token
+                    }
+                }
+            )
+
+            socket.emit('CLIENTS', ({ clients: clients.data.data }));
+        }
+        catch (err) {
+            console.error('[ERROR] ClientsSocketEvents.UPDATE_CLIENT', err.message);
         }
     })
 }
