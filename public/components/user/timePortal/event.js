@@ -85,7 +85,7 @@ export default async function Events() {
         }
     });
 
-    socketClient.on('UTILITY_MODE', (data) => {
+    socketClient.on('SET_UTILITY_MODE', (data) => {
         console.log(data);
         updateDropButtonState(data);
         if (data.mode === "on") {
