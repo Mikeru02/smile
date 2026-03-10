@@ -1,5 +1,6 @@
-export function validateForm(nameInput, consentCheckbox, submitBtn) {
+export function validateForm(nameInput, consentCheckbox, studentIdInput, submitBtn) {
     const isNameValid = nameInput.value.trim() !== '';
+    const isStudentIDValid = studentIdInput.value.trim() !== '';
     const isConsentChecked = consentCheckbox.checked;
-    submitBtn.disabled = !(isNameValid && isConsentChecked);
+    submitBtn.disabled = !(isNameValid && isStudentIDValid && isConsentChecked);
 }
