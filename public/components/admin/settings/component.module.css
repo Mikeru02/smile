@@ -591,6 +591,11 @@ input:checked + .slider:before {
     filter: brightness(0) invert(1);
 }
 
+.save-defaults-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .save {
     /* width: 49.6%;
     height: 4.8rem; */
@@ -685,9 +690,5 @@ input:checked + .slider:before {
     
     .section-title {
         font-size: 1.1rem;
-    }
-
-    .save{
-        width: 49%;
     }
 }
