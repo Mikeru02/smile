@@ -51,8 +51,8 @@ export default async function PageEvents() {
         if (roleElement) roleElement.value = account.role;
         if (createdElement) createdElement.value = account.created_at ? new Date(account.created_at).toLocaleDateString() : 'N/A';;
 
-        saveViewModal.dataset.clientId = button.dataset.id;
-        deleteViewModal.dataset.clientId = button.dataset.id;
+        saveViewModal.dataset.clientId = account.id;
+        deleteViewModal.dataset.clientId = account.id;
 
         modal.style.display = 'block';
     })

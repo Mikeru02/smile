@@ -56,8 +56,8 @@ export default async function Event() {
         if (wasteCollectedElement) wasteCollectedElement.value = client.waste_collected || 0;
         if (createdAtElement) createdAtElement.value = client.created_at ? new Date(client.created_at).toLocaleDateString() : 'N/A';
 
-        saveBtn.dataset.clientId = button.dataset.id;
-        deleteBtn.dataset.clientId = button.dataset.id;
+        saveBtn.dataset.clientId = client.id;
+        deleteBtn.dataset.clientId = client.id;
 
         modal.style.display = 'block';
     })
