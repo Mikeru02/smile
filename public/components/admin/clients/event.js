@@ -44,7 +44,7 @@ export default async function Event() {
 
     socketClient.off('SPECIFIC_CLIENT');
     socketClient.on('SPECIFIC_CLIENT', (data) => {
-        const client = data.clientData;
+        const client = data.clientData[0];
         console.log(client);
 
         if (nameElement) nameElement.value = client.name || '';
