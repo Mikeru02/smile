@@ -4,6 +4,7 @@ import CSVExporter from "../../../utils/csvExporter.js";
 import socketClient from "../../../sockets/socketInstance.js";
 
 export default async function PageEvents() {
+    socketClient.connect();
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
         headers: {
@@ -101,12 +102,22 @@ export default async function PageEvents() {
         password.value = "";
     });
 
-    saveCreateBtn.addEventListener('click', async function() {
+    saveCreateBtn.addEventListener('click', function() {
+        const userVal = username.value.trim();
+        const nameVal = name.value.trim();
+        const roleVal = role.value.trim();
+        const passVal = password.value.trim();
+
+        if (!userVal || !nameVal || !roleVal || !passVal) {
+            alert("All fields are required!");
+            return;
+        }
+        
         socketClient.emit('CREATE_ACCOUNT', ({
-            username: username.value,
-            name: name.value,
-            role: role.value,
-            password: password.value,
+            username: userVal,
+            name: nameVal,
+            role: roleVal,
+            password: passVal,
         }));
 
         createModal.style.display = "none";
@@ -123,7 +134,7 @@ export default async function PageEvents() {
         modal.style.display = "none";
     });
 
-    saveViewModal.addEventListener('click', async function() {
+    saveViewModal.addEventListener('click', function() {
         const clientId = saveViewModal.dataset.clientId;
         if (!clientId) return;
 

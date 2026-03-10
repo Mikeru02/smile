@@ -78,6 +78,15 @@ export default function AccountsSocketEvents(socket, server) {
                     }
                 }
             )
+            const account = await server.axiosClient.get(
+                `account/all`,
+                {
+                    headers: {
+                        'token': socket.token
+                    }
+                }
+            )
+            socket.emit("ACCOUNTS", ({ accounts: account.data.data }))
         }
         catch (err) {
             console.error('[ERROR] AccountsSocketEvents.CREATE_ACCOUNT', err.message);
