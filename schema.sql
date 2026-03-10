@@ -90,11 +90,11 @@ CREATE TABLE `prohibited_links`(
 
 CREATE TABLE `settings`(
     `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `utility_mode` BOOLEAN,
-    `auto_backup` BOOLEAN,
-    `backup_freq` ENUM('hourly', 'daily', 'weekly', 'monthly') DEFAULT 'daily',
+    `utility_mode` BOOLEAN DEFAULT FALSE,
+    `auto_backup` BOOLEAN DEFAULT TRUE,
+    `backup_freq` ENUM('hourly', 'daily', 'weekly', 'monthly') DEFAULT 'hourly',
     `compression` ENUM('none', 'gzip', 'zip') DEFAULT 'zip',
-    `location` VARCHAR(100),
+    `location` VARCHAR(100) DEFAULT '/root/backup/smile',
     `retention` INT DEFAULT 30,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
