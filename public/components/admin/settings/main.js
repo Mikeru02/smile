@@ -88,7 +88,7 @@ export default function MainContent(root) {
                                     <img src="${RestoreSVG}" class="${styles['action-svg']}">
                                 </div>
                                 <div class="${styles['save']}" id="save-now">
-                                    <img src="${SaveSVG}" class="${styles['action-svg']}">>
+                                    <img src="${SaveSVG}" class="${styles['action-svg']}">
                                 </div>
                             </div>
                         </div>
