@@ -22,6 +22,7 @@ CREATE TABLE `clients`(
     `mac` VARCHAR(50) NOT NULL,
     `ip` VARCHAR(15) NULL,
     `hostname` VARCHAR(100) NOT NULL,
+    `student_id` VARCHAR(10) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
     `course` VARCHAR(10) NOT NULL,
     `year_level` INT NOT NULL,
