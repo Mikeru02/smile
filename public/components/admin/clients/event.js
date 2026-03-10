@@ -59,7 +59,7 @@ export default async function Event() {
 
             if (client.status === "active") {
 
-                let seconds = timeToSeconds(client.time_remaining);
+                let seconds = client.time_remaining;
 
                 const interval = setInterval(() => {
 
