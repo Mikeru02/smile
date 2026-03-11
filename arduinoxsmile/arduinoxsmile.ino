@@ -331,7 +331,7 @@ void runPlatformSonars() {
   //   return; // stop further processing
   // }
 
-  if (handPresent || isScanning || isCapturing) {
+  if ((handPresent && isScanning) || (handPresent && isCapturing)) {
     // Hand came back, stop scanning
     isScanning = false;
     alreadyDetectIR = false;
