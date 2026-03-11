@@ -38,7 +38,7 @@ Servo servoLeft;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 AccelStepper stepper(AccelStepper::DRIVER, stepPin, dirPin);
 
-long readDistance(int echoPin);
+long readDistance(int trigPin, int echoPin)
 void openGate(Servo servoLeft, Servo servoRight);
 void closeGate(Servo servoLeft, Servo servoRight);
 
