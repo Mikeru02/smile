@@ -52,10 +52,16 @@ class ClientController {
             if (!response) {
                 return res.status(400).json({
                     success: false,
-                    message: `Insert failed: ${response}`
+                    message: `Insert failed: ${response?.data}`
                 })
             }
-            
+
+            await this.log.create(
+                "Client Created",
+                `Client ${name} with MAC ${mac} was ${existingClient && existingClient.length > 0 ? "updated" : "created"} successfully`,
+                "INFO"
+            );
+
             return res.status(200).json({
                 success: true,
                 data: {
@@ -65,6 +71,11 @@ class ClientController {
             })
         }
         catch (err) {
+            await this.log.create(
+                "Client Creation Error",
+                `Error creating/updating client for IP ${req.ip || req.socket.remoteAddress}: ${err.toString()}`,
+                "ERROR"
+            );
             return res.status(500).json({
                 success: false,
                 message: err.toString()
@@ -189,7 +200,12 @@ class ClientController {
                     message: "Failed to allow client: " + err.message
                 });
             }
-            await this.log.create("Client Connected", `Client ${clientData.name} is connected and will expire on ${fomattedExpireAt}`, "INFO");
+
+            await this.log.create(
+                "Client Connected",
+                `Client ${clientData.name} (${clientData.ip}) authenticated successfully and will expire on ${fomattedExpireAt}`,
+                "INFO"
+            );
 
             return res.status(200).json({
                 sucess: true,
@@ -198,6 +214,11 @@ class ClientController {
 
         }
         catch (err) {
+            await this.log.create(
+                "Client Authentication Error",
+                `Unexpected error during authentication: ${err.toString()}`,
+                "ERROR"
+            );
             return res.status(500).json({
                 success: false,
                 message: err.toString()
@@ -210,11 +231,6 @@ class ClientController {
             let client;
             let field;
             let fieldValue;
-
-            console.log('DEBUG: ', {
-                "REQ BODY": req.body,
-                "RES LOCALS": res.locals
-            })
 
             if (res.locals.role === "admin") {
                 const { clientId } = req.body || {};
@@ -264,6 +280,12 @@ class ClientController {
                     message: "Failed to allow client: " + err.message
                 });
             }
+
+            await this.log.create(
+                "Client Disconnected",
+                `Client ${clientData.name} (${clientData.ip}) was deauthenticated. Remaining time: ${updatedTimeRemaining} seconds`,
+                "INFO"
+            );
             return res.status(200).json({
                 sucess: true,
                 message: 'Client deauthenticated'
@@ -271,6 +293,11 @@ class ClientController {
 
         }
         catch (err) {
+            await this.log.create(
+                "Client Deauthentication Error",
+                `Unexpected error during deauthentication: ${err.toString()}`,
+                "ERROR"
+            );
             return res.status(500).json({
                 success: false,
                 message: err.toString()
@@ -358,6 +385,11 @@ class ClientController {
             
         }
         catch (err) {
+            await this.log.create(
+                "Earned Time Error",
+                `Error adding earned time: ${err.toString()}`,
+                "ERROR"
+            );
             return res.status(500).json({
                 success: false,
                 message: err.toString()
@@ -390,8 +422,14 @@ class ClientController {
 
             const timeRemaining = clientData.time_remaining + clientData.time_earned;
             await this.client.update(field, fieldValue, { time_remaining: timeRemaining, time_earned: 0, updated_at: new Date() });
+            await this.log.create('Added Time', `Client ${clientData.name} transfered ${clientData.time_earned} the total time now is ${timeRemaining}`);
         }
         catch (err) {
+            await this.log.create(
+                "Add Time Error",
+                `Error adding time for client ${req.query.value || 'unknown'}: ${err.toString()} by ${res.locals.username || 'system'}`,
+                "ERROR"
+            );
             return res.status(500).json({
                 success: false,
                 message: err.toString()

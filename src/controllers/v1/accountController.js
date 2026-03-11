@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
 import Account from "../../models/v1/account.js";
+import Logs from "../../models/v1/log.js";
 
 class AccountController {
     constructor() {
         this.account = new Account();
+        this.log = new Logs();
     }
 
     // Create Functions         *****************************************
@@ -26,6 +28,8 @@ class AccountController {
                     message: `Insert failed: ${response}`
                 })
             }
+
+            await this.log.create("Account Creation", `${res.locals.username} created an account with username ${username}`, "INFO");
             
             return res.status(200).json({
                 success: true,
@@ -33,6 +37,11 @@ class AccountController {
             })
         }
         catch (err) {
+            await this.log.create(
+                "Account Creation Error",
+                `${res.locals.username} failed to create account ${req.body?.username}: ${err.toString()}`,
+                "ERROR"
+            );
             return res.status(500).json({
                 success: false,
                 message: err.toString()
@@ -115,12 +124,14 @@ class AccountController {
             console.log("DEBUG login", response);
 
             if (!response) {
+                await this.log.create("Login Failed", `Login attempt made on account ${username}`, 'WARN')
                 return res.status(400).json({
                     success: false,
                     message: "Invalid username or password"
                 })
             }
 
+            await this.log.create("Login Successful", `Login success on account ${username} on ${new Date()}`, 'INFO')
             return res.status(200).json({
                 success: true,
                 data: {
@@ -131,6 +142,14 @@ class AccountController {
             })
         }
         catch (err) {
+            const userForLog = req.body?.username || "unknown user";
+
+            await this.log.create(
+                "Login Failed",
+                `Login attempt failed for account ${userForLog}: ${err.toString()}`,
+                "ERROR"
+            );
+
             return res.status(500).json({
                 success: false,
                 message: err.toString()
@@ -160,12 +179,18 @@ class AccountController {
                 })
             }
 
+            await this.log.create("Update Successful", `${res.locals.username} updated account data for account ${fieldValue}`, "INFO");
             return res.status(200).json({
                 success: true,
                 data: response
             })
         }
         catch (err) {
+            await this.log.create(
+                "Update Failed",
+                `${res.locals.username} failed to update account ${fieldValue}: ${err.toString()}`,
+                "ERROR"
+            );
             return res.status(500).json({
                 success: false,
                 message: err.toString()
@@ -195,12 +220,18 @@ class AccountController {
                 })
             }
             
+            await this.log.create("Delete Successful", `${res.locals.username} delete account ${fieldValue}`, "INFO");
             return res.status(200).json({
                 success: true,
                 data: response
             })
         }
         catch (err) {
+            await this.log.create(
+                "Delete Failed", 
+                `${res.locals.username} failed to delete account ${fieldValue}`, 
+                "ERROR"
+            );
             return res.status(500).json({
                 success: false,
                 message: err.toString()
