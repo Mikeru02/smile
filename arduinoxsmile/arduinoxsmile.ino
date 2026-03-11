@@ -49,7 +49,7 @@ unsigned long IRDetectStartTime = 0;
 
 bool captureBeeping = false;
 unsigned long lastCaptureBeep = 0;
-const int captureBeepInterval = 300
+const int captureBeepInterval = 300;
 
 // Varibles for Sonars
 const int sonarDistanceTreshold = 20;
