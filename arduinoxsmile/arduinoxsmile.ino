@@ -47,6 +47,10 @@ bool handPresent = false;
 bool willContinue = false;
 unsigned long IRDetectStartTime = 0;
 
+bool captureBeeping = false;
+unsigned long lastCaptureBeep = 0;
+const int captureBeepInterval = 300
+
 // Varibles for Sonars
 const int sonarDistanceTreshold = 20;
 const int sonarPulseIn = 30000;
@@ -77,7 +81,7 @@ int leftClearCount = 0;
 // IR filters
 bool IRLastState = false;
 int hasObjectDetectCount = 0;
-int hasOjectCount = 5;
+int hasOjectCount = 10;
 
 // Variables of Stepper Motor
 const float stepsPerRevolution = 200;
@@ -242,6 +246,7 @@ void runPlatform(String objectType) {
       stepper.run();
     }
     delay(2000);
+    beep(1, 100, 100);
   }
   else if (objectType.equalsIgnoreCase("Paper")) {
     beep(3, 100, 100);
@@ -255,6 +260,7 @@ void runPlatform(String objectType) {
       stepper.run();
     }
     delay(2000);
+    beep(1, 100, 100);
   }
   else if (objectType.equalsIgnoreCase("General Waste")) {
     beep(1, 500, 100);
@@ -262,6 +268,7 @@ void runPlatform(String objectType) {
     delay(2000);
     closeGate(servoLeft, servoRight);
     delay(2000);
+    beep(1, 100, 100);
   } else if (objectType.equalsIgnoreCase("none")){
     lcd.clear();
     lcd.setCursor(0,0);
@@ -273,6 +280,7 @@ void runPlatform(String objectType) {
     closeGate(servoLeft, servoRight);
     delay(2000);
     lcd.clear();
+    beep(1, 100, 100);
   }
 }
 
@@ -343,6 +351,15 @@ void runPlatformSonars() {
     lcd.clear();
     lcd.print("Scanning Stopped");
     Serial.println("Scanning paused due to hand return");
+  }
+
+  if (isCaptureBeeping) {
+    if (millis() - lastCaptureBeep >= captureBeepInterval) {
+      digitalWrite(buzzerPin, HIGH);
+      delay(60);
+      digitalWrite(buzzerPin, LOW);
+      lastCaptureBeep = millis();
+    }
   }
 
   previousIRState = currentIRState;
@@ -448,6 +465,7 @@ void runPlatformSonars() {
       isCapturing = true;
       isScanning = false;
       alreadyDetectIR = false;
+      captureBeeping = true;
     }
     else if ((millis() - scanningStartTime >= sonarTimeOut * 1000)) {
       if (isUtilityMode) {
@@ -458,6 +476,7 @@ void runPlatformSonars() {
       isCapturing = true;
       isScanning = false;
       alreadyDetectIR = false;
+      captureBeeping = true;
     }
   }
 }
