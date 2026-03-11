@@ -404,7 +404,11 @@ class SocketServer {
         if (message === "STOP:capture") {
             console.log("Capture stopped by Arduino");
             this.isCaptureStopped = true;
-        }   
+        }
+
+        if (message === "CONTINUE:capture") {
+            this.isCaptureStopped = false;
+        }
 
         if (message === "SONAR DETECTED:utility") {
             try {

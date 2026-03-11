@@ -345,18 +345,15 @@ void runPlatformSonars() {
     isScanning = false;
     alreadyDetectIR = false;
     isIRBeeping = true;
-    lcd.clear();
     respondAndDisplay("STOP", "Please remove hand", "STOP:capture");
   }
 
-  if (!handPresent && !isCapturing && !isScanning) {
+  if (!handPresent && isCapturing) {
     // Only resume if we previously had stopped due to hand
     isScanning = true;
     alreadyDetectIR = true;
     isIRBeeping = false;
-    lcd.clear();
-    lcd.print("Scanning Resumed");
-    Serial.println("Resuming scan after hand removed");
+    respondAndDisplay("", "", "CONTINUE:capture");
     scanningStartTime = millis();
   }
 
