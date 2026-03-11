@@ -44,7 +44,7 @@ bool isScanning = false;
 bool isUtilityMode = false;
 bool isIRBeeping = false;
 bool handPresent = false;
-bool wilContinue = false;
+bool willContinue = false;
 unsigned long IRDetectStartTime = 0;
 
 // Varibles for Sonars
