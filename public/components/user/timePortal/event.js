@@ -89,7 +89,7 @@ export default async function Events() {
 
     socketClient.on('SET_UTILITY_MODE', (data) => {
         console.log(data);
-        updateDropButtonState(data);
+        updateDropButtonState({ mode: data.mode });
         if (data.mode) {
             annoucementContainer.innerHTML = `
                 <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
@@ -104,7 +104,7 @@ export default async function Events() {
     })
 
     socketClient.on('BIN_STATUS', (data) => {
-        updateDropButtonState(data);
+        updateDropButtonState({ status: data.status });
         console.log('[SOCKET] Bin status: ', data.status);
         if (data.status !== 'all_ok') {
             annoucementContainer.innerHTML = `
