@@ -32,7 +32,7 @@ class Client {
         try {
             const [row] = await this.db.execute(
                 `INSERT INTO clients (ip, mac, hostname, student_id, name, course, year_level, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-                [ip, mac, host, student_id ?? null, name, course ?? null, year_level ?? null, "pending"]
+                [ip, mac, host, student_id, name, course, year_level, "pending"]
             );
             return row || null;
         } 

@@ -17,7 +17,6 @@ class ClientController {
         try {
             const ip = req.ip || req.socket.remoteAddress;
             const { student_id, name, course, year_level } = req.body || {};
-            console.log("REQ BODY: ", req.body)
             const leaseInfo = getLeaseInfo(ip);
 
             if (!leaseInfo) {
@@ -35,7 +34,9 @@ class ClientController {
             }
 
             const { mac, hostname } = leaseInfo;
-            console.log('DATA: ', {name, course, year_level, mac, hostname, ip})
+            const studentIdVal = student_id ?? null;
+            const courseVal = course ?? null;
+            const yearLevelVal = year_level ?? null;            
             let response;
 
             const existingClient = await this.client.getClientWithSpecificField("mac", mac);
@@ -43,7 +44,7 @@ class ClientController {
             if (existingClient && existingClient.length > 0) {
                 response = await this.client.update("mac", mac, { ip: ip });
             } else {
-                response = await this.client.create(ip, mac, hostname, student_id, name, course, year_level);
+                response = await this.client.create(ip, mac, hostname, studentIdVal, name, courseVal, yearLevelVal);
             }
 
             console.log('RESPONSE: ', response);
