@@ -118,6 +118,7 @@ export default async function Event() {
 
     deleteBtn.addEventListener('click', function() {
         socketClient.emit('DELETE_CLIENT', ({ clientId: deleteBtn.dataset.clientId }));
+        modal.style.display = "none"
     })
 
     saveBtn.addEventListener('click', function() {
