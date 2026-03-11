@@ -401,40 +401,30 @@ class SocketServer {
             return;
         }
 
-        if (message === "STOP:capture") {
-            console.log("Capture stopped by Arduino");
-            this.isCaptureStopped = true;
-        }
-
-        if (message === "CONTINUE:capture") {
-            this.isCaptureStopped = false;
-        }
-
         if (message === "SONAR DETECTED:utility") {
             try {
-                this.isCaptureStopped = false;
+                let isCapturing = false;
+                if (message === "CONTINUE:capture" && !isCapturing) {
+                    isCapturing = true;
+                    const timeStamp = Date.now();
+                    const uniqueFilename = `capture_${timeStamp}.jpg`;
 
-                const timeStamp = Date.now();
-                const uniqueFilename = `capture_${timeStamp}.jpg`;
+                    const savedPath = await this.webcam.capture(uniqueFilename);
+                    console.log("Unique image saved:", savedPath);
 
-                if (this.isCaptureStopped) return;
-                const savedPath = await this.webcam.capture(uniqueFilename);
-                console.log("Unique image saved:", savedPath);
+                    const testPath = await this.webcam.getFilePath("test_capture.jpg");
+                    fs.copyFile(savedPath, testPath);
+                    console.log("test_capture overwritten:", testPath);
 
-                if (this.isCaptureStopped) return;
-                const testPath = await this.webcam.getFilePath("test_capture.jpg");
-                fs.copyFile(savedPath, testPath);
-                console.log("test_capture overwritten:", testPath);
+                    await new Promise(resolve => setTimeout(resolve, 1000));
 
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                if (this.isCaptureStopped) return;
-                const response = await this.modelApi.earnedTime();
+                    const response = await this.modelApi.earnedTime();
+                    
+                    console.log("Done capturing, sending command to arduino")
+                    this.arduino.sendCommand("DONE CAPTURE");
+                    this.arduino.sendCommand(`DETECT:${response.category}`);
+                }
                 
-                if (this.isCaptureStopped) return;
-                console.log("Done capturing, sending command to arduino")
-                this.arduino.sendCommand("DONE CAPTURE");
-                this.arduino.sendCommand(`DETECT:${response.category}`);
             } catch(err) {
                 console.error("Capture Error: ", err)
             }
