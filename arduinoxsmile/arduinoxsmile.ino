@@ -461,6 +461,10 @@ void runPlatformSonars() {
 
     // ---------------- FINAL CONFIRM ----------------
     if (anySonarDetected()) {
+      isCapturing = true;
+      isScanning = false;
+      alreadyDetectIR = false;
+      captureBeeping = true;
       if (isUtilityMode) {
         respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
         respondAndDisplay("Processing", "Please wait!", "");
@@ -472,12 +476,13 @@ void runPlatformSonars() {
         delay(1000);
         respondAndDisplay("Don't remove", "the trash!", "");
       }
-      isCapturing = true;
-      isScanning = false;
-      alreadyDetectIR = false;
-      captureBeeping = true;
+      
     }
     else if ((millis() - scanningStartTime >= sonarTimeOut * 1000)) {
+      isCapturing = true;
+      isScanning = false;
+      alreadyDetectIR = false;
+      captureBeeping = true;
       if (isUtilityMode) {
         respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
         respondAndDisplay("Processing", "Please wait!", "");
@@ -489,10 +494,6 @@ void runPlatformSonars() {
         delay(1000);
         respondAndDisplay("Don't remove", "the trash!", "");
       }
-      isCapturing = true;
-      isScanning = false;
-      alreadyDetectIR = false;
-      captureBeeping = true;
     }
   }
 }
