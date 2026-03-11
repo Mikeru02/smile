@@ -377,8 +377,8 @@ class SocketServer {
         }
 
         if (message.startsWith("WARN:")) {
-            const message = message.split(":")[1];
-            this.io.emit('WARN', ({ message: message }));
+            const messageData = message.split(":")[1];
+            this.io.emit('WARN', ({ message: messageData }));
         }
 
         if (message.startsWith("UTILITY_MODE:")) {
