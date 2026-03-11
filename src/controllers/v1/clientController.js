@@ -211,6 +211,11 @@ class ClientController {
             let field;
             let fieldValue;
 
+            console.log('DEBUG: ', {
+                "REQ BODY": req.body,
+                "RES LOCALS": res.locals
+            })
+
             if (res.locals.role === "admin") {
                 const { clientId } = req.body || {};
                 field = "id";
