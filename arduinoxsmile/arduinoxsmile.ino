@@ -346,7 +346,7 @@ void runPlatformSonars() {
     alreadyDetectIR = false;
     isIRBeeping = true;
     lcd.clear();
-    respondAndDisplay('STOP', 'Please remove hand', "STOP:capture")
+    respondAndDisplay('STOP', 'Please remove hand', "STOP:capture");
   }
 
   previousIRState = currentIRState;
