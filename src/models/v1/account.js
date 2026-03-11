@@ -128,7 +128,7 @@ class Account {
 
             const updated = await this.update("id", user.id, { last_login: new Date() });
 
-            return updated;
+            return user;
         }
         catch(err) {
             console.error("[ERROR] account.verify", err);
