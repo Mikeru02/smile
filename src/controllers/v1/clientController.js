@@ -27,12 +27,12 @@ class ClientController {
                 })
             }
 
-            // if (!name || !course || !year_level) {
-            //     return res.status(400).json({
-            //         success: false,
-            //         message: 'All fields are required'
-            //     })
-            // }
+            if (!name) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Name field is required'
+                })
+            }
 
             const { mac, hostname } = leaseInfo;
             console.log('DATA: ', {name, course, year_level, mac, hostname, ip})
