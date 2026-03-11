@@ -553,11 +553,10 @@ void loop() {
       isUtilityMode = (value.equalsIgnoreCase("true"));
       if (isUtilityMode) {
         respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
-        beep(1, 100, 100);
       } else {
         respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");
-        beep(1, 100, 100);
       }
+      beep(1, 100, 100);
     }
     else if (command == "CHECK_MODE") {
       if (isUtilityMode) {
