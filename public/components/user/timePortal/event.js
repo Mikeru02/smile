@@ -216,7 +216,7 @@ export default async function Events() {
                 dropBtn.style.cursor = 'not-allowed';
             }
             else {
-                console.log("Changing state of drop button")
+                alert("Changing state of drop button")
                 dropBtn.disabled = false;
                 dropBtn.style.opacity = '1';
                 dropBtn.style.cursor = 'pointer';
