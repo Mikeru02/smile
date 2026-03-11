@@ -245,9 +245,12 @@ class ClientController {
             const clientData = client[0];
 
             const now = new Date();
-            const consumedTime = Math.floor(
-                (now - new Date(clientData.connection_start_at)) / 1000
-            );
+            let consumedTime = 0;
+            if (clientData.connection_start_at) {
+                consumedTime = Math.floor(
+                    (now - new Date(clientData.connection_start_at)) / 1000
+                );
+            }
 
             let updatedTimeRemaining = Math.max(clientData.time_remaining - consumedTime, 0);
 
