@@ -15,7 +15,7 @@ class SocketServer {
         this.webcam = webcam;
         this.modelApi = modelApi;
         this.messageBot = messageBot;
-        this.srcBaseUrl = `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/${process.env.SRC_ROUTE_VERSION}/`
+        this.srcBaseUrl = `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/`
         this.axiosClient = axios.create({
             baseURL: this.srcBaseUrl,
             headers: {

@@ -89,6 +89,9 @@ export default async function Events() {
                     headers: { "Content-Type": "application/json", "apikey": import.meta.env.VITE_SRC_KEY }
                 });
 
+                console.log("Login Response", response);
+
+
                 localStorage.setItem('token', response.data.data.token);
                 window.app.pushRoute("/portal");
             } catch (err) {
