@@ -349,12 +349,7 @@ void runPlatformSonars() {
   }
 
   if (!handPresent && isCapturing) {
-    // Only resume if we previously had stopped due to hand
-    isScanning = true;
-    alreadyDetectIR = true;
-    isIRBeeping = false;
-    respondAndDisplay("", "", "CONTINUE:capture");
-    scanningStartTime = millis();
+    
   }
 
   previousIRState = currentIRState;

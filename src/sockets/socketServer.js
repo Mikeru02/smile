@@ -403,27 +403,24 @@ class SocketServer {
 
         if (message === "SONAR DETECTED:utility") {
             try {
-                let isCapturing = false;
-                if (message === "CONTINUE:capture" && !isCapturing) {
-                    isCapturing = true;
-                    const timeStamp = Date.now();
-                    const uniqueFilename = `capture_${timeStamp}.jpg`;
+                isCapturing = true;
+                const timeStamp = Date.now();
+                const uniqueFilename = `capture_${timeStamp}.jpg`;
 
-                    const savedPath = await this.webcam.capture(uniqueFilename);
-                    console.log("Unique image saved:", savedPath);
+                const savedPath = await this.webcam.capture(uniqueFilename);
+                console.log("Unique image saved:", savedPath);
 
-                    const testPath = await this.webcam.getFilePath("test_capture.jpg");
-                    fs.copyFile(savedPath, testPath);
-                    console.log("test_capture overwritten:", testPath);
+                const testPath = await this.webcam.getFilePath("test_capture.jpg");
+                fs.copyFile(savedPath, testPath);
+                console.log("test_capture overwritten:", testPath);
 
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
-                    const response = await this.modelApi.earnedTime();
-                    
-                    console.log("Done capturing, sending command to arduino")
-                    this.arduino.sendCommand("DONE CAPTURE");
-                    this.arduino.sendCommand(`DETECT:${response.category}`);
-                }
+                const response = await this.modelApi.earnedTime();
+                
+                console.log("Done capturing, sending command to arduino")
+                this.arduino.sendCommand("DONE CAPTURE");
+                this.arduino.sendCommand(`DETECT:${response.category}`);
                 
             } catch(err) {
                 console.error("Capture Error: ", err)
