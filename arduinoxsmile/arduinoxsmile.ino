@@ -353,7 +353,7 @@ void runPlatformSonars() {
     Serial.println("Scanning paused due to hand return");
   }
 
-  if (isCaptureBeeping) {
+  if (captureBeeping) {
     if (millis() - lastCaptureBeep >= captureBeepInterval) {
       digitalWrite(buzzerPin, HIGH);
       delay(60);
