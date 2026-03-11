@@ -29,12 +29,14 @@ export default async function PageEvent() {
     socketClient.off("SET_UTILITY_MODE");
     socketClient.on("SET_UTILITY_MODE", (data) => {
         const mode = data.mode;
+        const message = data.socketMessage;
         if (mode) {
             utilityCheckBox.checked = true;
         }
         else {
             utilityCheckBox.checked = false;
         }
+        alert(message);
 
     });
 
@@ -71,11 +73,6 @@ export default async function PageEvent() {
             backupCheckbox.checked = false;
             toggleBackupInputs(backupCheckbox.checked);
         }
-    })
-
-    socketClient.off('WARN')
-    socketClient.on('WARN', (data) => {
-        alert(data.message);
     })
 
     socketClient.emit("GET_SETTINGS")

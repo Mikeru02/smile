@@ -623,7 +623,7 @@ void loop() {
         }
         beep(1, 100, 100);
       } else {
-        Serial.println("WARN:A user is dropping, cannot set utility mode");
+        Serial.println("UTILITY_MODE:blocked");
       }
       
     }
