@@ -583,6 +583,7 @@ void loop() {
     }
 
     if (command == "DETECT") {
+      captureBeeping = false;
       respondAndDisplay("MODEL DETECT", value, "MODEL DETECTED");
       runPlatform(value);
       isCapturing = false;
