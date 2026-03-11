@@ -331,7 +331,7 @@ void runPlatformSonars() {
   //   return; // stop further processing
   // }
 
-  if ((handPresent && isScanning) || (handPresent && isCapturing)) {
+  if ((handPresent && isScanning)) {
     // Hand came back, stop scanning
     isScanning = false;
     alreadyDetectIR = false;
@@ -339,6 +339,14 @@ void runPlatformSonars() {
     lcd.clear();
     lcd.print("Scanning Stopped");
     Serial.println("Scanning paused due to hand return");
+  }
+
+  if (handPresent && isCapturing) {
+    isScanning = false;
+    alreadyDetectIR = false;
+    isIRBeeping = true;
+    lcd.clear();
+    respondAndDisplay('STOP', 'Please remove hand', "STOP:capture")
   }
 
   previousIRState = currentIRState;

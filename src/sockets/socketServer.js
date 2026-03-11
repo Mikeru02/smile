@@ -23,7 +23,7 @@ class SocketServer {
                 'apikey': process.env.SRC_KEY,
             }
         });
-
+        this.isCaptureStopped = false;
         this.internetStatus = null;
         this.io = null;
         this.activeClient = null;
@@ -401,21 +401,33 @@ class SocketServer {
             return;
         }
 
+        if (message === "STOP:capture") {
+            console.log("Capture stopped by Arduino");
+            this.isCaptureStopped = true;
+        }   
+
         if (message === "SONAR DETECTED:utility") {
             try {
+                this.isCaptureStopped = false;
+
                 const timeStamp = Date.now();
                 const uniqueFilename = `capture_${timeStamp}.jpg`;
+
+                if (this.isCaptureStopped) return;
                 const savedPath = await this.webcam.capture(uniqueFilename);
                 console.log("Unique image saved:", savedPath);
 
+                if (this.isCaptureStopped) return;
                 const testPath = await this.webcam.getFilePath("test_capture.jpg");
                 fs.copyFile(savedPath, testPath);
                 console.log("test_capture overwritten:", testPath);
 
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
+                if (this.isCaptureStopped) return;
                 const response = await this.modelApi.earnedTime();
                 
+                if (this.isCaptureStopped) return;
                 console.log("Done capturing, sending command to arduino")
                 this.arduino.sendCommand("DONE CAPTURE");
                 this.arduino.sendCommand(`DETECT:${response.category}`);
@@ -425,7 +437,6 @@ class SocketServer {
         }
 
         if (message === "SONAR DETECTED") {
-            console.log('SONAR Detected from Arduino');
             const client = this.activeClient;
 
             if (client) {
