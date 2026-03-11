@@ -43,6 +43,7 @@ bool alreadyPressButton = false;
 bool isScanning = false;
 bool isUtilityMode = false;
 bool isIRBeeping = false;
+bool handPresent = false;
 unsigned long IRDetectStartTime = 0;
 
 // Varibles for Sonars
@@ -311,6 +312,7 @@ String hasFullBin() {
 
 void runPlatformSonars() {
   bool currentIRState = readIRStable(IRPin);
+  handPresent = (currentIRState == LOW);
 
   if (previousIRState == LOW && currentIRState == HIGH && !alreadyDetectIR && !isCapturing) {
     isScanning = true;
@@ -319,6 +321,16 @@ void runPlatformSonars() {
     lcd.clear();
     lcd.print("Scanning Start");
     delay(500);
+  }
+
+  if (handPresent && isScanning) {
+    // Hand came back, stop scanning
+    isScanning = false;
+    alreadyDetectIR = false;
+    isIRBeeping = true;
+    lcd.clear();
+    lcd.print("Scanning Stopped");
+    Serial.println("Scanning paused due to hand return");
   }
 
   previousIRState = currentIRState;
@@ -345,6 +357,8 @@ void runPlatformSonars() {
   }
 
   if (isScanning && alreadyDetectIR) {
+
+    
     long frontDistance = readSonarDistance(sonarTrigPin, frontEchoPin);
     delay(70);
     long rightDistance = readSonarDistance(sonarTrigPin, rightEchoPin);
