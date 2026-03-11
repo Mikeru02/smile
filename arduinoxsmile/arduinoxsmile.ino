@@ -553,8 +553,10 @@ void loop() {
       isUtilityMode = (value.equalsIgnoreCase("true"));
       if (isUtilityMode) {
         respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
+        beep(1, 100, 100);
       } else {
         respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");
+        beep(1, 100, 100);
       }
     }
     else if (command == "CHECK_MODE") {
@@ -595,6 +597,7 @@ void loop() {
       respondAndDisplay("", "", "DONE CAPTURE");
       isCapturing = false;
       resetSonar();
+      beep(1, 100, 100);
     }
     else {
       respondAndDisplay("UNKNOWN", command, "UNKNOWN COMMAND");
