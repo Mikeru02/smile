@@ -38,9 +38,9 @@ Servo servoLeft;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 AccelStepper stepper(AccelStepper::DRIVER, stepPin, dirPin);
 
-long readDistance(int trigPin, int echoPin)
-void openGate(Servo servoLeft, Servo servoRight);
-void closeGate(Servo servoLeft, Servo servoRight);
+long readDistance(int trigPin, int echoPin);
+void openGate(Servo &servoLeft, Servo &servoRight);
+void closeGate(Servo &servoLeft, Servo &servoRight);
 
 void setup() {
   servoLeft.attach(servoLeftPin);
@@ -205,7 +205,7 @@ long readDistance(int trigPin, int echoPin) {
   return distance;
 }
 
-void openGate(Servo servoLeft, Servo servoRight) {
+void openGate(Servo &servoLeft, Servo &servoRight) {
   // servoRight.write(0);
   // servoLeft.write(180);
   // Move both servos simultaneously
@@ -222,7 +222,7 @@ void openGate(Servo servoLeft, Servo servoRight) {
   servoRight.writeMicroseconds(stop);
 }
 
-void closeGate(Servo servoLeft, Servo servoRight) {
+void closeGate(Servo &servoLeft, Servo &servoRight) {
   // servoRight.write(90);
   // servoLeft.write(80);
   // servoLeft.writeMicroseconds(forward);
