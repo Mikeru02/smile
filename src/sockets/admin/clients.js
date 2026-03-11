@@ -63,6 +63,7 @@ export default function ClientsSocketEvents(socket, server) {
     })
 
     socket.on('UPDATE_CLIENT', async (data) => {
+        console.log("DEBUG update client data", data)
         try {
             const clientResponse = await server.axiosClient.get(
                 `client/?field=id&value=${data.clientId}`,
