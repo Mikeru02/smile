@@ -619,7 +619,7 @@ void loop() {
           respondAndDisplay("Ready", "Input the trash", "");
         } else {
           respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");
-          respondAndDisplay("Ready", "Input the trash", "");
+          respondAndDisplay("Ready for", "the next user", "");
         }
         beep(1, 100, 100);
       } else {
@@ -662,6 +662,7 @@ void loop() {
       delay(2000);
       controlMotor("disable");
       beep(1, 100, 100);
+      respondAndDisplay("Ready for", "the next user", "");
     }
     else if (command == "DONE CAPTURE" || command == "IGNORE") {
       respondAndDisplay("", "", "DONE CAPTURE");
