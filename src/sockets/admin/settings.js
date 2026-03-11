@@ -36,9 +36,9 @@ export default function SettingsSocketEvents(socket, server) {
                 }
             )
 
-            console.log(existingDomain.data.data);
+            const domainData = existingDomain.data.data
 
-            if (existingDomain && existingDomain.length > 0) {
+            if (domainData && domainData.length > 0) {
                 socket.emit('PROHIBITED_ERROR', ({ message: "Domain already in the list!" }))
                 return;
             }
