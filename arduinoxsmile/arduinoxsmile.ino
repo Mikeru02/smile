@@ -622,9 +622,10 @@ void loop() {
           respondAndDisplay("Ready", "Input the trash", "");
         }
         beep(1, 100, 100);
+      } else {
+        Serial.println("WARN:A user is dropping, cannot set utility mode");
       }
-
-      Serial.println("WARN:A user is dropping, cannot set utility mode");
+      
     }
     else if (command == "CHECK_MODE") {
       if (isUtilityMode) {
