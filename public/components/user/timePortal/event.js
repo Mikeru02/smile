@@ -194,7 +194,7 @@ export default async function Events() {
     const updateDropButtonState = (data) => {
         const status = data.status; // can me undefined
         const mode = data.mode; // can be undefined
-
+        alert(mode)
         if (status) {
             if (status !== 'all_ok') {
                 dropBtn.disabled = true;
