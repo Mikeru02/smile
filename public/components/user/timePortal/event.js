@@ -23,6 +23,8 @@ export default async function Events() {
     let isInternetUp;
     const disableTimeSeconds = 3;
     let connectLock = false;
+    let lastBinStatus = 'all_ok';
+    let lastUtilityMode = false;
 
     let isConnected = false;
 
@@ -191,31 +193,21 @@ export default async function Events() {
         renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
     }
 
-    const updateDropButtonState = (data) => {
-        const status = data.status; // can be undefined
-        const mode = data.mode;     // can be undefined
+    const updateDropButtonState = (data = {}) => {
+        // Update stored values if provided
+        if (data.status !== undefined) lastBinStatus = data.status;
+        if (data.mode !== undefined) lastUtilityMode = data.mode;
 
-        let disable = false;
-
-        // Disable if bin status is not OK
-        if (status && status !== 'all_ok') {
-            disable = true;
-        }
-
-        // Disable if utility mode is active
-        if (mode === true) {
-            disable = true;
-        }
+        // Compute disable flag
+        const disable = lastBinStatus !== 'all_ok' || lastUtilityMode === true;
 
         // Apply button state
         dropBtn.disabled = disable;
         dropBtn.style.opacity = disable ? '0.5' : '1';
         dropBtn.style.cursor = disable ? 'not-allowed' : 'pointer';
 
-        if (!disable) {
-            console.log("Drop button enabled ✅");
-        }
-    }
+        if (!disable) console.log("Drop button enabled ✅");
+    };
 
     // const updateDropButtonState = (data) => {
     //     const status = data.status; // can me undefined
