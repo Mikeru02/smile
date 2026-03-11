@@ -613,10 +613,11 @@ void loop() {
       isUtilityMode = (value.equalsIgnoreCase("true"));
       if (isUtilityMode) {
         respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
+        respondAndDisplay("Ready", "Input the trash", "");
       } else {
         respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");
+        respondAndDisplay("Ready", "Input the trash", "");
       }
-      respondAndDisplay("Ready", "Input the trash", "");
       beep(1, 100, 100);
     }
     else if (command == "CHECK_MODE") {
