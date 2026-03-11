@@ -141,6 +141,8 @@ class ClientController {
 
             if (res.locals.role === "admin") {
                 const { clientId } = req.body || {};
+                field = "id";
+                fieldValue = clientId;
                 client = await this.client.getClientWithSpecificField('id', clientId);
             }
             else {
@@ -211,6 +213,8 @@ class ClientController {
 
             if (res.locals.role === "admin") {
                 const { clientId } = req.body || {};
+                field = "id";
+                fieldValue = clientId;
                 client = await this.client.getClientWithSpecificField('id', clientId);
             }
             else {
