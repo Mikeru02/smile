@@ -607,8 +607,7 @@ void loop() {
     else if (command == "CHECK_BIN") {
       String status = hasFullBin();
       // String status = "all_ok";
-      respondAndDisplay("", "", "BINS:" + status);
-      respondAndDisplay("Ready", "Input the trash", "");
+      respondAndDisplay("BIN STATUS", status, "BINS:" + status);
     }
     else if (command == "SET_UTILITY_MODE") {
       isUtilityMode = (value.equalsIgnoreCase("true"));
@@ -640,7 +639,9 @@ void loop() {
       ip = value;
     }
     else if (command == "DROPPING") {
-      respondAndDisplay("DROPPING", value, "DROPPING STATUS DISPLAYED");
+      respondAndDisplay("Ready", "Input the trash", "");
+      // respondAndDisplay("DROPPING", value, "DROPPING STATUS DISPLAYED");
+
       isUserDropping = true;
       controlMotor("enable");
       beep(1, 100, 100);
