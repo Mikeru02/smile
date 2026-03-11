@@ -192,37 +192,63 @@ export default async function Events() {
     }
 
     const updateDropButtonState = (data) => {
-        const status = data.status; // can me undefined
-        const mode = data.mode; // can be undefined
-        alert(mode)
-        if (status !== undefined) {
-            if (status !== 'all_ok') {
-                dropBtn.disabled = true;
-                dropBtn.style.opacity = '0.5';
-                dropBtn.style.cursor = 'not-allowed';
-            }
-            else {
-                console.log("Changing state of drop button")
-                dropBtn.disabled = false;
-                dropBtn.style.opacity = '1';
-                dropBtn.style.cursor = 'pointer';
-            }
+        const status = data.status; // can be undefined
+        const mode = data.mode;     // can be undefined
+
+        let disable = false;
+
+        // Disable if bin status is not OK
+        if (status && status !== 'all_ok') {
+            disable = true;
         }
 
-        if (mode !== undefined) {
-            if (mode === true){
-                dropBtn.disabled = true;
-                dropBtn.style.opacity = '0.5';
-                dropBtn.style.cursor = 'not-allowed';
-            }
-            else {
-                alert("Changing state of drop button")
-                dropBtn.disabled = false;
-                dropBtn.style.opacity = '1';
-                dropBtn.style.cursor = 'pointer';
-            }
+        // Disable if utility mode is active
+        if (mode === true) {
+            disable = true;
+        }
+
+        // Apply button state
+        dropBtn.disabled = disable;
+        dropBtn.style.opacity = disable ? '0.5' : '1';
+        dropBtn.style.cursor = disable ? 'not-allowed' : 'pointer';
+
+        if (!disable) {
+            console.log("Drop button enabled ✅");
         }
     }
+
+    // const updateDropButtonState = (data) => {
+    //     const status = data.status; // can me undefined
+    //     const mode = data.mode; // can be undefined
+    //     alert(mode)
+    //     if (status !== undefined) {
+    //         if (status !== 'all_ok') {
+    //             dropBtn.disabled = true;
+    //             dropBtn.style.opacity = '0.5';
+    //             dropBtn.style.cursor = 'not-allowed';
+    //         }
+    //         else {
+    //             console.log("Changing state of drop button")
+    //             dropBtn.disabled = false;
+    //             dropBtn.style.opacity = '1';
+    //             dropBtn.style.cursor = 'pointer';
+    //         }
+    //     }
+
+    //     if (mode !== undefined) {
+    //         if (mode === true){
+    //             dropBtn.disabled = true;
+    //             dropBtn.style.opacity = '0.5';
+    //             dropBtn.style.cursor = 'not-allowed';
+    //         }
+    //         else {
+    //             alert("Changing state of drop button")
+    //             dropBtn.disabled = false;
+    //             dropBtn.style.opacity = '1';
+    //             dropBtn.style.cursor = 'pointer';
+    //         }
+    //     }
+    // }
 
     const updateProceedButtonState = () => {
         const isEarnedTimeZero = timeEarnedSeconds <= 0;
