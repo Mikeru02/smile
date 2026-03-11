@@ -126,8 +126,8 @@ export default async function Event() {
             clientId: saveBtn.dataset.clientId,
             clientData: {
                 name: nameElement.value,
-                course: courseElement.value,
-                year_level: yearlvlElement.value,
+                course: courseElement.value ?? null,
+                year_level: yearlvlElement.value ?? null,
                 status: statusElement.value,
                 time_earned: timeEarnedElement.value,
                 time_remaining: timeRemainingElement.value,
