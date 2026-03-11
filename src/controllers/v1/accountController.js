@@ -112,6 +112,8 @@ class AccountController {
 
             const response = await this.account.verify(username, password);
 
+            console.log("DEBUG login", response);
+
             if (!response) {
                 return res.status(400).json({
                     success: false,
