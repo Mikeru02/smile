@@ -195,7 +195,7 @@ export default async function Events() {
         const status = data.status; // can me undefined
         const mode = data.mode; // can be undefined
         alert(mode)
-        if (status) {
+        if (status !== undefined) {
             if (status !== 'all_ok') {
                 dropBtn.disabled = true;
                 dropBtn.style.opacity = '0.5';
