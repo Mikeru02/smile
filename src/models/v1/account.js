@@ -5,7 +5,7 @@ class Account {
     constructor() {
         this.db = connection;
         this.allowedGetFields = ["id", "username", "name", "role", "password", "last_login", "created_at", "updated_at"];
-        this.allowedUpdateFields = ["username", "name", "role", "password", "updated_at"];
+        this.allowedUpdateFields = ["username", "name", "role", "password", "updated_at", "last_login"];
         this.allowedUpdateWhere = ["id"];
     }
 
