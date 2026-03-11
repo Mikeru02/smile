@@ -17,6 +17,7 @@ class ClientController {
         try {
             const ip = req.ip || req.socket.remoteAddress;
             const { student_id, name, course, year_level } = req.body || {};
+            console.log("REQ BODY: ", req.body)
             const leaseInfo = getLeaseInfo(ip);
 
             if (!leaseInfo) {

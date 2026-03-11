@@ -29,8 +29,7 @@ export default async function PageEvent() {
     socketClient.off("SET_UTILITY_MODE");
     socketClient.on("SET_UTILITY_MODE", (data) => {
         const mode = data.mode;
-        const message = data.socketMessage;
-        if (mode) {
+        if (mode ) {
             utilityCheckBox.checked = true;
         }
         else {

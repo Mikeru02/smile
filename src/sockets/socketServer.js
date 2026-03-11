@@ -378,23 +378,19 @@ class SocketServer {
 
         if (message.startsWith("UTILITY_MODE:")) {
             const utilityMode = message.split(":")[1];
-            let socketMessage;
             if (utilityMode === "on") {
                 this.utilityMode = true;
-                socketMessage = "Enabled utility mode!";
             }
             else if (utilityMode === "off") {
                 this.utilityMode = false;
-                socketMessage = "Disabled utility mode!";
             }
             else if (utilityMode === "blocked") {
                 this.utilityMode = false;
-                socketMessage = "A user is currently dropping!";
             }
             else {
                 console.error("Invalid mode");
             }
-            this.io.emit('SET_UTILITY_MODE', { mode: this.utilityMode, socketMessage: socketMessage });
+            this.io.emit('SET_UTILITY_MODE', { mode: this.utilityMode });
         }
 
         if (message.startsWith("BINS:")) {
