@@ -354,7 +354,7 @@ void runPlatformSonars() {
     isScanning = true;
     alreadyDetectIR = true;
     isIRBeeping = false;
-    wilContinue = true;
+    willContinue = true;
   }
 
   previousIRState = currentIRState;
