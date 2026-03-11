@@ -18,6 +18,20 @@ class LinkController {
                 })
             }
 
+            const existingDomain = await this.link.getSpecificDomain(domain);
+            if (existingDomain) {
+                await this.log.create(
+                    "Create Prohibited Skipped",
+                    `${res.locals.username || 'unknown user'} attempted to add domain "${domain}" which already exists`,
+                    "WARN"
+                );
+
+                return res.status(400).json({
+                    success: false,
+                    message: "Domain already prohibited"
+                });
+            }
+
             const response = await this.link.createProhibitedLink(domain);
 
             await this.log.create(

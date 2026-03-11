@@ -26,6 +26,11 @@ export default async function PageEvent() {
         }
     })
 
+    socketClient.off('PROHIBITED_ERROR');
+    socketClient.on('PROHIBITED_ERROR', (data) => {
+        alert(data.message);
+    })
+
     socketClient.off("SET_UTILITY_MODE");
     socketClient.on("SET_UTILITY_MODE", (data) => {
         const mode = data.mode;

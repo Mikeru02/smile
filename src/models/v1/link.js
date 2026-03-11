@@ -19,6 +19,20 @@ class Link {
         }
     }
 
+    async getSpecificDomain(domain) {
+        try {
+            const [row] = await this.db.execute(
+                `SELECT * FROM prohibited_links WHERE link=?`,
+                [domain]
+            )
+            return row;
+        }
+        catch (err) {
+            console.error("[ERROR] link.getSpecificDomain", err);
+            throw err;
+        }
+    }
+
     async getAllProhibitedLinks() {
         try {
             const [row] = await this.db.execute(
