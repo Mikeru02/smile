@@ -119,6 +119,11 @@ class Account {
 
             if (!user) return null;
 
+            console.log("DEBUG: ", {
+                db_pass: user.password,
+                pass: encryptPassword(password)
+            })
+
             if (user.password !== encryptPassword(password)) return null;
 
             await this.update("id", user.id, { last_login: new Date() });
