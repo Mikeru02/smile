@@ -122,17 +122,30 @@ export default async function Event() {
     })
 
     saveBtn.addEventListener('click', function() {
-        socketClient.emit('UPDATE_CLIENT', ({ 
+        const payload = {
             clientId: saveBtn.dataset.clientId,
             clientData: {
-                name: nameElement.value,
-                course: courseElement.value ?? null,
-                year_level: yearlvlElement.value ?? null,
-                status: statusElement.value,
-                time_earned: timeEarnedElement.value,
-                time_remaining: timeRemainingElement.value,
+                name: nameElement.value || null,
+                course: courseElement.value || null,
+                year_level: yearlvlElement.value || null,
+                status: statusElement.value || null,
+                time_earned: timeEarnedElement.value || null,
+                time_remaining: timeRemainingElement.value || null,
             }
-        }))
+        };
+
+        socketClient.emit("UPDATE_CLIENT", payload)
+        // socketClient.emit('UPDATE_CLIENT', ({ 
+        //     clientId: saveBtn.dataset.clientId,
+        //     clientData: {
+        //         name: nameElement.value,
+        //         course: courseElement.value ?? null,
+        //         year_level: yearlvlElement.value ?? null,
+        //         status: statusElement.value,
+        //         time_earned: timeEarnedElement.value,
+        //         time_remaining: timeRemainingElement.value,
+        //     }
+        // }))
 
         alert("Update successfully");
         modal.style.display = "none";
