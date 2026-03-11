@@ -89,7 +89,10 @@ export default async function Events() {
 
     socketClient.on('SET_UTILITY_MODE', (data) => {
         console.log(data);
-        updateDropButtonState({ mode: data.mode });
+        if (data.mode !== undefined) lastUtilityMode = data.mode;
+
+        // Recompute drop button state using stored values
+        updateDropButtonState();
         if (data.mode) {
             annoucementContainer.innerHTML = `
                 <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
@@ -104,7 +107,10 @@ export default async function Events() {
     })
 
     socketClient.on('BIN_STATUS', (data) => {
-        updateDropButtonState({ status: data.status });
+        if (data.status !== undefined) lastBinStatus = data.status;
+
+        // Recompute drop button state using stored values
+        updateDropButtonState();
         console.log('[SOCKET] Bin status: ', data.status);
         if (data.status !== 'all_ok') {
             annoucementContainer.innerHTML = `
@@ -193,15 +199,9 @@ export default async function Events() {
         renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
     }
 
-    const updateDropButtonState = (data = {}) => {
-        // Update stored values if provided
-        if (data.status !== undefined) lastBinStatus = data.status;
-        if (data.mode !== undefined) lastUtilityMode = data.mode;
-
-        // Compute disable flag
+    const updateDropButtonState = () => {
         const disable = lastBinStatus !== 'all_ok' || lastUtilityMode === true;
 
-        // Apply button state
         dropBtn.disabled = disable;
         dropBtn.style.opacity = disable ? '0.5' : '1';
         dropBtn.style.cursor = disable ? 'not-allowed' : 'pointer';
