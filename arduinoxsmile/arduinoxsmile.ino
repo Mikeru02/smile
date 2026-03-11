@@ -607,7 +607,8 @@ void loop() {
     else if (command == "CHECK_BIN") {
       String status = hasFullBin();
       // String status = "all_ok";
-      respondAndDisplay("BIN STATUS", status, "BINS:" + status);
+      respondAndDisplay("", "", "BINS:" + status);
+      respondAndDisplay("Ready", "Input the trash", "");
     }
     else if (command == "SET_UTILITY_MODE") {
       isUtilityMode = (value.equalsIgnoreCase("true"));
