@@ -403,7 +403,6 @@ class SocketServer {
 
         if (message === "SONAR DETECTED:utility") {
             try {
-                isCapturing = true;
                 const timeStamp = Date.now();
                 const uniqueFilename = `capture_${timeStamp}.jpg`;
 

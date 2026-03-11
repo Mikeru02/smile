@@ -349,7 +349,9 @@ void runPlatformSonars() {
   }
 
   if (!handPresent && isCapturing) {
-    
+    isScanning = true;
+    alreadyDetectIR = true;
+    isIRBeeping = false;
   }
 
   previousIRState = currentIRState;
