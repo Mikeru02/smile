@@ -323,15 +323,15 @@ void runPlatformSonars() {
     delay(500);
   }
 
-  if (isCapturing || handPresent) {
-    isScanning = false;
-    alreadyDetectIR = false;
-    isIRBeeping = false;
-    IRDetectStartTime = 0;
-    return; // stop further processing
-  }
+  // if (isCapturing || handPresent) {
+  //   isScanning = false;
+  //   alreadyDetectIR = false;
+  //   isIRBeeping = false;
+  //   IRDetectStartTime = 0;
+  //   return; // stop further processing
+  // }
 
-  if (handPresent && isScanning) {
+  if (handPresent && isScanning || isCapturing) {
     // Hand came back, stop scanning
     isScanning = false;
     alreadyDetectIR = false;
