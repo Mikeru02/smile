@@ -697,7 +697,7 @@ void loop() {
     runPlatformSonars();
   }
 
-  if (!isCapturing && isUserDropping && !isUtilityMode) {
+  if (isUserDropping && !isUtilityMode) {
     runPlatformSonars();
   }
 }
