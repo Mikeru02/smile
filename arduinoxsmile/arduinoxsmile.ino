@@ -44,7 +44,7 @@ bool isScanning = false;
 bool isUtilityMode = false;
 bool isIRBeeping = false;
 bool handPresent = false;
-bool willContinue = false;
+bool willContinue = true;
 unsigned long IRDetectStartTime = 0;
 
 // Varibles for Sonars
@@ -381,8 +381,6 @@ void runPlatformSonars() {
   }
 
   if (isScanning && alreadyDetectIR) {
-
-    
     long frontDistance = readSonarDistance(sonarTrigPin, frontEchoPin);
     delay(70);
     long rightDistance = readSonarDistance(sonarTrigPin, rightEchoPin);
@@ -453,25 +451,29 @@ void runPlatformSonars() {
     }
 
     // ---------------- FINAL CONFIRM ----------------
-    if (anySonarDetected() && willContinue) {
-      if (isUtilityMode) {
-        respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
-      } else {
-        respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
-      }
+    if (anySonarDetected()) {
       isCapturing = true;
       isScanning = false;
       alreadyDetectIR = false;
+      if (willContinue) {
+        if (isUtilityMode) {
+          respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
+        } else {
+          respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
+        }
+      }
     }
-    else if ((millis() - scanningStartTime >= sonarTimeOut * 1000) && willContinue) {
-      if (isUtilityMode) {
-        respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
-      } else {
-        respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
-      }
+    else if ((millis() - scanningStartTime >= sonarTimeOut * 1000)) {
       isCapturing = true;
       isScanning = false;
       alreadyDetectIR = false;
+      if (willContinue) {
+        if (isUtilityMode) {
+          respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
+        } else {
+          respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
+        }
+      }
     }
   }
 }
