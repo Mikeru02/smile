@@ -121,7 +121,7 @@ export default function ClientsSocketEvents(socket, server) {
             socket.emit('CLIENTS', { clients: clients.data.data });
 
         } catch (err) {
-            console.error('[ERROR] ClientsSocketEvents.UPDATE_CLIENT', err.message);
+            console.error('[ERROR] ClientsSocketEvents.UPDATE_CLIENT', err.response?.data || err.message);
         }
     });
 }
