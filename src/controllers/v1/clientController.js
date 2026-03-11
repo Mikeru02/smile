@@ -249,7 +249,7 @@ class ClientController {
                 (now - new Date(clientData.connection_start_at)) / 1000
             );
 
-            let updatedTimeRemaining = clientData.time_remaining - consumedTime;
+            let updatedTimeRemaining = Math.max(clientData.time_remaining - consumedTime, 0);
 
             await this.client.update(field, fieldValue, { status: 'pending', expire_at: null, time_remaining: updatedTimeRemaining, connection_start_at: null, updated_at: new Date()})
             try {
