@@ -49,7 +49,7 @@ unsigned long IRDetectStartTime = 0;
 
 bool captureBeeping = false;
 unsigned long lastCaptureBeep = 0;
-const int captureBeepInterval = 300;
+const int captureBeepInterval = 100;
 
 // Varibles for Sonars
 const int sonarDistanceTreshold = 20;
@@ -462,8 +462,14 @@ void runPlatformSonars() {
     if (anySonarDetected()) {
       if (isUtilityMode) {
         respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
+        respondAndDisplay("Processing", "Please wait!", "");
+        delay(1000);
+        respondAndDisplay("Don't remove", "the trash!", "");
       } else {
         respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
+        respondAndDisplay("Processing", "Please wait!", "");
+        delay(1000);
+        respondAndDisplay("Don't remove", "the trash!", "");
       }
       isCapturing = true;
       isScanning = false;
@@ -473,8 +479,14 @@ void runPlatformSonars() {
     else if ((millis() - scanningStartTime >= sonarTimeOut * 1000)) {
       if (isUtilityMode) {
         respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
+        respondAndDisplay("Processing", "Please wait!", "");
+        delay(1000);
+        respondAndDisplay("Don't remove", "the trash!", "");
       } else {
         respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED");
+        respondAndDisplay("Processing", "Please wait!", "");
+        delay(1000);
+        respondAndDisplay("Don't remove", "the trash!", "");
       }
       isCapturing = true;
       isScanning = false;
