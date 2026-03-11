@@ -158,7 +158,7 @@ class ClientController {
                 client = await this.client.getClientWithSpecificField(field, fieldValue);
             }
 
-            if (!client && client.length === 0) {
+            if (!client || client.length === 0) {
                 return res.status(404).json({
                     success: false,
                     message: "Client not found"
@@ -230,7 +230,7 @@ class ClientController {
                 client = await this.client.getClientWithSpecificField(field, fieldValue);
             }
 
-            if (!client && client.length === 0) {
+            if (!client || client.length === 0) {
                 return res.status(404).json({
                     success: false,
                     message: "Client not found"
