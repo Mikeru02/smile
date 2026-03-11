@@ -121,9 +121,9 @@ class Account {
 
             if (user.password !== encryptPassword(password)) return null;
 
-            await this.update("id", user.id, { last_login: new Date() });
+            const updated = await this.update("id", user.id, { last_login: new Date() });
 
-            return user;
+            return updated;
         }
         catch(err) {
             console.error("[ERROR] account.verify", err);
