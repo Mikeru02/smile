@@ -247,7 +247,7 @@ void runPlatform(String objectType) {
     }
     delay(2000);
     beep(1, 100, 100);
-    respondAndDisplay("Place trash", "in the platform", "")
+    respondAndDisplay("Place trash", "in the platform", "");
   }
   else if (objectType.equalsIgnoreCase("Paper")) {
     beep(3, 100, 100);
@@ -262,7 +262,7 @@ void runPlatform(String objectType) {
     }
     delay(2000);
     beep(1, 100, 100);
-    respondAndDisplay("Place trash", "in the platform", "")
+    respondAndDisplay("Place trash", "in the platform", "");
   }
   else if (objectType.equalsIgnoreCase("General Waste")) {
     beep(1, 500, 100);
@@ -271,7 +271,7 @@ void runPlatform(String objectType) {
     closeGate(servoLeft, servoRight);
     delay(2000);
     beep(1, 100, 100);
-    respondAndDisplay("Place trash", "in the platform", "")
+    respondAndDisplay("Place trash", "in the platform", "");
   } else if (objectType.equalsIgnoreCase("none")){
     lcd.clear();
     lcd.setCursor(0,0);
@@ -283,7 +283,7 @@ void runPlatform(String objectType) {
     closeGate(servoLeft, servoRight);
     delay(2000);
     beep(1, 100, 100);
-    respondAndDisplay("Place trash", "in the platform", "")
+    respondAndDisplay("Place trash", "in the platform", "");
   }
 }
 
