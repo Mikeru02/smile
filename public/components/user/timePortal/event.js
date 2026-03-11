@@ -209,7 +209,7 @@ export default async function Events() {
             }
         }
 
-        if (mode) {
+        if (mode !== undefined) {
             if (mode === true){
                 dropBtn.disabled = true;
                 dropBtn.style.opacity = '0.5';
