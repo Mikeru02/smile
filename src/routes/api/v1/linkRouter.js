@@ -10,6 +10,7 @@ linkRouter.use(authorization);
 
 // Get Methods
 linkRouter.get('/prohibited/all', authentication, link.getAllProhibitedLinks.bind(link));
+linkRouter.get('/prohibited', authentication, link.getSpecificDomain.bind(link));
 
 // Post Methods
 linkRouter.post('/prohibited', authentication, link.createProhibitedLink.bind(link));

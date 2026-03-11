@@ -18,20 +18,6 @@ class LinkController {
                 })
             }
 
-            const existingDomain = await this.link.getSpecificDomain(domain);
-            if (existingDomain) {
-                await this.log.create(
-                    "Create Prohibited Skipped",
-                    `${res.locals.username || 'unknown user'} attempted to add domain "${domain}" which already exists`,
-                    "WARN"
-                );
-
-                return res.status(400).json({
-                    success: false,
-                    message: "Domain already prohibited"
-                });
-            }
-
             const response = await this.link.createProhibitedLink(domain);
 
             await this.log.create(
@@ -50,6 +36,22 @@ class LinkController {
                 `Error creating prohibited domain "${req.body?.domain || 'unknown'}" by ${res.locals.username || 'system'}: ${err.toString()}`,
                 "ERROR"
             );
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async getSpecificDomain(req, res) {
+        try {
+            const response = await this.link.getSpecificDomain(req.query.domain);
+            return res.status(200).json({
+                success: true,
+                data: response
+            })
+        }
+        catch (err) {
             return res.status(500).json({
                 success: false,
                 message: err.toString()

@@ -27,23 +27,29 @@ export default function SettingsSocketEvents(socket, server) {
 
     socket.on("SET_PROHIBITED", async (data) => {
         try {
-            try {
-                const createResponse =  await server.axiosClient.post(
-                    `link/prohibited`,
-                    { domain: data.domain},
-                    {
-                        headers: {
-                            "token": socket.token
-                        }
+            const existingDomain = await server.axiosClient.get(
+                `link/prohibited?domain=${data.domain}`,
+                {
+                    headers: {
+                        "token": socket.token
                     }
-                )
-            }
-            catch (err) {
-                socket.emit("PROHIBITED_ERROR", {
-                    message: err.response.data.message || "Failed to add prohibited domain"
-                });
+                }
+            )
+
+            if (existingDomain && existingDomain.length > 0) {
+                socket.emit('PROHIBITED_ERROR', ({ message: "Domain already in the list!" }))
                 return;
             }
+
+            const createResponse =  await server.axiosClient.post(
+                `link/prohibited`,
+                { domain: data.domain},
+                {
+                    headers: {
+                        "token": socket.token
+                    }
+                }
+            )
 
             const prohibited = await server.axiosClient.get(
                 `link/prohibited/all`,
