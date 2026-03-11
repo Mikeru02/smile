@@ -73,6 +73,11 @@ export default async function PageEvent() {
         }
     })
 
+    socketClient.off('WARN')
+    socketClient.on('WARN', (data) => {
+        alert(data.message);
+    })
+
     socketClient.emit("GET_SETTINGS")
 
 

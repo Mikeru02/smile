@@ -612,15 +612,19 @@ void loop() {
       respondAndDisplay("BIN STATUS", status, "BINS:" + status);
     }
     else if (command == "SET_UTILITY_MODE") {
-      isUtilityMode = (value.equalsIgnoreCase("true"));
-      if (isUtilityMode) {
-        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
-        respondAndDisplay("Ready", "Input the trash", "");
-      } else {
-        respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");
-        respondAndDisplay("Ready", "Input the trash", "");
+      if (!isUserDropping) {
+        isUtilityMode = (value.equalsIgnoreCase("true"));
+        if (isUtilityMode) {
+          respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:on");
+          respondAndDisplay("Ready", "Input the trash", "");
+        } else {
+          respondAndDisplay("UTILITY MODE", isUtilityMode ? "ON" : "OFF", "UTILITY_MODE:off");
+          respondAndDisplay("Ready", "Input the trash", "");
+        }
+        beep(1, 100, 100);
       }
-      beep(1, 100, 100);
+
+      Serial.println("WARN:A user is dropping, cannot set utility mode");
     }
     else if (command == "CHECK_MODE") {
       if (isUtilityMode) {

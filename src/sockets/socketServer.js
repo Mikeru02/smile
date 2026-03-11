@@ -376,6 +376,11 @@ class SocketServer {
             this.arduino.sendCommand('CHECK_MODE');
         }
 
+        if (message.startsWith("WARN:")) {
+            const message = message.split(":")[1];
+            this.io.emit('WARN', ({ message: message }));
+        }
+
         if (message.startsWith("UTILITY_MODE:")) {
             const utilityMode = message.split(":")[1];
             if (utilityMode === "on") {
