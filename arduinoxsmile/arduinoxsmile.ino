@@ -44,6 +44,7 @@ bool isScanning = false;
 bool isUtilityMode = false;
 bool isIRBeeping = false;
 bool handPresent = false;
+bool wilContinue = false;
 unsigned long IRDetectStartTime = 0;
 
 // Varibles for Sonars
@@ -345,6 +346,7 @@ void runPlatformSonars() {
     isScanning = false;
     alreadyDetectIR = false;
     isIRBeeping = true;
+    willContinue = false
     respondAndDisplay("STOP", "Please remove hand", "STOP:capture");
   }
 
@@ -352,6 +354,7 @@ void runPlatformSonars() {
     isScanning = true;
     alreadyDetectIR = true;
     isIRBeeping = false;
+    wilContinue = true;
   }
 
   previousIRState = currentIRState;
@@ -450,7 +453,7 @@ void runPlatformSonars() {
     }
 
     // ---------------- FINAL CONFIRM ----------------
-    if (anySonarDetected()) {
+    if (anySonarDetected() && willContinue) {
       if (isUtilityMode) {
         respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
       } else {
@@ -460,7 +463,7 @@ void runPlatformSonars() {
       isScanning = false;
       alreadyDetectIR = false;
     }
-    else if (millis() - scanningStartTime >= sonarTimeOut * 1000) {
+    else if ((millis() - scanningStartTime >= sonarTimeOut * 1000) && willContinue) {
       if (isUtilityMode) {
         respondAndDisplay("DETECTED", "Object Present", "SONAR DETECTED:utility");
       } else {
