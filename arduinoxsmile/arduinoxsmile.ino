@@ -346,7 +346,7 @@ void runPlatformSonars() {
     isScanning = false;
     alreadyDetectIR = false;
     isIRBeeping = true;
-    willContinue = false
+    willContinue = false;
     respondAndDisplay("STOP", "Please remove hand", "STOP:capture");
   }
 
