@@ -381,6 +381,7 @@ void runPlatformSonars() {
     // Beep continuously if IR is HIGH and stable
     if (isIRBeeping) {
       beep(1, 100, 100); // single beep every 300ms
+      respondAndDisplay("Please remove", "your hand!", "");
     }
   } else {
     // Reset flags when IR goes LOW
