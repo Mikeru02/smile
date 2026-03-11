@@ -31,13 +31,22 @@ export default async function Events() {
     // Populate courses
     if (courseSelect) {
         populateSelect(courseSelect, SELECT_CONFIG.course, "name");
+
         courseSelect.addEventListener("change", () => {
             const selectedCourse = SELECT_CONFIG.course.find(c => c.name === courseSelect.value);
             if (!selectedCourse) return;
             const yearConfig = SELECT_CONFIG.yearlvl.find(y => y.type === selectedCourse.type);
             if (!yearConfig) return;
-            populateSelect(yearSelect, yearConfig.levels.map(l => ({ name: l })), "name");
+
+            // Convert numbers to strings
+            populateSelect(
+                yearSelect,
+                yearConfig.levels.map(l => ({ name: String(l) })),
+                "name"
+            );
         });
+
+        // Trigger once to populate years for default student
         courseSelect.dispatchEvent(new Event("change"));
     }
 
