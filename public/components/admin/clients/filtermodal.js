@@ -10,7 +10,7 @@ export default function FilterModal() {
                 </div>
                 <div class="${styles['filter-container']}">
                     <div class="${styles['filter-group']}">
-                        <label for="filter-logedin">Status</label>
+                        <label for="filter-logedin">Logged In</label>
                         <select id="filter-logedin" class="${styles['filter-select']}">
                             <option value="">None</option>
                             <option value="1">True</option>
