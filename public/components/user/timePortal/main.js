@@ -7,6 +7,7 @@ import ILLUSTRATION1 from '/icons/time.svg';
 export default function Main(root) {
     root.innerHTML = `
         <div class="${styles["card"]}">
+            <button class="${styles["logout-button"]}" id="logout-btn">Logout</button>
             <img src="${Logo}" class="${styles["logo"]}">
             <h1 class="${styles["title"]}">S.M.I.L.E</h1>
             <p class="${styles["desc"]}">Time Management Portal</p>
