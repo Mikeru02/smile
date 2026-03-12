@@ -49,13 +49,16 @@ export default async function Events() {
             const response = await axiosClient.post(
                 `client/`,
                 { username: usernameInput.value, password: passwordInput.value }
-            )
-            alert(response.data)
+            );
+
             localStorage.setItem('token', response.data.data.token);
             window.app.pushRoute("/portal");
+        } catch (err) {
+            if (err.response && err.response.data && err.response.data.message) {
+                alert(err.response.data.message);
+            } else {
+                alert(err.message || "An error occurred");
+            }
         }
-        catch (err) {
-            alert(response?.data || err.message)
-        }
-    })
+    });
 }

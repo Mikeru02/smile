@@ -33,7 +33,15 @@ class ClientController {
                 })
             }
 
-            const { mac, hostname } = leaseInfo;       
+            const { mac, hostname } = leaseInfo;
+            const existingUser = await this.client.getClientWithSpecificField('username', username);
+            if (existingUser && existingUser.length > 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Username already exists'
+                });
+            }
+
             const response = await this.client.create(ip, mac, hostname, username, password);
 
             if (!response) {
