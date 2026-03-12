@@ -103,6 +103,16 @@ class ClientController {
                 });
             }
 
+            if (clientData.is_logged) {
+                return res.status(400).json({
+                    success: false,
+                    message: `
+                        Your account is currently connected on ${clientData.hostname}.
+                        Please logout the device first!
+                    `
+                })
+            }
+
             const response = await this.client.update("username", username, {
                 ip: ip,
                 mac: mac,
