@@ -33,6 +33,6 @@ export default async function PageEvents() {
 
     const exportBtn = document.getElementById('export-logs');
     exportBtn.addEventListener('click', async function() {
-        filterModal.style.display = "flex";
+        filterModal.style.display = "block";
     })
 }

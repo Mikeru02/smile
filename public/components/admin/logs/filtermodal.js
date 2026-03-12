@@ -10,16 +10,6 @@ export default function FilterModal() {
                 </div>
                 <div class="${styles['filter-container']}">
                     <div class="${styles['filter-group']}">
-                        <label for="filter-name">Name</label>
-                        <input type="text" id="filter-name" placeholder="Enter name..." class="${styles['filter-input']}">
-                    </div>
-                    
-                    <div class="${styles['filter-group']}">
-                        <label for="filter-description">Description</label>
-                        <input type="text" id="filter-description" placeholder="Enter description..." class="${styles['filter-input']}">
-                    </div>
-                    
-                    <div class="${styles['filter-group']}">
                         <label for="filter-level">Log Level</label>
                         <select id="filter-level" class="${styles['filter-select']}">
                             <option value="">All Levels</option>

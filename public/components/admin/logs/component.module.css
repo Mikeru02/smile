@@ -360,7 +360,6 @@
     max-width: calc(100% - 2rem);
     max-height: 95vh;
     border-radius: 1rem;
-    margin: 1rem;
   }
   
   .filter-container {
