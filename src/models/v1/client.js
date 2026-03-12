@@ -109,6 +109,48 @@ class Client {
         }
     }
 
+    async getExort(filters = {}) {
+        try {
+            let query = `SELECT * FROM clients WHERE 1=1`;
+            const params = [];
+
+            if (filters.is_logged) {
+                query += `AND is_logged = ?`;
+                params.push(filters.is_logged);
+            }
+
+            if (filters.status) {
+                query += `AND status = ?`;
+                params.push(filters.status);
+            }
+
+            if (filters.from) {
+                query += ` AND timestamp >= ?`;
+                params.push(filters.from);
+            }
+
+            if (filters.to) {
+                query += ` AND timestamp <= ?`;
+                params.push(filters.to);
+            }
+
+            query += ` ORDER BY timestamp DESC`;
+
+            if (filters.limit) {
+                query += ` LIMIT ?`;
+                params.push(filters.limit);
+            }
+
+            const [rows] = await this.db.execute(query, params);
+            return rows;
+
+        }
+        catch (err) {
+            console.error("[ERROR] clients.getExort", err);
+            throw err;
+        }
+    }
+
     // Update Functions     *****************************************
     /**
      * Updates specific fields of a client record in the database.

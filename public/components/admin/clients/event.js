@@ -176,6 +176,38 @@ export default async function Event() {
         filterModal.style.display = "block"
     })
 
+    exportToCSVBtn.addEventListener('click', async function() {
+        try {
+            const response = await axiosClient.get('clients/export', {
+                headers: {
+                    "token": localStorage.getItem('token')
+                },
+                params: {
+                    is_logged: isLogedIn.value || undefined,
+                    status: status.value || undefined,
+                    from: dateFrom.value || undefined,
+                    to: dateTo.value || undefined,
+                    limit: limit.value || undefined
+                }
+            });
+
+            console.log(response.data);
+
+            const logs = response.data.logs || [];
+            if (logs.length === 0) {
+                alert("No logs found for the selected filters.");
+                return;
+            }
+
+            CSVExporter.download(logs, "logs_export.csv");
+            filterModal.style.display = "none";
+
+        } catch (err) {
+            console.error("Failed to export logs:", err);
+            alert("Failed to export logs.");
+        }
+    });
+
     cancelExportBtn.addEventListener('click', function() {
         filterModal.style.display = "none";
     })

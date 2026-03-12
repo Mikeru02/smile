@@ -11,6 +11,7 @@ clientRouter.use(authorization);
 // Get Methods
 clientRouter.get('/', authentication, client.getClientWithSpecificField.bind(client));
 clientRouter.get('/all', authentication, client.getAll.bind(client));
+clientRouter.get('/export', authentication, client.getExport.bind(client));
 
 // Post Methods
 clientRouter.post('/', client.create.bind(client));

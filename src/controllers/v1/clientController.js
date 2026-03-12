@@ -219,6 +219,30 @@ class ClientController {
         }
     }
 
+    async getExport(req, res) {
+        try {
+            const filters = {
+                is_logged: req.query.logged || null,
+                status: req.query.status || null,
+                from: req.query.from || null,
+                to: req.query.to || null,
+                limit: req.query.limit ? Number(req.query.limit) : null
+            };
+
+            const result = await this.client.getExport(filters);
+            return res.status(200).json({
+                success: true,
+                clients: result
+            });
+        }
+        catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     // Update Functions         *****************************************
     async authenticate(req, res) {
         try {
