@@ -7,7 +7,7 @@ class Client {
         this.db = connection;
         this.waste = new Waste();
         this.allowedGetFields = ["id", "ip", "mac", "username", "hostname", "is_logged", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
-        this.allowedFields = ["ip", "name", "course", "year_level", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
+        this.allowedFields = ["ip", "mac", "hostname", "is_logged", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
         this.allowedWhere = ["id", "mac", "username"];
     }
 
