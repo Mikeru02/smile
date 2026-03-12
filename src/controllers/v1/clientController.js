@@ -37,8 +37,7 @@ class ClientController {
             let response;
 
             console.log("DEBUG: ", {
-                username,
-                password,
+                mac
                 ip,
                 hostname,
                 username,
