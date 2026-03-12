@@ -124,6 +124,12 @@ class ClientController {
                 })
             }
 
+            await this.log.create(
+                "Client Login",
+                `Client ${username} with MAC ${mac} login successfully`,
+                "INFO"
+            );
+
             return res.status(200).json({
                 success: true,
                 data: {
