@@ -1,4 +1,5 @@
 import styles from "./component.module.css";
+import FilterModal from "./filtermodal";
 
 export default function MainContent(root) {
     // Sample log data - in real app, this would come from server
@@ -29,6 +30,7 @@ export default function MainContent(root) {
                 </div>
             </div>
             -->
+            ${FilterModal()}
         </div>
     `;
 
@@ -39,6 +41,12 @@ export default function MainContent(root) {
 }
 
 function initializeLogsFunctionality() {
+    // Export button event listener
+    const exportButton = document.getElementById('export-logs');
+    if (exportButton) {
+        exportButton.addEventListener('click', showFilterModal);
+    }
+    
     // Sorting functionality
     const sortableHeaders = document.querySelectorAll(`.${styles["sortable"]}`);
     sortableHeaders.forEach(header => {
@@ -48,12 +56,8 @@ function initializeLogsFunctionality() {
         });
     });
     
-    const logsHeader = document.querySelector(`.${styles["logs-header"]}`);
-    //logsHeader.insertBefore(filterInput, logsHeader.firstChild);
-    
-    // filterInput.addEventListener('input', (e) => {
-    //     filterLogs(e.target.value);
-    // });
+    // Modal event listeners
+    setupModalEventListeners();
 }
 
 function sortLogs(field) {
@@ -66,11 +70,94 @@ function filterLogs(searchTerm) {
     // In real implementation, this would filter the log rows
 }
 
+function setupModalEventListeners() {
+    const modal = document.getElementById('filter-modal');
+    const cancelButton = document.getElementById('cancel-filter');
+    const exportButton = document.getElementById('apply-filter-export');
+    
+    // Close modal on cancel
+    if (cancelButton) {
+        cancelButton.addEventListener('click', hideFilterModal);
+    }
+    
+    // Export with filters
+    if (exportButton) {
+        exportButton.addEventListener('click', exportFilteredLogs);
+    }
+    
+    // Close modal on outside click
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideFilterModal();
+            }
+        });
+    }
+    
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && modal.style.display === 'block') {
+            hideFilterModal();
+        }
+    });
+}
+
+function showFilterModal() {
+    const modal = document.getElementById('filter-modal');
+    if (modal) {
+        modal.style.display = 'block';
+        // Clear previous filter values
+        clearFilterFields();
+    }
+}
+
+function hideFilterModal() {
+    const modal = document.getElementById('filter-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function clearFilterFields() {
+    document.getElementById('filter-name').value = '';
+    document.getElementById('filter-description').value = '';
+    document.getElementById('filter-level').value = '';
+    document.getElementById('filter-date-from').value = '';
+    document.getElementById('filter-date-to').value = '';
+}
+
+function exportFilteredLogs() {
+    const filters = {
+        name: document.getElementById('filter-name').value,
+        description: document.getElementById('filter-description').value,
+        level: document.getElementById('filter-level').value,
+        dateFrom: document.getElementById('filter-date-from').value,
+        dateTo: document.getElementById('filter-date-to').value
+    };
+    
+    // Check if any filters are set
+    const hasFilters = Object.values(filters).some(value => value !== '');
+    
+    if (hasFilters) {
+        console.log('Exporting logs with filters:', filters);
+        // In real implementation, send filters to server
+        // The server will apply filters and return filtered data for export
+        // No need to filter the table since we're exporting directly
+    } else {
+        console.log('Exporting all logs (no filters applied)');
+        // In real implementation, export all logs
+    }
+    
+    // Hide modal after export
+    hideFilterModal();
+    
+    // Show success message
+    alert('Logs exported successfully!');
+}
+
 // Global functions for button actions
 window.exportLogs = function() {
-    console.log('Exporting logs...');
-    // In real implementation, this would export logs to file
-    alert('Logs exported successfully');
+    showFilterModal();
 };
 
 window.clearLogs = function() {
