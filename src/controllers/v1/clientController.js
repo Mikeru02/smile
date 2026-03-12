@@ -96,6 +96,13 @@ class ClientController {
             const existingClient = await this.client.getClientWithSpecificField('username', username);
             const clientData = existingClient[0];
 
+            if (!clientData) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No account found'
+                });
+            }
+
             if ((clientData.password !== encryptPassword(password)) || (clientData.username !== username)) {
                 return res.status(400).json({
                     success: false,
