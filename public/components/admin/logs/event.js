@@ -44,15 +44,33 @@ export default async function PageEvents() {
     const cancelExportBtn = document.getElementById('cancel-filter');
 
     exportToCSVBtn.addEventListener('click', async function() {
-        const data = await axiosClient.get(
-            `logs/export?level=${logLevel.value}&from=${dateFrom.value}&to=${dateTo.value}&limit=${limit.value}`,
-            {
+        try {
+            const response = await axiosClient.get('logs/export', {
                 headers: {
                     "token": localStorage.getItem('token')
+                },
+                params: {
+                    level: logLevel.value || undefined,
+                    from: dateFrom.value || undefined,
+                    to: dateTo.value || undefined,
+                    limit: limit.value || undefined
                 }
+            });
+
+            const logs = response.data.logs || [];
+            if (logs.length === 0) {
+                alert("No logs found for the selected filters.");
+                return;
             }
-        )
-    })
+
+            CSVExporter.download(logs, "logs_export.csv");
+            filterModal.style.display = "none";
+
+        } catch (err) {
+            console.error("Failed to export logs:", err);
+            alert("Failed to export logs.");
+        }
+    });
 
     cancelExportBtn.addEventListener('click', function() {
         filterModal.style.display = "none";
