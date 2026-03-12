@@ -7,7 +7,13 @@ import { populateSelect } from "../../../utils/populateSelect.js";
 import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
 export default async function Events() {
-    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`;
+    const axiosClient = axios.create({
+        baseURL:`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": import.meta.env.VITE_SRC_KEY
+        }
+    })
     const validToken = await checkToken(localStorage.getItem('token'));
 
     if (validToken) {
@@ -37,4 +43,23 @@ export default async function Events() {
 
     usernameInput.addEventListener('input', () => {validateLoginForm(usernameInput, passwordInput, loginBtn);})
     passwordInput.addEventListener('input', () => {validateLoginForm(usernameInput, passwordInput, loginBtn);})
+
+    loginBtn.addEventListener('click', async function() {
+        try {
+            const response = await axiosClient.post(
+                `client/login`,
+                { username: usernameInput.value, password: passwordInput.value }
+            );
+
+            localStorage.setItem('token', response.data.data.token);
+            window.app.pushRoute("/portal");
+        } 
+        catch (err) {
+            if (err.response && err.response.data && err.response.data.message) {
+                alert(err.response.data.message);
+            } else {
+                alert(err.message || "An unexpected error occurred");
+            }
+        }
+    });
 }

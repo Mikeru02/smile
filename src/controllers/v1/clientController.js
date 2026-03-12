@@ -4,6 +4,7 @@ import Client from "../../models/v1/client.js";
 import Waste from "../../models/v1/waste.js";
 import Log from "../../models/v1/log.js";
 import ClientManagement from "../../utils/clientManagement.js";
+import { encryptPassword } from "../../utils/hash.js";
 
 class ClientController {
     constructor() {
@@ -64,6 +65,66 @@ class ClientController {
                     token: jwt.sign({ username: username, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
                 },
             })
+        }
+        catch (err) {
+            await this.log.create(
+                "Client Creation Error",
+                `Error creating/updating client for IP ${req.ip || req.socket.remoteAddress}: ${err.toString()}`,
+                "ERROR"
+            );
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async login(req, res) {
+        try {
+            const ip = req.ip || req.socket.remoteAddress;
+            const { username, password } = req.body || {};
+            const leaseInfo = getLeaseInfo(ip);
+
+            if (!leaseInfo) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Client lease not found"
+                })
+            }
+            const { mac, hostname } = leaseInfo;
+
+            const existingClient = await this.client.getClientWithSpecificField('username', username);
+            const clientData = existingClient.data.data[0];
+
+            if ((clientData.password !== encryptPassword(password)) || (clientData.username !== username)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid username or password'
+                });
+            }
+
+            await this.client.update("username", username, {
+                ip: ip,
+                mac: mac,
+                hostname: hostname,
+                is_logged: true
+            })
+
+            if (!response) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Insert failed: ${response?.data}`
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                data: {
+                    response: response,
+                    token: jwt.sign({ username: username, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
+                },
+            })
+
         }
         catch (err) {
             await this.log.create(

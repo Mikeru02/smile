@@ -15,6 +15,7 @@ clientRouter.get('/all', authentication, client.getAll.bind(client));
 // Post Methods
 clientRouter.post('/', client.create.bind(client));
 clientRouter.post('/earn', authentication, client.earned.bind(client));
+clientRouter.post('/login', client.login.bind(client));
 
 // Patch Methods
 clientRouter.patch('/', authentication, client.updateClientData.bind(client));

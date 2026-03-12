@@ -51,17 +51,13 @@ export default async function Events() {
                 { username: usernameInput.value, password: passwordInput.value }
             );
 
-            // Success: save token and redirect
             localStorage.setItem('token', response.data.data.token);
             window.app.pushRoute("/portal");
         } 
         catch (err) {
-            // Axios puts the server response in err.response
             if (err.response && err.response.data && err.response.data.message) {
-                // This will show your 400 error message, like "Username already exists"
                 alert(err.response.data.message);
             } else {
-                // Generic error fallback
                 alert(err.message || "An unexpected error occurred");
             }
         }
