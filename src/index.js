@@ -38,8 +38,8 @@ const arduino = new Arduino(
 
         // Intialize workers
         startTimeDeductor();
-        // checkInternetWorker();
-        // watchDnsmasq(process.env.DNSMASQ_LOG);
+        checkInternetWorker();
+        watchDnsmasq(process.env.DNSMASQ_LOG);
         const backupWorker = new BackupWorker();
         backupWorker.start();
         checkClients();

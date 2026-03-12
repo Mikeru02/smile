@@ -38,6 +38,22 @@ class AdminController {
             });
         }
     }
+
+    async createAccessedLinks(req, res) {
+        try {
+            const {clientIP, domain} = req.body || {};
+            const response = await this.admin.createAccessedLinks(clientIP, domain);
+            return res.status(200).json({
+                success: true,
+                data: response
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
 }
 
 export default AdminController;
