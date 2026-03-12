@@ -13,7 +13,7 @@ adminRouter.get('/dashboard-info', admin.getDashboardInfo.bind(admin));
 adminRouter.get('/machine-info', admin.getMachineInfo.bind(admin));
 
 // Post Methods
-adminRouter.post('/accessed-link', admin.)
+// adminRouter.post('/accessed-link', admin.)
 
 // Update Methods
 

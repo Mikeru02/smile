@@ -20,13 +20,14 @@ export default function Main(root){
                     </button>
                 </div>
             </div>
-    
             <div class="${styles["consent-container"]}">
-                <label for="consent">View <a href="/terms-and-conditions">Terms and Conditions</a></label>
+                <input type="checkbox" id="consent" name="consent">
+                <label for="consent">I agree to <a href="/terms-and-conditions">Terms and Conditions</a></label>
             </div>
-            <button id="submit-credential" class="${styles["button-submit-cred"]}" disabled>LOGIN</button>
+            <button id="submit-credential" class="${styles["button-submit-cred"]}" disabled>SIGN UP</button>
+
             <div class="${styles["consent-container"]}">
-                <label for="consent">Don't have an account? <a href="/sign-up">Sign Up</a></label>
+                <label for="consent">Allready have an account? <a href="/">Log In</a></label>
             </div>
         </div>
     `;

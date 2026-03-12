@@ -15,6 +15,7 @@ import AdminAccountManagement from './pages/admin/accountManagement';
 
 import './styles/styles.css';
 import Lost from './pages/lost';
+import SignUp from './pages/user/signUp';
 
 const app = new SPA({
     root: document.getElementById("app"),
@@ -27,6 +28,7 @@ window.app = app;
 app.add("/", CaptivePortal);
 app.add("/generate_204", CaptivePortal);
 app.add("/portal", TimePortal, true);
+app.add("/sign-up", SignUp);
 app.add("/terms-and-conditions", TermsAndConditions);
 app.add("/lost", Lost);
 app.add("/admin/login", AdminLogin);
