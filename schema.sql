@@ -6,6 +6,8 @@ CREATE DATABASE IF NOT EXISTS smile
 
 USE smile;
 
+SET time_zone = '+08:00';
+
 CREATE TABLE `accounts`(
     `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `username` VARCHAR(15) NOT NULL UNIQUE KEY,
