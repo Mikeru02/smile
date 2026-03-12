@@ -62,6 +62,25 @@ export default function ClientsSocketEvents(socket, server) {
         }
     })
 
+    socket.on('LOGOUT_CLIENT', async () => {
+        try {
+            const response = await server.axiosClient.patch(
+                `client/?field=username&value=${socket.decoded.username}`,
+                {
+                    ip: null,
+                    mac: null,
+                    hostname: null,
+                    is_logged: 0
+                }
+            )
+
+            socket.emit('LOGOUT_DONE');
+        }
+        catch (err) {
+            console.error('[ERROR] ClientsSocketEvents.LOGOUT_CLIENT', err.message);
+        }
+    })
+
     socket.on('UPDATE_CLIENT', async (data) => {
         console.log("DEBUG update client data", data)
         try {

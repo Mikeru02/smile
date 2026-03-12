@@ -139,6 +139,12 @@ export default async function Events() {
         updateConnectButtonState();
     });
 
+    socketClient.on('LOGOUT_DONE', () => {
+        socketClient.disconnect();
+        localStorage.removeItem('token');
+        window.app.pushRoute('/')
+    })
+
 
 
     // Time containers
@@ -150,6 +156,7 @@ export default async function Events() {
     const TRsecSpan = document.getElementById('sec-span');
 
     const annoucementContainer = document.getElementById('announcement-container')
+    const logoutBtn = document.getElementById('logout-btn');
 
     // Modals
     const modal = document.getElementById('modal');
@@ -379,4 +386,8 @@ export default async function Events() {
 
         // window.app.pushRoute("/portal");
     });
+
+    logoutBtn.addEventListener('click', function() {
+        socketClient.emit('LOGOUT_CLIENT')
+    })
 }
