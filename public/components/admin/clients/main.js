@@ -1,5 +1,6 @@
 import styles from "./component.module.css";
 import Modal from "./modal.js";
+import FilterModal from "./filtermodal.js";
 
 export default function MainContent(root) {
     root.innerHTML = `
@@ -33,6 +34,7 @@ export default function MainContent(root) {
             -->
         </div>
         ${Modal()}
+        ${FilterModal()}
     `;
 
     root.className = styles["main"];

@@ -5,17 +5,26 @@ export default function FilterModal() {
         <div class="${styles['modal']}" id="filter-modal">
             <div class="${styles['modal-content']}">
                 <div class="${styles['top-container']}">
-                    <h2>Export Logs Filter</h2>
-                    <p>Choose which logs to export</p>
+                    <h2>Export Client Filter</h2>
+                    <p>Choose which client to export</p>
                 </div>
                 <div class="${styles['filter-container']}">
                     <div class="${styles['filter-group']}">
-                        <label for="filter-level">Log Level</label>
-                        <select id="filter-level" class="${styles['filter-select']}">
-                            <option value="">All Levels</option>
-                            <option value="INFO">INFO</option>
-                            <option value="WARN">WARN</option>
-                            <option value="ERROR">ERROR</option>
+                        <label for="filter-logedin">Status</label>
+                        <select id="filter-logedin" class="${styles['filter-select']}">
+                            <option value="">None</option>
+                            <option value="1">True</option>
+                            <option value="0">False</option>
+                        </select>
+                    </div>
+
+                    <div class="${styles['filter-group']}">
+                        <label for="filter-status">Status</label>
+                        <select id="filter-status" class="${styles['filter-select']}">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="active">Active</option>
+                            <option value="paused">Paused</option>
                         </select>
                     </div>
                     
