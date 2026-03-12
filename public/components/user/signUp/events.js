@@ -45,7 +45,6 @@ export default async function Events() {
     consentCheckbox.addEventListener('change', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn)});
 
     loginBtn.addEventListener('click', async function() {
-        alert("HIT")
         try {
             const response = await axiosClient.post(
                 `client/`,

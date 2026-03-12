@@ -36,16 +36,6 @@ class ClientController {
             const { mac, hostname } = leaseInfo;       
             const response = await this.client.create(ip, mac, hostname, username, password);
 
-            // const existingClient = await this.client.getClientWithSpecificField("username", username);
-
-            // if (existingClient || existingClient.length > 0) {
-            //     response = await this.client.update("username", username, { ip: ip, hostname: hostname, mac: mac, is_logged: true });
-            // } else {
-            //     response = await this.client.create(ip, mac, hostname, username, password);
-            // }
-
-            // console.log('RESPONSE: ', response);
-
             if (!response) {
                 return res.status(400).json({
                     success: false,
@@ -55,7 +45,7 @@ class ClientController {
 
             await this.log.create(
                 "Client Created",
-                `Client ${username} with MAC ${mac} was ${existingClient || existingClient.length > 0 ? "updated" : "created"} successfully`,
+                `Client ${username} with MAC ${mac} was created successfully`,
                 "INFO"
             );
 
