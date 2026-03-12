@@ -36,6 +36,15 @@ class ClientController {
             const { mac, hostname } = leaseInfo;       
             let response;
 
+            console.log("DEBUG: ", {
+                username,
+                password,
+                ip,
+                hostname,
+                username,
+                password
+            })
+
             const existingClient = await this.client.getClientWithSpecificField("username", username);
 
             if (existingClient && existingClient.length > 0) {
