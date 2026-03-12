@@ -62,7 +62,7 @@ class ClientController {
                 success: true,
                 data: {
                     response: response,
-                    token: jwt.sign({ username: username, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
+                    token: jwt.sign({ username: username, mac: mac, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
                 },
             })
         }
@@ -103,7 +103,7 @@ class ClientController {
                 });
             }
 
-            await this.client.update("username", username, {
+            const response = await this.client.update("username", username, {
                 ip: ip,
                 mac: mac,
                 hostname: hostname,
@@ -121,7 +121,7 @@ class ClientController {
                 success: true,
                 data: {
                     response: response,
-                    token: jwt.sign({ username: username, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
+                    token: jwt.sign({ username: username, mac: mac, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
                 },
             })
 
