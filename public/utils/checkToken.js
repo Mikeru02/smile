@@ -23,7 +23,7 @@ export default async function checkToken(token) {
             }
 
             const response = await axiosClient.get(
-                `client/?field=userame&value=${decoded.username}`,
+                `client/?field=username&value=${decoded.username}`,
                 {
                     headers: {
                         "token": token
