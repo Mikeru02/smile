@@ -108,7 +108,7 @@ class ClientController {
                     success: false,
                     message: `
                         Your account is currently connected on ${clientData.hostname}.
-                        Please logout the device first!
+                        Please logout the current active connection on ${clientData.hostname} first!
                     `
                 })
             }
