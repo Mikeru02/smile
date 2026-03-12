@@ -2,7 +2,7 @@ import axios from "axios";
 import OpenEye from '../../../icons/open-eye.svg';
 import CloseEye from '../../../icons/close-eye.svg';
 import checkToken from "../../../utils/checkToken.js";
-import { validateForm } from "../../../utils/validateInput.js";
+import { validateSignupForm } from "../../../utils/validateInput.js";
 import { populateSelect } from "../../../utils/populateSelect.js";
 import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
@@ -21,7 +21,10 @@ export default async function Events() {
 
     const eyeIcon = document.getElementById('eye-icon');
     const togglePasswordBtn = document.getElementById('toggle-password');
+    const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('submit-credential');
+    const consentCheckbox = document.getElementById('consent');
 
 
     togglePasswordBtn.addEventListener('click', function() {
@@ -31,5 +34,9 @@ export default async function Events() {
         eyeIcon.alt = type === 'password' ? 'Show password' : 'Hide password';
     });
 
-    const submitBtn = document.getElementById("submit-credential");
+    validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn);
+
+    usernameInput.addEventListener('input', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn);})
+    passwordInput.addEventListener('input', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn);})
+    consentCheckbox.addEventListener('change', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn)});
 }

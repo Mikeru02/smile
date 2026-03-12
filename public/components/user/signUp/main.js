@@ -27,7 +27,7 @@ export default function Main(root){
             <button id="submit-credential" class="${styles["button-submit-cred"]}" disabled>SIGN UP</button>
 
             <div class="${styles["consent-container"]}">
-                <label for="consent">Allready have an account? <a href="/">Log In</a></label>
+                <label for="consent">Already have an account? <a href="/">Log In</a></label>
             </div>
         </div>
     `;

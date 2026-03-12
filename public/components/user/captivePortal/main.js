@@ -20,11 +20,12 @@ export default function Main(root){
                     </button>
                 </div>
             </div>
-    
+
+            <button id="submit-credential" class="${styles["button-submit-cred"]}" disabled>LOGIN</button>
             <div class="${styles["consent-container"]}">
                 <label for="consent">View <a href="/terms-and-conditions">Terms and Conditions</a></label>
             </div>
-            <button id="submit-credential" class="${styles["button-submit-cred"]}" disabled>LOGIN</button>
+            
             <div class="${styles["consent-container"]}">
                 <label for="consent">Don't have an account? <a href="/sign-up">Sign Up</a></label>
             </div>

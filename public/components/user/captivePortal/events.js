@@ -2,7 +2,7 @@ import axios from "axios";
 import OpenEye from '../../../icons/open-eye.svg';
 import CloseEye from '../../../icons/close-eye.svg';
 import checkToken from "../../../utils/checkToken.js";
-import { validateForm } from "../../../utils/validateInput.js";
+import { validateLoginForm } from "../../../utils/validateInput.js";
 import { populateSelect } from "../../../utils/populateSelect.js";
 import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
@@ -21,8 +21,9 @@ export default async function Events() {
 
     const eyeIcon = document.getElementById('eye-icon');
     const togglePasswordBtn = document.getElementById('toggle-password');
+    const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
-
+    const loginBtn = document.getElementById('submit-credential');
 
     togglePasswordBtn.addEventListener('click', function() {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -31,5 +32,9 @@ export default async function Events() {
         eyeIcon.alt = type === 'password' ? 'Show password' : 'Hide password';
     });
 
-    const submitBtn = document.getElementById("submit-credential");
+
+    validateLoginForm(usernameInput, passwordInput, loginBtn);
+
+    usernameInput.addEventListener('input', () => {validateLoginForm(usernameInput, passwordInput, loginBtn);})
+    passwordInput.addEventListener('input', () => {validateLoginForm(usernameInput, passwordInput, loginBtn);})
 }
