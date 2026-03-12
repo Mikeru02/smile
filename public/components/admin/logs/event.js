@@ -35,4 +35,28 @@ export default async function PageEvents() {
     exportBtn.addEventListener('click', async function() {
         filterModal.style.display = "block";
     })
+
+    const logLevel = document.getElementById('filter-level');
+    const dateFrom = document.getElementById('filter-date-from');
+    const dateTo =document.getElementById('filter-date-to');
+    const limit = document.getElementById('filter-limit');
+    const exportToCSVBtn = document.getElementById('apply-filert-export');
+    const cancelExportBtn = document.getElementById('cancel-filter');
+
+    exportToCSVBtn.addEventListener('click', async function() {
+        const data = await axiosClient.get(
+            `logs/export?level=${logLevel.value}&from=${dateFrom.value}&to=${dateTo.value}&limit=${limit.value}`,
+            {
+                headers: {
+                    "token": localStorage.getItem('token')
+                }
+            }
+        )
+    })
+
+    cancelExportBtn.addEventListener('click', function() {
+        filterModal.style.display = "none";
+    })
+
+
 }

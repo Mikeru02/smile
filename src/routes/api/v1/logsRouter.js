@@ -10,6 +10,7 @@ logRouter.use(authorization);
 
 // Get Methods
 logRouter.get('/', authentication, log.get.bind(log));
+logRouter.get('/export', authentication, log.getExport.bind(log));
 
 // Post Methods
 

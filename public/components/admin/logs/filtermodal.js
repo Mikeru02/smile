@@ -28,6 +28,11 @@ export default function FilterModal() {
                         <label for="filter-date-to">Date To</label>
                         <input type="datetime-local" id="filter-date-to" class="${styles['filter-input']}">
                     </div>
+
+                    <div class="${styles['filter-group']}">
+                        <label for="filter-limit">Limit</label>
+                        <input type="number" id="filter-limit" class="${styles['filter-input']}">
+                    </div>
                 </div>
                 <div class="${styles['button-container']}">
                     <button id="cancel-filter" class="${styles['btn-cancel']}">Cancel</button>

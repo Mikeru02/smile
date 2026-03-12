@@ -37,6 +37,30 @@ class LogController {
             });
         }
     }
+
+    async getExport(req, res) {
+        try {
+            const filters = {
+                level: req.query.level || null,
+                from: req.query.from || null,
+                to: req.query.to || null,
+                limit: req.query.limit ? Number(req.query.limit) : null
+            };
+
+            const result = await this.log.getExport(filters);
+
+            return res.status(200).json({
+                success: true,
+                logs: result
+            });
+        }
+        catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
 }
 
 export default LogController;
