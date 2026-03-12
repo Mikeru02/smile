@@ -63,7 +63,7 @@ class ClientController {
 
             await this.log.create(
                 "Client Created",
-                `Client ${username} with MAC ${mac} was ${existingClient && existingClient.length > 0 ? "updated" : "created"} successfully`,
+                `Client ${username} with MAC ${mac} was ${existingClient || existingClient.length > 0 ? "updated" : "created"} successfully`,
                 "INFO"
             );
 
