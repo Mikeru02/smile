@@ -28,7 +28,7 @@ export default async function Event() {
     const activeTimers = new Map();
 
     const axiosClient = axios.create({
-        baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
+        baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
         headers: {
             "Content-Type": "application/json",
             "apikey": import.meta.env.VITE_SRC_KEY,
@@ -178,7 +178,7 @@ export default async function Event() {
 
     exportToCSVBtn.addEventListener('click', async function() {
         try {
-            const response = await axiosClient.get('clients/export', {
+            const response = await axiosClient.get('client/export', {
                 headers: {
                     "token": localStorage.getItem('token')
                 },
@@ -193,18 +193,18 @@ export default async function Event() {
 
             console.log(response.data);
 
-            const logs = response.data.logs || [];
+            const logs = response.data.clients || [];
             if (logs.length === 0) {
-                alert("No logs found for the selected filters.");
+                alert("No clients found for the selected filters.");
                 return;
             }
 
-            CSVExporter.download(logs, "logs_export.csv");
+            CSVExporter.download(logs, "clients_export.csv");
             filterModal.style.display = "none";
 
         } catch (err) {
-            console.error("Failed to export logs:", err);
-            alert("Failed to export logs.");
+            console.error("Failed to export clients:", err);
+            alert("Failed to export clients.");
         }
     });
 

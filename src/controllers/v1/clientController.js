@@ -222,7 +222,7 @@ class ClientController {
     async getExport(req, res) {
         try {
             const filters = {
-                is_logged: req.query.logged || null,
+                is_logged: req.query.is_logged || null,
                 status: req.query.status || null,
                 from: req.query.from || null,
                 to: req.query.to || null,
