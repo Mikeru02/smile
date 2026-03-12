@@ -24,7 +24,7 @@ CREATE TABLE `clients`(
     `hostname` VARCHAR(100) NULL,
     `username` VARCHAR(25) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `is_logged` BOOLEAN DEFAULT FALSE,
+    `is_logged` BOOLEAN DEFAULT TRUE,
     `status` ENUM('pending', 'active', 'dropping', 'paused', 'outOfTime'),
     `time_remaining` BIGINT DEFAULT 0,
     `time_earned` BIGINT DEFAULT 0,

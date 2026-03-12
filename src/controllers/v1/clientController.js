@@ -117,7 +117,7 @@ class ClientController {
                 ip: ip,
                 mac: mac,
                 hostname: hostname,
-                is_logged: true
+                is_logged: 1
             })
 
             if (!response) {
