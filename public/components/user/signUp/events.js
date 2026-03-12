@@ -49,7 +49,7 @@ export default async function Events() {
         try {
             const response = await axiosClient.post(
                 `client/`,
-                { ussername: usernameInput.value, password: passwordInput.value }
+                { username: usernameInput.value, password: passwordInput.value }
             )
             localStorage.setItem('token', response.data.data.token);
             window.app.pushRoute("/portal");
