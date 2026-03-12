@@ -71,6 +71,11 @@ export default function ClientsSocketEvents(socket, server) {
                     mac: null,
                     hostname: null,
                     is_logged: 0
+                },
+                {
+                    headers: {
+                        "token": socket.token
+                    }
                 }
             )
 
