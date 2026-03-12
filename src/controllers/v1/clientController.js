@@ -106,10 +106,7 @@ class ClientController {
             if (clientData.is_logged) {
                 return res.status(400).json({
                     success: false,
-                    message: `
-                        Your account is currently connected on ${clientData.hostname}.
-                        Please logout the current active connection on ${clientData.hostname} first!
-                    `
+                    message: `Your account is currently connected on ${clientData.hostname}. Please logout the current active connection on ${clientData.hostname} first!`
                 })
             }
 
