@@ -57,6 +57,8 @@ export default async function PageEvents() {
                 }
             });
 
+            console.log(response.data);
+
             const logs = response.data.logs || [];
             if (logs.length === 0) {
                 alert("No logs found for the selected filters.");
