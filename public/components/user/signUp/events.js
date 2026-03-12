@@ -55,7 +55,7 @@ export default async function Events() {
             window.app.pushRoute("/portal");
         }
         catch (err) {
-            
+            alert(response?.data || err.message)
         }
     })
 }
