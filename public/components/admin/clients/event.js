@@ -105,6 +105,16 @@ export default async function Event() {
 
     socketClient.emit('GET_CLIENTS');
 
+    const filterModal = document.getElementById('filter-modal')
+    const isLogedIn = document.getElementById('filter-logedin')
+    const status = document.getElementById('filter-status');
+    const dateFrom = document.getElementById('filter-date-from');
+    const dateTo =document.getElementById('filter-date-to');
+    const limit = document.getElementById('filter-limit');
+    const exportToCSVBtn = document.getElementById('apply-filter-export');
+    const cancelExportBtn = document.getElementById('cancel-filter');
+
+
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
             const button = e.target;
@@ -153,14 +163,21 @@ export default async function Event() {
 
     const exportBtn = document.getElementById('export-btn');
     exportBtn.addEventListener('click', async function() {
-        try {
-            const clients = await axiosClient.get(
-                `client/all`
-            )
-            CSVExporter.download(clients.data.data, "clients.csv");
-        }
-        catch (err) {
+        // try {
+        //     const clients = await axiosClient.get(
+        //         `client/all`
+        //     )
+        //     CSVExporter.download(clients.data.data, "clients.csv");
+        // }
+        // catch (err) {
 
-        }
+        // }
+
+        filterModal.style.display = "block"
     })
+
+    cancelExportBtn.addEventListener('click', function() {
+        filterModal.style.display = "none";
+    })
+
 }
