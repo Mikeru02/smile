@@ -94,8 +94,7 @@ class ClientController {
             const { mac, hostname } = leaseInfo;
 
             const existingClient = await this.client.getClientWithSpecificField('username', username);
-            const clientData = existingClient;
-            console.log(clientData);
+            const clientData = existingClient[0];
 
             if ((clientData.password !== encryptPassword(password)) || (clientData.username !== username)) {
                 return res.status(400).json({
