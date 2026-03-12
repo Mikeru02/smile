@@ -23,7 +23,7 @@ export default async function checkToken(token) {
             }
 
             const response = await axiosClient.get(
-                `client/?field=mac&value=${decoded.mac}`,
+                `client/?field=userame&value=${decoded.username}`,
                 {
                     headers: {
                         "token": token
@@ -35,7 +35,7 @@ export default async function checkToken(token) {
 
             const clientData = response.data.data[0];
 
-            if (!clientData && clientData.length === 0) {
+            if (!clientData || clientData.length === 0) {
                 localStorage.removeItem('token');
                 return false;
             }
