@@ -19,6 +19,7 @@ export default async function PageEvents() {
     const tbody = table.querySelector("tbody");
 
     let headers = populateHeaders(thead, "logs");
+    const filterModal = document.getElementById('filter-modal')
 
 
     socketClient.off('LOGS');
@@ -32,14 +33,6 @@ export default async function PageEvents() {
 
     const exportBtn = document.getElementById('export-logs');
     exportBtn.addEventListener('click', async function() {
-        // try {
-        //     const logs = await axiosClient.get(
-        //         `logs/`
-        //     )
-        //     CSVExporter.download(logs.data.data, "logs.csv");
-        // }
-        // catch (err) {
-
-        // }
+        filterModal.style.display = "flex";
     })
 }
