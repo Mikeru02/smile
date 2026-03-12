@@ -19,9 +19,9 @@ CREATE TABLE `accounts`(
 
 CREATE TABLE `clients`(
     `id` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `mac` VARCHAR(50) NOT NULL,
+    `mac` VARCHAR(50) NULL,
     `ip` VARCHAR(15) NULL,
-    `hostname` VARCHAR(100) NOT NULL,
+    `hostname` VARCHAR(100) NULL,
     `username` VARCHAR(25) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `is_logged` BOOLEAN DEFAULT FALSE,

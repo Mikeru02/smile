@@ -1,4 +1,5 @@
 import { connection } from "../../core/database.js";
+import { encryptPassword } from "../../utils/hash.js";
 import Waste from "./waste.js";
 
 class Client {
@@ -28,11 +29,11 @@ class Client {
      * @example
      * await client.create("ip", "mac", "host", "name", "course", "year_level")
      */
-    async create(ip, mac, host, student_id, name, course, year_level) {
+    async create(ip, mac, host, username, password) {
         try {
             const [row] = await this.db.execute(
-                `INSERT INTO clients (ip, mac, hostname, student_id, name, course, year_level, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-                [ip, mac, host, student_id, name, course, year_level, "pending"]
+                `INSERT INTO clients (ip, mac, hostname, username, password, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+                [ip, mac, host, username, encryptPassword(password), "pending"]
             );
             return row || null;
         } 

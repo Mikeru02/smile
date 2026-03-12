@@ -16,7 +16,7 @@ class ClientController {
     async create(req, res) {
         try {
             const ip = req.ip || req.socket.remoteAddress;
-            const { student_id, name, course, year_level } = req.body || {};
+            const { username, password } = req.body || {};
             const leaseInfo = getLeaseInfo(ip);
 
             if (!leaseInfo) {
@@ -26,25 +26,22 @@ class ClientController {
                 })
             }
 
-            if (!name) {
+            if (!username || !password) {
                 return res.status(400).json({
                     success: false,
-                    message: 'Name field is required'
+                    message: 'Username and password field is required'
                 })
             }
 
-            const { mac, hostname } = leaseInfo;
-            const studentIdVal = student_id ?? null;
-            const courseVal = course ?? null;
-            const yearLevelVal = year_level ?? null;            
+            const { mac, hostname } = leaseInfo;       
             let response;
 
-            const existingClient = await this.client.getClientWithSpecificField("mac", mac);
+            const existingClient = await this.client.getClientWithSpecificField("username", username);
 
             if (existingClient && existingClient.length > 0) {
-                response = await this.client.update("mac", mac, { ip: ip });
+                response = await this.client.update("username", username, { ip: ip, hostname: hostname, mac: mac, is_logged: true });
             } else {
-                response = await this.client.create(ip, mac, hostname, studentIdVal, name, courseVal, yearLevelVal);
+                response = await this.client.create(ip, mac, hostname, username, password);
             }
 
             console.log('RESPONSE: ', response);
@@ -58,7 +55,7 @@ class ClientController {
 
             await this.log.create(
                 "Client Created",
-                `Client ${name} with MAC ${mac} was ${existingClient && existingClient.length > 0 ? "updated" : "created"} successfully`,
+                `Client ${username} with MAC ${mac} was ${existingClient && existingClient.length > 0 ? "updated" : "created"} successfully`,
                 "INFO"
             );
 

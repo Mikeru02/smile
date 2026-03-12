@@ -3,11 +3,15 @@ import OpenEye from '../../../icons/open-eye.svg';
 import CloseEye from '../../../icons/close-eye.svg';
 import checkToken from "../../../utils/checkToken.js";
 import { validateSignupForm } from "../../../utils/validateInput.js";
-import { populateSelect } from "../../../utils/populateSelect.js";
-import { SELECT_CONFIG } from "../../../config/selectConfig.js";
 
 export default async function Events() {
-    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`;
+    const axiosClient = axios.create({
+        baseURL:`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`,
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": import.meta.env.VITE_SRC_KEY
+        }
+    })
     const validToken = await checkToken(localStorage.getItem('token'));
 
     if (validToken) {
@@ -39,4 +43,16 @@ export default async function Events() {
     usernameInput.addEventListener('input', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn);})
     passwordInput.addEventListener('input', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn);})
     consentCheckbox.addEventListener('change', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn)});
+
+    loginBtn.addEventListener('click', async function() {
+        try {
+            const response = await axiosClient.post(
+                `client/`,
+                { ussername: usernameInput.value, password: passwordInput.value }
+            )
+        }
+        catch (err) {
+            
+        }
+    })
 }
