@@ -40,7 +40,7 @@ export default async function PageEvents() {
     const dateFrom = document.getElementById('filter-date-from');
     const dateTo =document.getElementById('filter-date-to');
     const limit = document.getElementById('filter-limit');
-    const exportToCSVBtn = document.getElementById('apply-filert-export');
+    const exportToCSVBtn = document.getElementById('apply-filter-export"');
     const cancelExportBtn = document.getElementById('cancel-filter');
 
     exportToCSVBtn.addEventListener('click', async function() {
