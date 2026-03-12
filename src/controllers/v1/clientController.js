@@ -37,7 +37,7 @@ class ClientController {
             let response;
 
             console.log("DEBUG: ", {
-                mac
+                mac,
                 ip,
                 hostname,
                 username,
@@ -71,7 +71,7 @@ class ClientController {
                 success: true,
                 data: {
                     response: response,
-                    token: jwt.sign({ mac: mac, name: name, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
+                    token: jwt.sign({ username: username, role: 'user' }, process.env.API_SECRET_KEY, { expiresIn: '1d' })
                 },
             })
         }
