@@ -6,7 +6,7 @@ class Client {
     constructor() {
         this.db = connection;
         this.waste = new Waste();
-        this.allowedGetFields = ["id", "ip", "mac", "name", "course", "year_level", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
+        this.allowedGetFields = ["id", "ip", "mac", "username", "name", "course", "year_level", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
         this.allowedFields = ["ip", "name", "course", "year_level", "status", "time_remaining", "time_earned", "expire_at", "connection_start_at", "updated_at"];
         this.allowedWhere = ["id", "mac"];
     }
