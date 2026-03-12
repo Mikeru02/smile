@@ -40,11 +40,6 @@ export default async function checkToken(token) {
                 return false;
             }
 
-            if (!clientData.ip) {
-                localStorage.removeItem('token');
-                return false;
-            }
-
             return true;
         } catch (error) {
             console.error("ERROR: ", error)
