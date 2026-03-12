@@ -46,7 +46,7 @@ class ClientController {
 
             const existingClient = await this.client.getClientWithSpecificField("username", username);
 
-            if (existingClient && existingClient.length > 0) {
+            if (existingClient || existingClient.length > 0) {
                 response = await this.client.update("username", username, { ip: ip, hostname: hostname, mac: mac, is_logged: true });
             } else {
                 response = await this.client.create(ip, mac, hostname, username, password);
