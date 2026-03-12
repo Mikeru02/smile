@@ -51,6 +51,7 @@ export default async function Events() {
                 `client/`,
                 { username: usernameInput.value, password: passwordInput.value }
             )
+            alert(response.data)
             localStorage.setItem('token', response.data.data.token);
             window.app.pushRoute("/portal");
         }
