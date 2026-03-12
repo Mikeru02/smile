@@ -6,7 +6,7 @@ import { validateSignupForm } from "../../../utils/validateInput.js";
 
 export default async function Events() {
     const axiosClient = axios.create({
-        baseURL:`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`,
+        baseURL:`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
         headers: {
             "Content-Type": "application/json",
             "apikey": import.meta.env.VITE_SRC_KEY
