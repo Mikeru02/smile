@@ -66,9 +66,17 @@ export default async function PageEvents() {
     const modal = document.getElementById('modal');
     const createModal = document.getElementById('create-modal')
     
+    const filterBtn = document.getElementById('filter-btn');
     const filterModal = document.getElementById('filter-modal');
-    
-
+    const roleFilter = document.getElementById('filter-role');
+    const dateFrom = document.getElementById('filter-date-from');
+    const dateTo = document.getElementById('filter-date-to');
+    const limitFilter = document.getElementById('filter-limt');
+    const cancelFilter = document.getElementById('filter-cancel');
+    const applyFilter = document.getElementById('apply-filter');
+    const exportBtn = document.getElementById('export-btn');
+    const clearFilter = document.getElementById('clear-btn');
+    clearFilter.style.display = "none";
 
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
@@ -77,7 +85,10 @@ export default async function PageEvents() {
         }
     })
 
-    const exportBtn = document.getElementById('export-btn');
+    filterBtn.addEventListener('click', function() {
+        filterModal.style.display = "block";
+    })
+
     exportBtn.addEventListener('click', async function() {
         try {
             const accounts = await axiosClient.get(
