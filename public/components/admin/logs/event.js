@@ -5,6 +5,8 @@ import socketClient from "../../../sockets/socketInstance.js";
 
 export default async function PageEvents() {
     socketClient.connect();
+    const today = new Date().toISOString().split('T')[0];
+
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1`,
         headers: {
@@ -110,6 +112,10 @@ export default async function PageEvents() {
 
     clearBtn.addEventListener('click',function() {
         clearBtn.style.display = "none";
-        socketClient.emit('GET_LOGS')
+        socketClient.emit('GET_LOGS');
+        logLevel.value = "";
+        dateFrom = today;
+        dateFrom = today;
+        limit = 30
     })
 }

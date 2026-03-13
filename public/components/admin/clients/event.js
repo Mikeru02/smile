@@ -7,6 +7,7 @@ import timeToSeconds from '../../../utils/timeToSeconds.js';
 
 export default async function Event() {
     socketClient.connect();
+    const today = new Date().toISOString().split('T')[0];
     const table = document.getElementById("clients-table");
     const thead = table.querySelector("thead");
     const tbody = table.querySelector("tbody");
@@ -219,7 +220,12 @@ export default async function Event() {
 
     clearBtn.addEventListener('click',function() {
         clearBtn.style.display = "none";
-        socketClient.emit('GET_CLIENTS')
+        socketClient.emit('GET_CLIENTS');
+        isLogedIn.value = "";
+        status.value = "";
+        dateFrom = today;
+        dateFrom = today;
+        limit = 30;
     })
 
 }
