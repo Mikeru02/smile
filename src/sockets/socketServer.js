@@ -124,9 +124,21 @@ class SocketServer {
                         }
                     )
 
+                    const wastesTime = await server.axiosClient.get(
+                        `waste/wastes-time`,
+                        {
+                            headers: {
+                                'token': socket.token
+                            }
+                        }
+                    )
+
                     socket.emit('LOGS', ({ logs: logs.data.data }))
                     socket.emit('CLIENTS', ({ clients: clients.data.data }));
-                    socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
+                    socket.emit('SETTINGS', ({ 
+                        settings: setting.data.data[0],
+                        wastesTime: wastesTime.data.data[0]
+                    }))
                     socket.emit("ACCOUNTS", ({ accounts: account.data.data}))
                     socket.emit("PROHIBITED", ({links: prohibited.data.data}))
                 }
