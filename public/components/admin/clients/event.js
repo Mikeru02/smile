@@ -158,19 +158,7 @@ export default async function Event() {
         };
 
         socketClient.emit("UPDATE_CLIENT", payload)
-        // socketClient.emit('UPDATE_CLIENT', ({ 
-        //     clientId: saveBtn.dataset.clientId,
-        //     clientData: {
-        //         name: nameElement.value,
-        //         course: courseElement.value ?? null,
-        //         year_level: yearlvlElement.value ?? null,
-        //         status: statusElement.value,
-        //         time_earned: timeEarnedElement.value,
-        //         time_remaining: timeRemainingElement.value,
-        //     }
-        // }))
 
-        alert("Update successfully");
         modal.style.display = "none";
     })
 
@@ -193,41 +181,37 @@ export default async function Event() {
     
 
     const exportBtn = document.getElementById('export-btn');
-    // exportBtn.addEventListener('click', async function() {
-    //     filterModal.style.display = "block"
-    // })
+    exportBtn.addEventListener('click', async function() {
+        try {
+            const response = await axiosClient.get('client/export', {
+                headers: {
+                    "token": localStorage.getItem('token')
+                },
+                params: {
+                    is_logged: isLogedIn.value || null,
+                    status: status.value || null,
+                    from: dateFrom.value || null,
+                    to: dateTo.value || null,
+                    limit: limit.value || null
+                }
+            });
 
-    // exportToCSVBtn.addEventListener('click', async function() {
-    //     try {
-    //         const response = await axiosClient.get('client/export', {
-    //             headers: {
-    //                 "token": localStorage.getItem('token')
-    //             },
-    //             params: {
-    //                 is_logged: isLogedIn.value || undefined,
-    //                 status: status.value || undefined,
-    //                 from: dateFrom.value || undefined,
-    //                 to: dateTo.value || undefined,
-    //                 limit: limit.value || undefined
-    //             }
-    //         });
+            console.log(response.data);
 
-    //         console.log(response.data);
+            const logs = response.data.clients || [];
+            if (logs.length === 0) {
+                alert("No clients found for the selected filters.");
+                return;
+            }
 
-    //         const logs = response.data.clients || [];
-    //         if (logs.length === 0) {
-    //             alert("No clients found for the selected filters.");
-    //             return;
-    //         }
+            CSVExporter.download(logs, "clients_export.csv");
+            filterModal.style.display = "none";
 
-    //         CSVExporter.download(logs, "clients_export.csv");
-    //         filterModal.style.display = "none";
-
-    //     } catch (err) {
-    //         console.error("Failed to export clients:", err);
-    //         alert("Failed to export clients.");
-    //     }
-    // });
+        } catch (err) {
+            console.error("Failed to export clients:", err);
+            alert("Failed to export clients.");
+        }
+    });
 
     cancelExportBtn.addEventListener('click', function() {
         filterModal.style.display = "none";
