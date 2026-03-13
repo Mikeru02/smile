@@ -80,7 +80,7 @@ export default function watchDnsmasq(logFilePath) {
                 }
             )
             console.log("Setting Response", settingResponse.data);
-            settings = settingResponse.data.data;
+            settings = settingResponse.data.data[0];
         }
         catch (err) {
             console.error('Error fetching settings:', err.message);
@@ -88,7 +88,7 @@ export default function watchDnsmasq(logFilePath) {
 
         try {
             const prohibitedResponse = await axios.get(
-               `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/link/probihited/all`,
+               `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/link/prohibited/all`,
                 {
                     headers: {
                         "Content-Type": "application/json",
