@@ -127,7 +127,7 @@ export default function AccountsSocketEvents(socket, server) {
                 }
             )
             const accounts = response.data.data || [];
-            socket.emit('ACCOUNT', ({ accounts: accounts }));
+            socket.emit('ACCOUNTS', ({ accounts: accounts }));
         }
         catch (err) {
             console.error('[ERROR] AccountsSocketEvents.FILTER_ACCOUNT', err.message);
