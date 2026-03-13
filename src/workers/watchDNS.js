@@ -124,6 +124,7 @@ export default function watchDnsmasq(logFilePath) {
             prohibited: prohibitedLinks
         })
 
+        console.log("Domain", domain);
         const isProhibited = prohibitedLinks?.some(link => domain.includes(link.link));
         console.log("DEBUG Deduct", isProhibited)
         if (isProhibited) {
