@@ -19,6 +19,20 @@ class Link {
         }
     }
 
+    async createAccessedLinkTransaction(clientId, domain) {
+        try {
+            const [row] = await this.db.execute(
+                `INSERT INTO accessed_links (client_id, link) VALUES (?, ?)`,
+                [clientId, domain]
+            )
+            return row;
+        }
+        catch (err) {
+            console.error("[ERROR] link.createAccessedLinkTransaction", err);
+            throw err;
+        }
+    }
+
     async getSpecificDomain(domain) {
         try {
             const [row] = await this.db.execute(

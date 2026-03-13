@@ -48,8 +48,14 @@ class LinkController {
     async createAccessedLink(req, res) {
         try {
             const { clientIP, domain } = req.body || {};
-            const clientData = await this.client.getClientWithSpecificField("ip", clientIP);
-            console.log("DEBUG: ",clientData);
+            const clientResponse = await this.client.getClientWithSpecificField("ip", clientIP);
+            const clientData = clientResponse[0];
+
+            const response = await this.link.createAccessedLinkTransaction(clientData.id, domain);
+            return res.status(200).json({
+                success: true,
+                data: response
+            })
         }
         catch (err) {
             return res.status(500).json({
