@@ -28,8 +28,8 @@ export default async function Events(){
     const minutes = minutesMatch ? minutesMatch[1] : 0;
     const daysSpan = document.getElementById('days');
     const hoursSpan = document.getElementById('hours-mins');
-    daysSpan.textContent = `${uptime.days}`;
-    hoursSpan.textContent = `${uptime.hours} Hours ${uptime.minutes} Minutes`;
+    daysSpan.textContent = `${days}`;
+    hoursSpan.textContent = `${hours} Hours ${minutes} Minutes`;
 
     const modelStatSpan = document.getElementById('model-stat');
     const modelSubstatSpan = document.getElementById('model-substat');
