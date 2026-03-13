@@ -17,7 +17,15 @@ export default async function Events(){
 
     const dashboardData = dashboardInfo.data.data;
     console.log("DASHBOARD: ", dashboardData);
-    const uptime = calculateUptime(new Date(dashboardData.server_start_time));
+    // const uptime = calculateUptime(new Date(dashboardData.server_start_time));
+    const uptimeString = dashboardData.uptime;
+    const clean = uptimeString.replace("up ", "");
+    const hoursMatch = clean.match(/(\d+)\s+hour/);
+    const minutesMatch = clean.match(/(\d+)\s+minute/);
+    const daysMatch = clean.match(/(\d+)\s+day/);
+    const days = daysMatch ? daysMatch[1] : 0;
+    const hours = hoursMatch ? hoursMatch[1] : 0;
+    const minutes = minutesMatch ? minutesMatch[1] : 0;
     const daysSpan = document.getElementById('days');
     const hoursSpan = document.getElementById('hours-mins');
     daysSpan.textContent = `${uptime.days}`;
