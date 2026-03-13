@@ -24,9 +24,7 @@ export default function ClientsSocketEvents(socket, server) {
                 {
                     headers: {
                         "token": socket.token
-                    }
-                },
-                {
+                    },
                     params: {
                         is_logged: data.isLogedIn || undefined,
                         status: data.status || undefined,
