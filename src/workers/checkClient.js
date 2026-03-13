@@ -56,6 +56,7 @@ export default async function checkClients() {
                             mac: null,
                             hostname: null,
                             ip: null,
+                            is_logged: 0,
                             expire_at: null,
                             time_remaining: updatedTimeRemaining,
                             connection_start_at: null,
