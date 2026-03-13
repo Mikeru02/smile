@@ -45,7 +45,7 @@ export default function FilterModal() {
                 </div>
                 <div class="${styles['button-container']}">
                     <button id="cancel-filter" class="${styles['btn-cancel']}">Cancel</button>
-                    <button id="apply-filter-export" class="${styles['btn-primary']}">Export Logs</button>
+                    <button id="apply-filter" class="${styles['btn-primary']}">Apply Filter</button>
                 </div>
             </div>
         </div>
