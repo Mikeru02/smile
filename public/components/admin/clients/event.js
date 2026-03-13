@@ -46,6 +46,19 @@ export default async function Event() {
         activeTimers.clear();
 
         tbody.innerHTML = '';
+        if (clients.length === 0) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = headers.length; // span across all columns
+            cell.textContent = "No clients found";
+            cell.style.textAlign = "center";
+
+            row.appendChild(cell);
+            tbody.appendChild(row);
+            return;
+        }
+
         populateTable(tbody, clients, headers);
 
         const rows = tbody.querySelectorAll("tr");
