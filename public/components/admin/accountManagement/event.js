@@ -72,10 +72,10 @@ export default async function PageEvents() {
     const dateFrom = document.getElementById('filter-date-from');
     const dateTo = document.getElementById('filter-date-to');
     const limitFilter = document.getElementById('filter-limt');
-    const cancelFilter = document.getElementById('filter-cancel');
+    const cancelFilter = document.getElementById('cancel-filter');
     const applyFilter = document.getElementById('apply-filter');
     const exportBtn = document.getElementById('export-btn');
-    const clearFilter = document.getElementById('clear-filter');
+    const clearFilter = document.getElementById('clear-btn');
     clearFilter.style.display = "none";
 
     tbody.addEventListener('click', async (e) => {
@@ -172,5 +172,9 @@ export default async function PageEvents() {
 
         socketClient.emit('DELETE_ACCOUNT', ({ accountId: clientId }));
         modal.style.display = "none";
+    })
+
+    cancelFilter.addEventListener('click', function() {
+        filterModal.style.display = "none"
     })
 }
