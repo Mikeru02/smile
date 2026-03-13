@@ -199,7 +199,12 @@ export default function SettingsSocketEvents(socket, server) {
             // update deduct time
             await server.axiosClient.patch(
                 `setting/`,
-                { time_deduct: deductTime }
+                { time_deduct: deductTime },
+                {
+                    headers: {
+                        "token": socket.token
+                    }
+                }
             );
 
             console.log("Time settings updated");
@@ -208,4 +213,58 @@ export default function SettingsSocketEvents(socket, server) {
             console.error('[ERROR] SettingsSocketEvents.SAVE_TIMESETTING', err.message);
         }
     });
+
+    socket.on('RESTORE_TIMESETTING', async (data) => {
+        try {
+            const { wasteTime, deductTime } = data;
+
+            for (const waste of wasteTime) {
+                await server.axiosClient.patch(
+                    `waste/update-time?wasteCode=${waste.code}&updatedTime=${waste.time}`,
+                    {},
+                    {
+                        headers: {
+                            "token": socket.token
+                        }
+                    }
+                );
+            }
+
+            await server.axiosClient.patch(
+                `setting/`,
+                { time_deduct: deductTime },
+                {
+                    headers: {
+                        "token": socket.token
+                    }
+                }
+            );
+
+            const setting = await server.axiosClient.get(
+                `setting/`,
+                {
+                    headers: {
+                        'token': socket.token
+                    }
+                }
+            )
+
+            const wastesTime = await server.axiosClient.get(
+                `waste/wastes-time`,
+                {
+                    headers: {
+                        'token': socket.token
+                    }
+                }
+            )
+
+            socket.emit('SETTINGS', ({ 
+                settings: setting.data.data[0],
+                wastesTime: wastesTime.data.data
+            }))
+        }
+        catch (err) {
+            console.error('[ERROR] SettingsSocketEvents.SAVE_TIMESETTING', err.message);
+        }
+    })
 }

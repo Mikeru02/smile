@@ -259,4 +259,27 @@ export default async function PageEvent() {
 
         alert('Time settings saved successfully');
     });
+
+    restoreTimeSetting.addEventListener('click', function() {
+        const payload = {
+            wasteTime: [
+                {
+                    code: 'PBTL',
+                    time: 8
+                },
+                {
+                    code: 'PPRS',
+                    time: 5
+                },
+                {
+                    code: 'GWST',
+                    time: 2
+                }
+            ],
+            deductTime: 1
+        };
+
+        socketClient.emit('RESTORE_TIMESETTING', payload);
+        alert('Time settings restoresd successfully');
+    })
 }
