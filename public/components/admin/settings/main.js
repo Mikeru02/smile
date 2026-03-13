@@ -103,24 +103,30 @@ export default function MainContent(root) {
                     <h3 class="${styles["section-title"]}">💾 Time Settings</h3>
                         <div class="${styles["settings-group"]}">
                             <div class="${styles["setting-item"]}">
-                                <label for="time-bottles">Plastic Bottles</label>
+                                <label for="time-bottles">Plastic Bottles (in minutes)</label>
                                 <input type="text" id="time-bottles" value="8" class="${styles["setting-input"]}">
                                 <small>Time incentive for plastic bottles</small>
                             </div>
                             <div class="${styles["setting-item"]}">
-                                <label for="time-papers">Paper</label>
+                                <label for="time-papers">Paper (in minutes)</label>
                                 <input type="text" id="time-papers" value="5" class="${styles["setting-input"]}">
                                 <small>Time incentive for papers</small>
                             </div>
                             <div class="${styles["setting-item"]}">
-                                <label for="time-general">General Waste</label>
+                                <label for="time-general">General Waste (in minutes)</label>
                                 <input type="text" id="time-general" value="2" class="${styles["setting-input"]}">
                                 <small>Time incentive for general wastes</small>
                             </div>
                             <div class="${styles["setting-item"]}">
-                                <label for="time-deduct">Tme Deduct</label>
+                                <label for="time-deduct">Tme Deduct (in minutes)</label>
                                 <input type="text" id="time-deduct" value="1" class="${styles["setting-input"]}">
                                 <small>Deduct clients time when accessed the prohibited sites</small>
+                            </div>
+                            <div class="${styles["setting-item"]}">
+                                <button class="${styles['backup-now']}" id="restore-setting">Restore</button>
+                            </div>
+                            <div class="${styles["setting-item"]}">
+                                <button class="${styles['backup-now']}" id="save-setting">Save</button>
                             </div>
                         </div>
                 </div>
