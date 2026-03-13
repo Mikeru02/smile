@@ -22,7 +22,7 @@ class Link {
     async createAccessedLinkTransaction(clientId, domain) {
         try {
             const [row] = await this.db.execute(
-                `INSERT INTO accessed_links (client_id, link) VALUES (?, ?)`,
+                `INSERT INTO accessed_links (client_id, link, accessed_at) VALUES (?, ?, NOW())`,
                 [clientId, domain]
             )
             return row;
