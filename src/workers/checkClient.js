@@ -51,7 +51,7 @@ export default async function checkClients() {
                     ClientManagement.revokeClient(client.ip);
 
                     await axiosClient.patch(
-                        `client/?field=mac&value=${client.mac}`,
+                        `client/?field=id&value=${client.id}`,
                         { 
                             mac: null,
                             hostname: null,
