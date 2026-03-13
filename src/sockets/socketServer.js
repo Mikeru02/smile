@@ -124,7 +124,7 @@ class SocketServer {
                         }
                     )
 
-                    const wastesTime = await server.axiosClient.get(
+                    const wastesTime = await this.axiosClient.get(
                         `waste/wastes-time`,
                         {
                             headers: {
