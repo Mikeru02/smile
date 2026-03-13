@@ -149,9 +149,7 @@ export default async function Event() {
         const payload = {
             clientId: saveBtn.dataset.clientId,
             clientData: {
-                name: nameElement.value || null,
-                course: courseElement.value || null,
-                year_level: yearlvlElement.value || null,
+                username: nameElement.value || null,
                 status: statusElement.value || null,
                 time_earned: timeEarnedElement.value || null,
                 time_remaining: timeRemainingElement.value || null,
