@@ -71,7 +71,7 @@ export default async function PageEvents() {
     const roleFilter = document.getElementById('filter-role');
     const dateFrom = document.getElementById('filter-date-from');
     const dateTo = document.getElementById('filter-date-to');
-    const limitFilter = document.getElementById('filter-limt');
+    const limitFilter = document.getElementById('filter-limit');
     const cancelFilter = document.getElementById('cancel-filter');
     const applyFilter = document.getElementById('apply-filter');
     const exportBtn = document.getElementById('export-btn');
