@@ -7,6 +7,10 @@ export default function MainContent(root) {
         <div class="${styles["logs-container"]}">
             <div class="${styles["logs-header"]}">
                 <div class="${styles["logs-actions"]}">
+                    <button class="${styles["btn-secondary"]}" id="clear-btn">Clear</button>
+                    <button class="${styles["btn-secondary"]}" id="filter-btn">
+                        <span>📥</span> Filter
+                    </button>
                     <button class="${styles["btn-secondary"]}" id="export-logs">
                         <span>📥</span> Export Logs
                     </button>

@@ -9,8 +9,8 @@ export default function MainContent(root) {
                 <div class="${styles["table-actions"]}">
                     <button class="${styles["btn-secondary"]}" id="clear-btn">Clear</button>
                     <button class="${styles["btn-secondary"]}" id="filter-btn">
-                            <span>📥</span> Filter
-                        </button>
+                        <span>📥</span> Filter
+                    </button>
                     <button class="${styles["btn-primary"]}" id="export-btn">
                         <span>📥</span> Export Data
                     </button>

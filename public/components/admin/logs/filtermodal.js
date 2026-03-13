@@ -5,8 +5,8 @@ export default function FilterModal() {
         <div class="${styles['modal']}" id="filter-modal">
             <div class="${styles['modal-content']}">
                 <div class="${styles['top-container']}">
-                    <h2>Export Logs Filter</h2>
-                    <p>Choose which logs to export</p>
+                    <h2>Apply Logs Filter</h2>
+                    <p>Choose which logs to filter</p>
                 </div>
                 <div class="${styles['filter-container']}">
                     <div class="${styles['filter-group']}">

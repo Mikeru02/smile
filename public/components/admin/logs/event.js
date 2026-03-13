@@ -26,6 +26,21 @@ export default async function PageEvents() {
     socketClient.on('LOGS', (data) => {
         const logs = data.logs;
         console.log(logs);
+
+        tbody.innerHTML = '';
+        if (logs.length === 0) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = headers.length; // span across all columns
+            cell.textContent = "No logs found";
+            cell.style.textAlign = "center";
+
+            row.appendChild(cell);
+            tbody.appendChild(row);
+            return;
+        }
+
         populateTable(tbody, logs, headers);
     })
     
@@ -40,8 +55,10 @@ export default async function PageEvents() {
     const dateFrom = document.getElementById('filter-date-from');
     const dateTo =document.getElementById('filter-date-to');
     const limit = document.getElementById('filter-limit');
-    const exportToCSVBtn = document.getElementById('apply-filter-export');
+    const applyFilter = document.getElementById('apply-filter');
     const cancelExportBtn = document.getElementById('cancel-filter');
+    const clearBtn = document.getElementById('clear-btn');
+    clearBtn.style.display = "none"
 
     exportToCSVBtn.addEventListener('click', async function() {
         try {
