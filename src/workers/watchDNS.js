@@ -77,7 +77,7 @@ export default function watchDnsmasq(logFilePath) {
                     }
                 }
             )
-            settings = settingResponse.data.data[0];
+            settings = settingResponse.data.data;
         }
         catch (err) {
             console.error('Error fetching settings:', err.message);
