@@ -62,13 +62,12 @@ export default async function PageEvents() {
     })
 
     applyFilter.addEventListener('click', function() {
-        // socketClient.emit('FILTER_CLIENT', ({
-        //     is_logged: isLogedIn.value || null,
-        //     status: status.value || null,
-        //     from: dateFrom.value || null,
-        //     to: dateTo.value || null,
-        //     limit: limit.value || null
-        // }));
+        socketClient.emit('FILTER_CLIENT', ({
+            level: logLevel.value || null,
+            from: dateFrom.value || null,
+            to: dateTo.value || null,
+            limit: limit.value || null
+        }));
         filterModal.style.display = "none";
         clearBtn.style.display = "block"
 
@@ -81,10 +80,10 @@ export default async function PageEvents() {
                     "token": localStorage.getItem('token')
                 },
                 params: {
-                    level: logLevel.value || undefined,
-                    from: dateFrom.value || undefined,
-                    to: dateTo.value || undefined,
-                    limit: limit.value || undefined
+                    level: logLevel.value || null,
+                    from: dateFrom.value || null,
+                    to: dateTo.value || null,
+                    limit: limit.value || null
                 }
             });
 
