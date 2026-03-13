@@ -125,6 +125,8 @@ export default async function Event() {
     const limit = document.getElementById('filter-limit');
     const applyFilter = document.getElementById('apply-filter');
     const cancelExportBtn = document.getElementById('cancel-filter');
+    const clearBtn = document.getElementById('clear-btn');
+    clearBtn.style.display = "none"
 
 
     tbody.addEventListener('click', async (e) => {
@@ -185,7 +187,8 @@ export default async function Event() {
             to: dateTo.value || null,
             limit: limit.value || null
         }));
-        filterModal.style.display = "none"
+        filterModal.style.display = "none";
+        clearBtn.style.display = "block"
 
     })
     
