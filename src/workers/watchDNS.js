@@ -2,6 +2,7 @@ import axios from "axios";
 import jwt from "jsonwebtoken";
 import { spawn } from "child_process";
 import { createInterface } from "readline";
+import ignoredDomain from '../resources/ignoredDomains.js';
 
 export default function watchDnsmasq(logFilePath) {
     if (!logFilePath) {
@@ -32,6 +33,8 @@ export default function watchDnsmasq(logFilePath) {
         if (clientIP === "127.0.0.1") return; // skip localhost
 
         if (!domain.startsWith("www.")) return;
+
+        if (ignoredDomain.some(d => domain.includes(d))) return;
 
         const key = `${clientIP}-${domain}`;
         const now = Date.now();
