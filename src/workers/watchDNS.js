@@ -129,7 +129,7 @@ export default function watchDnsmasq(logFilePath) {
         if (isProhibited) {
             const newTimeRemaining = client.time_remaining - (settings.time_deduct * 60);
             await axios.patch(
-                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?filed=id&value=${client.id}`,
+                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?field=id&value=${client.id}`,
                 { time_remaining: newTimeRemaining },
                 {
                     headers: {
