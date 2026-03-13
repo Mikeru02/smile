@@ -88,9 +88,7 @@ export default async function Event() {
         const client = data.clientData;
         console.log(client);
 
-        if (nameElement) nameElement.value = client.name || '';
-        if (courseElement) courseElement.value = client.course || '';
-        if (yearlvlElement) yearlvlElement.value = client.year_level || '';
+        if (nameElement) nameElement.value = client.username || '';
         if (statusElement) statusElement.value = client.status || 'active';
         if (timeEarnedElement) timeEarnedElement.value = client.time_earned || 0;
         if (timeRemainingElement) timeRemainingElement.value = client.time_remaining || 0;
