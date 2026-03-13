@@ -206,7 +206,6 @@ export default async function PageEvents() {
         clearFilter.style.display = "none";
         socketClient.emit("GET_ACCOUNTS");
         role.value = "";
-        logLevel.value = "";
         dateFrom.value = "";
         dateTo.value= "";
         limit = 30;
