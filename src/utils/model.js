@@ -2,13 +2,14 @@ import axios from "axios";
 import fs from 'fs';
 import path from "path";
 import FormData from "form-data";
+import jwt from "jsonwebtoken";
 
 class Model {
     constructor() {
         this.timeMap = {
-            "general waste": parseInt(2),
-            "plastic bottle": parseInt(8),
-            "paper": parseInt(5)
+            // "general waste": parseInt(2),
+            // "plastic bottle": parseInt(8),
+            // "paper": parseInt(5)
         }
         this.wasteCodeMap = {
             "general waste": "GWST",
@@ -26,6 +27,32 @@ class Model {
         })
 
         console.log(this.baseUrl);
+    }
+
+    async getTimes() {
+        try {
+            const response = await server.axiosClient.get(
+                `waste/wastes-time`,
+                {
+                    headers: {
+                        'token': jwt.sign({ role: "admin" }, process.env.API_SECRET_KEY, {
+                            expiresIn: '1m'
+                        })
+                    }
+                }
+            );
+
+            const wastesTime = response.data.data; // [{ code, name, time }, ...]
+            
+            // Assign to timeMap dynamically
+            wastesTime.forEach(waste => {
+                this.timeMap[waste.name.toLowerCase()] = parseInt(waste.time);
+            });
+
+            console.log("Updated timeMap:", this.timeMap);
+        } catch (err) {
+            console.error("[ERROR] fetching waste times:", err.message);
+        }
     }
 
     async checkModel() {
@@ -59,6 +86,8 @@ class Model {
     }
 
     async earnedTime() {
+        await this.getTimes();
+        
         const prediction = await this.predict();
         if (!prediction[0]) {
             return { category: "none", wasteCode: "GWST", earnedTime: 120}
