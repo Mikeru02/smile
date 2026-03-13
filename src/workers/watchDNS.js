@@ -33,7 +33,7 @@ export default function watchDnsmasq(logFilePath) {
         if (clientIP === "127.0.0.1") return; // skip localhost
 
         if (!domain.startsWith("www.")) return;
-
+        const normalizedDomain = domain.replace(/^www\./, "");
         if (ignoredDomain.some(d => domain.includes(d))) return;
 
         const key = `${clientIP}-${domain}`;
@@ -125,7 +125,9 @@ export default function watchDnsmasq(logFilePath) {
         })
 
         console.log("Domain", domain);
-        const isProhibited = prohibitedLinks?.some(link => domain.includes(link.link));
+        const isProhibited = prohibitedLinks?.some(link =>
+            normalizedDomain === link.link || normalizedDomain.endsWith("." + link.link)
+        );
         console.log("DEBUG Deduct", isProhibited)
         if (isProhibited) {
             const newTimeRemaining = client.time_remaining - (settings.time_deduct * 60);
