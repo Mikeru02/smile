@@ -125,16 +125,16 @@ class Client {
             }
 
             if (filters.from) {
-                query += ` AND timestamp >= ?`;
+                query += ` AND created_at >= ?`;
                 params.push(filters.from);
             }
 
             if (filters.to) {
-                query += ` AND timestamp <= ?`;
+                query += ` AND created_at <= ?`;
                 params.push(filters.to);
             }
 
-            query += ` ORDER BY timestamp DESC`;
+            query += ` ORDER BY created_at DESC`;
 
             if (filters.limit) {
                 query += ` LIMIT ?`;
