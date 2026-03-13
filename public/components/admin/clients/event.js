@@ -128,7 +128,6 @@ export default async function Event() {
     const clearBtn = document.getElementById('clear-btn');
     clearBtn.style.display = "none"
 
-
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
             const button = e.target;
@@ -232,6 +231,11 @@ export default async function Event() {
 
     cancelExportBtn.addEventListener('click', function() {
         filterModal.style.display = "none";
+    })
+
+    clearBtn.addEventListener('click',function() {
+        clearBtn.style.display = "none";
+        socketClient.emit('GET_CLIENTS')
     })
 
 }
