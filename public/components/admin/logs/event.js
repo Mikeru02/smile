@@ -114,8 +114,8 @@ export default async function PageEvents() {
         clearBtn.style.display = "none";
         socketClient.emit('GET_LOGS');
         logLevel.value = "";
-        dateFrom = today;
-        dateFrom = today;
-        limit = 30
+        dateFrom.value = "";
+        dateTo.value= today;
+        limit = 30;
     })
 }

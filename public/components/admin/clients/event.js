@@ -223,8 +223,8 @@ export default async function Event() {
         socketClient.emit('GET_CLIENTS');
         isLogedIn.value = "";
         status.value = "";
-        dateFrom = today;
-        dateFrom = today;
+        dateFrom.value = "";
+        dateTo.value= today;
         limit = 30;
     })
 
