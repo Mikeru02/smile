@@ -18,6 +18,12 @@ export default async function PageEvent() {
     const restoreBtn = document.getElementById('restore-now');
     const saveBtn = document.getElementById('save-now');
 
+    // Time settings
+    const bottlesTime = document.getElementById('time-bottles');
+    const papersTime = document.getElementById('time-papers');
+    const generalTime = document.getElementById('time-general');
+    const deductTime = document.getElementById('time-deduct');
+
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
         headers: {
@@ -54,11 +60,15 @@ export default async function PageEvent() {
     socketClient.off('SETTINGS');
     socketClient.on('SETTINGS', (data) => {
         const settingData = data.settings;
+        const wastesTime = data.wastesTime;
+        console.log("SETTINGS DATA",data);
+
         console.log("DEBUG", settingData);
         frequency.value = settingData.backup_freq;
         compression.value = settingData.compression;
         location.value = settingData.location;
         retention.value = settingData.retention;
+        
 
         if (settingData.utility_mode) {
             utilityCheckBox.checked = true;

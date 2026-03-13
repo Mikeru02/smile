@@ -98,6 +98,7 @@ CREATE TABLE `settings`(
     `compression` ENUM('none', 'gzip', 'zip') DEFAULT 'zip',
     `location` VARCHAR(100) DEFAULT '/root/backup/smile',
     `retention` INT DEFAULT 30,
+    `time_deduct` INT DEFAULT 1,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
