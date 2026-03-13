@@ -7,7 +7,10 @@ export default function MainContent(root) {
         <div class="${styles["clients-container"]}">
             <div class="${styles["table-header"]}">
                 <div class="${styles["table-actions"]}">
-                    <button class="${styles["btn-secondary"]}" id="filter-btn">
+                    <button class="${styles["btn-primary"]}" id="clear-btn">
+                        <span>📥</span> Clear Filter
+                    </button>
+                    <button class="${styles["btn-primary"]}" id="filter-btn">
                             <span>📥</span> Filter
                         </button>
                     <button class="${styles["btn-secondary"]}" id="export-btn">
