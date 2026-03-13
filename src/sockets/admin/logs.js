@@ -19,7 +19,7 @@ export default function LogsSocketEvents(socket, server) {
 
     socket.on('FILTER_LOGS', async (data) => {
         try {
-            const response = await axiosClient.get('client/export', {
+            const response = await server.axiosClient.get('logs/export', {
                 headers: {
                     "token": localStorage.getItem('token')
                 },
@@ -36,7 +36,7 @@ export default function LogsSocketEvents(socket, server) {
             socket.emit('LOGS', ({ logs: logs }));
         }
         catch (err) {
-            console.error('[ERROR] LogsSocketEvents.GET_LOGS', err.message);
+            console.error('[ERROR] LogsSocketEvents.FILTER_LOGS', err.message);
         }
     })
 }
