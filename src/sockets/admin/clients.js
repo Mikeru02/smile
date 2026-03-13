@@ -37,6 +37,7 @@ export default function ClientsSocketEvents(socket, server) {
                 }
             )
 
+            console.log('RESPONSE: ')
             const clients = response.data.clients || [];
 
             socket.emit('CLIENTS', ({ clients: clients }));
