@@ -26,7 +26,7 @@ export default function ClientsSocketEvents(socket, server) {
                         "token": socket.token
                     },
                     params: {
-                        is_logged: data.isLogedIn || null,
+                        is_logged: data.is_logged || null,
                         status: data.status || null,
                         from: data.dateFrom || null,
                         to: data.dateTo || null,
