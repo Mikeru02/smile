@@ -7,10 +7,14 @@ export default function MainContent(root) {
         <div class="${styles["accounts-container"]}">
             <div class="${styles["accounts-header"]}">
                 <div class="${styles["accounts-actions"]}">
-                    <button class="${styles["btn-primary"]}" id="add-account">
+                    <button class="${styles["btn-secondary"]}" id="clear-btn">Clear</button>
+                    <button class="${styles["btn-secondary"]}" id="filter-btn">
+                        <span>📥</span> Filter
+                    </button>
+                    <button class="${styles["btn-secondary"]}" id="add-account">
                         <span>➕</span> Add Account
                     </button>
-                    <button class="${styles["btn-secondary"]}" id="export-btn">
+                    <button class="${styles["btn-primary"]}" id="export-btn">
                         <span>📥</span> Export Data
                     </button>
                 </div>

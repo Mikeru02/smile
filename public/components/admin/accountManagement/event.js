@@ -66,6 +66,10 @@ export default async function PageEvents() {
     const modal = document.getElementById('modal');
     const createModal = document.getElementById('create-modal')
     
+    const filterModal = document.getElementById('filter-modal');
+    
+
+
     tbody.addEventListener('click', async (e) => {
         if (e.target && e.target.classList.contains('see-more')) {
             const button = e.target;
