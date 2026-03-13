@@ -116,6 +116,12 @@ export default function watchDnsmasq(logFilePath) {
             console.error("Error posting accessed link:", err.message);
         }
 
+        console.log("DEBUG DATA", {
+            client: client,
+            setting: settings,
+            prohibited: prohibitedLinks
+        })
+
         const isProhibited = prohibitedLinks?.some(link => domain.includes(link.link));
         console.log("DEBUG Deduct", isProhibited)
         if (isProhibited) {
