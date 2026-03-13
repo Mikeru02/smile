@@ -21,7 +21,7 @@ export default function LogsSocketEvents(socket, server) {
         try {
             const response = await server.axiosClient.get('logs/export', {
                 headers: {
-                    "token": localStorage.getItem('token')
+                    "token": socket.token
                 },
                 params: {
                     is_logged: data.isLogedIn,
