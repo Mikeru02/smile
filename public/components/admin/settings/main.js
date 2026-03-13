@@ -101,12 +101,28 @@ export default function MainContent(root) {
 
                 <div class="${styles["settings-section"]}">
                     <h3 class="${styles["section-title"]}">💾 Time Settings</h3>
-                    <div class="${styles["settings-group"]}">
-                        <div class="${styles["setting-item"]}">
-                            
+                        <div class="${styles["settings-group"]}">
+                            <div class="${styles["setting-item"]}">
+                                <label for="time-bottles">Plastic Bottles</label>
+                                <input type="text" id="time-bottles" value="8" class="${styles["setting-input"]}">
+                                <small>Time incentive for plastic bottles</small>
+                            </div>
+                            <div class="${styles["setting-item"]}">
+                                <label for="time-papers">Paper</label>
+                                <input type="text" id="time-papers" value="5" class="${styles["setting-input"]}">
+                                <small>Time incentive for papers</small>
+                            </div>
+                            <div class="${styles["setting-item"]}">
+                                <label for="time-general">General Waste</label>
+                                <input type="text" id="time-general" value="2" class="${styles["setting-input"]}">
+                                <small>Time incentive for general wastes</small>
+                            </div>
+                            <div class="${styles["setting-item"]}">
+                                <label for="time-deduct">Tme Deduct</label>
+                                <input type="text" id="time-deduct" value="1" class="${styles["setting-input"]}">
+                                <small>Deduct clients time when accessed the prohibited sites</small>
+                            </div>
                         </div>
-                        <small>Manage time incentives</small>
-                    </div>
                 </div>
                 
             </div>

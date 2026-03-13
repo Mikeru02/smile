@@ -76,10 +76,38 @@ class Waste {
             );
             return row[0]['COUNT(*)'];
         }
-        catch (err) {
-            
+        catch(err) {
+            console.error("[ERROR] waste.getAllBinCount", err);
+            throw err;
         }
 
+    }
+
+    async getWastesTime() {
+        try {
+            const [row] = await this.db.execute(
+                `SELECT * FROM waste`
+            )
+            return row;
+        }
+        catch(err) {
+            console.error("[ERROR] waste.getAllBinCount", err);
+            throw err;
+        }
+    }
+
+    async updateWasteTime(wasteCode, updatedTime) {
+        try {
+            const [row] = await this.db.execute(
+                `UPDATE waste SET time = ? WHERE code = ?`,
+                [updatedTime, wasteCode]
+            )
+            return row;
+        }
+        catch(err) {
+            console.error("[ERROR] waste.getAllBinCount", err);
+            throw err;
+        }
     }
 }
 

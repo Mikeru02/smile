@@ -21,8 +21,20 @@ export default function SettingsSocketEvents(socket, server) {
             }
         )
 
+        const wastesTime = await server.axiosClient.get(
+            `waste/wastes-time`,
+            {
+                headers: {
+                    'token': socket.token
+                }
+            }
+        )
+
         socket.emit("PROHIBITED", ({ links: prohibited.data.data }))
-        socket.emit('SETTINGS', ({ settings: setting.data.data[0] }))
+        socket.emit('SETTINGS', ({ 
+            settings: setting.data.data[0],
+            wastesTime: wastesTime.data.data[0]
+        }))
     })
 
     socket.on("SET_PROHIBITED", async (data) => {
