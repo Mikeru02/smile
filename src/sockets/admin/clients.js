@@ -28,8 +28,8 @@ export default function ClientsSocketEvents(socket, server) {
                     params: {
                         is_logged: data.is_logged,
                         status: data.status,
-                        from: data.dateFrom,
-                        to: data.dateTo,
+                        from: data.from,
+                        to: data.to,
                         limit: data.limit
                     }
                 }
