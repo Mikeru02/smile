@@ -172,6 +172,7 @@ export default async function Event() {
             to: dateTo.value || null,
             limit: limit.value || null
         }));
+        filterModal.style.display = "none"
 
     })
     
