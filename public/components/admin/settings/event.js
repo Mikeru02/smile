@@ -32,6 +32,10 @@ export default async function PageEvent() {
         }
     })
 
+    socketClient.on('connect', () => {   
+        socketClient.emit("GET_SETTINGS")
+    })
+
     socketClient.off('PROHIBITED_ERROR');
     socketClient.on('PROHIBITED_ERROR', (data) => {
         alert(data.message);
@@ -46,8 +50,6 @@ export default async function PageEvent() {
         else {
             utilityCheckBox.checked = false;
         }
-        alert(message);
-
     });
 
     socketClient.off("PROHIBITED");
@@ -88,8 +90,6 @@ export default async function PageEvent() {
             toggleBackupInputs(backupCheckbox.checked);
         }
     })
-
-    socketClient.emit("GET_SETTINGS")
 
 
     function toggleBackupInputs(enabled) {
