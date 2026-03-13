@@ -3,7 +3,7 @@ import { connection } from "../../core/database.js";
 class Setting {
     constructor() {
         this.db = connection;
-        this.allowedUpdateField = ["utility_mode", "auto_backup", "backup_freq", "compression", "location", "retention", "updated_at"]
+        this.allowedUpdateField = ["utility_mode", "auto_backup", "backup_freq", "compression", "location", "retention", "time_deduct", "updated_at"]
     }
 
     async get() {
