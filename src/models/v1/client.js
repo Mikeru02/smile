@@ -114,23 +114,23 @@ class Client {
             let query = `SELECT * FROM clients WHERE 1=1`;
             const params = [];
 
-            if (filters.is_logged) {
-                query += `AND is_logged = ?`;
+            if (filters.is_logged !== undefined && filters.is_logged !== null) {
+                query += ` AND is_logged = ?`;
                 params.push(filters.is_logged);
             }
 
             if (filters.status) {
-                query += `AND status = ?`;
+                query += ` AND status = ?`;
                 params.push(filters.status);
             }
 
             if (filters.from) {
-                query += ` AND created_at >= ?`;
+                query += ` AND DATE(created_at) >= ?`;
                 params.push(filters.from);
             }
 
             if (filters.to) {
-                query += ` AND created_at <= ?`;
+                query += ` AND DATE(created_at) <= ?`;
                 params.push(filters.to);
             }
 
