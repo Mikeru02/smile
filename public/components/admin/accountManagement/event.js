@@ -43,12 +43,12 @@ export default async function PageEvents() {
         console.log(accounts);
 
         tbody.innerHTML = '';
-        if (logs.length === 0) {
+        if (accounts.length === 0) {
             const row = document.createElement("tr");
             const cell = document.createElement("td");
 
             cell.colSpan = headers.length; // span across all columns
-            cell.textContent = "No logs found";
+            cell.textContent = "No accounts found";
             cell.style.textAlign = "center";
 
             row.appendChild(cell);
