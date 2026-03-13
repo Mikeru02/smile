@@ -117,6 +117,7 @@ export default function watchDnsmasq(logFilePath) {
         }
 
         const isProhibited = prohibitedLinks?.some(link => domain.includes(link.link));
+        console.log("DEBUG Deduct", isProhibited)
         if (isProhibited) {
             const newTimeRemaining = client.time_remaining - (settings.time_deduct * 60);
             await axios.patch(
