@@ -20,6 +20,7 @@ export default async function PageEvents() {
     const table =  document.getElementById("accounts-table");
     const thead = table.querySelector("thead");
     const tbody = table.querySelector("tbody");
+    let headers = populateHeaders(thead, "account-management");
 
     // View & Change Modal
     const usernameElement = document.getElementById('admin-username');
@@ -41,7 +42,19 @@ export default async function PageEvents() {
 
         console.log(accounts);
 
-        let headers = populateHeaders(thead, "account-management");
+        tbody.innerHTML = '';
+        if (logs.length === 0) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = headers.length; // span across all columns
+            cell.textContent = "No logs found";
+            cell.style.textAlign = "center";
+
+            row.appendChild(cell);
+            tbody.appendChild(row);
+            return;
+        }
         populateTable(tbody, accounts, headers);
     })
 
