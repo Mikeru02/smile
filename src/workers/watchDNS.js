@@ -118,17 +118,17 @@ export default function watchDnsmasq(logFilePath) {
             console.error("Error posting accessed link:", err.message);
         }
 
-        console.log("DEBUG DATA", {
-            client: client,
-            setting: settings,
-            prohibited: prohibitedLinks
-        })
+        // console.log("DEBUG DATA", {
+        //     client: client,
+        //     setting: settings,
+        //     prohibited: prohibitedLinks
+        // })
 
-        console.log("Domain", domain);
+        // console.log("Domain", domain);
         const isProhibited = prohibitedLinks?.some(link =>
             normalizedDomain === link.link || normalizedDomain.endsWith("." + link.link)
         );
-        console.log("DEBUG Deduct", isProhibited)
+        // console.log("DEBUG Deduct", isProhibited)
         if (isProhibited) {
             const newTimeRemaining = client.time_remaining - (settings.time_deduct * 60);
             await axios.patch(

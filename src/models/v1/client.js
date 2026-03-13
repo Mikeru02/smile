@@ -171,6 +171,7 @@ class Client {
      */
     async update(field, value, setFields) {
         try {
+            console.log('SET FIELDS: ', setFields);
             if (!this.allowedWhere.includes(field)) {
                 console.error("[ERROR] client.update: Invalid where field!");
                 return null
