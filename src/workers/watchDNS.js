@@ -73,6 +73,8 @@ export default function watchDnsmasq(logFilePath) {
                 `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/setting/`,
                 {
                     headers: {
+                        "Content-Type": "application/json",
+                        "apikey": process.env.SRC_KEY,
                         "token": token
                     }
                 }
@@ -86,7 +88,7 @@ export default function watchDnsmasq(logFilePath) {
 
         try {
             const prohibitedResponse = await axios.get(
-               `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/link/probibited/all`,
+               `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/link/probihited/all`,
                 {
                     headers: {
                         "Content-Type": "application/json",
