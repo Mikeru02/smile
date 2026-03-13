@@ -23,6 +23,8 @@ export default async function PageEvent() {
     const papersTime = document.getElementById('time-papers');
     const generalTime = document.getElementById('time-general');
     const deductTime = document.getElementById('time-deduct');
+    const saveTimeSetting = document.getElementById('save-timesetting');
+    const restoreTimeSetting = document.getElementById('restore-timesetting');
 
     const axiosClient = axios.create({
         baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
@@ -61,14 +63,26 @@ export default async function PageEvent() {
     socketClient.on('SETTINGS', (data) => {
         const settingData = data.settings;
         const wastesTime = data.wastesTime;
-        console.log("SETTINGS DATA",data);
 
-        console.log("DEBUG", settingData);
         frequency.value = settingData.backup_freq;
         compression.value = settingData.compression;
         location.value = settingData.location;
         retention.value = settingData.retention;
         
+        wastesTime.forEach(waste => {
+            if (waste.code === 'PBTL') {
+                bottlesTime.value = waste.time;
+            }
+
+            if (waste.code === 'PPRS') {
+                papersTime.value = waste.time;
+            }
+
+            if (waste.code === 'GWST') {
+                generalTime.value = waste.time;
+            }
+        });
+        deductTime.value = settingData.time_deduct;
 
         if (settingData.utility_mode) {
             utilityCheckBox.checked = true;
@@ -220,5 +234,29 @@ export default async function PageEvent() {
         });
 
         alert('Saved Successfully');
+    });
+
+    saveTimeSetting.addEventListener('click', function () {
+        const payload = {
+            wasteTime: [
+                {
+                    code: 'PBTL',
+                    time: Number(bottlesTime.value)
+                },
+                {
+                    code: 'PPRS',
+                    time: Number(papersTime.value)
+                },
+                {
+                    code: 'GWST',
+                    time: Number(generalTime.value)
+                }
+            ],
+            deductTime: Number(deductTime.value)
+        };
+
+        socketClient.emit('SAVE_TIMESETTING', payload);
+
+        alert('Time settings saved successfully');
     });
 }

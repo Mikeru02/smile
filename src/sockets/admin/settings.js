@@ -178,4 +178,33 @@ export default function SettingsSocketEvents(socket, server) {
         server.arduino.sendCommand(`SET_UTILITY_MODE:${mode}`);
         socket.emit('SET_UTILITY_MODE', { mode: server.utilityMode })
     })
+
+    socket.on('SAVE_TIMESETTING', async (data) => {
+        try {
+            const { wasteTime, deductTime } = data;
+
+            // update each waste time
+            for (const waste of wasteTime) {
+                await server.axiosClient.patch(
+                    `waste/wastes-time?wasteCode=${waste.code}&updatedTime=${waste.time}`,
+                    {
+                        headers: {
+                            "token": socket.token
+                        }
+                    }
+                );
+            }
+
+            // update deduct time
+            await server.axiosClient.patch(
+                `setting/`,
+                { time_deduct: deductTime }
+            );
+
+            console.log("Time settings updated");
+        }
+        catch (err) {
+            console.error('[ERROR] SettingsSocketEvents.SAVE_TIMESETTING', err.message);
+        }
+    });
 }
