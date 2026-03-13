@@ -35,6 +35,11 @@ export default async function checkToken(token) {
 
             const clientData = response.data.data[0];
 
+            if (!clientData.ip || !clientData.mac ||!clientData.hostname) {
+                localStorage.removeItem('token');
+                return false;
+            }
+
             if (!clientData || clientData.length === 0) {
                 localStorage.removeItem('token');
                 return false;

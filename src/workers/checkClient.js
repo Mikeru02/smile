@@ -53,6 +53,8 @@ export default async function checkClients() {
                     await axiosClient.patch(
                         `client/?field=mac&value=${client.mac}`,
                         { 
+                            mac: null,
+                            hostname: null,
                             ip: null,
                             expire_at: null,
                             time_remaining: updatedTimeRemaining,
