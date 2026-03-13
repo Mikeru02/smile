@@ -589,8 +589,15 @@ select.form-input:hover {
 }
 
 .btn-cancel {
-  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+  background: #6c757d;
   color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn-cancel:hover {
