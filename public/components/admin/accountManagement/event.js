@@ -150,10 +150,10 @@ export default async function PageEvents() {
 
     applyFilter.addEventListener('click', function() {
         socketClient.emit("FILTER_ACCOUNT", ({
-            role: role.value || null,
+            role: roleFilter.value || null,
             from: dateFrom.value || null,
             to: dateTo.value || null,
-            limit: limit.value || null
+            limit: limitFilter.value || null
         }));
         filterModal.style.display = "none";
         clearFilter.style.display ="block";
