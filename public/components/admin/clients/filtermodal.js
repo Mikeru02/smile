@@ -1,12 +1,13 @@
 import styles from './component.module.css';
 
 export default function FilterModal() {
+    const today = new Date().toISOString().split('T')[0];
     const modal = `
         <div class="${styles['modal']}" id="filter-modal">
             <div class="${styles['modal-content']}">
                 <div class="${styles['top-container']}">
-                    <h2>Export Client Filter</h2>
-                    <p>Choose which client to export</p>
+                    <h2>Client Filter</h2>
+                    <p>Choose which client to filter</p>
                 </div>
                 <div class="${styles['filter-container']}">
                     <div class="${styles['filter-group']}">
@@ -30,12 +31,12 @@ export default function FilterModal() {
                     
                     <div class="${styles['filter-group']}">
                         <label for="filter-date-from">Date From</label>
-                        <input type="datetime-local" id="filter-date-from" class="${styles['filter-input']}">
+                        <input type="date" id="filter-date-from" class="${styles['filter-input']}">
                     </div>
                     
                     <div class="${styles['filter-group']}">
                         <label for="filter-date-to">Date To</label>
-                        <input type="datetime-local" id="filter-date-to" class="${styles['filter-input']}">
+                        <input type="date" id="filter-date-to" class="${styles['filter-input']}" max="${today}">
                     </div>
 
                     <div class="${styles['filter-group']}">
