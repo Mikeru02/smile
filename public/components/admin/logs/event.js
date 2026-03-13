@@ -46,6 +46,7 @@ export default async function PageEvents() {
     
     socketClient.emit('GET_LOGS');
 
+    const filterBtn = document.getElementById('filter-btn');
     const logLevel = document.getElementById('filter-level');
     const dateFrom = document.getElementById('filter-date-from');
     const dateTo =document.getElementById('filter-date-to');
