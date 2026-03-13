@@ -24,8 +24,7 @@ export default function LogsSocketEvents(socket, server) {
                     "token": socket.token
                 },
                 params: {
-                    is_logged: data.isLogedIn,
-                    status: data.status,
+                    level: data.level,
                     from: data.from,
                     to: data.to,
                     limit: data.limit
@@ -33,6 +32,8 @@ export default function LogsSocketEvents(socket, server) {
             });
 
             const logs = response.data.logs || [];
+
+            console.log("LOGS: ", logs);
             socket.emit('LOGS', ({ logs: logs }));
         }
         catch (err) {
