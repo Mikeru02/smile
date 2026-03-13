@@ -187,6 +187,7 @@ export default function SettingsSocketEvents(socket, server) {
             for (const waste of wasteTime) {
                 await server.axiosClient.patch(
                     `waste/update-time?wasteCode=${waste.code}&updatedTime=${waste.time}`,
+                    {},
                     {
                         headers: {
                             "token": socket.token
