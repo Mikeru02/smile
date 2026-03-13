@@ -17,6 +17,35 @@ export default function ClientsSocketEvents(socket, server) {
         }
     })
 
+    socket.on('FILTER_CLIENT', async (data) => {
+        try {
+            const response = await server.axiosClient.get(
+                `client/export`,
+                {
+                    headers: {
+                        "token": socket.token
+                    }
+                },
+                {
+                    params: {
+                        is_logged: data.isLogedIn || undefined,
+                        status: data.status || undefined,
+                        from: data.dateFrom || undefined,
+                        to: data.dateTo || undefined,
+                        limit: data.limit || undefined
+                    }
+                }
+            )
+
+            const clients = response.data.clients || [];
+
+            socket.emit('CLIENTS', ({ clients: clients }));
+        }
+        catch (err) {
+            console.error('[ERROR] ClientsSocketEvents.FILTER_CLIENT', err.message);
+        }
+    })
+
     socket.on('DELETE_CLIENT', async (data) => {
         try {
             await server.axiosClient.delete(

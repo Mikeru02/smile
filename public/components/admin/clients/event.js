@@ -110,7 +110,7 @@ export default async function Event() {
     const dateFrom = document.getElementById('filter-date-from');
     const dateTo =document.getElementById('filter-date-to');
     const limit = document.getElementById('filter-limit');
-    const exportToCSVBtn = document.getElementById('apply-filter');
+    const applyFilter = document.getElementById('apply-filter');
     const cancelExportBtn = document.getElementById('cancel-filter');
 
 
@@ -163,6 +163,18 @@ export default async function Event() {
     filterBtn.addEventListener('click',function() {
         filterModal.style.display = "block"
     })
+
+    applyFilter.addEventListener('click', function() {
+        socketClient.emit('FILTER_CLIENT', ({
+            is_logged: isLogedIn.value || undefined,
+            status: status.value || undefined,
+            from: dateFrom.value || undefined,
+            to: dateTo.value || undefined,
+            limit: limit.value || undefined
+        }));
+
+    })
+    
 
     const exportBtn = document.getElementById('export-btn');
     // exportBtn.addEventListener('click', async function() {
