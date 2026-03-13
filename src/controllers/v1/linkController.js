@@ -1,9 +1,11 @@
 import Link from "../../models/v1/link.js";
 import Log from "../../models/v1/log.js";
+import Client from "../../models/v1/client.js";
 
 class LinkController {
     constructor() {
         this.link = new Link();
+        this.client = new Client();
         this.log = new Log();
     }
 
@@ -36,6 +38,20 @@ class LinkController {
                 `Error creating prohibited domain "${req.body?.domain || 'unknown'}" by ${res.locals.username || 'system'}: ${err.toString()}`,
                 "ERROR"
             );
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async createAccessedLink(req, res) {
+        try {
+            const { clientIP, domain } = req.body || {};
+            const clientData = await this.client.getClientWithSpecificField("ip", clientIP);
+            console.log("DEBUG: ",clientData);
+        }
+        catch (err) {
             return res.status(500).json({
                 success: false,
                 message: err.toString()
