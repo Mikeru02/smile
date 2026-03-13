@@ -44,8 +44,61 @@ export default function watchDnsmasq(logFilePath) {
 
         recentAccesses.set(key, now);
 
+        let prohibitedLinks;
+        let settings;
+        let client;
+
         // Generate a fresh JWT for each request
         const token = jwt.sign({ role: "admin" }, process.env.API_SECRET_KEY, { expiresIn: "1m" });
+
+        try {
+            const clientResponse = await axios.get(
+                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?filed=ip&value=${clientIP}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": process.env.SRC_KEY,
+                        "token": token
+                    } 
+                }
+            )
+            client = clientResponse.data.data[0];
+        }
+        catch (err) {
+            console.error("Error fetching client data", err.message);
+        }
+
+        try {
+            const settingResponse = await axios.get(
+                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/setting/`,
+                {
+                    headers: {
+                        "token": token
+                    }
+                }
+            )
+            settings = settingResponse.data.data[0];
+        }
+        catch (err) {
+            console.error('Error fetching settings:', err.message);
+        }
+
+        try {
+            const prohibitedResponse = await axios.get(
+               `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/link/probibited/all`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": process.env.SRC_KEY,
+                        "token": token
+                    }
+                } 
+            )
+            prohibitedLinks = prohibitedResponse.data.data;
+        }
+        catch (err) {
+            console.error("Error getting prohibited links", err.message);
+        }
 
         try {
             await axios.post(
@@ -61,6 +114,22 @@ export default function watchDnsmasq(logFilePath) {
             );
         } catch (err) {
             console.error("Error posting accessed link:", err.message);
+        }
+
+        const isProhibited = prohibitedLinks?.some(link => domain.includes(link.link));
+        if (isProhibited) {
+            const newTimeRemaining = client.time_remaining - (settings.time_deduct * 60);
+            await axios.patch(
+                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?filed=id&value=${client.id}`,
+                { time_remaining: newTimeRemaining },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": process.env.SRC_KEY,
+                        "token": token
+                    }   
+                }
+            )
         }
     });
 
