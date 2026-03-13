@@ -46,21 +46,34 @@ export default async function PageEvents() {
     
     socketClient.emit('GET_LOGS');
 
-    const exportBtn = document.getElementById('export-logs');
-    exportBtn.addEventListener('click', async function() {
-        filterModal.style.display = "block";
-    })
-
     const logLevel = document.getElementById('filter-level');
     const dateFrom = document.getElementById('filter-date-from');
     const dateTo =document.getElementById('filter-date-to');
     const limit = document.getElementById('filter-limit');
     const applyFilter = document.getElementById('apply-filter');
     const cancelExportBtn = document.getElementById('cancel-filter');
+    const exportBtn = document.getElementById('export-btn');
     const clearBtn = document.getElementById('clear-btn');
     clearBtn.style.display = "none"
 
-    exportToCSVBtn.addEventListener('click', async function() {
+    filterBtn.addEventListener('click',function() {
+        filterModal.style.display = "block"
+    })
+
+    applyFilter.addEventListener('click', function() {
+        // socketClient.emit('FILTER_CLIENT', ({
+        //     is_logged: isLogedIn.value || null,
+        //     status: status.value || null,
+        //     from: dateFrom.value || null,
+        //     to: dateTo.value || null,
+        //     limit: limit.value || null
+        // }));
+        filterModal.style.display = "none";
+        clearBtn.style.display = "block"
+
+    })
+
+    exportBtn.addEventListener('click', async function() {
         try {
             const response = await axiosClient.get('logs/export', {
                 headers: {
@@ -95,5 +108,8 @@ export default async function PageEvents() {
         filterModal.style.display = "none";
     })
 
-
+    clearBtn.addEventListener('click',function() {
+        clearBtn.style.display = "none";
+        socketClient.emit('GET_LOGS')
+    })
 }
