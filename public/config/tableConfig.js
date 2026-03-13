@@ -1,13 +1,10 @@
 const TABLE_CONFIG = {
     "all-client": [
         { label: "ID", key: "id" },
-        { label: "Student ID", key: "student_id"},
         { label: "MAC", key: "mac"},
         { label: "IP", key: "ip" },
         { label: "Device Name", key: "hostname" },
-        { label: "Name", key: "name" },
-        { label: "Course", key: "course" },
-        { label: "Year Level", key: "year_level" },
+        { label: "Username", key: "username" },
         { label: "Status", key: "status" },
         { label: "Time Remaining", key: "time_remaining" },
         { label: "Details", key: "details" },
