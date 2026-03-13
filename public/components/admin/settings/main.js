@@ -123,7 +123,7 @@ export default function MainContent(root) {
                                 <small>Deduct clients time when accessed the prohibited sites</small>
                             </div>
                             <div class="${styles["setting-item"]}">
-                                <button class="${styles['backup-now']}" id="restore-setting">Restore</button>
+                                <button class="${styles['backup-now']} ${styles['restore']}" id="restore-setting">Restore</button>
                             </div>
                             <div class="${styles["setting-item"]}">
                                 <button class="${styles['backup-now']}" id="save-setting">Save</button>
