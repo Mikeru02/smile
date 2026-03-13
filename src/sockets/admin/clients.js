@@ -26,18 +26,18 @@ export default function ClientsSocketEvents(socket, server) {
                         "token": socket.token
                     },
                     params: {
-                        is_logged: data.is_logged || null,
-                        status: data.status || null,
-                        from: data.dateFrom || null,
-                        to: data.dateTo || null,
-                        limit: data.limit || null
+                        is_logged: data.is_logged,
+                        status: data.status,
+                        from: data.dateFrom,
+                        to: data.dateTo,
+                        limit: data.limit
                     }
                 }
             )
 
-            console.log('RESPONSE: ')
             const clients = response.data.clients || [];
 
+            console.log(clients);
             socket.emit('CLIENTS', ({ clients: clients }));
         }
         catch (err) {
