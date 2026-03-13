@@ -75,7 +75,7 @@ export default async function PageEvents() {
     const cancelFilter = document.getElementById('filter-cancel');
     const applyFilter = document.getElementById('apply-filter');
     const exportBtn = document.getElementById('export-btn');
-    const clearFilter = document.getElementById('clear-btn');
+    const clearFilter = document.getElementById('clear-filter');
     clearFilter.style.display = "none";
 
     tbody.addEventListener('click', async (e) => {
