@@ -109,7 +109,7 @@ class Client {
         }
     }
 
-    async getExort(filters = {}) {
+    async getExport(filters = {}) {
         try {
             let query = `SELECT * FROM clients WHERE 1=1`;
             const params = [];
