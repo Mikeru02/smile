@@ -98,7 +98,16 @@ export default function MainContent(root) {
                         </div>
                     </div>
                 </div>
-            
+
+                <div class="${styles["settings-section"]}">
+                    <h3 class="${styles["section-title"]}">💾 Time Settings</h3>
+                    <div class="${styles["settings-group"]}">
+                        <div class="${styles["setting-item"]}">
+                            
+                        </div>
+                        <small>Manage time incentives</small>
+                    </div>
+                </div>
                 
             </div>
         </div>
