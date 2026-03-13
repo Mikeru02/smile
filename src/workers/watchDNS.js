@@ -79,7 +79,6 @@ export default function watchDnsmasq(logFilePath) {
                     }
                 }
             )
-            console.log("Setting Response", settingResponse.data);
             settings = settingResponse.data.data[0];
         }
         catch (err) {
@@ -97,7 +96,6 @@ export default function watchDnsmasq(logFilePath) {
                     }
                 } 
             )
-            console.log("Prohibited Response", prohibitedResponse.data)
             prohibitedLinks = prohibitedResponse.data.data;
         }
         catch (err) {
