@@ -115,7 +115,7 @@ export default async function PageEvents() {
         socketClient.emit('GET_LOGS');
         logLevel.value = "";
         dateFrom.value = "";
-        dateTo.value= today;
+        dateTo.value= "";
         limit = 30;
     })
 }

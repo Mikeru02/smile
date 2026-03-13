@@ -27,7 +27,7 @@ export default function FilterModal() {
                     
                     <div class="${styles['filter-group']}">
                         <label for="filter-date-to">Date To</label>
-                        <input type="date" id="filter-date-to" class="${styles['filter-input']}" value="${today}" max="${today}">
+                        <input type="date" id="filter-date-to" class="${styles['filter-input']}" max="${today}">
                     </div>
 
                     <div class="${styles['filter-group']}">

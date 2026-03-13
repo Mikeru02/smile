@@ -224,7 +224,7 @@ export default async function Event() {
         isLogedIn.value = "";
         status.value = "";
         dateFrom.value = "";
-        dateTo.value= today;
+        dateTo.value= "";
         limit = 30;
     })
 
