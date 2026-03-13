@@ -53,7 +53,7 @@ export default function watchDnsmasq(logFilePath) {
 
         try {
             const clientResponse = await axios.get(
-                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?filed=ip&value=${clientIP}`,
+                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?field=ip&value=${clientIP}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
