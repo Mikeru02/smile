@@ -166,11 +166,11 @@ export default async function Event() {
 
     applyFilter.addEventListener('click', function() {
         socketClient.emit('FILTER_CLIENT', ({
-            is_logged: isLogedIn.value || undefined,
-            status: status.value || undefined,
-            from: dateFrom.value || undefined,
-            to: dateTo.value || undefined,
-            limit: limit.value || undefined
+            is_logged: isLogedIn.value || null,
+            status: status.value || null,
+            from: dateFrom.value || null,
+            to: dateTo.value || null,
+            limit: limit.value || null
         }));
 
     })

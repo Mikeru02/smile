@@ -26,11 +26,11 @@ export default function ClientsSocketEvents(socket, server) {
                         "token": socket.token
                     },
                     params: {
-                        is_logged: data.isLogedIn || undefined,
-                        status: data.status || undefined,
-                        from: data.dateFrom || undefined,
-                        to: data.dateTo || undefined,
-                        limit: data.limit || undefined
+                        is_logged: data.isLogedIn || null,
+                        status: data.status || null,
+                        from: data.dateFrom || null,
+                        to: data.dateTo || null,
+                        limit: data.limit || null
                     }
                 }
             )
