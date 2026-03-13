@@ -62,7 +62,7 @@ export default async function PageEvents() {
     })
 
     applyFilter.addEventListener('click', function() {
-        socketClient.emit('FILTER_CLIENT', ({
+        socketClient.emit('FILTER_LOGS', ({
             level: logLevel.value || null,
             from: dateFrom.value || null,
             to: dateTo.value || null,
