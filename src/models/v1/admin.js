@@ -21,6 +21,7 @@ class Admin {
             console.log("DEBUG HIt getDshboardInfo")
             return {
                 server_start_time: new Date(Date.now() - process.uptime() * 1000).toISOString(),
+                uptime: runSpawnSync('uptime', ['-p']),
                 internet: checkInternet(),  
                 model: await checkModel(),
                 total_clients: (await this.client.getAll()).length,
