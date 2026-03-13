@@ -46,7 +46,7 @@ export default function watchDnsmasq(logFilePath) {
 
         try {
             await axios.post(
-                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/admin/accessed-link`,
+                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/link/accessed-link`,
                 { clientIP, domain },
                 {
                     headers: {
