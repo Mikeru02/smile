@@ -136,6 +136,40 @@ class Account {
         }
     }
 
+    async getExport(filters = {}) {
+        try {
+            let query = `SELECT * FROM accounts WHERE 1=1`;
+            const params = [];
+
+            if (filters.role) {
+                query += ` AND role = ?`;
+                params.push(filters.role);
+            }
+
+            if (filters.from) {
+                query += ` AND DATE(last_login) >= ?`;
+                params.push(filters.from);
+            }
+
+            if (filters.to) {
+                query += ` AND DATE(last_login) <= ?`;
+                params.push(filters.to);
+            }
+
+            if (filters.limit) {
+                query += ` LIMIT ?`;
+                params.push(filters.limit);
+            }
+
+            const [rows] = await this.db.execute(query, params);
+            return rows;
+        }
+        catch (err) {
+            console.error("[ERROR] accounts.getExort", err);
+            throw err;
+        }
+    }
+
     // Update Functions     *****************************************
     /**
      * Update specific fields of an account record in the database

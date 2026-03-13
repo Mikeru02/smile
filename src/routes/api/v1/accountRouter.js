@@ -11,6 +11,7 @@ accountRouter.use(authorization);
 // Get Methods
 accountRouter.get('/', authentication, account.getAccounttWithSpecificField.bind(account));
 accountRouter.get('/all', authentication, account.getAll.bind(account));
+accountRouter.get('/export', authentication, account.getExport.bind(account));
 
 // Post Methods
 accountRouter.post('/', authentication, account.create.bind(account));

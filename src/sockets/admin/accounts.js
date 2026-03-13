@@ -109,4 +109,28 @@ export default function AccountsSocketEvents(socket, server) {
             console.error('[ERROR] AccountsSocketEvents.GET_SPECIFIC_ACCOUNT', err.message);
         }
     })
+
+    socket.on("FILTER_ACCOUNT", async (data) => {
+        try {
+            const response = await server.axiosClient.get(
+                `account/export`,
+                {
+                    headers: {
+                        "token": socket.token
+                    },
+                    params: {
+                        role: data.role,
+                        from: data.from,
+                        to: data.to,
+                        limit: data.limit
+                    }
+                }
+            )
+            const accounts = response.data.data || [];
+            socket.emit('ACCOUNT', ({ accounts: accounts }));
+        }
+        catch (err) {
+            console.error('[ERROR] AccountsSocketEvents.FILTER_ACCOUNT', err.message);
+        }
+    })
 }

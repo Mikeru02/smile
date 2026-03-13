@@ -157,6 +157,30 @@ class AccountController {
         }
     }
 
+    async getExport(req, res) {
+        try {
+            const filters = {
+                role: req.query.role || null,
+                from: req.query.from || null,
+                to: req.query.to || null,
+                limit: req.query.limit ? Number(req.query.limit) : null
+            }
+
+            const result = await this.account.getExport(filters);
+
+            return res.status(200).json({
+                success: true,
+                clients: result
+            });
+        }
+        catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
     // Update Functions         *****************************************
     async updateAccountData(req, res) {
         try {

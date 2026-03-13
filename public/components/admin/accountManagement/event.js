@@ -148,6 +148,17 @@ export default async function PageEvents() {
         modal.style.display = "none";
     });
 
+    applyFilter.addEventListener('click', function() {
+        socketClient.emit("FILTER_ACCOUNT", ({
+            role: role.value || null,
+            from: dateFrom.value || null,
+            to: dateTo.value || null,
+            limit: limit.value || null
+        }));
+        filterModal.style.display = "none";
+        clearFilter.style.display ="block";
+    })
+
     saveViewModal.addEventListener('click', function() {
         const clientId = saveViewModal.dataset.clientId;
         if (!clientId) return;
@@ -176,5 +187,15 @@ export default async function PageEvents() {
 
     cancelFilter.addEventListener('click', function() {
         filterModal.style.display = "none"
+    })
+
+    clearFilter.addEventListener('click', function() {
+        clearFilter.style.display = "none";
+        socketClient.emit("GET_ACCOUNTS");
+        role.value = "";
+        logLevel.value = "";
+        dateFrom.value = "";
+        dateTo.value= "";
+        limit = 30;
     })
 }

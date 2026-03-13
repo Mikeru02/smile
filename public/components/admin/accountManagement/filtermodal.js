@@ -31,7 +31,7 @@ export default function FilterModal() {
 
                     <div class="${styles['filter-group']}">
                         <label for="filter-limit">Limit</label>
-                        <input type="number" id="filter-limit" class="${styles['filter-input']}">
+                        <input type="number" id="filter-limit" class="${styles['filter-input']}" value=30>
                     </div>
                 </div>
                 <div class="${styles['button-container']}">
