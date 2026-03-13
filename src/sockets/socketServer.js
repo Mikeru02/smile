@@ -137,7 +137,7 @@ class SocketServer {
                     socket.emit('CLIENTS', ({ clients: clients.data.data }));
                     socket.emit('SETTINGS', ({ 
                         settings: setting.data.data[0],
-                        wastesTime: wastesTime.data.data[0]
+                        wastesTime: wastesTime.data.data
                     }))
                     socket.emit("ACCOUNTS", ({ accounts: account.data.data}))
                     socket.emit("PROHIBITED", ({links: prohibited.data.data}))

@@ -33,7 +33,7 @@ export default function SettingsSocketEvents(socket, server) {
         socket.emit("PROHIBITED", ({ links: prohibited.data.data }))
         socket.emit('SETTINGS', ({ 
             settings: setting.data.data[0],
-            wastesTime: wastesTime.data.data[0]
+            wastesTime: wastesTime.data.data
         }))
     })
 
