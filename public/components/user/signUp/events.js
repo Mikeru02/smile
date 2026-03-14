@@ -27,22 +27,26 @@ export default async function Events() {
     const togglePasswordBtn = document.getElementById('toggle-password');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
     const loginBtn = document.getElementById('submit-credential');
     const consentCheckbox = document.getElementById('consent');
 
 
     togglePasswordBtn.addEventListener('click', function() {
+        const confirmPasswordInputType = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPasswordInput.setAttribute('type', confirmPasswordInputType);
         passwordInput.setAttribute('type', type);
         eyeIcon.src = type === 'password' ? CloseEye : OpenEye;
         eyeIcon.alt = type === 'password' ? 'Show password' : 'Hide password';
     });
 
-    validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn);
+    validateSignupForm(usernameInput, passwordInput, confirmPasswordInput, consentCheckbox, loginBtn);
 
-    usernameInput.addEventListener('input', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn);})
-    passwordInput.addEventListener('input', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn);})
-    consentCheckbox.addEventListener('change', () => {validateSignupForm(usernameInput, passwordInput, consentCheckbox, loginBtn)});
+    usernameInput.addEventListener('input', () => {validateSignupForm(usernameInput, passwordInput, confirmPasswordInput, consentCheckbox, loginBtn)})
+    passwordInput.addEventListener('input', () => {validateSignupForm(usernameInput, passwordInput, confirmPasswordInput, consentCheckbox, loginBtn)})
+    confirmPasswordInput.addEventListener('input', () => {validateSignupForm(usernameInput, passwordInput, confirmPasswordInput, consentCheckbox, loginBtn)})
+    consentCheckbox.addEventListener('change', () => {validateSignupForm(usernameInput, passwordInput, confirmPasswordInput, consentCheckbox, loginBtn)});
 
     loginBtn.addEventListener('click', async function() {
         try {
