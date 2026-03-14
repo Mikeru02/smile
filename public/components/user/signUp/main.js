@@ -7,7 +7,7 @@ export default function Main(root){
         <div class="${styles["card"]}">
             <img src="${Logo}" class="${styles["logo"]}" id="logo">
             <h1 class="${styles["title"]}">S.M.I.L.E</h1>
-            <p class="${styles["desc"]}">Input Credentials</p>
+            <p class="${styles["desc"]}">Input Sign Up Credentials</p>
             <!-- From Uiverse.io by Yaya12085 --> 
             <div class="${styles["input-fields"]}" id="input-fields">
                 <label for="username">Username</label>
@@ -15,6 +15,13 @@ export default function Main(root){
                 <label for="password">Password</label>
                 <div class="${styles["password-wrapper"]}">
                     <input type="password" name="password" placeholder="Password" id="password" autocomplete="new-password">
+                    <button type="button" id="toggle-password" class="${styles["toggle-password"]}">
+                        <img id="eye-icon" src="${CloseEye}" alt="Show password" class="${styles["eye-icon"]}">
+                    </button>
+                </div>
+                <label for="confirm-password">Confirm Password</label>
+                <div class="${styles["password-wrapper"]}">
+                    <input type="password" name="confirm-password" placeholder="Confirm Password" id="confirm-password" autocomplete="new-password">
                     <button type="button" id="toggle-password" class="${styles["toggle-password"]}">
                         <img id="eye-icon" src="${CloseEye}" alt="Show password" class="${styles["eye-icon"]}">
                     </button>
