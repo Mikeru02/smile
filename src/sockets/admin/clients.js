@@ -91,7 +91,7 @@ export default function ClientsSocketEvents(socket, server) {
     socket.on('LOGOUT_CLIENT', async () => {
         try {
             await server.axiosClient.patch(
-                `client/deauth?field=macvalue=${socket.decoded.mac}`,
+                `client/deauth?field=mac&value=${socket.decoded.mac}`,
                 {},
                 {
                     headers: {
