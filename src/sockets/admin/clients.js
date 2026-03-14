@@ -105,6 +105,8 @@ export default function ClientsSocketEvents(socket, server) {
                 }
             )
 
+            console.log("RESPONSE LOGOUT", response.data);
+
             socket.emit('LOGOUT_DONE');
         }
         catch (err) {
