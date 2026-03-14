@@ -31,15 +31,30 @@ export default async function Events() {
     const loginBtn = document.getElementById('submit-credential');
     const consentCheckbox = document.getElementById('consent');
 
+    const toggleButtons = document.querySelectorAll('#toggle-password');
+    const eyeIcons = document.querySelectorAll('#eye-icon');
 
-    togglePasswordBtn.addEventListener('click', function() {
-        const confirmPasswordInputType = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        confirmPasswordInput.setAttribute('type', confirmPasswordInputType);
-        passwordInput.setAttribute('type', type);
-        eyeIcon.src = type === 'password' ? CloseEye : OpenEye;
-        eyeIcon.alt = type === 'password' ? 'Show password' : 'Hide password';
-    });
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            confirmPasswordInput.type = type;
+
+            eyeIcons.forEach(icon => {
+                icon.src = type === 'password' ? CloseEye : OpenEye;
+                eyeIcons.alt = type === 'password' ? 'Show password' : 'Hide password';
+            })
+        })
+    })
+
+    // togglePasswordBtn.addEventListener('click', function() {
+    //     const confirmPasswordInputType = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    //     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    //     confirmPasswordInput.setAttribute('type', confirmPasswordInputType);
+    //     passwordInput.setAttribute('type', type);
+    //     eyeIcon.src = type === 'password' ? CloseEye : OpenEye;
+    //     eyeIcon.alt = type === 'password' ? 'Show password' : 'Hide password';
+    // });
 
     validateSignupForm(usernameInput, passwordInput, confirmPasswordInput, consentCheckbox, loginBtn);
 
