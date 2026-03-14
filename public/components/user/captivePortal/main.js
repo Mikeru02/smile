@@ -7,8 +7,7 @@ export default function Main(root){
         <div class="${styles["card"]}">
             <img src="${Logo}" class="${styles["logo"]}" id="logo">
             <h1 class="${styles["title"]}">S.M.I.L.E</h1>
-            <p class="${styles["desc"]}">Log In Form</p>
-            <p class="${styles["desc"]}">Input Credentials</p>
+            <p class="${styles["desc"]}">Input Log In Credentials</p>
             <!-- From Uiverse.io by Yaya12085 --> 
             <div class="${styles["input-fields"]}" id="input-fields">
                 <label for="username">Username</label>
