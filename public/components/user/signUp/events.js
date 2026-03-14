@@ -64,6 +64,15 @@ export default async function Events() {
     consentCheckbox.addEventListener('change', () => {validateSignupForm(usernameInput, passwordInput, confirmPasswordInput, consentCheckbox, loginBtn)});
 
     loginBtn.addEventListener('click', async function() {
+        if (passwordInput.value !== confirmPasswordInput.value) {
+                alert("Password do not match!");
+                return;
+            }
+
+        if (!passwordInput.value || !confirmPasswordInput.value) {
+            alert("Password fields are empty");
+            return;
+        }
         try {
             const response = await axiosClient.post(
                 `client/`,
