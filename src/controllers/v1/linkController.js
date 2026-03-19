@@ -103,7 +103,7 @@ class LinkController {
         try {
             const domain = await this.link.getDomain(req.params.id);
             const response = await this.link.deleteProhibitedLink(req.params.id);
-            console.log("DEBUG", domain[0])
+            // console.log("DEBUG", domain[0])
             ContentFiltering.removeDomain(domain[0].link)
             await this.log.create(
                 "Delete Prohibited",
