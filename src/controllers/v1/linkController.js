@@ -1,6 +1,7 @@
 import Link from "../../models/v1/link.js";
 import Log from "../../models/v1/log.js";
 import Client from "../../models/v1/client.js";
+import ContentFiltering from "../../utils/contentFiltering.js";
 
 class LinkController {
     constructor() {
@@ -20,6 +21,7 @@ class LinkController {
                 })
             }
 
+            ContentFiltering.addDomain(link);
             const response = await this.link.createProhibitedLink(domain);
 
             await this.log.create(
