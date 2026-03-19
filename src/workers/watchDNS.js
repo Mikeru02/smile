@@ -63,6 +63,7 @@ export default function watchDnsmasq(logFilePath) {
                 }
             )
             client = clientResponse.data.data[0];
+            console.log("DEBUG TWO: ", client.data)
         }
         catch (err) {
             console.error("Error fetching client data", err.message);
