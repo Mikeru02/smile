@@ -60,6 +60,20 @@ class Link {
         }
     }
 
+    async getDomain(id) {
+        try {
+            const [row] = await this.db.execute(
+                `SELECT * FROM prohibited_links WHERE id = ?`,
+                [id]
+            )
+            return row;
+        }
+        catch (err) {
+            console.error("[ERROR] link.getAllProhibitedLinks", err);
+            throw err;
+        }
+    }
+
     async deleteProhibitedLink(id) {
         try {
             const [row] = await this.db.execute(
