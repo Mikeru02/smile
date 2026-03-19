@@ -21,7 +21,7 @@ class LinkController {
                 })
             }
 
-            ContentFiltering.addDomain(link);
+            ContentFiltering.addDomain(domain);
             const response = await this.link.createProhibitedLink(domain);
 
             await this.log.create(
