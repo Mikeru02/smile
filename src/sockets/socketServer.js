@@ -24,7 +24,7 @@ class SocketServer {
             }
         });
         this.isCaptureStopped = false;
-        this.internetStatus = null;
+        this.internetStatus = checkInternet();
         this.io = null;
         this.activeClient = null;
         this.timeDeductionInterval = null;
