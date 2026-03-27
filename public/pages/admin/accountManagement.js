@@ -18,8 +18,10 @@ export default class AdminAccountManagement {
         const card = MainCard(main, "Account Management");
         MainContent(card);
 
-        AdminRoutingEvent();
-        AdminEvents();
-        PageEvents();
+        const stopProcess = AdminEvents();
+        if (!stopProcess) {
+            AdminRoutingEvent();
+            PageEvents();
+        }
     }
 }

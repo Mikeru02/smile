@@ -6,13 +6,20 @@ class SocketClient {
     }
 
     connect() {
-        if (this.socket) return;
+        if (this.socket?.connected) return;
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error("[SOCKET] No token found. Connection skipped.");
+            return;
+        }
         
         this.socket = io(
             `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`,
             {
                 autoConnect: true,
-                transports: ['websocket', 'polling']
+                transports: ['websocket', 'polling'],
+                auth: { token }
             }
         );
 
@@ -30,9 +37,19 @@ class SocketClient {
         this.socket.on(event, handler);
     }
 
+    once(event, handler) {
+        if (!this.socket) return;
+        this.socket.once(event, handler);
+    }
+    
     emit(event, payload) {
         if (!this.socket || !this.socket.connected) return;
         this.socket.emit(event, payload);
+    }
+
+    off(event, handler) {
+        if (!this.socket) return;
+        this.socket.off(event, handler);
     }
 
     disconnect() {

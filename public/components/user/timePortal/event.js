@@ -1,16 +1,153 @@
-import axios from 'axios';
 import SocketClient from '../../../sockets/socketClient.js';
 import { renderEarnTime, renderTimeRemaining } from '../../../utils/render.js';
-import  BGIMG from '/icons/bgimg.svg';
+import checkToken from '../../../utils/checkToken.js';
+import { getRole } from '../../../utils/getRole.js';
+import ILLUSTRATION2 from '/icons/warning.svg';
+import styles from './component.module.css';
 
 export default async function Events() {
+    const token = localStorage.getItem('token');
+    const validToken = await checkToken(token);
+    const role = getRole(token);
+
+    // Intervals
+    let timeEarned = 0;
+    let earnInterval = null;
+    let isRunning = false;
+    let dropTimeout = null;
+    let countdownInterval = null;
+    const dropTimeoutSec = 60;
+    let timeRemainingSeconds = 0;
+    let timeEarnedSeconds = 0;
+    let timeRemainingInterval = null;
+    let isInternetUp;
+    const disableTimeSeconds = 3;
+    let connectLock = false;
+    let lastBinStatus = 'all_ok';
+    let lastUtilityMode = false;
+
+    let isConnected = false;
+
+    if (!validToken) {
+        window.app.pushRoute('/');
+        return;
+    }
+    
+    if (role === 'admin') {
+        window.app.pushRoute('/admin/dashboard');
+        return;
+    }
+
+    // Socket Events            ************************************************************
     const socketClient = new SocketClient();
+    socketClient.connect();
+    socketClient.on('connect', () => {
+        console.log('[SOCKET] connected, waiting for commands.');
+        socketClient.emit('GET_BIN_STATUS');
+    });
 
-    // document.body.style.backgroundImage = `url('${BGIMG}')`;
+    socketClient.on('DROP:allowed', () => {
+        modal.style.display = 'block';
+        startDropTimeout();
+    });
 
-    const modal = document.getElementById('modal');
+    socketClient.on('TIME_EARNED', (data) => {
+        timeEarnedSeconds = data.timeEarned;
+        startDropTimeout();
+        renderEarnTime({ hoursSpan, minSpan, secSpan }, data.timeEarned);
+        updateProceedButtonState();
+    })
 
-    // Time Containers
+    socketClient.on('DROP:busy', () => {
+        droppingModal.style.display = 'block';
+    });
+
+    socketClient.on('DROP_FINISHED', () => {
+        modal.style.display = 'none';
+        clearDropTimeouts();
+        updateTimeRemaining();
+    })
+
+    socketClient.on('ARDUINO:SONAR', () => {
+
+    });
+
+    socketClient.on('TIME_REMAINING', (data) => {
+        timeRemainingSeconds = data.timeRemaining;
+        console.log("DEbUG", timeRemainingSeconds)
+        updateConnectButtonState();
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, data.timeRemaining);
+    });
+
+    socketClient.on('CLIENT_STATUS', (data) => {
+        if (data.status === 'active') {
+            connect.textContent = 'Pause';
+            isConnected = true;
+            startTime();
+        }
+    });
+
+    socketClient.on('SET_UTILITY_MODE', (data) => {
+        console.log(data);
+        if (data.mode !== undefined) lastUtilityMode = data.mode;
+
+        // Recompute drop button state using stored values
+        updateDropButtonState();
+        if (data.mode) {
+            annoucementContainer.innerHTML = `
+                <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
+                <p>Utility staff is currently using the bin. Please wait</p>
+            `;
+            annoucementContainer.style.display = 'flex';
+        }
+        else {
+            annoucementContainer.style.display = 'none';
+            annoucementContainer.innerHTML = '';
+        }
+    })
+
+    socketClient.on('BIN_STATUS', (data) => {
+        if (data.status !== undefined) lastBinStatus = data.status;
+
+        // Recompute drop button state using stored values
+        updateDropButtonState();
+        console.log('[SOCKET] Bin status: ', data.status);
+        if (data.status !== 'all_ok') {
+            annoucementContainer.innerHTML = `
+                <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
+                <p>${data.status.replace('_', ' ')} is full. Waiting for removal.</p>
+            `;
+            annoucementContainer.style.display = 'flex';
+        } else {
+            annoucementContainer.style.display = 'none';
+            annoucementContainer.innerHTML = '';
+        }
+    });
+
+    socketClient.on('INTERNET_STATUS', (data) => {
+        console.log("DEBUG: ", data);
+        isInternetUp = data.online;
+
+        if (!isInternetUp){
+            annoucementContainer.innerHTML = '';
+            annoucementContainer.innerHTML = `
+                <img src="${ILLUSTRATION2}" class="${styles['illustration2']}">
+                <p>No Internet. Please wait</p>
+            `
+            annoucementContainer.style.display = 'flex';
+        }
+        updateConnectButtonState();
+    });
+
+    socketClient.on('LOGOUT_DONE', () => {
+        socketClient.disconnect();
+        localStorage.removeItem('token');
+        window.app.pushRoute('/')
+    })
+
+
+
+    // Time containers
     const hoursSpan = document.getElementById('earn-hours-span');
     const minSpan = document.getElementById('earn-min-span');
     const secSpan = document.getElementById('earn-sec-span');
@@ -18,170 +155,138 @@ export default async function Events() {
     const TRminSpan = document.getElementById('min-span');
     const TRsecSpan = document.getElementById('sec-span');
 
-    // Earn Intervals
-    let earnInterval = null;
-    let timeEarnedResInterval = null;
-    let isRunning = false;
-    
-    //console.log("TIMEEARNEDRES", timeEarnedRes)
-    const timeEarned = 10;
+    const annoucementContainer = document.getElementById('announcement-container')
+    const logoutBtn = document.getElementById('logout-btn');
 
-    // Time Remaining Intervals
-    let timeRemainingSeconds = 0;
-    let timeRemainingInterval = null;
+    // Modals
+    const modal = document.getElementById('modal');
+    const droppingModal = document.getElementById('dropping-modal');
 
-    
-    const connect = document.getElementById('connect');
-    let isConnected = false;
-    connect.addEventListener('click', async function() {
-        if (!isConnected) {
-            connect.textContent = 'Pause';
-            isConnected = true;
+    const startDropTimeout = () => {
+        if (dropTimeout) clearTimeout(dropTimeout);
+        if (countdownInterval) clearInterval(countdownInterval);
 
-            startTime();
-            await axios.post(
-                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/auth`,
-                {},
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_SRC_KEY,
-                        'token': localStorage.getItem('token')
-                    }
-                }
+        // Reset visual timer
+        const timerElement = document.getElementById('countdown-timer');
+        const progressBar = document.getElementById("progress-bar");
 
-            );
+        if (timerElement) timerElement.textContent = dropTimeoutSec;
+        if (progressBar) progressBar.style.width = '100%';
+
+        // Start visual countdown
+        let timeLeft = dropTimeoutSec;
+        countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (timerElement) {
+                timerElement.textContent = timeLeft;
+            }
+            if (progressBar) {
+                progressBar.style.width = `${(timeLeft / dropTimeoutSec) * 100}%`;
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }, 1000);
+
+        dropTimeout = setTimeout(async () => {
+            console.log("TIMEOUT TRIGGERED");
+            modal.style.display = 'none';
+            socketClient.emit('DROP_COMPLETE');
+            clearInterval(earnInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+            dropTimeout = null;
+            countdownInterval = null;
+            socketClient.emit("DROP_TIMEOUT");
+        }, dropTimeoutSec * 1000)
+    }
+
+    const updateTimeRemaining = () => {
+        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+    }
+
+    const updateDropButtonState = () => {
+        const disable = lastBinStatus !== 'all_ok' || lastUtilityMode === true;
+
+        dropBtn.disabled = disable;
+        dropBtn.style.opacity = disable ? '0.5' : '1';
+        dropBtn.style.cursor = disable ? 'not-allowed' : 'pointer';
+
+        if (!disable) console.log("Drop button enabled ✅");
+    };
+
+    // const updateDropButtonState = (data) => {
+    //     const status = data.status; // can me undefined
+    //     const mode = data.mode; // can be undefined
+    //     alert(mode)
+    //     if (status !== undefined) {
+    //         if (status !== 'all_ok') {
+    //             dropBtn.disabled = true;
+    //             dropBtn.style.opacity = '0.5';
+    //             dropBtn.style.cursor = 'not-allowed';
+    //         }
+    //         else {
+    //             console.log("Changing state of drop button")
+    //             dropBtn.disabled = false;
+    //             dropBtn.style.opacity = '1';
+    //             dropBtn.style.cursor = 'pointer';
+    //         }
+    //     }
+
+    //     if (mode !== undefined) {
+    //         if (mode === true){
+    //             dropBtn.disabled = true;
+    //             dropBtn.style.opacity = '0.5';
+    //             dropBtn.style.cursor = 'not-allowed';
+    //         }
+    //         else {
+    //             alert("Changing state of drop button")
+    //             dropBtn.disabled = false;
+    //             dropBtn.style.opacity = '1';
+    //             dropBtn.style.cursor = 'pointer';
+    //         }
+    //     }
+    // }
+
+    const updateProceedButtonState = () => {
+        const isEarnedTimeZero = timeEarnedSeconds <= 0;
+
+        if (isEarnedTimeZero) {
+            proceedBtn.disabled = true;
+            proceedBtn.style.opacity = '0.5';
+            proceedBtn.style.cursor = 'not-allowed';
         } else {
-            connect.textContent = 'Connect';
-            clearInterval(timeRemainingInterval);
-            isConnected = false;
-            timeRemainingInterval = null;
-
-            // Call disconnect function from main server
-            await axios.post(
-                `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/deauth`,
-                {},
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': import.meta.env.VITE_SRC_KEY,
-                        'token': localStorage.getItem('token')
-                    }
-                }
-            );
-
-            updateTimeRemaining();
+            proceedBtn.disabled = false;
+            proceedBtn.style.opacity = '1';
+            proceedBtn.style.cursor = 'pointer';
         }
-    });
-
-    const dropBtn = document.getElementById('start-drop');
-    dropBtn.addEventListener('click', async function() {
-        modal.style.display = 'block';
-        updateEarnedTimeDisplay();
-        socketClient.connect();
-        socketClient.on('connect', () => {
-            console.log('[SOCKET] connected, waiting for events')
-            socketClient.emit('DROPPING');
-            socketClient.on('ARDUINO:SONAR', (data) => {
-                console.log('SONAR DETECTED', data);
-            });
-            socketClient.on("EARN", (earnedTime) => {
-                earn(earnedTime);
-            })
-        })
-    });
-
-    const exit = document.getElementById('exit');
-    exit.addEventListener('click', async function() {
-        socketClient.disconnect();
-        modal.style.display = 'none';
-        clearInterval(earnInterval);
-        const response = await axios.patch(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/`,
-            { status: 'pending' }, 
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
-        updateTimeRemaining();
-    });
-
-    const proceed = document.getElementById('proceed');
-    proceed.addEventListener('click', async function() {
-        socketClient.disconnect();
-        modal.style.display = 'none';
-        clearInterval(earnInterval);
-        await axios.post(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/add-time`,
-            {}, 
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
-        updateTimeRemaining();
-    });
-
-    const updateTimeRemaining = async () => {
-        const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_remaining`, 
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
-        timeRemainingSeconds = response.data.data.time_remaining;
-        const timeRemaining = response.data.data.time_remaining;
-        renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemaining)
     }
 
-    const updateEarnedTimeDisplay = async () => {
-        const response = await axios.get(
-            `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/time/time_earned`, 
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
+    const updateConnectButtonState = () => {
+        if (connectLock) return;
+        const isTimeZero = timeRemainingSeconds <= 0;
 
-        if (!response.data.success) return;
+        if (isTimeZero || !isInternetUp) {
+            connectBtn.disabled = true;
+            connectBtn.style.opacity = '0.5';
+            connectBtn.style.cursor = 'not-allowed';
+        } else {
+            connectBtn.disabled = false;
+            connectBtn.style.opacity = '1';
+            connectBtn.style.cursor = 'pointer';
+        }
+    };
 
-        const earnedSeconds = response.data.data.time_earned;
-        console.log(earnedSeconds);
-        renderEarnTime({ hoursSpan, minSpan, secSpan }, earnedSeconds);
-    }
-
-    const earn = async (time) => {
-        if (isRunning) return;
-
-        isRunning = true;
-
-        await axios.post(`http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/earn`, 
-            { earned_time: time },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': import.meta.env.VITE_SRC_KEY,
-                    'token': localStorage.getItem('token')
-                }
-            }
-        );
-
-        updateEarnedTimeDisplay();
-        isRunning = false;
+    function clearDropTimeouts() {
+        if (dropTimeout) {
+            clearTimeout(dropTimeout);
+            dropTimeout = null;
+        }
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
     }
 
     const startTime = () => {
@@ -192,29 +297,97 @@ export default async function Events() {
             if (timeRemainingSeconds <= 0) {
                 clearInterval(timeRemainingInterval);
                 timeRemainingInterval = null;
-                await axios.patch(
-                    `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/${import.meta.env.VITE_SRC_ROUTE_VERSION}/client/revoke`,
-                    {},
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'apikey': import.meta.env.VITE_SRC_KEY,
-                            'token': localStorage.getItem('token')
-                        }
-                    }
-
-                );
+                socketClient.emit('DEAUTH_CLIENT');
                 connect.textContent = 'Connect';
                 isConnected = false;
                 return;
             }
 
             timeRemainingSeconds -= 1;
+            socketClient.emit('DEDUCT_TIME', {timeRemaining: timeRemainingSeconds });
             renderTimeRemaining({ TRhoursSpan, TRminSpan, TRsecSpan }, timeRemainingSeconds);
+            updateConnectButtonState();
         }, 1000);
-    }
-
-    updateTimeRemaining()
+    };
 
 
+    const connectBtn = document.getElementById('connect');
+    connectBtn.addEventListener('click', async function() {
+        if (!isConnected) { 
+            connect.textContent = 'Pause';
+            isConnected = true;
+            startTime();
+            socketClient.emit('AUTH_CLIENT');
+        } else {
+            connect.textContent = 'Connect';
+            clearInterval(timeRemainingInterval);
+            isConnected = false;
+            timeRemainingInterval = null;
+            socketClient.emit('DEAUTH_CLIENT');
+        }
+
+        connectLock = true;
+
+        connectBtn.disabled = true;
+        connectBtn.style.opacity = '0.5';
+        connectBtn.style.cursor = 'not-allowed';
+        
+        setTimeout(() => {
+            connectLock = false;
+            updateConnectButtonState();
+        }, disableTimeSeconds * 1000);
+    });
+
+
+    const dropBtn = document.getElementById('start-drop');
+    dropBtn.addEventListener('click', async function() {
+        console.log("DROP BTN TRIGGER");
+        socketClient.emit('DROPPING');
+    });
+
+    const okBtn = document.getElementById('ok-button');
+    okBtn.addEventListener('click', function() {
+        droppingModal.style.display = 'none';
+    })
+
+    const exit = document.getElementById('exit');
+    exit.addEventListener('click', async function() {
+        socketClient.emit('DROP_COMPLETE');
+        modal.style.display = 'none';
+        clearDropTimeouts();
+
+        dropBtn.disabled = true;
+        dropBtn.style.opacity = '0.5';
+        dropBtn.style.cursor = 'not-allowed';
+        
+        setTimeout(() => {
+            dropBtn.disabled = false;
+            dropBtn.style.opacity = '1';
+            dropBtn.style.cursor = 'pointer';
+        }, disableTimeSeconds * 1000);
+    });
+
+    const proceedBtn = document.getElementById('proceed');
+    proceedBtn.addEventListener('click', async function() {
+        socketClient.emit('ADD_TIME');
+        socketClient.emit('DROP_COMPLETE');
+        modal.style.display = 'none';
+        clearDropTimeouts();
+
+        dropBtn.disabled = true;
+        dropBtn.style.opacity = '0.5';
+        dropBtn.style.cursor = 'not-allowed';
+        
+        setTimeout(() => {
+            dropBtn.disabled = false;
+            dropBtn.style.opacity = '1';
+            dropBtn.style.cursor = 'pointer';
+        }, disableTimeSeconds * 1000);
+
+        // window.app.pushRoute("/portal");
+    });
+
+    logoutBtn.addEventListener('click', function() {
+        socketClient.emit('LOGOUT_CLIENT')
+    })
 }

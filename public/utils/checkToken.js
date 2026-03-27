@@ -1,6 +1,15 @@
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
-export default function checkToken(token) {
+export default async function checkToken(token) {
+    const axiosClient = axios.create({
+        baseURL: `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}/api/v1/`,
+        headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SRC_KEY,
+        }
+    })
+
     if (!token) {
         return false;
     } else {
@@ -11,10 +20,34 @@ export default function checkToken(token) {
             if (decoded.exp < currentTime) {
                 localStorage.removeItem('token');
                 return false;
-            } else {
-                return true;
             }
+
+            const response = await axiosClient.get(
+                `client/?field=username&value=${decoded.username}`,
+                {
+                    headers: {
+                        "token": token
+                    }
+                }
+            )
+
+            console.log("RESPONSE", response)
+
+            const clientData = response.data.data[0];
+
+            if (!clientData.ip || !clientData.mac ||!clientData.hostname) {
+                localStorage.removeItem('token');
+                return false;
+            }
+
+            if (!clientData || clientData.length === 0) {
+                localStorage.removeItem('token');
+                return false;
+            }
+
+            return true;
         } catch (error) {
+            console.error("ERROR: ", error)
             localStorage.removeItem('token');
             return false;
         }

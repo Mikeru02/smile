@@ -1,4 +1,4 @@
-import { SELECT_CONFIG } from "../config/selectConfig";
+import { SELECT_CONFIG } from "../config/selectConfig.js";
 
 // Populate any select element
 export function populateSelect(select, items, valueKey = "name") {

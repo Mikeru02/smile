@@ -1,26 +1,28 @@
 const TABLE_CONFIG = {
     "all-client": [
         { label: "ID", key: "id" },
+        { label: "MAC", key: "mac"},
         { label: "IP", key: "ip" },
-        { label: "Name", key: "name" },
-        { label: "Course", key: "course" },
-        { label: "Year Level", key: "yearlevel" },
+        { label: "Device Name", key: "hostname" },
+        { label: "Username", key: "username" },
         { label: "Status", key: "status" },
-        { label: "Registration Date", key: "created_at" },
         { label: "Time Remaining", key: "time_remaining" },
-        { label: "Waste Collected", key: "waste_collected" },
         { label: "Details", key: "details" },
     ],
     "account-management": [
-        { label: "UserID", key: "id" },
+        { label: "ID", key: "id" },
+        { label: "Username", key: "username" },
         { label: "Name", key: "name" },
         { label: "Role", key: "role" },
-        { label: "Details", key: "details" },
+        { label: "Last Login", key: "last_login" },
+        { label: "Created At", key: "created_at" },
+        { label: "Details", key: "details"}
     ],
     "logs": [
         { label: "Timestamp", key: "timestamp" },
-        { label: "Event", key: "event" },
+        { label: "Event", key: "name" },
         { label: "Description", key: "description" },
+        { label: "Level", key: "level" }
     ]
 };
 

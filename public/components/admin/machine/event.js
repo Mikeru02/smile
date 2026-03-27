@@ -1,8 +1,10 @@
-import axios from 'axios';
+import axios from "axios";
 
-export default async function Events(){
+export default async function Events() {
+    const baseUrl = `http://${import.meta.env.VITE_SRC_HOST}:${import.meta.env.VITE_SRC_PORT}`
+
     const machineInformation = await axios.get(
-        '/api/v1/admin/machine-info',
+        `${baseUrl}/api/v1/admin/machine-info`,
         {
             headers: {
                 "Content-Type": "application/json",
@@ -11,7 +13,7 @@ export default async function Events(){
         }
     );
     const machineData = machineInformation.data.data;
-    
+    console.log("MACHINE DATA: ", machineData);
     // Populate CPU Information
     document.getElementById('processor-model').textContent = machineData.cpu.model || 'Unknown';
     document.getElementById('number-of-cores').textContent = machineData.cpu.cores || 'Unknown';

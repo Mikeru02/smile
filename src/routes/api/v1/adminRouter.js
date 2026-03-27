@@ -13,12 +13,10 @@ adminRouter.get('/dashboard-info', admin.getDashboardInfo.bind(admin));
 adminRouter.get('/machine-info', admin.getMachineInfo.bind(admin));
 
 // Post Methods
-adminRouter.post('/', admin.createAccount.bind(admin));
-adminRouter.post('/login', admin.loginAccount.bind(admin));
+// adminRouter.post('/accessed-link', admin.)
 
 // Update Methods
 
 // Delete Methods
-
 
 export default adminRouter;

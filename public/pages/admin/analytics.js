@@ -26,8 +26,11 @@ export default class AdminAnalytics {
         const card = MainCard(main, "Analytics");
         MainContent(card);
         
-        AdminEvents();
-        PageEvents();
-
+        const stopProcess = AdminEvents();
+        if (!stopProcess) {
+            AdminRoutingEvent();
+            PageEvents();
+        }
+        
     }
 }

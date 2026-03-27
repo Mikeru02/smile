@@ -1,54 +1,37 @@
-import { connection } from '../../core/database.js';
-import Client from './client.js';
 import runSpawnSync  from '../../utils/runSpawnSync.js';
 import { CPUInfo, memoryInfo, storageInfo, networkInfo, OSName } from '../../utils/machineInformation.js';
 import { checkInternet, checkModel } from '../../utils/dashboardInformation.js';
+import Client from './client.js';
+import Waste from './waste.js';
+import Log from './log.js';
+import Bin from './bin.js';
+import Link from './link.js';
 
 class Admin {
     constructor() {
-        this.db = connection;
         this.client = new Client();
-    }
-
-    async createAccount(username, name, role, password) {
-        try {
-            const [result] = await this.db.execute(
-                'INSERT INTO accounts (username, name, role, password, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())',
-                [username, name, role, encryptPassword(password)]
-            );
-            return result;
-        } catch(err) {
-            console.error("[ERROR] account.create", err);
-            throw err;
-        }
-    }
-
-    async verifyAccount(username, password) {
-        try {
-            const [result] = await this.db.execute(
-                'SELECT * FROM accounts WHERE username=? AND password=?',
-                [username, encryptPassword(password)]
-            );
-            return result;
-        } catch(err) {
-            console.error("[ERROR] account.verify", err);
-            throw err;
-        }
+        this.waste = new Waste();
+        this.log = new Log();
+        this.bin = new Bin();
+        this.link = new Link();
     }
 
     async getDashboardInfo() {
         try {
+            console.log("DEBUG HIt getDshboardInfo")
             return {
                 server_start_time: new Date(Date.now() - process.uptime() * 1000).toISOString(),
+                uptime: runSpawnSync('uptime', ['-p']),
                 internet: checkInternet(),  
                 model: await checkModel(),
-                total_clients: await this.client.getTotalClients(),
-                active_clients: await this.client.getActiveClients(),
-                waste_transactions: await this.getAllWasteTransaction(),
-                plastic_bottle: await this.getAllSpecificWaste("PBTL"),
-                paper: await this.getAllSpecificWaste("PPRS"),
-                general_waste: await this.getAllSpecificWaste("GWST"),
-                bn_count: await this.getAllBinTransaction()
+                total_clients: (await this.client.getAll()).length,
+                active_clients: (await this.client.getClientWithSpecificField("status", "active")).length,
+                waste_transactions: await this.waste.getAllWasteTransaction(),
+                bottle_transactions: await this.waste.getAllSpecificWaste("PBTL"),
+                paper_transactions: await this.waste.getAllSpecificWaste("PPRS"),
+                general_transactions: await this.waste.getAllSpecificWaste("GWST"),
+                bin_count: (await this.bin.getAllBinTransaction()).length,
+                top_sites: await this.link.getTopVisitedSites()
             }
         } catch(err) {
             console.error("[ERROR] admin.dashboardInfo", err);
@@ -77,39 +60,17 @@ class Admin {
         
     }
 
-    async getAllWasteTransaction() {
+    async createAccessedLinks(clientIP, domain) {
         try {
-            const [result] = await this.db.execute(
-                'SELECT COUNT(*) FROM waste_transactions WHERE DATE(created_at) = CURDATE()'
-            );
-            return result[0]['COUNT(*)'];
-        } catch(err) {
-            console.error("[ERROR] admin.getAllWasteTransaction", err);
-            throw err;
-        }
-    }
+            const clientData = await this.client.getClientWithSpecificField("id", clientIP);
 
-    async getAllSpecificWaste(type) {
-        try {
-            const [result] = await this.db.execute(
-                'SELECT COUNT(*) FROM waste_transactions WHERE waste_code=?',
-                [type]
-            );
-            return result[0]['COUNT(*)'];
+            const [row] = await this.db.execute(
+                `INSERT INTO accessed_links (client_id, link, accessed_at) VALUES (?, ?, NOW())`,
+                [clientData.id, domain]
+            )
+            return row;
         } catch(err) {
-            console.error("[ERROR] admin.getAllSpecificWaste", err);
-            throw err;
-        }
-    }
-
-    async getAllBinTransaction() {
-        try {
-            const [result] = await this.db.execute(
-                'SELECT COUNT(*) FROM bin_logs'
-            );
-            return result[0]['COUNT(*)'];
-        } catch(err) {
-            console.error("[ERROR] admin.getAllBinTransaction", err);
+            console.error("[ERROR] admin.createAccessedLinks", err);
             throw err;
         }
     }

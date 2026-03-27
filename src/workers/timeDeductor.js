@@ -1,45 +1,81 @@
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
+import ClientManagement from '../utils/clientManagement.js';
 
 export default function startTimeDeductor() {
-    console.log(`[RUNNING] Time deductor started (30s Interval)`);
-
-    setInterval(async () => {
-        await axios.patch(
-            `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/${process.env.SRC_ROUTE_VERSION}/client/all`, 
-            {},
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': process.env.API_KEY
-                }
-            }
-        )
-
-        const response = await axios.get(
-            `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/${process.env.SRC_ROUTE_VERSION}/client/outOfTime`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': process.env.API_KEY
-                }
-            }
-        )
-
-        const clients = response.data.data;
-
-        for (const client of clients) {
-            await axios.patch(
-                `http://${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_ROUTE_VERSION}/client/revoke`,
-                {},
+    const loopInterval = 30;
+    const deductLoop = async () => {
+        try {
+            console.log('Time Deductor Worker starts')
+            const activeClientsResponse = await axios.get(
+                `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?field=status&value=active`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'apikey': process.env.API_KEY
+                        'apikey': process.env.SRC_KEY,
+                        'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
+                            expiresIn: "1m"
+                        })
                     }
                 }
             )
+            const activeClients = activeClientsResponse.data.data;
+            
+            for (const client of activeClients) {
+                console.log("DEBUG: ", client);
+                let newTimeRemaining = client.time_remaining - loopInterval;
+                if (newTimeRemaining < 0) newTimeRemaining = 0;
+
+                const connectionStart = new Date(client.connection_start_at).getTime();
+                const newExpireAt = new Date(connectionStart + newTimeRemaining * 1000);
+                const formattedExpireAt = newExpireAt.toLocaleString('sv-SE').replace('T', ' ')
+                const newStatus = newTimeRemaining <= 0 ? 'pending' : 'active';
+
+                if (newStatus === 'pending') {
+                    ClientManagement.revokeClient(client.ip);
+                    await axios.patch(
+                        `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?field=id&value=${client.id}`,
+                        {
+                            status: newStatus,
+                            time_remaining: newTimeRemaining,
+                            expire_at: null,
+                            connection_start_at: null,
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'apikey': process.env.SRC_KEY,
+                                'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
+                                    expiresIn: "1m"
+                                })
+                            }
+                        }
+                    )
+                    return;
+                }
+
+                await axios.patch(
+                    `http://${process.env.SRC_HOST}:${process.env.SRC_PORT}/api/v1/client/?field=id&value=${client.id}`,
+                    {
+                        status: newStatus,
+                        time_remaining: newTimeRemaining,
+                        expire_at: formattedExpireAt
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': process.env.SRC_KEY,
+                            'token': jwt.sign({ role: "admin"}, process.env.API_SECRET_KEY,{
+                                expiresIn: "1m"
+                            })
+                        }
+                    }
+                )
+            }
+        } catch (err) {
+            console.error('Time Deductor Error: ', err);
+        } finally {
+            setTimeout(deductLoop, loopInterval * 1000);
         }
+    }
 
-
-    }, 30000);
+    setTimeout(deductLoop, loopInterval * 1000);
 }

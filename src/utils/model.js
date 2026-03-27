@@ -2,19 +2,57 @@ import axios from "axios";
 import fs from 'fs';
 import path from "path";
 import FormData from "form-data";
+import jwt from "jsonwebtoken";
 
 class Model {
-    constructor(env) {
-        this.env = env;
+    constructor() {
         this.timeMap = {
-            "general waste": parseInt(this.env.TIME_GENERAL_WASTE || 1),
-            "plastic bottle": parseInt(this.env.TIME_PLASTIC_BOTTLE || 5),
-            "paper": parseInt(this.env.TIME_PAPER || 2)
+            // "general waste": parseInt(2),
+            // "plastic bottle": parseInt(8),
+            // "paper": parseInt(5)
         }
-        this.baseUrl = `https://${this.env.MODEL_HOST}/${this.env.MODEL_VERSION}/model`;
+        this.wasteCodeMap = {
+            "general waste": "GWST",
+            "plastic bottle": "PBTL",
+            "paper": "PPRS"
+        }
+        if (process.env.MODEL_TYPE === 'deployed') {
+            this.baseUrl = `https://${process.env.MODEL_HOST}/${process.env.MODEL_VERSION}/model`;
+        }
+        else {
+            this.baseUrl = `http://${process.env.MODEL_LOCALHOST}:${process.env.MODEL_PORT}/${process.env.MODEL_VERSION}/model`;
+        }
         this.client = axios.create({
             baseURL: this.baseUrl,
         })
+
+        console.log(this.baseUrl);
+    }
+
+    async getTimes() {
+        try {
+            const response = await server.axiosClient.get(
+                `waste/wastes-time`,
+                {
+                    headers: {
+                        'token': jwt.sign({ role: "admin" }, process.env.API_SECRET_KEY, {
+                            expiresIn: '1m'
+                        })
+                    }
+                }
+            );
+
+            const wastesTime = response.data.data; // [{ code, name, time }, ...]
+            
+            // Assign to timeMap dynamically
+            wastesTime.forEach(waste => {
+                this.timeMap[waste.name.toLowerCase()] = parseInt(waste.time);
+            });
+
+            console.log("Updated timeMap:", this.timeMap);
+        } catch (err) {
+            console.error("[ERROR] fetching waste times:", err.message);
+        }
     }
 
     async checkModel() {
@@ -22,7 +60,7 @@ class Model {
             "/",
             {
                 headers: {
-                    "api-key": this.env.MODEL_APIKEY 
+                    "apikey": process.env.MODEL_APIKEY 
                 }
             }
         )
@@ -39,29 +77,29 @@ class Model {
             formData,
             {
                 headers: {
-                    "api-key": this.env.MODEL_APIKEY,
+                    "apikey": process.env.MODEL_APIKEY,
                     ...formData.getHeaders()
                 }
             }
         );
-        
-        return result.data.predictions[0];
+        return result.data.prediction;
     }
 
     async earnedTime() {
-        console.log("HIT FUNCTION")
+        await this.getTimes();
+        
         const prediction = await this.predict();
-
-        if (!prediction) {
-            return { category: null, timeEarned: 10}
+        if (!prediction[0]) {
+            return { category: "none", wasteCode: "GWST", earnedTime: 120}
         };
 
-        const category = prediction.class_name.toLowerCase();
+        const category = prediction[0].class_name?.toLowerCase();
         const timeEarned = this.timeMap[category] ?? 0;
 
         return { 
             category: category,
-            timeEarned: timeEarned * 60
+            wasteCode: this.wasteCodeMap[category],
+            earnedTime: timeEarned * 60
         };
     }
 }

@@ -18,8 +18,10 @@ export default class AdminClients {
         const card = MainCard(main, "Client Management");
         MainContent(card)
         
-        AdminRoutingEvent();
-        AdminEvents();
-        Event();
+        const stopProcess = AdminEvents();
+        if (!stopProcess) {
+            AdminRoutingEvent();
+            Event();
+        }
     }
 }

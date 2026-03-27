@@ -17,8 +17,10 @@ export default class AdminMachine {
         Sidebar(sidebar);
         const card = MainCard(main, "Machine Details");
         MainContent(card)
-        Events();
-        AdminRoutingEvent();
-        AdminEvents();
+        const stopProcess = AdminEvents();
+        if (!stopProcess) {
+            AdminRoutingEvent();
+            Events();
+        }
     }
 }

@@ -1,18 +1,20 @@
 import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import fs from 'fs/promises';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 class Webcam {
     constructor() {
-        this.device = process.env.DEVICE || "/dev/video1";
-        this.width = process.env.WIDTH || 512;
-        this.height = process.env.HEIGHT || 384;
-        this.format = process.env.FORMAT || "mjpeg";
-        this.frames = process.env.FRAMES || 1;
+        this.device = process.env.DEVICE || "/dev/video0";
+        this.width = process.env.WIDTH || 1920;
+        this.height = process.env.HEIGHT || 1080;
         this.outputFolder = join(__dirname, '../captures');
+        fs.mkdir(this.outputFolder, { recursive: true }).catch(err => {
+            console.error("Failed to create capture folder:", err);
+        });
     }
 
     getFilePath(filename = "last_capture.jpg") {
@@ -23,29 +25,29 @@ class Webcam {
         const filePath = this.getFilePath(filename);
 
         return new Promise((resolve, reject) => {
-            const ffmpeg = spawn("ffmpeg", [
-                "-y", // overwrite
-                "-f", "v4l2",
-                "-input_format", this.format,
-                "-video_size", `${this.width}x${this.height}`,
-                "-i", this.device,
-                "-frames:v", `${this.frames}`,
-                filePath,
+            const fswebcam = spawn("fswebcam", [
+                "-d", this.device,
+                "-r", `${this.width}x${this.height}`,
+                "--no-banner",
+                "-D", "0", // zero delay
+                filePath
             ]);
 
-            ffmpeg.stderr.on("data", (data) => {}   );
-            ffmpeg.stdout.on("data", (data) => {});
+            fswebcam.stdout.on("data", (data) => {});
+            fswebcam.stderr.on("data", (data) => {
+                console.log(data.toString());
+            });
 
-            ffmpeg.on("close", (code) => {
+            fswebcam.on("close", (code) => {
                 if (code === 0) {
                     console.log("Image captured at:", filePath);
                     resolve(filePath);
                 } else {
-                    reject(new Error(`FFmpeg exited with code ${code}`));
+                    reject(new Error(`fswebcam exited with code ${code}`));
                 }
             });
 
-            ffmpeg.on("error", (err) => reject(err));
+            fswebcam.on("error", (err) => reject(err));
         });
     }
 }

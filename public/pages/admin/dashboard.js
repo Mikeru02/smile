@@ -17,9 +17,10 @@ export default class AdminDashboard {
         Sidebar(sidebar);
         const card = MainCard(main, "Dashboard");
         MainContent(card)
-
-        Events();
-        AdminRoutingEvent();
-        AdminEvents();
+        const stopProcess = AdminEvents();
+        if (!stopProcess) {
+            AdminRoutingEvent();
+            Events();
+        }
     }
 }

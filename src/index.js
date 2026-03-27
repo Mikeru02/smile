@@ -1,6 +1,5 @@
 import express from 'express';
 import http from 'http';
-import SocketServer from './sockets/socketServer.js';
 import path from 'path';
 import compression from 'compression';
 import { fileURLToPath } from 'url';
@@ -8,13 +7,20 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import 'dotenv/config.js';
+import 'dotenv/config';
+import limiter from './middlewares/rateLimiter.js';
+import SocketServer from './sockets/socketServer.js';
 import Arduino from './resources/arduino.js';
 import Webcam from './resources/webcam.js';
 import apiRouter from './routes/api/index.js';
 import startTimeDeductor from './workers/timeDeductor.js';
 import getLocalIP from './utils/getIp.js';
 import Model from './utils/model.js';
+import MessageBot from './utils/tgBot.js';
+import checkInternetWorker from './workers/internetWorker.js';
+import watchDnsmasq from './workers/watchDNS.js';
+import checkClients from './workers/checkClient.js';
+import BackupWorker from './workers/backupWorker.js';
 
 const ip = getLocalIP();
 
@@ -25,15 +31,29 @@ const arduino = new Arduino(
     Number(process.env.SERIAL_TIMEOUT) || 1000,
     () => {
         arduino.sendCommand(`IP:${ip}`);
+        server.listen(port, host, () => {
+            console.log(`Server is running at http://${host}:${port}`);
+        });
+        arduino.sendCommand("STATUS");
+
+        // Intialize workers
+        startTimeDeductor();
+        checkInternetWorker();
+        watchDnsmasq(process.env.DNSMASQ_LOG);
+        const backupWorker = new BackupWorker();
+        backupWorker.start();
+        checkClients();
     }
 );
-console.log("DEBUG", arduino)
+// const arduino = "";
 
 // Block for Camera
 const webcam = new Webcam();
 
 // Block for Model API
 const modelApi = new Model(process.env);
+
+const messageBot = new MessageBot(process.env.BOT_TOKEN, process.env.BOT_USERS);
 
 const file = fileURLToPath(import.meta.url);
 const directory = path.dirname(file);
@@ -53,9 +73,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(distDirectory)));
 
+app.use(limiter);
+
 const server = http.createServer(app);
 
-const socketServer = new SocketServer({ server, arduino, webcam, modelApi });
+const socketServer = new SocketServer({ server, arduino, webcam, modelApi, messageBot });
 
 const io = socketServer.init();
 
@@ -68,10 +90,3 @@ app.get(['/generate_204', '/hotspot-detect.html'], (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(distDirectory, 'index.html'))
 });
-
-server.listen(port, host, () => {
-    console.log(`Server is running at http://${host}:${port}`);
-});
-
-// Intialize workers
-//startTimeDeductor();

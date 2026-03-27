@@ -26,3 +26,22 @@ export function formatDate(date) {
     
     return dateObj.toLocaleDateString('en-US', options);
 }
+
+export function formatDateTime(date) {
+    if (!date) return '';
+
+    const dateObj = new Date(date);
+    if (isNaN(dateObj.getTime())) return date; // Return original if invalid date
+
+    const options = { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false // 24-hour format
+    };
+
+    return dateObj.toLocaleString('en-US', options).replace(',', '');
+}

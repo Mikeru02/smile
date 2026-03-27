@@ -1,61 +1,12 @@
 import jwt from 'jsonwebtoken';
 import Admin from '../../models/v1/admin.js';
+import Log from  '../../models/v1/log.js';
+import ContentFiltering from '../../utils/contentFiltering.js';
 
 class AdminController {
     constructor() {
         this.admin = new Admin();
-    }
-
-    async createAccount(req, res) {
-        try {
-            const { username, name, role, password } = req.body || {};
-            if (!username || !name || !role || !password) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'All fields are required'
-                })
-            }
-            const response = await this.account.create(username, name, role, password);
-            return res.status(200).json({
-                success: true,
-                data: {
-                    token: jwt.sign({ 'username': username, 'role': role}, process.env.API_SECRET_KEY, {
-                        expiresIn: '1d'
-                    })
-                }
-            });
-        } catch (err) {
-            return res.status(500).json({
-                success: false,
-                message: err.toString()
-            });
-        }
-    }
-
-    async loginAccount(req, res) {
-        try {
-            const { username, password } = req.body || {};
-            if (!username || !password) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'All fields are required'
-                })
-            } 
-            const response = await this.account.verify(username, password);
-            return res.status(200).json({
-                success: true,
-                data: {
-                    token: jwt.sign({ 'username': response.username, 'role': response.role}, process.env.API_SECRET_KEY, {
-                        expiresIn: '1d'
-                    })
-                }
-            });
-        } catch (err) {
-            return res.status(500).json({
-                success: false,
-                message: err.toString()
-            });
-        }
+        this.log = new Log();
     }
 
     async getDashboardInfo(req, res) {
@@ -81,6 +32,22 @@ class AdminController {
                 data: result
             });
         } catch(err) {
+            return res.status(500).json({
+                success: false,
+                message: err.toString()
+            });
+        }
+    }
+
+    async createAccessedLinks(req, res) {
+        try {
+            const {clientIP, domain} = req.body || {};
+            const response = await this.admin.createAccessedLinks(clientIP, domain);
+            return res.status(200).json({
+                success: true,
+                data: response
+            });
+        } catch (err) {
             return res.status(500).json({
                 success: false,
                 message: err.toString()

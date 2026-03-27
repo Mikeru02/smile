@@ -18,8 +18,10 @@ export default class AdminLogs {
         const card = MainCard(main, "Logs");
         MainContent(card)
 
-        AdminRoutingEvent();
-        AdminEvents();
-        PageEvents();
+        const stopProcess = AdminEvents();
+        if (!stopProcess) {
+            AdminRoutingEvent();
+            PageEvents();
+        }
     }
 }

@@ -1,5 +1,5 @@
 import { TABLE_CONFIG } from "../config/tableConfig.js";
-import { formatSeconds, formatDate } from "./formatTime.js";
+import { formatSeconds, formatDate, formatDateTime } from "./formatTime.js";
 import styles from '../components/admin/clients/component.module.css';
 
 export function populateTable(tbody, data, headers) {
@@ -11,19 +11,21 @@ export function populateTable(tbody, data, headers) {
         const trow = document.createElement("tr");    
         headers.forEach(head => {
             const tdata = document.createElement('td');
-            let value = row[head.key] ?? "";
+            let value = row[head.key] ?? "None";
 
             if (head.key === 'time_remaining') {
                 value = formatSeconds(value);
-                tdata.id = "time";
+                tdata.classList.add("time");
                 tdata.textContent = value;
-            } else if (head.key === 'details') {
+            } 
+            else if (head.key === 'details') {
                 value = 'See more';
-                tdata.id = "see-more"
-                tdata.className = styles.seeMore;
+                tdata.classList.add('see-more');
+                tdata.classList.add(styles.seeMore);
                 tdata.dataset.id = row.id;
                 tdata.textContent = value;
-            } else if (head.key === 'status') {
+            } 
+            else if (head.key === 'status') {
                 const span = document.createElement('span');
                 span.id = "status";
                 span.className = styles.spanStatus;
@@ -40,13 +42,21 @@ export function populateTable(tbody, data, headers) {
                     span.style.backgroundColor = 'gray';
                 }
                 tdata.appendChild(span);
-            } else if (head.key === 'created_at') {
+            } 
+            else if (head.key === 'created_at') {
                 value = formatDate(value);
                 tdata.textContent = value;
-            } else if (head.key === 'waste_collected') {
+            }
+            else if (head.key === 'timestamp' || head.key === 'last_login') {
+                value = formatDateTime(value);
+                tdata.textContent = value;
+            }
+
+            else if (head.key === 'waste_collected') {
                 value = `${value} items`
                 tdata.textContent = value;
-            } else {
+            } 
+            else {
                 tdata.textContent = value;
             }
             trow.appendChild(tdata);
